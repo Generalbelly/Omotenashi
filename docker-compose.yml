@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql-silo
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_USER: silo
+      MYSQL_PASSWORD: silo
+      MYSQL_DATABASE: silo
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_HOST: '%'
+
+  web:
+    build: ./.docker/
+    container_name: web-silo
+    links:
+      - mysql
+    ports:
+      - 8888:80
+    volumes:
+      - ./:/var/www
+    #environment:
+    tty: true
