@@ -1,107 +1,57 @@
-FROM centos:centos6
+FROM amazonlinux:2
 
-MAINTAINER KoutatsuTakai
+LABEL maintainer "nshimmen"
 
-RUN cp -f /usr/share/zoneinfo/Japan /etc/localtime
+RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 
-# install
+RUN yum update -y
+
 RUN yum install -y \
-	epel-release \
-	centos-release-SCL \
-	wget \
-	curl-devel \
-	expat-devel \
-	gettext-devel \
-	openssl-devel \
-	zlib-devel \
-	perl-ExtUtils-MakeMaker \
-	gcc \
-	unzip \
-	libxml2 \
-	libxml2-devel \
-	libxslt \
-	libxslt-devel \
-	xz
+    initscripts \
+    sudo \
+    git \
+    zip \
+    unzip \
+    tar \
+    httpd \
+    wget \
+    less \
+    libxslt \
+    automake \
+    autoconf \
+    mysql \
+    libmcrypt \
+    libtool-ltdl \
+    which \
+    gcc gcc-c++
 
-RUN rpm -ivh http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm && \
-		rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+# install php7.2 nginx
+RUN amazon-linux-extras install php7.2 nginx1.12
 
-# install nginx
-RUN yum install -y nginx
+RUN yum install -y --disablerepo=amzn-main,amzn-updates --enablerepo=remi,remi-php72 \
+    php-devel \
+    php-mbstring \
+    php-xml
+
+RUN rm -f /etc/nginx/default.d/php.conf
 ADD ./nginx/default.conf /etc/nginx/conf.d/default.conf
-
-# install git
-WORKDIR /tmp/
-RUN wget https://github.com/git/git/archive/v2.16.1.tar.gz && \
-	tar -zxf v2.16.1.tar.gz
-
-WORKDIR /tmp/git-2.16.1
-RUN make prefix=/usr/local all && \
-	make prefix=/usr/local install
-
-# install php7
-RUN yum -y install --enablerepo=remi,remi-php71 \
-	php-cli \
-	php-common \
-	php-devel \
-	php-fpm \
-	php-gd \
-  php-intl \
-  php-json \
-  php-mbstring \
-  php-mcrypt \
-  php-mysqlnd \
-  php-pdo \
-  php-soap \
-  php-xml
-
-RUN mkdir /var/lib/php/session_nginx && \
-	chown root.nginx /var/lib/php/session_nginx && \
-	chmod 0775 /var/lib/php/session_nginx
-
-RUN mkdir /var/lib/php/wsdlcache_nginx && \
-	chown root.nginx /var/lib/php/wsdlcache_nginx && \
-	chmod 0775 /var/lib/php/wsdlcache_nginx
-
-RUN mkdir /var/lib/php/opcache_nginx && \
-	chown root.nginx /var/lib/php/opcache_nginx && \
-	chmod 0775 /var/lib/php/opcache_nginx
 
 ADD ./php-fpm/www.conf /etc/php-fpm.d/www.conf
 ADD ./php/php.ini /etc/php.ini
 
-# install libxl
-WORKDIR /usr/lib64/
-RUN wget http://www.libxl.com/download/libxl-lin-3.8.2.tar.gz && \
-	tar -zxf libxl-lin-3.8.2.tar.gz
+RUN chown -R root:nginx /var/log/nginx
+RUN chmod -R 770 /var/log/nginx/
 
-WORKDIR /usr/lib64/php/
-RUN git clone https://github.com/iliaal/php_excel.git ext/excel
+RUN useradd docker
 
-WORKDIR /usr/lib64/php/ext/excel
-RUN git checkout php7 && \
-	phpize && \
-	./configure --with-excel --with-libxl-incdir=/usr/lib64/libxl-3.8.2.0/include_c --with-libxl-libdir=/usr/lib64/libxl-3.8.2.0/lib64 --with-libxml-dir=/usr/include/libxml2 && \
-	make && \
-	make install
-ADD ./php/40-excel.ini /etc/php.d/40-excel.ini
+RUN systemctl enable nginx.service
+RUN systemctl enable php-fpm.service
 
-# yarnそのもをインストール
-RUN wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
-RUN yum -y install yarn
-
-# install npm
-RUN rm -rf /usr/bin/node
-WORKDIR /usr/lib64/
-RUN wget https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz && \
-	tar Jxfv node-v8.9.4-linux-x64.tar.xz && \
-	ln -s /usr/lib64/node-v8.9.4-linux-x64/bin/node /usr/bin/node && \
-	ln -s /usr/lib64/node-v8.9.4-linux-x64/lib/node_modules/npm/bin/npm-cli.js /usr/bin/npm && \
-	ln -s /usr/lib64/node-v8.9.4-linux-x64/lib/node_modules/npm/bin/npx-cli.js /usr/bin/npx
-
-VOLUME /var/www
-
-EXPOSE 80
+# install node and npm
+RUN curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
+RUN sudo yum -y install nodejs
+RUN sudo yum -y install gcc-c++ make
 
 WORKDIR /root
 

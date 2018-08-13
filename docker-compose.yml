@@ -1,26 +1,32 @@
-version: '2'
+version: '3'
 
 services:
-  mysql:
-    image: mysql:5.7
-    container_name: mysql-silo
-    ports:
-      - 3306:3306
-    environment:
-      MYSQL_USER: silo
-      MYSQL_PASSWORD: silo
-      MYSQL_DATABASE: silo
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_ROOT_HOST: '%'
+  # mysql:
+  #   image: mysql:5.7
+  #   container_name: mysql-silo
+  #   ports:
+  #     - 3306:3306
+  #   environment:
+  #     MYSQL_USER: omotenashi
+  #     MYSQL_PASSWORD: omotenashi
+  #     MYSQL_DATABASE: omotenashi
+  #     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+  #     MYSQL_ROOT_HOST: '%'
 
-  web:
+  app:
     build: ./.docker/
-    container_name: web-silo
-    links:
-      - mysql
+    container_name: omotenashi
+    # links:
+    #   - mysql
     ports:
-      - 8888:80
+      - 9000:80
     volumes:
       - ./:/var/www
-    #environment:
     tty: true
+    privileged: true
+    command: /sbin/init
+
+networks:
+  default:
+    external:
+      name: common_link

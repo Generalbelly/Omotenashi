@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-/etc/rc.d/init.d/php-fpm start
-/etc/rc.d/init.d/nginx start
+systemctl start nginx.service
+systemctl start php-fpm.service
 
 if [ $# -eq 0 ]; then
     /bin/bash
