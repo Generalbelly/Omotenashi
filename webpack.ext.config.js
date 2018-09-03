@@ -18,10 +18,10 @@ module.exports = {
                         loader: 'vue-loader',
                         options: {
                             loaders: {
-                                js: 'babel-loader'
+                                js: 'babel-loader',
                             }
                         }
-                    }
+                    },
                 ]
             },
             {

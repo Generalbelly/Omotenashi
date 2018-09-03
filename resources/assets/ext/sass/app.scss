@@ -1,8 +1,41 @@
 @charset "utf-8";
 
 @import "~driver.js/src/driver";
+@import "~quill/dist/quill.snow.css";
 
 #omotenashi {
+  box-sizing: border-box !important;
   @import "variables";
-  @import "../../sass/main";
+  @import "../../sass/common";
+  .is-fixed-bottom-right {
+    position: fixed !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    margin-right: 15px !important;
+    margin-bottom: 20px !important;
+  }
+  .is-fixed-bottom-left {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    margin-left: 15px !important;
+    margin-left: 20px !important;
+  }
+  .is-fixed-top-right {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    margin-right: 15px !important;
+    margin-top: 20px !important;
+  }
+  .is-fixed-top-left {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    margin-left: 15px !important;
+    margin-left: 20px !important;
+  }
+  .has-cursor-pointer {
+    cursor: pointer;
+  }
 }
