@@ -48,39 +48,15 @@
             @switchSideClick="isRight = !isRight"
         ></Menu>
 
-        <BaseMessage
-            v-show="userAction === 'deletingTutorial'"
-            header="Delete Tutorial"
-            :message-class="['is-danger', 'is-fixed-bottom-right']"
-            @closeClick="updateUserAction('onMenu')"
+        <DeleteConfirmationMessage
+                v-show="userAction === 'deletingTutorial'"
+                :selected-tutorial="selectedTutorial"
+                @closeClick="updateUserAction('onMenu')"
+                @deleteClick="() => {
+                    deleteTutorial(selectedTutorial)
+                }"
         >
-            <p class="has-padding-top-1 has-padding-bottom-4">
-                Your are about to delete "{{ selectedTutorial.name }}".<br/>
-                Please type in the name of the tutorial to confirm.
-            </p>
-            <div class="field">
-                <p class="control">
-                    <input
-                        class="input"
-                        type="text"
-                        placeholder="Tutorial name"
-                        v-model="tutorialNameToDelete"
-                    >
-                </p>
-            </div>
-            <div class="field">
-                <button
-                    class="button is-danger is-outlined is-fullwidth"
-                    :disabled="tutorialNameToDelete === '' || tutorialNameToDelete != selectedTutorial.name"
-                    @click="() => {
-                        deleteTutorial(selectedTutorial)
-                        updateUserAction('onMenu')
-                    }"
-                >
-                    DELETE
-                </button>
-            </div>
-        </BaseMessage>
+        </DeleteConfirmationMessage>
 
         <div
             class="editing-actions has-padding-4 is-fixed-bottom-right"
@@ -102,9 +78,7 @@
 
         <GreetingModal
             v-show="extLog.userIsFirstTime"
-            @startClick="() => {
-                updateUserAction('onMenu');
-            }"
+            @startClick="updateUserAction('onMenu')"
         ></GreetingModal>
 
         <Editor
@@ -133,22 +107,19 @@
     </div>
 </template>
 <script>
-import uuidv4 from 'uuid/v4';
-import finder from '@medv/finder';
-import Driver from 'driver.js/dist/driver.min.js';
-import {
-    mapState,
-    mapActions,
-    mapGetters,
-} from 'vuex';
+    import uuidv4 from 'uuid/v4';
+    import finder from '@medv/finder';
+    import Driver from 'driver.js/dist/driver.min.js';
+    import {mapActions, mapGetters, mapState,} from 'vuex';
 
-import BaseMessage from '../components/BaseMessage'
-import GreetingModal from '../components/Tutorial/GreetingModal'
-import Editor from '../components/Tutorial/Editor'
-import Menu from '../components/Tutorial/Menu'
-import Setting from '../components/Tutorial/Setting'
+    import BaseMessage from '../components/BaseMessage'
+    import GreetingModal from '../components/Tutorial/GreetingModal'
+    import Editor from '../components/Tutorial/Editor'
+    import Menu from '../components/Tutorial/Menu'
+    import Setting from '../components/Tutorial/Setting'
+    import DeleteConfirmationMessage from "../components/Tutorial/DeleteConfirmationMessage";
 
-const userActions = {
+    const userActions = {
     onMenu: 'onMenu',
     addingStep: 'addingStep',
     addingTutorial: 'addingTutorial',
@@ -162,7 +133,11 @@ const userActions = {
 
 export default {
     created() {
-        document.body.addEventListener('click', this.onUserScreenClick)
+        const els = document.querySelectorAll( 'body *' )
+        els.forEach(el => {
+            el.addEventListener('click', this.onUserScreenClick)
+        })
+
         this.driver = new Driver()
 
         this.retrieveLog()
@@ -189,9 +164,15 @@ export default {
                 isShown: false,
             },
             isRight: true,
-            tutorialNameToDelete: '',
+            // tutorialNameToDelete: '',
             // editorOpenButton: '<span id="open-advanced-editor-button" contenteditable="false" style="user-select: none; position: absolute; right:0; bottom:0; font-size: 11px; color: #3273dc;">advanced editor</span>',
             titleQuillContents: null,
+            selectorChoices: [],
+            selectedSelectorChoiceIndex: 0,
+            maxSelection: 3,
+            latestTapTime: null,
+            screenDoubleTapped: false,
+            dbClickEventListenersSet: false,
         }
     },
     methods: {
@@ -247,13 +228,9 @@ export default {
             this.updateUserAction(userActions.onMenu)
         },
         editStep(step) {
-            this.selectStep(step.id)
+            this.selectStep(id)
             this.updateUserAction(userActions.editingPopover)
-
-            this.driver.highlight({
-                element: step.element,
-                popover: step.popover,
-            })
+            this.highlight(step)
         },
         onAdvancedEditingClick() {
             this.updateUserAction('usingAdvancedEditor')
@@ -289,41 +266,70 @@ export default {
             this.updateUserAction(userActions.onMenu)
         },
         onUserScreenClick(e) {
-            // if (e.target.id === 'open-advanced-editor-button') {
-            //     this.onAdvancedEditingClick()
-            // }
+            // omotenashiの要素のクリックは無視
             if (e.composedPath().find(el => el.id === 'omotenashi')) return
+
             if (this.userAction === userActions.addingStep) {
+                //spa対策
                 e.stopPropagation() // for driver.js
                 e.preventDefault() // for driver.js
+
                 if (this.userAction === userActions.addingStep) {
                     this.updateUserAction(userActions.editingPopover)
-
-                    const selector = this.getSelector(e.target)
-
-                    // If there is a step with the same selector, we use it again.
-                    const step = this.selectedTutorial.steps.find(s => s.element === selector)
-                    if (step) {
-                        this.editStep(step)
-                    } else {
-                        this.driver.highlight({
-                            element: selector,
-                            popover: {
-                                // title: 'Edit me!'+this.editorOpenButton,
-                                title: 'Edit me!',
-                                description: 'Some description here',
-                            },
+                    if (this.selectorChoices.length === 0) {
+                        e.composedPath().find(el => {
+                            if (el === document.documentElement) return true
+                            this.selectorChoices.push(this.getSelector(el))
                         })
+                    }
+                    const selector = this.selectorChoices[this.selectedSelectorChoiceIndex]
+                    this.highlight({
+                        element: selector,
+                        popover: {
+                            // title: 'Edit me!'+this.editorOpenButton,
+                            title: 'Edit me!',
+                            description: 'Some description here',
+                        },
+                    })
+                    this.selectedSelectorChoiceIndex += 1
+
+                    this.showMessage({
+                        header: "Tips",
+                        body: "If the element is not correctly highlighted, you should keep double clicking until you find the right one.",
+                        messageClass: ['is-info', 'is-fixed-top-right'],
+                    })
+
+                    try {
+                        document.querySelector('#driver-page-overlay').addEventListener('dblclick', this.onDoubleClick)
+                        document.querySelector('#driver-page-overlay').addEventListener('touchstart', this.onDoubleTap)
+                        this.dbClickEventListenersSet = true
+                    } catch(error) {
+                        this.dbClickEventListenersSet = false
                     }
                 }
             }
+        },
+        highlight({ id=null, element, popover }) {
+            console.log(element);
+            // If there is a step with the same selector, we use it again.
+            if (!id) {
+                const step = this.selectedTutorial.steps.find(s => s.element === element)
+                if (step) {
+                    this.selectStep(step.id)
+                    this.updateUserAction(userActions.editingPopover)
+                }
+            }
+            this.driver.highlight({
+                element,
+                popover,
+            })
         },
         onPreviewClick() {
             if (this.selectedTutorial.steps.length === 0) {
                 this.showMessage({
                     header: "Oops",
                     body: "You haven't added any step yet.",
-                    messageClass: ['is-warning', 'is-small', 'is-fixed-top-right'],
+                    messageClass: ['is-warning', 'is-fixed-top-right'],
                 })
                 return
             }
@@ -333,6 +339,43 @@ export default {
             // document.querySelector('.driver-popover-title').innerHTML = html + this.editorOpenButton,
             // this.titleQuillContents = quillContents
             this.updateUserAction(userActions.editingPopover)
+        },
+        onDoubleTap(e) {
+            e.stopPropagation()
+            e.preventDefault()
+            if (this.latestTapTime) {
+                const now = new Date().getTime()
+                const timeDiff = now - this.latestTapTime
+                this.screenDoubleTapped = ((timeDiff < 600) && (timeDiff > 0))
+                this.showAnotherChoice()
+            } else {
+                this.latestTapTime = new Date().getTime()
+                this.screenDoubleTapped = false
+            }
+        },
+        onDoubleClick(e) {
+            e.stopPropagation()
+            e.preventDefault()
+            this.showAnotherChoice()
+        },
+        showAnotherChoice() {
+            if (this.selectedSelectorChoiceIndex === (this.selectorChoices.length - 1) || (this.selectedSelectorChoiceIndex + 1) > this.maxSelection ) {
+                this.showMessage({
+                    header: "Oops",
+                    body: "Looks like we don't have any other elements to show you.",
+                    messageClass: ['is-warning', 'is-fixed-top-right'],
+                })
+                this.selectedSelectorChoiceIndex = 0
+            } else {
+                this.highlight({
+                    element: this.selectorChoices[this.selectedSelectorChoiceIndex],
+                    popover: {
+                        title: 'Edit me!',
+                        description: 'Some description here',
+                    },
+                })
+                this.selectedSelectorChoiceIndex += 1
+            }
         }
     },
     watch: {
@@ -350,12 +393,14 @@ export default {
 
                     if (oldValue === userActions.editingPopover) {
                         this.driver.reset()
+                        this.selectorChoices = []
+                        this.selectedSelectorChoiceIndex = 0
+                        if (this.dbClickEventListenersSet) {
+                            document.querySelector('#driver-page-overlay').removeEventListener('dblclick', this.onDoubleClick)
+                            document.querySelector('#driver-page-overlay').removeEventListener('touchstart', this.onDoubleTap)
+                            this.dbClickEventListenersSet = false
+                        }
                     }
-
-                    if (oldValue === userActions.deletingTutorial) {
-                        this.tutorialNameToDelete = ''
-                    }
-
                     break
                 case userActions.addingStep:
                     this.showMessage({
@@ -371,7 +416,6 @@ export default {
                     }
                     this.driver.defineSteps(this.selectedTutorial.steps)
                     this.driver.start()
-
                     document.querySelector('.driver-popover-title').removeAttribute('contenteditable')
                     document.querySelector('.driver-popover-description').removeAttribute('contenteditable')
                     break
@@ -384,7 +428,12 @@ export default {
                     break
                 default:
             }
-        }
+        },
+        tutorials(newValue, oldValue) {
+            if ((oldValue.length - newValue.length) === 1) {
+                this.updateUserAction('onMenu')
+            }
+        },
     },
     computed: {
         ...mapState('tutorial', {
@@ -399,6 +448,7 @@ export default {
         ]),
     },
     components: {
+        DeleteConfirmationMessage,
         BaseMessage,
         Editor,
         GreetingModal,
@@ -418,6 +468,12 @@ export default {
 
     .tutorial-panel {
         min-width: 30vw;
+        max-width: 30vw;
+        width: 30vw;
+    }
+    .primary-nav,
+    .tutorial-panel {
+        z-index: 10000000;
     }
 
     .editing-actions {

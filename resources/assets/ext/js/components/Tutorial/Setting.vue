@@ -3,7 +3,7 @@
         <div class="modal-background"></div>
         <div class="modal-card">
             <header class="modal-card-head">
-                <p class="modal-card-title">{{ isCreate ? 'Create' : 'Edit' }} updatedTutorial</p>
+                <p class="modal-card-title">{{ isCreate ? 'Create' : 'Edit' }} Tutorial</p>
             </header>
             <section class="modal-card-body">
                 <div class="field">

@@ -7,6 +7,7 @@
         >
             <div
                 class="content"
+                style="flex-direction: column;"
                 :class="addtionalContentClass"
             >
                 <slot></slot>
@@ -64,3 +65,8 @@ export default {
     }
 };
 </script>
+<style>
+    .modal {
+        z-index: 10000000000 !important;
+    }
+</style>
