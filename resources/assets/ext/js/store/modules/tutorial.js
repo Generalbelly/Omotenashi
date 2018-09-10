@@ -122,10 +122,7 @@ const actions = {
             ...getters.selectedTutorial,
             steps: [
                 ...getters.selectedTutorial.steps.slice(0, stepIndex),
-                {
-                    ...getters.selectedStep,
-                    step,
-                },
+                step,
                 ...getters.selectedTutorial.steps.slice(stepIndex+1),
             ],
         })

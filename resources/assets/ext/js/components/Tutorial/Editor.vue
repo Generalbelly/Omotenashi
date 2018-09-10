@@ -4,11 +4,10 @@
         :content-class="contentClass"
         :show-close="false"
     >
-        <div
-            id="editor"
-            ref="editor"
-        >
-            <!--<span v-html="html"></span>-->
+        <div id="editor" class="pell"></div>
+        <div>
+            HTML output:
+            <div id="html-output" style="white-space:pre-wrap;"></div>
         </div>
         <button
             class="button is-fixed-bottom-right"
@@ -19,21 +18,11 @@
     </BaseModal>
 </template>
 <script>
-import Quill from 'quill/dist/quill.min';
-import BaseModal from '../BaseModal';
+import pell from 'pell'
+import BaseModal from '../BaseModal'
 
 export default {
-    props: {
-        quillContents: {
-            type: Object,
-            default: null,
-        }
-    },
     mounted() {
-        this.quill = new Quill('#editor', {
-            theme: 'snow'
-        });
-        this.quill.on('text-change', this.onTextChange)
     },
     beforeDestroy() {
         this.quill = null

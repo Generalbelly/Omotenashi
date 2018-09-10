@@ -31,7 +31,7 @@
                 <p class="control">
                     <button
                         class="button is-small"
-                        @click="$emit('editTutorialClick')"
+                        @click.stop.prevent="$emit('editTutorialClick')"
                     >
                         <span class="icon">
                             <font-awesome-icon icon="pen"></font-awesome-icon>
@@ -94,7 +94,7 @@
         <div class="panel-block">
             <button
                 class="button is-primary is-outlined is-fullwidth"
-                @click="$emit('previewClick')"
+                @click.stop.prevent="$emit('previewClick')"
             >
                 <span class="icon">
                     <font-awesome-icon icon="play"></font-awesome-icon>

@@ -1,7 +1,7 @@
 <template>
     <div
         class="message__container"
-        @click="$emit('closeClick')"
+        @click.stop.prevent="$emit('closeClick')"
     >
         <article
             class="message"
@@ -67,7 +67,7 @@ export default {
 
 <style scoped>
     .message__container {
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         bottom: 0;
