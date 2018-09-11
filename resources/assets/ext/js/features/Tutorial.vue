@@ -93,28 +93,39 @@
 
         <BaseMessage
             v-show="message.isShown"
+            :dont-show-me-option="message.dontShowMeOption"
+            :dontShowMeChecked="message.dontShowMeChecked"
             :header="message.header"
             :body="message.body"
             :message-class="message.messageClass"
             @closeClick="hideMessage"
+            @dontShowMeChecked="e => message.dontShowMeChecked = e"
         ></BaseMessage>
     </div>
 </template>
 <script>
 import uuidv4 from 'uuid/v4'
 import finder from '@medv/finder'
-// import Driver from 'driver.js/dist/driver.min.js';
-import Driver from '../../driver.js/src/index'
-import {mapActions, mapGetters, mapState,} from 'vuex'
-
+import {
+    mapActions,
+    mapGetters,
+    mapState,
+} from 'vuex'
+import Driver from '../../driver.js/src'
 import BaseMessage from '../components/BaseMessage'
 import GreetingModal from '../components/Tutorial/GreetingModal'
-import Editor from '../components/Tutorial/Editor'
 import Menu from '../components/Tutorial/Menu'
 import Setting from '../components/Tutorial/Setting'
 import DeleteConfirmationMessage from "../components/Tutorial/DeleteConfirmationMessage";
 
 import purify from 'dompurify'
+
+const messageKeys = {
+    clickToAddStep: 'clickToAddStep',
+    selectorChoicesAvailable: 'selectorChoicesAvailable',
+    noStepAddedYet: 'noStepAddedYet',
+    noMoreSelectorChoices: 'noMoreSelectorChoices',
+}
 
 const userActions = {
     onMenu: 'onMenu',
@@ -159,6 +170,9 @@ export default {
             userAction: userActions.home,
             driver: null,
             message: {
+                key: '',
+                dontShowMeOption: true,
+                dontShowMeChecked: false,
                 header: '',
                 body: '',
                 messageClass: [],
@@ -203,12 +217,16 @@ export default {
             }
             return null
         },
-        showMessage({ header, body, messageClass }) {
-            this.message = {
-                header,
-                body,
-                messageClass,
-                isShown: true,
+        showMessage({ key, header, body, messageClass }) {
+            if (!this.extLog.checkedMessages || !this.extLog.checkedMessages.includes(key)) {
+                this.message = {
+                    ...this.message,
+                    key,
+                    header,
+                    body,
+                    messageClass,
+                    isShown: true,
+                }
             }
         },
         hideMessage() {
@@ -290,11 +308,11 @@ export default {
                 })
 
                 this.showMessage({
+                    key: messageKeys.selectorChoicesAvailable,
                     header: "Tips",
                     body: "If the element is not correctly highlighted, you should keep clicking until you find the right one.",
                     messageClass: ['is-info', 'is-fixed-top-right'],
                 })
-            } else {
             }
         },
         highlight({ id=null, element, popover={ content: '<div><h1>Title</h1><div>Some description here</div></div>' } }) {
@@ -319,6 +337,7 @@ export default {
         onPreviewClick() {
             if (this.selectedTutorial.steps.length === 0) {
                 this.showMessage({
+                    key: this.messageKeys.noStepAddedYet,
                     header: "Oops",
                     body: "You haven't added any step yet.",
                     messageClass: ['is-warning', 'is-fixed-top-right'],
@@ -339,6 +358,7 @@ export default {
         showAnotherChoice() {
             if (this.selectorChoiceIndex === (this.selectorChoices.length - 1) || (this.selectorChoiceIndex + 1) > this.maxRetries ) {
                 this.showMessage({
+                    key: messageKeys.noMoreSelectorChoices,
                     header: "Oops",
                     body: "Looks like we don't have any other elements to show you.",
                     messageClass: ['is-warning', 'is-fixed-top-right'],
@@ -374,6 +394,7 @@ export default {
                     break
                 case userActions.addingStep:
                     this.showMessage({
+                        key: messageKeys.clickToAddStep,
                         header: "Tips",
                         body: "Click anywhere you want to attract your user attention",
                         messageClass: ['is-info', 'is-small', 'is-fixed-top-right'],
@@ -387,6 +408,24 @@ export default {
                 this.updateUserAction('onMenu')
             }
         },
+        message: {
+            deep: true,
+            handler(newValue, oldValue) {
+                if (!newValue.isShown) {
+                    if (oldValue.dontShowMeChecked) {
+                        if (this.extLog.checkedMessages) {
+                            this.saveLog({
+                                checkedMessages: [
+                                    ...this.extLog.checkedMessages,
+                                    oldValue.key,
+                                ]})
+                        } else {
+                            this.saveLog({ checkedMessages: [ oldValue.key ]})
+                        }
+                    }
+                }
+            },
+        }
     },
     computed: {
         ...mapState('tutorial', {

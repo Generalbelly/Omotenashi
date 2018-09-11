@@ -21,6 +21,18 @@
                 class="message-body"
             >
                 {{ body }}
+                <p v-if="dontShowMeOption" class="has-margin-top-3">
+                    <label class="checkbox">
+                        <input
+                            type="checkbox"
+                            :checked="dontShowMeChecked"
+                            :true-value="true"
+                            :false-value="false"
+                            @click="$emit('dontShowMeChecked', $event.target.checked)"
+                        >
+                        Don't show me this message again.
+                    </label>
+                </p>
             </div>
             <div
                 v-else
@@ -48,6 +60,14 @@ export default {
                 return [];
             }
         },
+        dontShowMeOption: {
+            type: Boolean,
+            default: false,
+        },
+        dontShowMeChecked: {
+            type: Boolean,
+            default: false,
+        }
     },
     computed: {
         additionalMessageClass() {

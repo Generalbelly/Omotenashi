@@ -5,9 +5,10 @@ import {
     SELECT_TUTORIAL,
     SELECT_STEP,
     RETRIEVE_LOG,
-    UPDATE_USER_ACTION,
     SAVE_LOG,
 } from './mutation-types'
+
+const EXT_LOG_KEY = '_ot_ext_log'
 
 const state = {
     lastUserAction: null,
@@ -68,7 +69,7 @@ const mutations = {
     },
     [RETRIEVE_LOG] (state) {
         try {
-            const savedLog = JSON.parse(localStorage.getItem('_ot_ext_log'))
+            const savedLog = JSON.parse(localStorage.getItem(EXT_LOG_KEY))
             if (savedLog) {
                 state.extLog = savedLog
             }
@@ -82,13 +83,10 @@ const mutations = {
                 ...state.extLog,
                 ...data,
             }
-            localStorage.setItem('_ot_ext_log', JSON.stringify(state.extLog))
+            localStorage.setItem(EXT_LOG_KEY, JSON.stringify(state.extLog))
         } catch (e) {
             console.log(e)
         }
-    },
-    [UPDATE_USER_ACTION] (state) {
-
     },
 }
 
