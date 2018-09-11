@@ -233,16 +233,14 @@ export default {
         },
         createStep(element) {
             const popover = element.getPopover()
-            const title = purify.sanitize(popover.getTitleNode().innerHTML)
-            const description = purify.sanitize(popover.getDescriptionNode().input)
+            const content = purify.sanitize(popover.getContentNode().input)
 
             const activeNode = element.getNode()
             const selector = this.getSelector(activeNode)
             return {
                 element: selector,
                 popover: {
-                    title: title,
-                    description: description,
+                    content: content,
                 },
             }
         },
@@ -251,7 +249,6 @@ export default {
             const { element, popover } = this.createStep(activeElement)
 
             if (this.selectedStepId) {
-                console.log(popover);
                 this.updateStep({
                     id: this.selectedStepId,
                     element,
@@ -300,7 +297,7 @@ export default {
             } else {
             }
         },
-        highlight({ id=null, element, popover={ title: 'Edit me!', description: '<div>Some description here</div>' } }) {
+        highlight({ id=null, element, popover={ content: '<div><h1>Title</h1><div>Some description here</div></div>' } }) {
             // If there is a step with the same selector, we use it again.
             if (!id) {
                 const step = this.selectedTutorial.steps.find(s => s.element === element)
@@ -308,11 +305,15 @@ export default {
                     this.selectStep(step.id)
                 }
             }
+            this.driver.options.allowClose = false
+            this.driver.options.isEditMode = true
             this.updateUserAction(userActions.editingPopover)
+
             this.driver.highlight({
                 element,
                 popover,
             })
+
             this.selectorChoiceIndex += 1
         },
         onPreviewClick() {
@@ -325,6 +326,15 @@ export default {
                 return
             }
             this.updateUserAction(userActions.previewing)
+            this.preview()
+        },
+        preview() {
+            this.driver.options.allowClose = true
+            this.driver.options.onReset = (e) => {
+                this.updateUserAction(userActions.onMenu)
+            }
+            this.driver.defineSteps(this.selectedTutorial.steps)
+            this.driver.start()
         },
         showAnotherChoice() {
             if (this.selectorChoiceIndex === (this.selectorChoices.length - 1) || (this.selectorChoiceIndex + 1) > this.maxRetries ) {
@@ -356,6 +366,8 @@ export default {
 
                     if (oldValue === userActions.editingPopover) {
                         this.driver.reset()
+                        this.driver.options.isEditMode = false
+
                         this.selectorChoices = []
                         this.selectorChoiceIndex = 0
                     }
@@ -366,25 +378,6 @@ export default {
                         body: "Click anywhere you want to attract your user attention",
                         messageClass: ['is-info', 'is-small', 'is-fixed-top-right'],
                     })
-                    break
-                case userActions.previewing:
-                    this.driver.options.allowClose = true
-                    this.driver.options.onReset = (e) => {
-                        this.updateUserAction(userActions.onMenu)
-                    }
-                    this.driver.defineSteps(this.selectedTutorial.steps)
-                    this.driver.start()
-                    document.querySelector('.driver-popover-title').removeAttribute('contenteditable')
-                    document.querySelector('.driver-popover-description').removeAttribute('contenteditable')
-                    break
-                case userActions.editingPopover:
-                    const titleEl = document.querySelector('.driver-popover-title')
-                    titleEl.addEventListener('click', e => {
-                        e.stopPropagation()
-                        e.preventDefault()
-                    })
-                    titleEl.setAttribute('contenteditable', true)
-                    this.driver.options.allowClose = false
                     break
                 default:
             }

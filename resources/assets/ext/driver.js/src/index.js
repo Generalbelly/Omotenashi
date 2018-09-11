@@ -7,6 +7,7 @@ import {
   CLASS_PREV_STEP_BTN,
   ESC_KEY_CODE,
   ID_POPOVER,
+  IS_EDIT_MODE,
   LEFT_KEY_CODE,
   OVERLAY_OPACITY,
   OVERLAY_PADDING,
@@ -28,6 +29,7 @@ export default class Driver {
    */
   constructor(options = {}) {
     this.options = {
+      isEditMode: IS_EDIT_MODE,
       animate: SHOULD_ANIMATE_OVERLAY, // Whether to animate or not
       opacity: OVERLAY_OPACITY,    // Overlay opacity
       padding: OVERLAY_PADDING,    // Spacing around the element from the overlay
@@ -369,7 +371,7 @@ export default class Driver {
     }
 
     let popover = null;
-    if (elementOptions.popover && elementOptions.popover.title) {
+    if (elementOptions.popover && elementOptions.popover.content) {
       const popoverOptions = {
         ...this.options,
         ...elementOptions.popover,

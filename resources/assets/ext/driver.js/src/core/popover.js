@@ -5,10 +5,9 @@ import {
   CLASS_BTN_DISABLED,
   CLASS_CLOSE_BTN,
   CLASS_NEXT_STEP_BTN,
-  CLASS_POPOVER_DESCRIPTION,
+  CLASS_POPOVER_CONTENT,
   CLASS_POPOVER_FOOTER,
   CLASS_POPOVER_TIP,
-  CLASS_POPOVER_TITLE,
   CLASS_PREV_STEP_BTN,
   ID_POPOVER,
   POPOVER_HTML,
@@ -62,8 +61,7 @@ export default class Popover extends Element {
 
     this.node = popover;
     this.tipNode = popover.querySelector(`.${CLASS_POPOVER_TIP}`);
-    this.titleNode = popover.querySelector(`.${CLASS_POPOVER_TITLE}`);
-    this.descriptionNode = popover.querySelector(`.${CLASS_POPOVER_DESCRIPTION}`);
+    this.contentNode = popover.querySelector(`.${CLASS_POPOVER_CONTENT}`);
     this.footerNode = popover.querySelector(`.${CLASS_POPOVER_FOOTER}`);
     this.nextBtnNode = popover.querySelector(`.${CLASS_NEXT_STEP_BTN}`);
     this.prevBtnNode = popover.querySelector(`.${CLASS_PREV_STEP_BTN}`);
@@ -71,21 +69,12 @@ export default class Popover extends Element {
   }
 
   /**
-   * Gets the title node for the popover
+   * Gets the content node for the popover
    * @returns {Element | null | *}
    * @public
    */
-  getTitleNode() {
-    return this.titleNode;
-  }
-
-  /**
-   * Gets the description node for the popover
-   * @returns {Element | null | *}
-   * @public
-   */
-  getDescriptionNode() {
-    return this.descriptionNode;
+  getContentNode() {
+    return this.contentNode;
   }
 
   /**
@@ -120,11 +109,13 @@ export default class Popover extends Element {
    */
   show(position) {
     this.setInitialState();
-
     // Set the title and descriptions
-    this.titleNode.innerHTML = this.options.title;
-    // this.descriptionNode.innerHTML = this.options.description || '';
-    console.log(this.options.description);
+    console.log(this.options.isEditMode);
+    if (this.options.isEditMode) {
+      this.attachPell(this.contentNode, this.options.content);
+    } else {
+      this.contentNode.innerHTML = this.options.content;
+    }
 
     this.renderFooter();
 
@@ -175,8 +166,6 @@ export default class Popover extends Element {
         this.autoPosition(position);
         break;
     }
-
-    this.attachPell(this.descriptionNode, this.options.description);
   }
 
   /**
@@ -461,19 +450,37 @@ export default class Popover extends Element {
     }
   }
 
-  attachPell(node, initialContent='') {
-    const isPellAttached = !!Array.from(node.childNodes).find(node => {
-      return node.classList.contains('pell-actionbar');
+  isPellAttched(node) {
+    if (node.childNodes.length === 0) return false;
+    return !!Array.from(node.childNodes).find(node => {
+        return node.classList.contains('pell-actionbar');
     });
-    if (!isPellAttached) {
+  }
+
+  attachPell(node, initialContent='') {
+    this.contentNode.innerHTML = '';
+    if (!this.isPellAttched(node)) {
       this.editor = pell.init({
         element: node,
-        onChange: html => this.descriptionNode.input = html,
+        onChange: html => this.contentNode.input = html,
+        actions: [
+          'bold',
+          'underline',
+          'strikethrough',
+          'heading1',
+          'heading2',
+          'paragraph',
+          'quote',
+          'olist',
+          'ulist',
+          'line',
+          'link',
+        ],
       });
     } else {
       this.editor = node;
     }
-    this.descriptionNode.input = initialContent
-    this.editor.content.innerHTML = initialContent
+    this.contentNode.input = initialContent;
+    this.editor.content.innerHTML = initialContent;
   }
 }
