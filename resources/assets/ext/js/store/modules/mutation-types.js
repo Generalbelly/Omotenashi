@@ -4,7 +4,3 @@ export const DELETE_TUTORIAL = 'DELETE_TUTORIAL'
 export const SELECT_TUTORIAL = 'SELECT_TUTORIAL'
 
 export const SELECT_STEP = 'SELECT_STEP'
-
-export const RETRIEVE_LOG = 'RETRIEVE_LOG'
-export const SAVE_LOG = 'SAVE_LOG'
-export const UPDATE_USER_ACTION = 'UPDATE_USER_ACTION'

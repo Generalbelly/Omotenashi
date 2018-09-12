@@ -4,20 +4,13 @@ import {
     DELETE_TUTORIAL,
     SELECT_TUTORIAL,
     SELECT_STEP,
-    RETRIEVE_LOG,
-    SAVE_LOG,
 } from './mutation-types'
-
-const EXT_LOG_KEY = '_ot_ext_log'
 
 const state = {
     lastUserAction: null,
     tutorials: [],
     selectedTutorialId: null,
     selectedStepId: null,
-    extLog: {
-        userIsFirstTime: true,
-    },
 }
 
 const getters = {
@@ -66,27 +59,6 @@ const mutations = {
     },
     [SELECT_STEP](state, stepId) {
         state.selectedStepId = stepId
-    },
-    [RETRIEVE_LOG] (state) {
-        try {
-            const savedLog = JSON.parse(localStorage.getItem(EXT_LOG_KEY))
-            if (savedLog) {
-                state.extLog = savedLog
-            }
-        } catch(e) {
-            console.log(e)
-        }
-    },
-    [SAVE_LOG](state, data) {
-        try {
-            state.extLog = {
-                ...state.extLog,
-                ...data,
-            }
-            localStorage.setItem(EXT_LOG_KEY, JSON.stringify(state.extLog))
-        } catch (e) {
-            console.log(e)
-        }
     },
 }
 
@@ -137,12 +109,6 @@ const actions = {
     },
     selectStep({ commit }, stepId) {
         commit(SELECT_STEP, stepId)
-    },
-    retrieveLog({ commit }, tutorial) {
-        commit(RETRIEVE_LOG, tutorial)
-    },
-    saveLog({ commit }, data) {
-        commit(SAVE_LOG, data)
     },
 }
 

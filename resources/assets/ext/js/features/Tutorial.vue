@@ -1,32 +1,5 @@
 <template>
     <div>
-        <div
-            class="primary-nav"
-            v-show="userAction === 'home'"
-        >
-            <div class="has-background-dark"></div>
-            <nav class="navbar level has-background-dark has-margin-bottom-0 has-padding-4 is-fixed-bottom">
-                <div class="level-left">
-                    <h1 class="has-text-white is-size-4">Omotenashi</h1>
-                </div>
-                <div class="level-right">
-                    <p class="level-item">
-                        <button
-                            class="button is-success"
-                            @click.stop.prevent="updateUserAction('onMenu')"
-                        >
-                            {{ extLog.userIsFirstTime ? 'Get started' : 'Tutorial' }}
-                        </button>
-                    </p>
-                    <p class="level-item">
-                        <a class="button" href="#">
-                            Feedback
-                        </a>
-                    </p>
-                </div>
-            </nav>
-        </div>
-
         <Menu
             v-show="userAction === 'onMenu'"
             class="tutorial-panel"
@@ -34,7 +7,7 @@
             :tutorials="tutorials"
             :selected-tutorial="selectedTutorial"
             :selected-step="selectedStep"
-            @homeClick="updateUserAction('home')"
+            @homeClick="$emit('homeClick')"
             @previewClick="onPreviewClick"
             @addStepClick="() => {
                 updateUserAction('addingStep')
@@ -49,12 +22,12 @@
         ></Menu>
 
         <DeleteConfirmationMessage
-                v-show="userAction === 'deletingTutorial'"
-                :selected-tutorial="selectedTutorial"
-                @closeClick="updateUserAction('onMenu')"
-                @deleteClick="() => {
-                    deleteTutorial(selectedTutorial)
-                }"
+            v-show="userAction === 'deletingTutorial'"
+            :selected-tutorial="selectedTutorial"
+            @closeClick="updateUserAction('onMenu')"
+            @deleteClick="() => {
+                deleteTutorial(selectedTutorial)
+            }"
         >
         </DeleteConfirmationMessage>
 
@@ -77,11 +50,6 @@
                 Cancel
             </button>
         </div>
-
-        <GreetingModal
-            v-show="extLog.userIsFirstTime"
-            @startClick="updateUserAction('onMenu')"
-        ></GreetingModal>
 
         <Setting
             v-show="userAction === 'editingTutorial' | userAction === 'addingTutorial'"
@@ -113,7 +81,6 @@ import {
 } from 'vuex'
 import Driver from '../../driver.js/src'
 import BaseMessage from '../components/BaseMessage'
-import GreetingModal from '../components/Tutorial/GreetingModal'
 import Menu from '../components/Tutorial/Menu'
 import Setting from '../components/Tutorial/Setting'
 import DeleteConfirmationMessage from "../components/Tutorial/DeleteConfirmationMessage";
@@ -136,7 +103,6 @@ const userActions = {
     editingPopover: 'editingPopover',
     previewing: 'previewing',
     usingAdvancedEditor: 'usingAdvancedEditor',
-    home: 'home',
 }
 
 export default {
@@ -167,7 +133,7 @@ export default {
     },
     data() {
         return {
-            userAction: userActions.home,
+            userAction: userActions.onMenu,
             driver: null,
             message: {
                 key: '',
@@ -192,11 +158,13 @@ export default {
             'deleteTutorial',
             'selectTutorial',
             'selectStep',
-            'retrieveLog',
-            'saveLog',
             'addStep',
             'updateStep',
             'deleteStep'
+        ]),
+        ...mapActions([
+            'retrieveLog',
+            'saveLog'
         ]),
         updateUserAction(state = null) {
             if (Object.values(userActions).includes(state)) {
@@ -375,10 +343,6 @@ export default {
         userAction(newValue, oldValue) {
             switch (newValue) {
                 case userActions.onMenu:
-                    if (this.extLog.userIsFirstTime) {
-                        this.saveLog({userIsFirstTime: false})
-                    }
-
                     if (oldValue === userActions.previewing) {
                         this.driver.options.allowClose = false
                         this.driver.options.onReset = () => {}
@@ -413,15 +377,12 @@ export default {
             handler(newValue, oldValue) {
                 if (!newValue.isShown) {
                     if (oldValue.dontShowMeChecked) {
-                        if (this.extLog.checkedMessages) {
-                            this.saveLog({
-                                checkedMessages: [
-                                    ...this.extLog.checkedMessages,
-                                    oldValue.key,
-                                ]})
-                        } else {
-                            this.saveLog({ checkedMessages: [ oldValue.key ]})
-                        }
+                        this.saveLog({
+                            checkedMessages: [
+                                ...this.extLog.checkedMessages,
+                                oldValue.key,
+                            ]
+                        })
                     }
                 }
             },
@@ -432,8 +393,8 @@ export default {
             tutorials: state => state.tutorials,
             selectedTutorialId: state => state.selectedTutorialId,
             selectedStepId: state => state.selectedStepId,
-            extLog: state => state.extLog,
         }),
+        ...mapState(['extLog']),
         ...mapGetters('tutorial', [
             'selectedTutorial',
             'selectedStep',
@@ -442,31 +403,18 @@ export default {
     components: {
         DeleteConfirmationMessage,
         BaseMessage,
-        GreetingModal,
         Menu,
         Setting,
     },
 }
 </script>
 <style scoped>
-    .primary-nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
     .tutorial-panel {
         min-width: 30vw;
         max-width: 30vw;
         width: 30vw;
-    }
-    .primary-nav,
-    .tutorial-panel {
         z-index: 10000000;
     }
-
     .editing-actions {
         height: 50px;
         z-index: 100000000;

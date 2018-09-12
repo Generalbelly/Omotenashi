@@ -3,6 +3,7 @@
         @closeClick="$emit('closeClick')"
         :modal-content-class="modalContentClass"
         :content-class="contentClass"
+        :show-close="false"
     >
         <h1>Omotenashi</h1>
         <p class="has-padding-top-4 has-margin-bottom-5 has-text-left">
@@ -12,8 +13,8 @@
         </p>
         <div>
             <button
-                    class="button is-success"
-                    @click="$emit('startClick')"
+                class="button is-success"
+                @click="$emit('startClick')"
             >
                 Let's get started
             </button>
@@ -37,7 +38,7 @@ export default {
         };
     },
     components: {
-        BaseModal
+        BaseModal,
     }
 }
 </script>

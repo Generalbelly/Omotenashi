@@ -75,5 +75,6 @@ module.exports = {
         alias: {
             vue: 'vue/dist/vue.esm.js'
         }
-    }
+    },
+    devtool: 'inline-cheap-module-source-map'
 };
