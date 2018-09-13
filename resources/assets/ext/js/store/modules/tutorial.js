@@ -7,7 +7,6 @@ import {
 } from './mutation-types'
 
 const state = {
-    lastUserAction: null,
     tutorials: [],
     selectedTutorialId: null,
     selectedStepId: null,

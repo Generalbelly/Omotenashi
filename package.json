@@ -3,8 +3,8 @@
     "scripts": {
         "dev": "npm run development",
         "development": "--mode=development webpack --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "watch-ext": "webpack --mode=development --watch --progress --colors --config=./webpack.ext.config.js",
-        "test-ext": "mocha-webpack --webpack-config ./webpack.ext.config.js --require test/setup.js ./resources/assets/test/**/*.spec.js",
+        "watch-ext": "webpack --mode=development --watch --progress --colors --config=./webpack.ext.config.dev.js",
+        "test-ext": "mocha-webpack --webpack-config ./webpack.ext.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/test/ext/**/*.spec.js",
         "watch-poll": "npm run watch -- --watch-poll",
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
@@ -32,7 +32,7 @@
         "jsdom-global": "^3.0.2",
         "mini-css-extract-plugin": "^0.4.1",
         "mocha": "^5.2.0",
-        "mocha-webpack": "^1.1.0",
+        "mocha-webpack": "^2.0.0-beta.0",
         "node-sass": "^4.9.2",
         "popper.js": "^1.12",
         "sass-loader": "^7.1.0",
@@ -50,7 +50,8 @@
         "vue-template-compiler": "^2.5.17",
         "webpack": "^4.16.5",
         "webpack-cli": "^3.1.0",
-        "webpack-md5-hash": "0.0.6"
+        "webpack-md5-hash": "0.0.6",
+        "webpack-node-externals": "^1.7.2"
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^1.2.2",
