@@ -13,7 +13,7 @@ module.exports = {
     './demo/styles/demo.scss',
     './demo/scripts/emoji.js',
     './demo/scripts/demo.js',
-    './src/index.js',
+    './src/app.js',
   ],
   output: {
     path: path.join(__dirname, '/dist/demo'),

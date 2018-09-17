@@ -5,40 +5,39 @@
     >
         <article
             class="message"
-            :class="additionalMessageClass"
+            :class="messageClass"
             @click.stop.prevent=""
         >
-            <div class="message-header">
-                <p>{{ header }}</p>
-                <button
-                    class="delete is-paddingless"
-                    aria-label="delete"
-                    @click.stop.prevent="$emit('closeClick')"
-                ></button>
+            <div
+                class="message-header"
+            >
+                <slot name="header">
+                    <p>{{ header }}</p>
+                    <button
+                        class="delete is-paddingless"
+                        aria-label="delete"
+                        @click.stop.prevent="$emit('closeClick')"
+                    ></button>
+                </slot>
             </div>
             <div
-                v-if="body"
                 class="message-body"
             >
-                {{ body }}
-                <p v-if="dontShowMeOption" class="has-margin-top-3">
-                    <label class="checkbox">
-                        <input
-                            type="checkbox"
-                            :checked="dontShowMeChecked"
-                            :true-value="true"
-                            :false-value="false"
-                            @click="$emit('dontShowMeChecked', $event.target.checked)"
-                        >
-                        Don't show me this message again.
-                    </label>
-                </p>
-            </div>
-            <div
-                v-else
-                class="message-body"
-            >
-                <slot></slot>
+                <slot name="body">
+                    <p>{{ body }}</p>
+                    <p v-if="dontShowMeOption" class="has-margin-top-3">
+                        <label class="checkbox">
+                            <input
+                                type="checkbox"
+                                :checked="dontShowMeChecked"
+                                :true-value="true"
+                                :false-value="false"
+                                @click="$emit('dontShowMeChecked', $event.target.checked)"
+                            >
+                            Don't show me this message again.
+                        </label>
+                    </p>
+                </slot>
             </div>
         </article>
     </div>
@@ -54,10 +53,10 @@ export default {
             type: String,
             default: '',
         },
-        messageClass: {
+        messageClasses: {
             type: Array,
             default() {
-                return [];
+                return []
             }
         },
         dontShowMeOption: {
@@ -70,18 +69,10 @@ export default {
         }
     },
     computed: {
-        additionalMessageClass() {
-            if (this.messageClass.length) {
-                return this.messageClass.reduce((a, c) => {
-                    return {
-                        ...a,
-                        [c]: true,
-                    }
-                }, {});
-            }
-            return {};
-        }
-    }
+        messageClass() {
+            return this.convertArrayToObject(this.messageClasses);
+        },
+    },
 }
 </script>
 

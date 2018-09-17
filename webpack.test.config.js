@@ -3,11 +3,7 @@ const nodeExternals = require('webpack-node-externals');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const isCoverage = process.env.NODE_ENV === 'coverage';
 
-module.exports = {
-    mode: 'development',
-    entry: [
-        './resources/assets/test/ext/app.js',
-    ],
+let config = {
     module: {
         rules: [
             {
@@ -70,3 +66,23 @@ module.exports = {
     externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
     devtool: "inline-cheap-module-source-map",
 };
+
+
+if (isCoverage) {
+    config.module.rules.unshift({
+        test: /\..{js,vue}$/,
+        include: [
+            path.resolve(__dirname, "resources/assets/js"),
+            path.resolve(__dirname, "resources/assets/ext"),
+        ],
+        use: {
+            loader: "istanbul-instrumenter-loader",
+            options: { esModules: true },
+        },
+        enforce: 'post',
+    });
+}
+
+config.mode = "development";
+
+module.exports = config;

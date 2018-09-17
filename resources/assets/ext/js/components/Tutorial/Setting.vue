@@ -35,7 +35,6 @@
     </div>
 </template>
 <script>
-import BaseModal from '../BaseModal';
 
 export default {
     props: {
@@ -82,9 +81,6 @@ export default {
             },
         },
     },
-    components: {
-        BaseModal
-    }
 }
 
 </script>

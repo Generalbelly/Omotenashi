@@ -3,14 +3,14 @@
         <div class="modal-background"></div>
         <div
             class="modal-content"
-            :class="addtionalModalClass"
+            :class="modalClass"
         >
             <div
                 class="content"
                 style="flex-direction: column;"
-                :class="addtionalContentClass"
+                :class="contentClass"
             >
-                <slot></slot>
+                <slot name="content"></slot>
             </div>
         </div>
         <button
@@ -28,13 +28,13 @@ export default {
             type: Boolean,
             default: true,
         },
-        modalContentClass: {
+        modalContentClasses: {
             type: Array,
             default() {
                 return [];
             }
         },
-        contentClass: {
+        contentClasses: {
             type: Array,
             default() {
                 return [];
@@ -44,23 +44,12 @@ export default {
     data() {
         return {};
     },
-    methods: {
-        convertArrayToObject(array, value=true) {
-            if (!Array.isArray(array)) return false;
-            return array.reduce((a, c) => {
-                return {
-                    ...a,
-                    [c]: value,
-                }
-            }, {});
-        },
-    },
     computed: {
-        addtionalModalClass() {
-            return this.convertArrayToObject(this.modalContentClass);
+        modalClass() {
+            return this.convertArrayToObject(this.modalContentClasses)
         },
-        addtionalContentClass() {
-            return this.convertArrayToObject(this.contentClass);
+        contentClass() {
+            return this.convertArrayToObject(this.contentClasses)
         }
     }
 };

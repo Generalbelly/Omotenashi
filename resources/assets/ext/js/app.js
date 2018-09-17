@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
     faHome,
     faPlay,
@@ -11,9 +12,12 @@ import {
     faPen,
     faEdit,
     faExchangeAlt,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+} from '@fortawesome'
+
 import store from './store'
+import mixins from './mixins';
+
+Vue.mixin(mixins);
 
 // import LogRocket from 'logrocket';
 // LogRocket.init('agnj7d/omotenashi');

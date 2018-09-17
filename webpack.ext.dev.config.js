@@ -45,7 +45,18 @@ module.exports = {
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: ['babel-preset-stage-2']
+                            presets: ['@babel/preset-env'],
+                            plugins: [
+                                '@babel/plugin-proposal-class-properties',
+                                '@babel/plugin-proposal-object-rest-spread',
+                                ["transform-imports", {
+                                    "@fortawesome": {
+                                        "transform": "@fortawesome/free-solid-svg-icons/${member}",
+                                        "preventFullImport": true,
+                                        "skipDefaultConversion": true,
+                                    }
+                                }],
+                            ]
                         }
                     }
                 ],
@@ -77,5 +88,4 @@ module.exports = {
             vue: 'vue/dist/vue.esm.js'
         }
     },
-    devtool: '#eval-source-map'
 };

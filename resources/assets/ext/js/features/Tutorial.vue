@@ -65,7 +65,7 @@
             :dontShowMeChecked="message.dontShowMeChecked"
             :header="message.header"
             :body="message.body"
-            :message-class="message.messageClass"
+            :message-classes="message.messageClasses"
             @closeClick="hideMessage"
             @dontShowMeChecked="e => message.dontShowMeChecked = e"
         ></BaseMessage>
@@ -141,13 +141,13 @@ export default {
                 dontShowMeChecked: false,
                 header: '',
                 body: '',
-                messageClass: [],
+                messageClasses: [],
                 isShown: false,
             },
             menuIsOnTheRight: true,
             selectorChoices: [],
             selectorChoiceIndex: 0,
-            maxRetries: 3,
+            maxRetries: 5,
             editor: null,
         }
     },
@@ -185,20 +185,21 @@ export default {
             }
             return null
         },
-        showMessage({ key, header, body, messageClass }) {
+        showMessage({ key, header, body, messageClasses }) {
             if (!this.extLog.checkedMessages || !this.extLog.checkedMessages.includes(key)) {
                 this.message = {
                     ...this.message,
                     key,
                     header,
                     body,
-                    messageClass,
+                    messageClasses,
                     isShown: true,
                 }
             }
         },
         hideMessage() {
             this.message.isShown = false
+            this.message.dontShowMeChecked = false
         },
         onTutorialSaveClick(tutorial) {
             if (tutorial.id) {
@@ -213,7 +214,6 @@ export default {
             this.updateUserAction(userActions.onMenu)
         },
         editStep(step) {
-            console.log(step)
             this.selectStep(step.id)
             this.highlight(step)
         },
@@ -249,6 +249,27 @@ export default {
             }
             this.updateUserAction(userActions.onMenu)
         },
+        extractSelectorChoices(e) {
+            let upperElements = []
+            let lowerElements = []
+            e.composedPath().find((el, index) => {
+                if (el.tagName.toLowerCase() === 'body') return true
+                const selector = this.getSelector(el)
+                upperElements.push(selector)
+                if (index === 0) {
+                    Array.from(el.children).forEach((childEl) => {
+                        const selector = this.getSelector(childEl)
+                        lowerElements.push(selector)
+                    })
+                }
+                return false
+            })
+
+            return [
+                ...lowerElements,
+                ...upperElements,
+            ]
+        },
         userScreenClickHandler(e) {
             // omotenashiの要素のクリックは無視
             if (e.composedPath().find(el => el.id === 'omotenashi')) return
@@ -263,11 +284,7 @@ export default {
                 e.preventDefault() // for driver.js
                 e.stopPropagation() // for driver.js
                 if (this.selectorChoices.length === 0) {
-                    e.composedPath().find(el => {
-                        if (el === document.documentElement) return true
-                        this.selectorChoices.push(el)
-                        return false
-                    })
+                    this.selectorChoices = this.extractSelectorChoices(e)
                 }
 
                 const selector = this.selectorChoices[this.selectorChoiceIndex]
@@ -278,8 +295,8 @@ export default {
                 this.showMessage({
                     key: messageKeys.selectorChoicesAvailable,
                     header: "Tips",
-                    body: "If the element is not correctly highlighted, you should keep clicking until you find the right one.",
-                    messageClass: ['is-info', 'is-fixed-top-right'],
+                    body: "If the element is not correctly highlighted or not bright enough, you should keep clicking until you find the right one.",
+                    messageClasses: ['is-info', 'is-fixed-top-right'],
                 })
             }
         },
@@ -295,6 +312,8 @@ export default {
             this.driver.options.isEditMode = true
             this.updateUserAction(userActions.editingPopover)
 
+            console.log(element);
+
             this.driver.highlight({
                 element,
                 popover,
@@ -308,7 +327,7 @@ export default {
                     key: this.messageKeys.noStepAddedYet,
                     header: "Oops",
                     body: "You haven't added any step yet.",
-                    messageClass: ['is-warning', 'is-fixed-top-right'],
+                    messageClasses: ['is-warning', 'is-fixed-top-right'],
                 })
                 return
             }
@@ -329,7 +348,7 @@ export default {
                     key: messageKeys.noMoreSelectorChoices,
                     header: "Oops",
                     body: "Looks like we don't have any other elements to show you.",
-                    messageClass: ['is-warning', 'is-fixed-top-right'],
+                    messageClasses: ['is-warning', 'is-fixed-top-right'],
                 })
                 this.selectorChoiceIndex = 0
             } else {
@@ -361,7 +380,7 @@ export default {
                         key: messageKeys.clickToAddStep,
                         header: "Tips",
                         body: "Click anywhere you want to attract your user attention",
-                        messageClass: ['is-info', 'is-small', 'is-fixed-top-right'],
+                        messageClasses: ['is-info', 'is-small', 'is-fixed-top-right'],
                     })
                     break
                 default:

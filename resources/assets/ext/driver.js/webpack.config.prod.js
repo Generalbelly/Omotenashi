@@ -5,7 +5,7 @@ module.exports = {
   mode: 'production',
   entry: [
     './src/driver.scss',
-    './src/index.js',
+    './src/app.js',
   ],
   output: {
     path: path.join(__dirname, '/dist'),
