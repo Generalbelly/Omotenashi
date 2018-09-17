@@ -87,5 +87,6 @@ export default {
     }
     .message {
         min-width: 30vw;
+        max-width: 50vw;
     }
 </style>

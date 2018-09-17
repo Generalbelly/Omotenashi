@@ -1,32 +1,34 @@
 <template>
     <BaseMessage
             header="Delete Tutorial"
-            :message-class="['is-danger', 'is-fixed-bottom-right']"
+            :message-classes="['is-danger', 'is-fixed-bottom-right']"
             @closeClick="$emit('closeClick')"
     >
-        <p class="has-padding-top-1 has-padding-bottom-4">
-            Your are about to delete "{{ selectedTutorial.name }}".<br/>
-            Please type in the name of the tutorial to confirm.
-        </p>
-        <div class="field">
-            <p class="control">
-                <input
-                    class="input"
-                    type="text"
-                    placeholder="Tutorial name"
-                    v-model="tutorialNameToDelete"
-                >
+        <template slot="body">
+            <p class="has-padding-top-1 has-padding-bottom-4">
+                Your are about to delete "{{ selectedTutorial.name }}".<br/>
+                Please type in the name of the tutorial to confirm.
             </p>
-        </div>
-        <div class="field">
-            <button
-                class="button is-danger is-outlined is-fullwidth"
-                :disabled="tutorialNameToDelete === '' || tutorialNameToDelete != selectedTutorial.name"
-                @click="$emit('deleteClick')"
-            >
-                DELETE
-            </button>
-        </div>
+            <div class="field">
+                <p class="control">
+                    <input
+                            class="input"
+                            type="text"
+                            placeholder="Tutorial name"
+                            v-model="tutorialName"
+                    >
+                </p>
+            </div>
+            <div class="field">
+                <button
+                        class="button is-danger is-outlined is-fullwidth"
+                        :disabled="tutorialName === '' || tutorialName != selectedTutorial.name"
+                        @click="$emit('deleteClick')"
+                >
+                    DELETE
+                </button>
+            </div>
+        </template>
     </BaseMessage>
 </template>
 <script>
@@ -45,12 +47,12 @@
         },
         data() {
             return {
-                tutorialNameToDelete: '',
+                tutorialName: '',
             }
         },
         watch: {
             selectedTutorial() {
-                this.tutorialNameToDelete = ''
+                this.tutorialName = ''
             }
         },
     }

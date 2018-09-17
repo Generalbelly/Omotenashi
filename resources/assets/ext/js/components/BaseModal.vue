@@ -7,7 +7,6 @@
         >
             <div
                 class="content"
-                style="flex-direction: column;"
                 :class="contentClass"
             >
                 <slot name="content"></slot>
@@ -57,5 +56,10 @@ export default {
 <style>
     .modal {
         z-index: 10000000000 !important;
+    }
+</style>
+<style scoped>
+    .content {
+        flex-direction: column !important;
     }
 </style>

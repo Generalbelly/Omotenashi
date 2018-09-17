@@ -29,8 +29,8 @@ import BaseModal from '../BaseModal';
 export default {
     data() {
         return {
-            modalContentClasses: ['has-background-white'],
-            contentClasses: ['has-padding-5'],
+            modalContentClasses: ['has-background-white', 'has-padding-5'],
+            contentClasses: [''],
         };
     },
     components: {

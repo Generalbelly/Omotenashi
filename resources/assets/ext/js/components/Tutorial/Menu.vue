@@ -1,9 +1,9 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
     <nav class="panel has-background-white">
         <p class="panel-heading level has-margin-bottom-0">
             <span>Tutorial</span>
             <button
-                class="button is-small has-background-grey has-text-white"
+                class="button is-small has-background-grey has-text-white tutorial-add-button"
                 @click="$emit('addTutorialClick')"
             >
                 <span class="icon">
@@ -12,66 +12,67 @@
                 <span>Add</span>
             </button>
         </p>
-        <p class="panel-block">
-            <span class="select">
+        <div class="panel-block level">
+            <div class="select">
                 <select
+                    @change="onTutorialChange($event.target.value)"
                     v-model="selectedTutorialId"
                 >
                     <option
-                        :key="t.id"
-                        v-for="t in tutorials"
-                        :value="t.id"
+                        v-for="tutorial in tutorials"
+                        :key="tutorial.id"
+                        :value="tutorial.id"
                     >
-                        {{ t.name }}
+                        {{ tutorial.name }}
                     </option>
                 </select>
-            </span>
-
-            <span class="field is-grouped has-margin-left-auto">
-                <p class="control">
+            </div>
+            <div class="field is-grouped has-margin-left-auto">
+                <div class="control">
                     <button
                         class="button is-small"
                         @click.stop.prevent="$emit('editTutorialClick')"
                     >
-                        <span class="icon">
-                            <font-awesome-icon icon="pen"></font-awesome-icon>
-                        </span>
+                            <span class="icon">
+                                <font-awesome-icon icon="pen"></font-awesome-icon>
+                            </span>
                         <span>Edit</span>
                     </button>
-                </p>
-                <p class="control">
+                </div>
+                <div class="control">
                     <button
                         v-show="tutorials.length > 1"
                         class="button is-small"
                         @click="$emit('deleteTutorialClick')"
                     >
-                        <span class="icon">
-                            <font-awesome-icon icon="trash"></font-awesome-icon>
-                        </span>
+                            <span class="icon">
+                                <font-awesome-icon icon="trash"></font-awesome-icon>
+                            </span>
                         <span>Delete</span>
                     </button>
-                </p>
-            </span>
-        </p>
-        <a
-            v-if="selectedTutorial"
-            class="panel-block has-padding-top-4 has-padding-bottom-4"
-            :key="step.id"
-            v-for="(step, stepIndex) in selectedTutorial.steps"
-            :class="{ 'is-active': step.id === (selectedStep && selectedStep.id) }"
-            @click.stop.prevent="$emit('stepClick', step)"
-        >
-            <span class="panel-icon">
-                 <font-awesome-icon icon="circle"></font-awesome-icon>
-            </span>
-            Step {{ stepIndex+1 }}
-            <span
-                class="panel-icon block has-margin-left-auto has-cursor-pointer"
-                @click.stop.prevent="$emit('deleteStepClick', step)"
+                </div>
+            </div>
+        </div>
+        <div v-if="selectedTutorial">
+            <a
+                class="panel-block has-padding-top-4 has-padding-bottom-4"
+                :key="step.id"
+                v-for="(step, stepIndex) in selectedTutorial.steps"
+                :class="{ 'is-active': step.id === selectedStep.id }"
+                @click.stop.prevent="$emit('stepClick', step)"
             >
-                 <font-awesome-icon icon="trash"></font-awesome-icon>
-            </span>
-        </a>
+                <span class="panel-icon">
+                     <font-awesome-icon icon="circle"></font-awesome-icon>
+                </span>
+                    Step {{ stepIndex+1 }}
+                    <span
+                        class="panel-icon block has-margin-left-auto has-cursor-pointer"
+                        @click.stop.prevent="$emit('deleteStepClick', step)"
+                    >
+                     <font-awesome-icon icon="trash"></font-awesome-icon>
+                </span>
+            </a>
+        </div>
         <div
             v-else
             class="panel-block"
@@ -136,15 +137,30 @@ export default {
             default: null,
         },
     },
-    computed: {
-        selectedTutorialId: {
-            get() {
-                return this.$store.state.tutorial.selectedTutorialId
-            },
-            set(value) {
-                this.$store.dispatch('tutorial/selectTutorial', value)
-            },
-        },
+    data() {
+        return {
+            selectedTutorialId: null
+        }
     },
+    watch: {
+        selectedTutorial: {
+            immediate: true,
+            handler (value) {
+                if (value) {
+                    this.selectedTutorialId = value.id
+                }
+            }
+        }
+    },
+    methods: {
+        onTutorialChange(tutorialId) {
+            this.$emit('tutorialChange', tutorialId)
+        }
+    }
 }
 </script>
+<style scoped>
+    .tutorial-add-button {
+        max-width: 80px !important;
+    }
+</style>

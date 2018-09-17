@@ -51,7 +51,7 @@
 //         })
 //     })
 //
-//     describe('@events', () => {
+//     describe('@eventss', () => {
 //         it('@homeClick - should emit an "homeclick" event when the home button is clicked', () => {
 //             const wrapper = shallowMount(Tutorial, { store, localVue })
 //             wrapper.vm.$emit('homeClick')

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from './App.vue'
+
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
@@ -16,11 +16,7 @@ import {
 
 import store from './store'
 import mixins from './mixins';
-
-Vue.mixin(mixins);
-
-// import LogRocket from 'logrocket';
-// LogRocket.init('agnj7d/omotenashi');
+import App from './App.vue'
 
 library.add(
     faHome,
@@ -34,6 +30,12 @@ library.add(
     faExchangeAlt
 )
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+
+Vue.mixin(mixins);
+
+// import LogRocket from 'logrocket';
+// LogRocket.init('agnj7d/omotenashi');
+
 
 import "../sass/app.scss"
 

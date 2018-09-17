@@ -7,6 +7,7 @@
             :tutorials="tutorials"
             :selected-tutorial="selectedTutorial"
             :selected-step="selectedStep"
+            @tutorialChange="selectTutorial"
             @homeClick="$emit('homeClick')"
             @previewClick="onPreviewClick"
             @addStepClick="() => {
@@ -25,9 +26,7 @@
             v-show="userAction === 'deletingTutorial'"
             :selected-tutorial="selectedTutorial"
             @closeClick="updateUserAction('onMenu')"
-            @deleteClick="() => {
-                deleteTutorial(selectedTutorial)
-            }"
+            @deleteClick="deleteTutorial(selectedTutorial)"
         >
         </DeleteConfirmationMessage>
 

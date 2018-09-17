@@ -4,7 +4,7 @@
         "dev": "npm run development",
         "development": "--mode=development webpack --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch-ext": "webpack --mode=development --watch --progress --colors --config=./webpack.ext.dev.config.js",
-        "test-ext": "mocha-webpack --webpack-config ./webpack.ext.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/test/ext/**/*.spec.js",
+        "test-ext": "mocha-webpack --webpack-config ./webpack.ext.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/test/ext/**/*.spec.js ./resources/assets/test/ext/components/**/*.spec.js",
         "watch-poll": "npm run watch -- --watch-poll",
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",

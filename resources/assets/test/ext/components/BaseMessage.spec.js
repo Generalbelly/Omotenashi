@@ -103,8 +103,8 @@ describe('BaseMessage.vue', () => {
 
     })
 
-    describe('@event', () => {
-        it('closeClick - should be emitted when the close button is clicked and anywhere outside of the message is clicked', () => {
+    describe('@events', () => {
+        it('@closeClick - should be emitted when the close button is clicked and anywhere outside of the message is clicked', () => {
 
             const wrapper = shallowMount(BaseMessage, {
                 localVue: Vue,
@@ -123,7 +123,7 @@ describe('BaseMessage.vue', () => {
 
         })
 
-        it('dontShowMeChecked - should be emitted when the checkbox is checked', ()=> {
+        it('@dontShowMeChecked - should be emitted when the checkbox is checked', ()=> {
 
             const wrapper = shallowMount(BaseMessage, {
                 localVue: Vue,
