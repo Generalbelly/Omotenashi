@@ -1,29 +1,29 @@
 <template>
     <BaseMessage
-            header="Delete Tutorial"
-            :message-classes="['is-danger', 'is-fixed-bottom-right']"
-            @closeClick="$emit('closeClick')"
+        header="Delete Tutorial"
+        :message-classes="['is-danger', 'is-fixed-bottom-right']"
+        @closeClick="$emit('closeClick')"
     >
         <template slot="body">
             <p class="has-padding-top-1 has-padding-bottom-4">
-                Your are about to delete "{{ selectedTutorial.name }}".<br/>
+                Your are about to delete "{{ tutorial.name }}".<br/>
                 Please type in the name of the tutorial to confirm.
             </p>
             <div class="field">
                 <p class="control">
                     <input
-                            class="input"
-                            type="text"
-                            placeholder="Tutorial name"
-                            v-model="tutorialName"
+                        class="input"
+                        type="text"
+                        placeholder="Tutorial name"
+                        v-model="tutorialName"
                     >
                 </p>
             </div>
             <div class="field">
                 <button
-                        class="button is-danger is-outlined is-fullwidth"
-                        :disabled="tutorialName === '' || tutorialName != selectedTutorial.name"
-                        @click="$emit('deleteClick')"
+                    class="button is-danger is-outlined is-fullwidth"
+                    :disabled="tutorialName === '' || tutorialName != tutorial.name"
+                    @click="$emit('deleteClick')"
                 >
                     DELETE
                 </button>
@@ -36,9 +36,11 @@
 
     export default {
         name: 'DeleteConfirmationMessage',
-        components: {BaseMessage},
+        components: {
+            BaseMessage
+        },
         props: {
-            selectedTutorial: {
+            tutorial: {
                 type: Object,
                 default() {
                     return {}
@@ -51,7 +53,7 @@
             }
         },
         watch: {
-            selectedTutorial() {
+            tutorial() {
                 this.tutorialName = ''
             }
         },

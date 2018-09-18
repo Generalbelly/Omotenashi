@@ -56,6 +56,7 @@ describe('BaseModal.vue', () => {
 
     describe('slot', () => {
         it('content - should render slot content', () => {
+
             const wrapper = shallowMount(BaseModal, {
                 localVue: Vue,
                 slots: {

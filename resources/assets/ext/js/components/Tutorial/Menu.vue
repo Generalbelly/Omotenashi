@@ -45,9 +45,9 @@
                         class="button is-small"
                         @click="$emit('deleteTutorialClick')"
                     >
-                            <span class="icon">
-                                <font-awesome-icon icon="trash"></font-awesome-icon>
-                            </span>
+                        <span class="icon">
+                            <font-awesome-icon icon="trash"></font-awesome-icon>
+                        </span>
                         <span>Delete</span>
                     </button>
                 </div>

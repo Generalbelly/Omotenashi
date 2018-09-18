@@ -139,6 +139,7 @@ describe('BaseMessage.vue', () => {
             checkBox.setChecked()
 
             expect(wrapper.emitted().dontShowMeChecked.length).to.equal(1)
+
             expect(wrapper.emitted().dontShowMeChecked[0][0]).to.equal(true)
 
         })

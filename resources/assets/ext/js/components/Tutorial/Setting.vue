@@ -2,20 +2,30 @@
     <div class="modal is-active">
         <div class="modal-background"></div>
         <div class="modal-card">
-            <header class="modal-card-head">
+            <header class="modal-card-head has-margin-bottom-0">
                 <p class="modal-card-title">{{ isCreate ? 'Create' : 'Edit' }} Tutorial</p>
             </header>
             <section class="modal-card-body">
                 <div class="field">
                     <label class="label">Name</label>
                     <div class="control">
-                        <input v-model="updatedTutorial.name" class="input" type="text" placeholder="First timers">
+                        <input
+                            v-model="updatedTutorial.name"
+                            class="input"
+                            type="text"
+                            placeholder="First timers"
+                        >
                     </div>
                 </div>
                 <div class="field">
                     <label class="label">Description (Optional)</label>
                     <div class="control">
-                        <textarea v-model="updatedTutorial.description" class="textarea" placeholder="updatedTutorial for the first time customers."></textarea>
+                        <textarea
+                            v-model="updatedTutorial.description"
+                            class="textarea"
+                            placeholder="updatedTutorial for the first time customers."
+                        >
+                        </textarea>
                     </div>
                 </div>
             </section>

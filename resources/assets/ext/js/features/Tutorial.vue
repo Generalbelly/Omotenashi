@@ -24,7 +24,7 @@
 
         <DeleteConfirmationMessage
             v-show="userAction === 'deletingTutorial'"
-            :selected-tutorial="selectedTutorial"
+            :tutorial="selectedTutorial"
             @closeClick="updateUserAction('onMenu')"
             @deleteClick="deleteTutorial(selectedTutorial)"
         >
