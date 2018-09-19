@@ -22,8 +22,8 @@
             <div class="field">
                 <button
                     class="button is-danger is-outlined is-fullwidth"
-                    :disabled="tutorialName === '' || tutorialName != tutorial.name"
-                    @click="$emit('deleteClick')"
+                    :disabled="isButtonDisabled"
+                    @click="onDeleteClick"
                 >
                     DELETE
                 </button>
@@ -52,10 +52,20 @@
                 tutorialName: '',
             }
         },
+        computed: {
+            isButtonDisabled() {
+                return (this.tutorialName === '' || this.tutorialName != this.tutorial.name)
+            }
+        },
         watch: {
             tutorial() {
                 this.tutorialName = ''
             }
         },
+        methods: {
+            onDeleteClick() {
+                this.$emit('deleteClick');
+            }
+        }
     }
 </script>

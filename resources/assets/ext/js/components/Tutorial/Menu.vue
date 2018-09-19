@@ -1,9 +1,9 @@
-<template xmlns="http://www.w3.org/1999/html">
+<template>
     <nav class="panel has-background-white">
         <p class="panel-heading level has-margin-bottom-0">
-            <span>Tutorial</span>
+            <span class="is-size-4 has-text-weight-semibold">Tutorial</span>
             <button
-                class="button is-small has-background-grey has-text-white tutorial-add-button"
+                class="button has-background-grey has-text-white tutorial-add-button"
                 @click="$emit('addTutorialClick')"
             >
                 <span class="icon">
@@ -12,8 +12,8 @@
                 <span>Add</span>
             </button>
         </p>
-        <div class="panel-block level">
-            <div class="select">
+        <p class="panel-block level has-margin-bottom-0">
+            <span class="select">
                 <select
                     @change="onTutorialChange($event.target.value)"
                     v-model="selectedTutorialId"
@@ -26,11 +26,11 @@
                         {{ tutorial.name }}
                     </option>
                 </select>
-            </div>
-            <div class="field is-grouped has-margin-left-auto">
-                <div class="control">
+            </span>
+            <span class="field is-grouped has-margin-left-auto">
+                <p class="control">
                     <button
-                        class="button is-small"
+                        class="button"
                         @click.stop.prevent="$emit('editTutorialClick')"
                     >
                             <span class="icon">
@@ -38,11 +38,11 @@
                             </span>
                         <span>Edit</span>
                     </button>
-                </div>
-                <div class="control">
+                </p>
+                <p class="control">
                     <button
                         v-show="tutorials.length > 1"
-                        class="button is-small"
+                        class="button"
                         @click="$emit('deleteTutorialClick')"
                     >
                         <span class="icon">
@@ -50,10 +50,10 @@
                         </span>
                         <span>Delete</span>
                     </button>
-                </div>
-            </div>
-        </div>
-        <div v-if="selectedTutorial">
+                </p>
+            </span>
+        </p>
+        <template v-if="selectedTutorial && selectedStep">
             <a
                 class="panel-block has-padding-top-4 has-padding-bottom-4"
                 :key="step.id"
@@ -65,22 +65,14 @@
                      <font-awesome-icon icon="circle"></font-awesome-icon>
                 </span>
                     Step {{ stepIndex+1 }}
-                    <span
-                        class="panel-icon block has-margin-left-auto has-cursor-pointer"
-                        @click.stop.prevent="$emit('deleteStepClick', step)"
-                    >
+                <span
+                    class="panel-icon block has-margin-left-auto has-cursor-pointer"
+                    @click.stop.prevent="$emit('deleteStepClick', step)"
+                >
                      <font-awesome-icon icon="trash"></font-awesome-icon>
                 </span>
             </a>
-        </div>
-        <div
-            v-else
-            class="panel-block"
-        >
-            <p class="has-padding-top-4 has-padding-bottom-4">
-                No step added yet.
-            </p>
-        </div>
+        </template>
         <div class="panel-block">
             <button
                 class="button is-link is-outlined is-fullwidth"
@@ -162,5 +154,9 @@ export default {
 <style scoped>
     .tutorial-add-button {
         max-width: 80px !important;
+    }
+    .panel-heading,
+    .panel-block {
+        padding: 1em !important;
     }
 </style>

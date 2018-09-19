@@ -9,6 +9,7 @@ describe('DeleteConfirmationMessage.vue', () => {
 
     beforeEach(() => {
         tutorial = {
+            id: '953c909a-e446-43fb-aea2-e07fa29716e9',
             name: 'Awesome Tutorial',
             description: 'This tutorial is awesome.',
         }
@@ -20,27 +21,22 @@ describe('DeleteConfirmationMessage.vue', () => {
 
             const wrapper = shallowMount(DeleteConfirmationMessage, {
                 localVue: Vue,
-                tutorial,
+                propsData: {
+                    tutorial,
+                },
             })
 
             const deleteButton = wrapper.find('button.button.is-danger.is-fullwidth')
 
             deleteButton.trigger('click')
 
-            // The button has disable attribute,
+            // The button has disable html attribute,
             // so you are not suppose to be able to click and the event wont'be emitted.
             expect(wrapper.emitted()).to.not.have.property('deleteClick');
-
-            // When you type the tutorial name in browser,
-            // the disabled attribute is supposed to be removed.
-            // Somehow, however it's not working that way in test,
-            // so I manually remove the attribute.
 
             wrapper.setData({
                 tutorialName: tutorial.name,
             })
-
-            deleteButton.element.removeAttribute('disabled')
 
             deleteButton.trigger('click')
 
@@ -51,7 +47,6 @@ describe('DeleteConfirmationMessage.vue', () => {
 
             const wrapper = shallowMount(DeleteConfirmationMessage, {
                 localVue: Vue,
-                tutorial,
             })
 
             const baseMessage = wrapper.find(BaseMessage)

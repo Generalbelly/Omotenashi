@@ -2,38 +2,43 @@ export default {
     data() {
         return {
             serverErrors: {},
-        };
+            clientErrors: {},
+        }
+    },
+    watch: {
+        errors: {
+            deep: true,
+            immediate: true,
+            handler(value) {
+                if (value) {
+                    this.clientErrors = {
+                        ...value.collect(),
+                    }
+                } else {
+                    this.clientErrors = {}
+                }
+            }
+        },
     },
     methods: {
         getErrors(key) {
-            if (!(key && this.serverErrors)) return [];
-            let errors = [];
-            if (Object.keys(this.serverErrors).includes(key)) {
-                const serverErrors = this.serverErrors[key];
-                errors = [
-                    ...errors,
-                    ...serverErrors,
-                ];
+            const errors = {
+                ...this.clientErrors,
+                ...this.serverErrors,
             }
-            const clientErrors = this.errors.collect(key);
-            if (clientErrors.length > 0) {
-                errors = [
-                    ...errors,
-                    clientErrors,
-                ];
-            }
-            return errors;
+            if (!errors[key]) return []
+            return errors[key]
         },
         validate() {
             return new Promise(((resolve, reject) => {
                 this.$validator.validateAll()
                     .then(result => {
-                        resolve(result);
+                        resolve(result)
                     })
                     .catch(() => {
-                        reject();
-                    });
-            }));
+                        reject()
+                    })
+            }))
         },
     },
-};
+}

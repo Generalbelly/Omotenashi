@@ -8,6 +8,7 @@ describe('BaseMessage.vue', () => {
 
     beforeEach(() => {
         tutorial = {
+            id: '953c909a-e446-43fb-aea2-e07fa29716e9',
             name: 'Awesome Tutorial',
             description: 'This tutorial is awesome.',
         }
@@ -49,7 +50,9 @@ describe('BaseMessage.vue', () => {
         it('@cancelClick - should be emitted, when the cancel button is clicked', () => {
             const wrapper = shallowMount(Setting, {
                 localVue: Vue,
-                tutorial,
+                propsData: {
+                    tutorial,
+                }
             })
 
             const cancelButton = wrapper.find('footer > button:nth-child(2)')
