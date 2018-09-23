@@ -20,25 +20,23 @@
                 </p>
             </div>
             <div class="field">
-                <button
-                    class="button is-danger is-outlined is-fullwidth"
-                    :disabled="isButtonDisabled"
+                <BaseButton
+                    :classes="['is-danger', 'is-outlined', 'is-fullwidth']"
                     @click="onDeleteClick"
+                    :disabled="isButtonDisabled"
                 >
                     DELETE
-                </button>
+                </BaseButton>
             </div>
         </template>
     </BaseMessage>
 </template>
 <script>
     import BaseMessage from '../BaseMessage'
+    import BaseButton from '../BaseButton'
 
     export default {
         name: 'DeleteConfirmationMessage',
-        components: {
-            BaseMessage
-        },
         props: {
             tutorial: {
                 type: Object,
@@ -66,6 +64,10 @@
             onDeleteClick() {
                 this.$emit('deleteClick');
             }
+        },
+        components: {
+            BaseMessage,
+            BaseButton,
         }
     }
 </script>

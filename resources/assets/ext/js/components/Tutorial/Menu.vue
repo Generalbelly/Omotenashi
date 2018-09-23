@@ -2,15 +2,15 @@
     <nav class="panel has-background-white">
         <p class="panel-heading level has-margin-bottom-0">
             <span class="is-size-4 has-text-weight-semibold">Tutorial</span>
-            <button
-                class="button has-background-grey has-text-white tutorial-add-button"
+            <BaseButton
+                :classes="['has-background-grey', 'has-text-white', 'tutorial-add-button']"
                 @click="$emit('addTutorialClick')"
             >
                 <span class="icon">
                     <font-awesome-icon icon="plus"></font-awesome-icon>
                 </span>
                 <span>Add</span>
-            </button>
+            </BaseButton>
         </p>
         <p class="panel-block level has-margin-bottom-0">
             <span class="select">
@@ -29,36 +29,34 @@
             </span>
             <span class="field is-grouped has-margin-left-auto">
                 <p class="control">
-                    <button
-                        class="button"
-                        @click.stop.prevent="$emit('editTutorialClick')"
+                    <BaseButton
+                        @click="$emit('editTutorialClick')"
                     >
-                            <span class="icon">
-                                <font-awesome-icon icon="pen"></font-awesome-icon>
-                            </span>
+                        <span class="icon">
+                            <font-awesome-icon icon="pen"></font-awesome-icon>
+                        </span>
                         <span>Edit</span>
-                    </button>
+                    </BaseButton>
                 </p>
                 <p class="control">
-                    <button
+                    <BaseButton
                         v-show="tutorials.length > 1"
-                        class="button"
                         @click="$emit('deleteTutorialClick')"
                     >
                         <span class="icon">
                             <font-awesome-icon icon="trash"></font-awesome-icon>
                         </span>
                         <span>Delete</span>
-                    </button>
+                    </BaseButton>
                 </p>
             </span>
         </p>
-        <template v-if="selectedTutorial && selectedStep">
+        <template v-if="selectedTutorial">
             <a
                 class="panel-block has-padding-top-4 has-padding-bottom-4"
                 :key="step.id"
                 v-for="(step, stepIndex) in selectedTutorial.steps"
-                :class="{ 'is-active': step.id === selectedStep.id }"
+                :class="{ 'is-active':isActiveStep(step) }"
                 @click.stop.prevent="$emit('stepClick', step)"
             >
                 <span class="panel-icon">
@@ -74,26 +72,26 @@
             </a>
         </template>
         <div class="panel-block">
-            <button
-                class="button is-link is-outlined is-fullwidth"
+            <BaseButton
+                :classes="['is-link', 'is-outlined', 'is-fullwidth']"
                 @click="$emit('addStepClick')"
             >
                 <span class="icon">
                     <font-awesome-icon icon="plus"></font-awesome-icon>
                 </span>
                 <span>Add Step</span>
-            </button>
+            </BaseButton>
         </div>
         <div class="panel-block">
-            <button
-                class="button is-primary is-outlined is-fullwidth"
-                @click.stop.prevent="$emit('previewClick')"
+            <BaseButton
+                :classes="['is-primary', 'is-outlined', 'is-fullwidth']"
+                @click="$emit('previewClick')"
             >
                 <span class="icon">
                     <font-awesome-icon icon="play"></font-awesome-icon>
                 </span>
                 <span>Preview</span>
-            </button>
+            </BaseButton>
         </div>
         <div class="panel-block">
             <span
@@ -112,44 +110,51 @@
     </nav>
 </template>
 <script>
-export default {
-    props: {
-        tutorials: {
-            type: Array,
-            default() {
-                return []
+    import BaseButton from '../BaseButton'
+    export default {
+        props: {
+            tutorials: {
+                type: Array,
+                default() {
+                    return []
+                },
+            },
+            selectedTutorial: {
+                type: Object,
+                default: null,
+            },
+            selectedStep: {
+                type: Object,
+                default: null,
             },
         },
-        selectedTutorial: {
-            type: Object,
-            default: null,
+        data() {
+            return {
+                selectedTutorialId: null
+            }
         },
-        selectedStep: {
-            type: Object,
-            default: null,
-        },
-    },
-    data() {
-        return {
-            selectedTutorialId: null
-        }
-    },
-    watch: {
-        selectedTutorial: {
-            immediate: true,
-            handler (value) {
-                if (value) {
-                    this.selectedTutorialId = value.id
+        watch: {
+            selectedTutorial: {
+                immediate: true,
+                handler (value) {
+                    if (value) {
+                        this.selectedTutorialId = value.id
+                    }
                 }
             }
-        }
-    },
-    methods: {
-        onTutorialChange(tutorialId) {
-            this.$emit('tutorialChange', tutorialId)
+        },
+        methods: {
+            onTutorialChange(tutorialId) {
+                this.$emit('tutorialChange', tutorialId)
+            },
+            isActiveStep(step) {
+                return this.selectedStep && step.id === this.selectedStep.id
+            }
+        },
+        components: {
+            BaseButton,
         }
     }
-}
 </script>
 <style scoped>
     .tutorial-add-button {

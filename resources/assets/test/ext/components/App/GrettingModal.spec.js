@@ -1,6 +1,7 @@
 import { shallowMount } from '@vue/test-utils'
 import GreetingModal from '../../../../ext/js/components/App/GreetingModal'
 import BaseModal from '../../../../ext/js/components/BaseModal'
+import BaseButton from '../../../../ext/js/components/BaseButton'
 import Vue from '../../app'
 
 describe('GreetingModal.vue', () => {
@@ -25,9 +26,9 @@ describe('GreetingModal.vue', () => {
                 localVue: Vue,
             })
 
-            const button = wrapper.find('button.is-success')
+            const button = wrapper.find(BaseButton)
 
-            button.trigger('click')
+            button.vm.$emit('click')
 
             expect(wrapper.emitted().startClick.length).to.equal(1)
 

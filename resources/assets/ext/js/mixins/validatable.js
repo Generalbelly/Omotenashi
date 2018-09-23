@@ -31,7 +31,7 @@ export default {
         },
         validate() {
             return new Promise(((resolve, reject) => {
-                this.$validator.validateAll()
+                this.$validator.validate()
                     .then(result => {
                         resolve(result)
                     })

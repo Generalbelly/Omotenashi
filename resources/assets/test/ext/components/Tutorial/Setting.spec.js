@@ -1,8 +1,9 @@
 import { shallowMount } from '@vue/test-utils'
 import Setting from '../../../../ext/js/components/Tutorial/Setting'
+import BaseButton from '../../../../ext/js/components/BaseButton'
 import Vue from '../../app'
 
-describe('BaseMessage.vue', () => {
+describe('Setting.vue', () => {
 
     let tutorial
 
@@ -55,9 +56,9 @@ describe('BaseMessage.vue', () => {
                 }
             })
 
-            const cancelButton = wrapper.find('footer > button:nth-child(2)')
-
-            cancelButton.trigger('click')
+            const cancelButton = wrapper.findAll(BaseButton).at(1)
+            expect(cancelButton.text()).to.equal('Cancel')
+            cancelButton.vm.$emit('click')
 
             expect(wrapper.emitted().cancelClick.length).to.equal(1)
 
@@ -72,15 +73,16 @@ describe('BaseMessage.vue', () => {
                 localVue: Vue,
             })
 
-            const saveButton = wrapper.find('footer > button:nth-child(1).is-success')
-
-            saveButton.trigger('click')
+            const saveButton = wrapper.findAll(BaseButton).at(0)
+            expect(saveButton.text()).to.equal('Create')
+            saveButton.vm.$emit('click')
 
             expect(wrapper.emitted().saveClick.length).to.equal(1)
 
-            expect(wrapper.emitted().saveClick[0][0].name).to.equal('')
-
-            expect(wrapper.emitted().saveClick[0][0].description).to.equal('')
+            expect(wrapper.emitted().saveClick[0][0]).to.deep.equal({
+                name: '',
+                description: '',
+            })
 
             expect(wrapper.find('section.modal-card-body > div.field:nth-child(1) > div.control input[type="text"]').text()).to.equal('')
 
@@ -90,15 +92,14 @@ describe('BaseMessage.vue', () => {
                 tutorial,
             })
 
-            saveButton.trigger('click')
+            expect(saveButton.text()).to.equal('Save')
+            saveButton.vm.$emit('click')
 
             wrapper.vm.$nextTick(() => {
 
                 expect(wrapper.emitted().saveClick.length).to.equal(2)
 
-                expect(wrapper.emitted().saveClick[1][0].name).to.equal(tutorial.name)
-
-                expect(wrapper.emitted().saveClick[1][0].description).to.equal(tutorial.description)
+                expect(wrapper.emitted().saveClick[1][0]).to.deep.equal(tutorial)
 
                 expect(wrapper.find('section.modal-card-body > div.field:nth-child(1) > div.control input[type="text"]').text()).to.equal('')
 

@@ -13,18 +13,19 @@
                 If you have any question or feedback, please click the feedback button below and submit a feedback form.
             </p>
             <div>
-                <button
-                    class="button is-success"
+                <BaseButton
+                    :classes="['is-success']"
                     @click="$emit('startClick')"
                 >
                     Let's get started
-                </button>
+                </BaseButton>
             </div>
         </template>
     </BaseModal>
 </template>
 <script>
 import BaseModal from '../BaseModal';
+import BaseButton from '../BaseButton';
 
 export default {
     data() {
@@ -34,6 +35,7 @@ export default {
         };
     },
     components: {
+        BaseButton,
         BaseModal,
     }
 }

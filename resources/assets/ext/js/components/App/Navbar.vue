@@ -5,12 +5,12 @@
         </div>
         <div class="level-right">
             <p class="level-item">
-                <button
-                    class="button is-success"
-                    @click.stop.prevent="$emit('actionClick')"
+                <BaseButton
+                    :classes="['is-success']"
+                    @click="$emit('actionClick')"
                 >
                     {{ actionBtnTitle }}
-                </button>
+                </BaseButton>
             </p>
             <p class="level-item">
                 <a class="button" href="#">
@@ -21,6 +21,8 @@
     </nav>
 </template>
 <script>
+    import BaseButton from '../BaseButton'
+
     export default {
         name: 'Navbar',
         props: {
@@ -29,11 +31,18 @@
                 default: 'Get started',
             },
         },
+        components: {
+            BaseButton,
+        }
     }
 </script>
 <style scoped>
     .navbar {
         top: unset;
         z-index: 10000000;
+    }
+    .navbar:after,
+    .navbar:before {
+        content: none;
     }
 </style>

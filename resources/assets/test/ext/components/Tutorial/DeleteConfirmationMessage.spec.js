@@ -1,6 +1,7 @@
 import { shallowMount } from '@vue/test-utils'
 import DeleteConfirmationMessage from '../../../../ext/js/components/Tutorial/DeleteConfirmationMessage'
 import BaseMessage from '../../../../ext/js/components/BaseMessage'
+import BaseButton from '../../../../ext/js/components/BaseButton'
 import Vue from '../../app'
 
 describe('DeleteConfirmationMessage.vue', () => {
@@ -26,21 +27,11 @@ describe('DeleteConfirmationMessage.vue', () => {
                 },
             })
 
-            const deleteButton = wrapper.find('button.button.is-danger.is-fullwidth')
-
-            deleteButton.trigger('click')
-
-            // The button has disable html attribute,
-            // so you are not suppose to be able to click and the event wont'be emitted.
-            expect(wrapper.emitted()).to.not.have.property('deleteClick');
-
-            wrapper.setData({
-                tutorialName: tutorial.name,
-            })
-
-            deleteButton.trigger('click')
+            const deleteButton = wrapper.find(BaseButton)
+            deleteButton.vm.$emit('click')
 
             expect(wrapper.emitted().deleteClick.length).to.equal(1)
+
         })
 
         it('@closeClick - should be emitted, when BaseMessage emit "closeClick"', () => {
@@ -57,6 +48,30 @@ describe('DeleteConfirmationMessage.vue', () => {
 
         })
 
+    })
+
+    describe('User interaction', () => {
+
+        it('deleteButton - should be disabled unless the user type in the tutorial name', () => {
+
+            const wrapper = shallowMount(DeleteConfirmationMessage, {
+                localVue: Vue,
+                propsData: {
+                    tutorial,
+                },
+            })
+
+            const deleteButton = wrapper.find(BaseButton)
+
+            expect(deleteButton.vm.$props.disabled).to.equal(true)
+
+            wrapper.setData({
+                tutorialName: tutorial.name,
+            })
+
+            expect(deleteButton.vm.$props.disabled).to.equal(false)
+
+        })
     })
 
 })

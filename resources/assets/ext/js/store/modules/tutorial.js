@@ -96,13 +96,13 @@ const actions = {
             ],
         })
     },
-    deleteStep({ commit }, step) {
+    deleteStep({ commit, getters, state }, step) {
         const stepIndex = getters.selectedTutorial.steps.findIndex(s => s.id === step.id)
         commit(UPDATE_TUTORIAL, {
             ...getters.selectedTutorial,
             steps: [
-                ...this.selectedTutorial.steps.slice(0, stepIndex),
-                ...this.selectedTutorial.steps.slice(stepIndex+1),
+                ...getters.selectedTutorial.steps.slice(0, stepIndex),
+                ...getters.selectedTutorial.steps.slice(stepIndex+1),
             ],
         })
     },

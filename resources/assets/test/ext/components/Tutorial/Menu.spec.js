@@ -1,5 +1,6 @@
 import { shallowMount, mount } from '@vue/test-utils'
 import Menu from '../../../../ext/js/components/Tutorial/Menu'
+import BaseButton from '../../../../ext/js/components/BaseButton'
 import Vue from '../../app'
 
 describe('Menu.vue', () => {
@@ -58,8 +59,9 @@ describe('Menu.vue', () => {
                 localVue: Vue,
             })
 
-            const deleteTutorialButton = wrapper.find('.field > .control:nth-child(2) > button')
+            const deleteTutorialButton = wrapper.findAll(BaseButton).at(2)
 
+            expect(deleteTutorialButton.text()).to.equal('Delete')
             expect(deleteTutorialButton.isVisible()).to.equal(false)
 
             wrapper.setProps({
@@ -120,9 +122,10 @@ describe('Menu.vue', () => {
                 }
             })
 
-            const addTutorialButton = wrapper.find('p.panel-heading > button.button')
-            addTutorialButton.trigger('click')
+            const addTutorialButton = wrapper.findAll(BaseButton).at(0)
+            addTutorialButton.vm.$emit('click')
 
+            expect(addTutorialButton.text()).equal('Add')
             expect(wrapper.emitted().addTutorialClick.length).equal(1)
 
         })
@@ -156,8 +159,9 @@ describe('Menu.vue', () => {
                 }
             })
 
-            const editTutorialButton = wrapper.find('p.control:nth-child(1) > button.button')
-            editTutorialButton.trigger('click')
+            const editTutorialButton = wrapper.findAll(BaseButton).at(1)
+            expect(editTutorialButton.text()).to.equal('Edit')
+            editTutorialButton.vm.$emit('click')
 
             expect(wrapper.emitted().editTutorialClick.length).equal(1)
 
@@ -174,8 +178,9 @@ describe('Menu.vue', () => {
                 }
             })
 
-            const deleteTutorialButton = wrapper.find('.field > .control:nth-child(2) > button')
-            deleteTutorialButton.trigger('click')
+            const deleteTutorialButton = wrapper.findAll(BaseButton).at(2)
+            expect(deleteTutorialButton.text()).to.equal('Delete')
+            deleteTutorialButton.vm.$emit('click')
             expect(wrapper.emitted().deleteTutorialClick.length).equal(1)
 
         })
@@ -227,8 +232,9 @@ describe('Menu.vue', () => {
                 }
             })
 
-            const addStepButton = wrapper.find('div.panel-block > button.is-link')
-            addStepButton.trigger('click')
+            const addStepButton = wrapper.findAll(BaseButton).at(3)
+            expect(addStepButton.text()).to.equal('Add Step')
+            addStepButton.vm.$emit('click')
 
             expect(wrapper.emitted().addStepClick.length).equal(1)
 
@@ -245,8 +251,9 @@ describe('Menu.vue', () => {
                 }
             })
 
-            const previewButton = wrapper.find('div.panel-block > button.is-primary')
-            previewButton.trigger('click')
+            const previewButton = wrapper.findAll(BaseButton).at(4)
+            expect(previewButton.text()).to.equal('Preview')
+            previewButton.vm.$emit('click')
 
             expect(wrapper.emitted().previewClick.length).equal(1)
 

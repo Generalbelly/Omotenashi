@@ -11,33 +11,30 @@
             <div
                 class="message-header"
             >
-                <slot name="header">
-                    <p>{{ header }}</p>
-                    <button
-                        class="delete is-paddingless"
-                        aria-label="delete"
-                        @click.stop.prevent="$emit('closeClick')"
-                    ></button>
-                </slot>
+                <slot name="header">{{ header }}</slot>
+                <button
+                    class="delete is-paddingless"
+                    aria-label="delete"
+                    @click.stop.prevent="$emit('closeClick')"
+                ></button>
             </div>
             <div
                 class="message-body"
             >
-                <slot name="body">
-                    <p>{{ body }}</p>
-                    <p v-if="dontShowMeOption" class="has-margin-top-3">
-                        <label class="checkbox">
-                            <input
-                                type="checkbox"
-                                :checked="dontShowMeChecked"
-                                :true-value="true"
-                                :false-value="false"
-                                @click="$emit('dontShowMeChecked', $event.target.checked)"
-                            >
-                            Don't show me this message again.
-                        </label>
-                    </p>
-                </slot>
+                <slot name="body">{{ body }}</slot>
+                <p v-if="hasDontShowMeOption" class="has-margin-top-3">
+                    <label class="checkbox">
+                        <input
+                            type="checkbox"
+                            :checked="dontShowMeChecked"
+                            :true-value="true"
+                            :false-value="false"
+                            @click="$emit('dontShowMeChecked', $event.target.checked)"
+                        >
+                        Don't show me this message again.
+                    </label>
+                </p>
+
             </div>
         </article>
     </div>
@@ -59,7 +56,7 @@ export default {
                 return []
             }
         },
-        dontShowMeOption: {
+        hasDontShowMeOption: {
             type: Boolean,
             default: false,
         },

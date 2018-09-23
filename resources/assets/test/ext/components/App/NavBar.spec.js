@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
 import NavBar from '../../../../ext/js/components/App/Navbar'
+import BaseButton from '../../../../ext/js/components/BaseButton'
 import Vue from '../../app'
 
 describe('NavBar.vue', () => {
@@ -12,9 +13,9 @@ describe('NavBar.vue', () => {
                 localVue: Vue,
             })
 
-            const actionButton = wrapper.find('button.is-success')
+            const actionButton = wrapper.find(BaseButton)
 
-            actionButton.trigger('click')
+            actionButton.vm.$emit('click')
 
             expect(wrapper.emitted().actionClick.length).to.equal(1)
 

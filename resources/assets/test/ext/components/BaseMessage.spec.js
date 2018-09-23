@@ -16,7 +16,7 @@ describe('BaseMessage.vue', () => {
                     header,
                 }
             })
-            expect(wrapper.find('div.message-header > p').text()).to.equal(header)
+            expect(wrapper.find('div.message-header').text()).to.equal(header)
         })
 
         it(':body - should render a message body with the passed-in body text', () => {
@@ -39,28 +39,28 @@ describe('BaseMessage.vue', () => {
             expect(wrapper.contains('article.message.'+messageClasses.join('.'))).to.equal(true)
         })
 
-        it(':dontShowMeOption - should render a checkbox with the text of "Don\'t show me this message again", if the prop is true', () => {
+        it(':hasDontShowMeOption - should render a checkbox with the text of "Don\'t show me this message again", if the prop is true', () => {
             const wrapper = shallowMount(BaseMessage, {
                 localVue: Vue,
                 propsData: {
-                    dontShowMeOption: true,
+                    hasDontShowMeOption: true,
                 }
             })
-            expect(wrapper.contains('p.has-margin-top-3 > label.checkbox > input[type="checkbox"]')).to.equal(true)
-            expect(wrapper.find('p.has-margin-top-3 > label.checkbox').text()).to.equal("Don't show me this message again.")
+            expect(wrapper.contains('label.checkbox > input[type="checkbox"]')).to.equal(true)
+            expect(wrapper.find('label.checkbox').text()).to.equal("Don't show me this message again.")
 
             wrapper.setProps({
-                dontShowMeOption: false,
+                hasDontShowMeOption: false,
             })
 
-            expect(wrapper.contains('p.has-margin-top-3 > label.checkbox > input[type="checkbox"]')).to.equal(false)
+            expect(wrapper.contains('label.checkbox > input[type="checkbox"]')).to.equal(false)
         })
 
         it(':dontShowMeChecked - should render a checked or unchecked checkbox, depending on the prop value', () => {
             const wrapper = shallowMount(BaseMessage, {
                 localVue: Vue,
                 propsData: {
-                    dontShowMeOption: true,
+                    hasDontShowMeOption: true,
                     dontShowMeChecked: false,
                 }
             })
@@ -128,7 +128,7 @@ describe('BaseMessage.vue', () => {
             const wrapper = shallowMount(BaseMessage, {
                 localVue: Vue,
                 propsData: {
-                    dontShowMeOption: true,
+                    hasDontShowMeOption: true,
                 }
             })
 

@@ -2,7 +2,7 @@
     <div class="modal is-active">
         <div class="modal-background"></div>
         <div class="modal-card">
-            <header class="modal-card-head has-margin-bottom-0">
+            <header class="modal-card-head has-margin-0">
                 <p class="modal-card-title">{{ isCreate ? 'Create' : 'Edit' }} Tutorial</p>
             </header>
             <section class="modal-card-body">
@@ -29,69 +29,77 @@
                     </div>
                 </div>
             </section>
-            <footer class="modal-card-foot">
-                <button
-                    class="button is-success"
+            <footer class="modal-card-foot has-margin-0">
+                <BaseButton
+                    :classes="['is-success']"
                     @click="onSaveClick"
                 >
                     {{ isCreate ? 'Create' : 'Save' }}
-                </button>
-                <button
-                    class="button"
+                </BaseButton>
+                <BaseButton
                     @click="onCancelClick"
-                >Cancel</button>
+                >
+                    Cancel
+                </BaseButton>
             </footer>
         </div>
     </div>
 </template>
 <script>
-
-export default {
-    props: {
-        tutorial: {
-            type: Object,
-            default: null,
-        },
-    },
-    data() {
-        return {
-            isCreate: true,
-            updatedTutorial: {
-                name: '',
-                description: '',
+    import BaseButton from '../BaseButton'
+    export default {
+        props: {
+            tutorial: {
+                type: Object,
+                default: null,
             },
-        };
-    },
-    methods: {
-        onCancelClick() {
-            this.$emit('cancelClick');
-            this.clear()
         },
-        onSaveClick() {
-            this.$emit('saveClick', this.updatedTutorial)
-            this.clear()
-        },
-        clear() {
-            this.updatedTutorial = {
-                name: '',
-                description: '',
+        data() {
+            return {
+                isCreate: true,
+                updatedTutorial: {
+                    name: '',
+                    description: '',
+                },
             };
         },
-    },
-    watch: {
-        tutorial: {
-            immediate: true,
-            handler(value) {
-                if (value) {
-                    this.isCreate = false;
-                    this.updatedTutorial = { ...value }
-                } else {
-                    this.clear();
-                }
+        methods: {
+            onCancelClick() {
+                this.$emit('cancelClick');
+                this.clear()
+            },
+            onSaveClick() {
+                this.$emit('saveClick', this.updatedTutorial)
+                this.clear()
+            },
+            clear() {
+                this.updatedTutorial = {
+                    name: '',
+                    description: '',
+                };
             },
         },
-    },
-}
+        watch: {
+            tutorial: {
+                immediate: true,
+                handler(value) {
+                    if (value) {
+                        this.isCreate = false;
+                        this.updatedTutorial = { ...value }
+                    } else {
+                        this.clear();
+                    }
+                },
+            },
+        },
+        components: {
+            BaseButton,
+        }
+    }
 
 </script>
-<style scoped></style>
+<style scoped>
+    .label {
+        text-align: left;
+    }
+</style>
