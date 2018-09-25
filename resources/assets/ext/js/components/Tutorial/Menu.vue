@@ -3,7 +3,9 @@
         <p class="panel-heading level has-margin-bottom-0">
             <span class="is-size-4 has-text-weight-semibold">Tutorial</span>
             <BaseButton
-                :classes="['has-background-grey', 'has-text-white', 'tutorial-add-button']"
+                has-background-grey
+                has-text-white
+                class="tutorial-add-button"
                 @click="$emit('addTutorialClick')"
             >
                 <span class="icon">
@@ -57,7 +59,7 @@
                 :key="step.id"
                 v-for="(step, stepIndex) in selectedTutorial.steps"
                 :class="{ 'is-active':isActiveStep(step) }"
-                @click.stop.prevent="$emit('stepClick', step)"
+                @click.stop="$emit('stepClick', step)"
             >
                 <span class="panel-icon">
                      <font-awesome-icon icon="circle"></font-awesome-icon>
@@ -65,7 +67,7 @@
                     Step {{ stepIndex+1 }}
                 <span
                     class="panel-icon block has-margin-left-auto has-cursor-pointer"
-                    @click.stop.prevent="$emit('deleteStepClick', step)"
+                    @click.stop="$emit('deleteStepClick', step)"
                 >
                      <font-awesome-icon icon="trash"></font-awesome-icon>
                 </span>
@@ -73,7 +75,9 @@
         </template>
         <div class="panel-block">
             <BaseButton
-                :classes="['is-link', 'is-outlined', 'is-fullwidth']"
+                is-link
+                is-outlined
+                is-fullwidth
                 @click="$emit('addStepClick')"
             >
                 <span class="icon">
@@ -84,7 +88,9 @@
         </div>
         <div class="panel-block">
             <BaseButton
-                :classes="['is-primary', 'is-outlined', 'is-fullwidth']"
+                is-primary
+                is-outlined
+                is-fullwidth
                 @click="$emit('previewClick')"
             >
                 <span class="icon">

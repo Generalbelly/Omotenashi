@@ -1,52 +1,44 @@
 <template>
-    <div class="modal is-active">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <header class="modal-card-head has-margin-0">
-                <p class="modal-card-title">{{ isCreate ? 'Create' : 'Edit' }} Tutorial</p>
-            </header>
-            <section class="modal-card-body">
-                <div class="field">
-                    <label class="label">Name</label>
-                    <div class="control">
-                        <input
-                            v-model="updatedTutorial.name"
-                            class="input"
-                            type="text"
-                            placeholder="First timers"
-                        >
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Description (Optional)</label>
-                    <div class="control">
-                        <textarea
-                            v-model="updatedTutorial.description"
-                            class="textarea"
-                            placeholder="updatedTutorial for the first time customers."
-                        >
-                        </textarea>
-                    </div>
-                </div>
-            </section>
-            <footer class="modal-card-foot has-margin-0">
-                <BaseButton
-                    :classes="['is-success']"
-                    @click="onSaveClick"
-                >
-                    {{ isCreate ? 'Create' : 'Save' }}
-                </BaseButton>
-                <BaseButton
-                    @click="onCancelClick"
-                >
-                    Cancel
-                </BaseButton>
-            </footer>
-        </div>
-    </div>
+    <BaseModalCard>
+        <BaseModalCardHeader>
+            {{ isCreate ? 'Create' : 'Edit' }} Tutorial
+        </BaseModalCardHeader>
+        <BaseModalCardBody>
+            <BaseTextField
+                    label="Name"
+                    v-model="updatedTutorial.name"
+                    placeholder="First timers"
+            ></BaseTextField>
+            <BaseTextArea
+                    label="Description (Optional)"
+                    v-model="updatedTutorial.description"
+                    placeholder="Tutorial for the first time customers."
+            ></BaseTextArea>
+        </BaseModalCardBody>
+        <BaseModalCardFooter>
+            <BaseButton
+                @click="onSaveClick"
+                is-success
+            >
+                {{ isCreate ? 'Create' : 'Save' }}
+            </BaseButton>
+            <BaseButton
+                @click="onCancelClick"
+            >
+                Cancel
+            </BaseButton>
+        </BaseModalCardFooter>
+    </BaseModalCard>
 </template>
 <script>
     import BaseButton from '../BaseButton'
+    import BaseTextField from '../BaseTextField'
+    import BaseTextArea from '../BaseTextArea'
+    import BaseModalCard from '../BaseModalCard'
+    import BaseModalCardHeader from '../BaseModalCardHeader'
+    import BaseModalCardBody from '../BaseModalCardBody'
+    import BaseModalCardFooter from '../BaseModalCardFooter'
+
     export default {
         props: {
             tutorial: {
@@ -94,12 +86,13 @@
         },
         components: {
             BaseButton,
+            BaseTextField,
+            BaseTextArea,
+            BaseModalCard,
+            BaseModalCardHeader,
+            BaseModalCardBody,
+            BaseModalCardFooter,
         }
     }
 
 </script>
-<style scoped>
-    .label {
-        text-align: left;
-    }
-</style>

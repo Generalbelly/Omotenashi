@@ -6,22 +6,29 @@ describe('BaseButton.vue', () => {
 
     describe(':props', () => {
 
-        it(':classes - should be converted to class', () => {
-
-            const classes = [
-                'one',
-                'two',
-                'three',
-            ]
+        it(':isOutlined - should be included in buttonClass', () => {
 
             const wrapper = shallowMount(BaseButton, {
                 localVue: Vue,
                 propsData: {
-                    classes,
-                },
+                    isOutlined: true
+                }
             })
 
-            expect(wrapper.contains('button.'+classes.join('.'))).to.equal(true)
+            expect(wrapper.classes().includes('is-outlined')).to.equal(true)
+
+        })
+
+        it(':isFullwidth - should be included in buttonClass', () => {
+
+            const wrapper = shallowMount(BaseButton, {
+                localVue: Vue,
+                propsData: {
+                    isFullwidth: true
+                }
+            })
+
+            expect(wrapper.classes().includes('is-fullwidth')).to.equal(true)
 
         })
 

@@ -8,65 +8,43 @@ import Tutorial, {
     userActions,
     messageKeys
 } from '../../../ext/js/features/Tutorial'
+import BaseButton from '../../../ext/js/components/BaseButton'
 import Menu from '../../../ext/js/components/Tutorial/Menu'
 import DeleteConfirmationMessage from '../../../ext/js/components/Tutorial/DeleteConfirmationMessage'
 import Setting from '../../../ext/js/components/Tutorial/Setting'
-import BaseMessage from '../../../ext/js/components/BaseMessage'
-import tutorial from "../../../ext/js/store/modules/tutorial";
+import HelpMessage from '../../../ext/js/components/Tutorial/HelpMessage'
+import { tutorials } from "../mock";
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
 describe('Tutorial.vue', () => {
 
-    const tutorials = [
-        {
-            id: '953c909a-e446-43fb-aea2-e07fa29716e9',
-            name: 'Awesome Tutorial',
-            description: 'This tutorial is awesome.',
-            steps: [
-                {
-                    id: '383c930a-e446-21fb-aea3-e07fa29716e3',
-                    element: '.flex .flex > .primary > .btn__content',
-                    popover: {
-                        content: '<div><h1>Title</h1><div>Some description here</div></div>',
-                    }
-                },
-                {
-                    id: '283c930a-e339-00fb-aea2-e07fa29716e4',
-                    element: '.flex .flex > .primary > .btn__content',
-                    popover: {
-                        content: '<div><h1>Title</h1><div>Some description here</div></div>',
-                    }
-                }
-            ],
-        },
-        {
-            id: '953c690c-e446-32fb-aea2-e07fa29716e8',
-            name: 'OK Tutorial',
-            description: 'This tutorial is okay.',
-            steps: [],
-        },
-        {
-            id: '888c909a-e323-13fb-aea2-e07fa29316e7',
-            name: 'Bad tutorial',
-            description: 'This tutorial is bad.',
-            steps: [],
-        }
-    ];
-
     let store
     let actions
     let tutorialActions
+    let selectedTutorial
+    let selectedStep
+
+    let state
+    let modules
 
     beforeEach(() => {
+        selectedTutorial = tutorials[0]
+        selectedStep = tutorials[0].steps[0]
+        state = {
+            extLog: {
+                userIsFirstTime: false,
+                checkedMessages: [],
+            }
+        }
         actions = {
             retrieveLog: sinon.fake(),
             saveLog: sinon.fake(),
         }
 
         tutorialActions = {
-            addTutorial: sinon.fake.returns(() => {}),
+            addTutorial: sinon.fake(),
             updateTutorial: sinon.fake(),
             deleteTutorial: sinon.fake(),
             selectTutorial: sinon.fake(),
@@ -76,31 +54,28 @@ describe('Tutorial.vue', () => {
             deleteStep: sinon.fake(),
         }
 
+        modules = {
+            tutorial: {
+                namespaced: true,
+                state: {
+                    tutorials: [],
+                    selectedTutorialId: null,
+                    selectedStepId: null
+                },
+                getters: {
+                    selectedTutorial: () => null,
+                    selectedStep: () => null
+                },
+                actions: tutorialActions,
+            }
+        }
+
         store = new Vuex.Store({
             namespaced: false,
-            state: {
-                extLog: {
-                    userIsFirstTime: false,
-                    checkedMessages: [],
-                }
-            },
-            actions,
             getters: {},
-            modules: {
-                tutorial: {
-                    namespaced: true,
-                    state: {
-                        tutorials: [],
-                        selectedTutorialId: null,
-                        selectedStepId: null
-                    },
-                    getters: {
-                        selectedTutorial: () => null,
-                        selectedStep: () => null
-                    },
-                    actions: tutorialActions,
-                }
-            }
+            state,
+            actions,
+            modules,
         })
     })
 
@@ -203,6 +178,24 @@ describe('Tutorial.vue', () => {
 
         })
 
+        it('Menu - should be positioned based on the value of menuIsOnTheRight.', () => {
+            const wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+            })
+
+            const menu = wrapper.find(Menu)
+
+            expect(menu.classes().includes('is-fixed-bottom-right')).to.equal(true)
+            expect(menu.classes().includes('is-fixed-bottom-left')).to.equal(false)
+
+            menu.vm.$emit('switchSideClick')
+
+            expect(menu.classes().includes('is-fixed-bottom-left')).to.equal(true)
+            expect(menu.classes().includes('is-fixed-bottom-right')).to.equal(false)
+
+        })
+
         it('Setting - should be shown when either isAddingTutorial or isEditingTUtorial is true', () => {
 
             const wrapper = shallowMount(Tutorial, {
@@ -233,13 +226,13 @@ describe('Tutorial.vue', () => {
             expect(menu.isVisible()).to.equal(false)
             expect(setting.isVisible()).to.equal(true)
 
-            setting.vm.$emit('saveClick', tutorial);
+            setting.vm.$emit('saveClick', tutorials[0]);
             expect(menu.isVisible()).to.equal(true)
             expect(setting.isVisible()).to.equal(false)
 
         })
 
-        it('DeleteCOnfirmationMessage - should be shown when either isDeletingTutorial is true', () => {
+        it('DeleteConfirmationMessage - should be shown when either isDeletingTutorial is true', () => {
 
             const wrapper = shallowMount(Tutorial, {
                 localVue,
@@ -278,19 +271,19 @@ describe('Tutorial.vue', () => {
 
         })
 
-        it('BaseMessage - should be shown depending on the value of shownMessage', () => {
+        it('A message - should be shown with depending on the value of shownMessage', () => {
 
             const wrapper = shallowMount(Tutorial, {
                 localVue,
                 store,
             })
 
-            const messages = wrapper.findAll(BaseMessage)
+            const messages = wrapper.findAll(HelpMessage)
 
             const selectorChoicesAvailable = messages.filter(w => w.text().includes('please keep clicking until you find the right one.')).at(0)
-            const noStepAddedYet = messages.filter(w => w.props().body.includes('You haven\'t added any step yet.')).at(0)
-            const noMoreSelectorChoices = messages.filter(w => w.props().body.includes('Looks like we don\'t have any other elements to show you.')).at(0)
-            const clickToAddStep = messages.filter(w => w.props().body.includes('Click anywhere you want to attract your user attention.')).at(0)
+            const noStepAddedYet = messages.filter(w => w.text().includes('You haven\'t added any step yet.')).at(0)
+            const noMoreSelectorChoices = messages.filter(w => w.text().includes('Looks like we don\'t have any other elements to show you.')).at(0)
+            const clickToAddStep = messages.filter(w => w.text().includes('Click anywhere you want to attract your user attention.')).at(0)
 
             expect(selectorChoicesAvailable.isVisible()).to.equal(false)
             expect(noStepAddedYet.isVisible()).to.equal(false)
@@ -332,7 +325,336 @@ describe('Tutorial.vue', () => {
             expect(noStepAddedYet.isVisible()).to.equal(false)
             expect(noMoreSelectorChoices.isVisible()).to.equal(false)
             expect(clickToAddStep.isVisible()).to.equal(true)
-            
+
+        })
+
+        it('A selectorChoicesAvailable message - should not be shown when the user checked don\'t show me this message last time he/she saw it.', () => {
+
+            store = new Vuex.Store({
+                namespaced: false,
+                state: {
+                    extLog: {
+                        userIsFirstTime: false,
+                        checkedMessages: [messageKeys.selectorChoicesAvailable],
+                    }
+                },
+                getters: {},
+                actions,
+                modules,
+            })
+
+            let wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+            })
+
+            let messages = wrapper.findAll(HelpMessage)
+            let selectorChoicesAvailable = messages.filter(w => w.text().includes('please keep clicking until you find the right one.')).at(0)
+
+            expect(selectorChoicesAvailable.isVisible()).to.equal(false)
+
+            wrapper.vm.showMessage(messageKeys.selectorChoicesAvailable)
+
+            expect(selectorChoicesAvailable.isVisible()).to.equal(false)
+
+            wrapper.destroy()
+
+            store = new Vuex.Store({
+                namespaced: false,
+                state: {
+                    extLog: {
+                        userIsFirstTime: false,
+                        checkedMessages: [],
+                    }
+                },
+                getters: {},
+                actions,
+                modules,
+            })
+
+            wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+            })
+
+            messages = wrapper.findAll(HelpMessage)
+            selectorChoicesAvailable = messages.filter(w => w.text().includes('please keep clicking until you find the right one.')).at(0)
+
+            expect(selectorChoicesAvailable.isVisible()).to.equal(false)
+
+            wrapper.vm.showMessage(messageKeys.selectorChoicesAvailable)
+
+            expect(selectorChoicesAvailable.isVisible()).to.equal(true)
+
+        })
+
+        it('A clickToAddStep message - should not be shown when the user checked don\'t show me this message last time he/she saw it.', () => {
+
+            store = new Vuex.Store({
+                state: {
+                    extLog: {
+                        userIsFirstTime: false,
+                        checkedMessages: [messageKeys.clickToAddStep],
+                    }
+                },
+                getters: {},
+                actions,
+                modules,
+            })
+
+            let wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+            })
+
+            let messages = wrapper.findAll(HelpMessage)
+
+            let clickToAddStep = messages.filter(w => w.text().includes('Click anywhere you want to attract your user attention.')).at(0)
+
+            expect(clickToAddStep.isVisible()).to.equal(false)
+
+            wrapper.vm.showMessage(messageKeys.clickToAddStep)
+
+            expect(clickToAddStep.isVisible()).to.equal(false)
+
+            wrapper.destroy()
+
+            store = new Vuex.Store({
+                namespaced: false,
+                state: {
+                    extLog: {
+                        userIsFirstTime: false,
+                        checkedMessages: [],
+                    }
+                },
+                getters: {},
+                actions,
+                modules,
+            })
+
+            wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+            })
+
+            messages = wrapper.findAll(HelpMessage)
+
+            clickToAddStep = messages.filter(w => w.text().includes('Click anywhere you want to attract your user attention.')).at(0)
+
+            expect(clickToAddStep.isVisible()).to.equal(false)
+
+            wrapper.vm.showMessage(messageKeys.clickToAddStep)
+
+            expect(clickToAddStep.isVisible()).to.equal(true)
+
+        })
+
+        it('Vuex action: addTutorial - should be called when it get a saveClick event with tutorial as an argument from Setting', () => {
+
+            const wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+            })
+
+            const { id, withoutId } = tutorials[0]
+
+            const menu = wrapper.find(Menu)
+            menu.vm.$emit('saveClick', withoutId)
+
+            expect(tutorialActions.addTutorial.callCount).to.equal(1)
+
+        })
+
+        it('Vuex action: updateTutorial - should be called when it get a saveClick event with tutorial having id as an argument from Setting', () => {
+
+            const wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+            })
+
+            const menu = wrapper.find(Menu)
+            menu.vm.$emit('saveClick', tutorials[0])
+
+            expect(tutorialActions.addTutorial.callCount).to.equal(1)
+
+        })
+
+        it('Vuex action: deleteTutorial - should be called when it get a deleteClick from DeleteConfirmationMessage component.', () => {
+
+            const wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+            })
+
+            const menu = wrapper.find(DeleteConfirmationMessage)
+            menu.vm.$emit('deleteClick')
+
+            expect(tutorialActions.deleteTutorial.callCount).to.equal(1)
+
+        })
+
+        it('Vuex action: selectTutorial - should be called when it get a tutorialChange event from Menu component.', () => {
+
+            const wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+            })
+
+            const menu = wrapper.find(Menu)
+            menu.vm.$emit('tutorialChange')
+
+            expect(tutorialActions.selectTutorial.callCount).to.equal(1)
+
+        })
+
+        it('Vuex action: addStep - should be called when the step save button is clicked.', () => {
+
+            const wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+                methods: {
+                    createStep: () => {
+                        return {
+                            element: '',
+                            popover: {
+                                content: '',
+                            }
+                        }
+                    }
+                }
+            })
+
+            const stepSaveButton = wrapper.findAll(BaseButton).filter(w => w.text() === 'Save').at(0)
+            stepSaveButton.vm.$emit('click')
+
+            expect(tutorialActions.addStep.callCount).to.equal(1)
+
+        })
+
+        it('Vuex action: updateStep - should be called when the step save button is clicked and selectedStepId is not null.', () => {
+
+            store = new Vuex.Store({
+                namespaced: false,
+                state,
+                getters: {},
+                actions,
+                modules: {
+                    tutorial: {
+                        namespaced: true,
+                        state: {
+                            tutorials,
+                            selectedTutorialId: selectedTutorial.id,
+                            selectedStepId: selectedStep.id,
+                        },
+                        getters: {
+                            selectedTutorial: () => selectedTutorial,
+                            selectedStep: () => selectedStep,
+                        },
+                        actions: tutorialActions,
+                    },
+                },
+            })
+
+            const wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+                methods: {
+                    createStep: () => {
+                        return {
+                            element: '',
+                            popover: {
+                                content: '',
+                            }
+                        }
+                    }
+                }
+            })
+
+            const stepSaveButton = wrapper.findAll(BaseButton).filter(w => w.text() === 'Save').at(0)
+            stepSaveButton.vm.$emit('click')
+
+            expect(tutorialActions.updateStep.callCount).to.equal(1)
+
+        })
+
+        it('Vuex action: deleteStep - should be called when it get a deleteStepClick event from Menu component.', () => {
+
+            const wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+            })
+
+            const menu = wrapper.find(Menu)
+            menu.vm.$emit('deleteStepClick')
+
+            expect(tutorialActions.deleteStep.callCount).to.equal(1)
+
+        })
+
+        it('Vuex action: selectStep - should be called when it get a stepClick event from Menu component.', () => {
+
+            const wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+            })
+
+            const menu = wrapper.find(Menu)
+            menu.vm.$emit('stepClick', selectedStep)
+
+            expect(tutorialActions.selectStep.callCount).to.equal(1)
+
+        })
+
+        it('Vuex action: selectStep - should be called when it get a addStepClick event from Menu component.', () => {
+
+            const wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+            })
+
+            const menu = wrapper.find(Menu)
+            menu.vm.$emit('stepClick', selectedStep)
+
+            expect(tutorialActions.selectStep.callCount).to.equal(1)
+
+        })
+
+        it('Vuex action: selectStep - should be called when highlight method is called with an element argument that is already in steps.', () => {
+
+            store = new Vuex.Store({
+                namespaced: false,
+                state,
+                getters: {},
+                actions,
+                modules: {
+                    tutorial: {
+                        namespaced: true,
+                        state: {
+                            tutorials,
+                            selectedTutorialId: selectedTutorial.id,
+                            selectedStepId: selectedStep.id,
+                        },
+                        getters: {
+                            selectedTutorial: () => selectedTutorial,
+                            selectedStep: () => selectedStep,
+                        },
+                        actions: tutorialActions,
+                    },
+                },
+            })
+
+            const wrapper = shallowMount(Tutorial, {
+                localVue,
+                store,
+            })
+
+            wrapper.vm.highlight({
+                id: null,
+                element: selectedStep.element,
+            })
+
+            expect(tutorialActions.selectStep.callCount).to.equal(1)
+
         })
 
     })

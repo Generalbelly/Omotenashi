@@ -2,7 +2,7 @@
     <div class="modal is-active">
         <div class="modal-background"></div>
         <div
-            class="modal-content"
+            class="modal-content has-background-white has-padding-5"
             :class="modalClass"
         >
             <div

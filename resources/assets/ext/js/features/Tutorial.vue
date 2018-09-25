@@ -37,7 +37,7 @@
             <BaseButton
                 id="om-adding-step-save"
                 @click="onStepSaveClick"
-                :classes="['is-success']"
+                is-success
             >
                 Save
             </BaseButton>
@@ -57,48 +57,56 @@
         >
         </Setting>
 
-        <BaseMessage
+        <HelpMessage
             v-show="selectorChoicesAvailableMessageShown"
             :has-dont-show-me-option="true"
-            :dont-show-me-checked="dontShowMeChecked('selectorChoicesAvailable')"
-            header="Tips"
-            :message-classes="['is-info', 'is-fixed-top-right']"
+            :dont-show-me="dontShowMeChecked('selectorChoicesAvailable')"
+            is-info
             @closeClick="hideMessage"
-            @dontShowMeChecked="onDontShowMeCheck('selectorChoicesAvailable')"
+            @dontShowMeChenge="removeMessage"
         >
+            <template slot="head">Tips</template>
             <template slot="body">
                 If the element is not correctly highlighted,<br>
                 please keep clicking until you find the right one.
             </template>
-        </BaseMessage>
+        </HelpMessage>
 
-        <BaseMessage
+        <HelpMessage
             v-show="noStepAddedYetMessageShown"
-            header="Oops"
-            body="You haven't added any step yet."
-            :message-classes="['is-warning', 'is-fixed-top-right']"
+            is-warning
             @closeClick="hideMessage"
-        ></BaseMessage>
+        >
+            <template slot="head">Oops</template>
+            <template slot="body">
+                You haven't added any step yet.
+            </template>
+        </HelpMessage>
 
-        <BaseMessage
+        <HelpMessage
             v-show="noMoreSelectorChoicesMessageShown"
-            header="Oops"
-            body="Looks like we don't have any other elements to show you."
-            :message-classes="['is-warning', 'is-fixed-top-right']"
+            is-warning
             @closeClick="hideMessage"
-        ></BaseMessage>
+        >
+            <template slot="head">Oops</template>
+            <template slot="body">
+                Looks like we don't have any other elements to show you.
+            </template>
+        </HelpMessage>
 
-        <BaseMessage
+        <HelpMessage
             v-show="clickToAddStepMessageShown"
             :has-dont-show-me-option="true"
-            :dont-show-me-checked="dontShowMeChecked('clickToAddStep')"
-            header="Tips"
-            body="Click anywhere you want to attract your user attention."
-            :message-classes="['is-info', 'is-fixed-top-right']"
+            :dont-show-me="dontShowMeChecked('clickToAddStep')"
+            is-info
             @closeClick="hideMessage"
-            @dontShowMeChecked="onDontShowMeCheck('clickToAddStep')"
-        ></BaseMessage>
-
+            @dontShowMeChenge="removeMessage"
+        >
+            <template slot="head">Tips</template>
+            <template slot="body">
+                Click anywhere you want to attract your user attention.
+            </template>
+        </HelpMessage>
     </div>
 </template>
 <script>
@@ -106,7 +114,7 @@
     import finder from '@medv/finder'
     import { mapActions, mapGetters, mapState,} from 'vuex'
     import Driver from '../../driver.js/src'
-    import BaseMessage from '../components/BaseMessage'
+    import HelpMessage from '../components/Tutorial/HelpMessage'
     import Menu from '../components/Tutorial/Menu'
     import Setting from '../components/Tutorial/Setting'
     import DeleteConfirmationMessage from "../components/Tutorial/DeleteConfirmationMessage";
@@ -211,11 +219,11 @@
             dontShowMeChecked(messageKey) {
                 return (this.extLog.checkedMessages && this.extLog.checkedMessages.includes(messageKey));
             },
-            onDontShowMeCheck(messageKey) {
+            removeMessage() {
                 this.saveLog({
                     checkedMessages: [
                         ...this.extLog.checkedMessages,
-                        messageKey,
+                        this.messageShown,
                     ]
                 })
             },
@@ -324,8 +332,6 @@
                 this.driver.options.allowClose = false
                 this.driver.options.isEditMode = true
                 this.updateUserAction(userActions.editingPopover)
-
-                console.log(element);
 
                 this.driver.highlight({
                     element,
@@ -438,7 +444,7 @@
         components: {
             BaseButton,
             DeleteConfirmationMessage,
-            BaseMessage,
+            HelpMessage,
             Menu,
             Setting,
         },

@@ -1,10 +1,9 @@
 <template>
-    <BaseModal
+    <base-modal
         @closeClick="$emit('closeClick')"
-        :modal-content-classes="modalContentClasses"
-        :content-classes="contentClasses"
         :show-close="false"
     >
+
         <template slot="content">
             <h1>Omotenashi</h1>
             <p class="has-padding-top-4 has-margin-bottom-5 has-text-left">
@@ -14,26 +13,20 @@
             </p>
             <div>
                 <BaseButton
-                    :classes="['is-success']"
+                    is-success
                     @click="$emit('startClick')"
                 >
                     Let's get started
                 </BaseButton>
             </div>
         </template>
-    </BaseModal>
+    </base-modal>
 </template>
 <script>
 import BaseModal from '../BaseModal';
 import BaseButton from '../BaseButton';
 
 export default {
-    data() {
-        return {
-            modalContentClasses: ['has-background-white', 'has-padding-5'],
-            contentClasses: [''],
-        };
-    },
     components: {
         BaseButton,
         BaseModal,

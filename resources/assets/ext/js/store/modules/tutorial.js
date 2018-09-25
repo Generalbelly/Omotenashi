@@ -12,7 +12,7 @@ const state = {
     selectedStepId: null,
 }
 
-const getters = {
+export const getters = {
     selectedTutorial: state => {
         if (state.selectedTutorialId) {
             return state.tutorials.find(t => t.id === state.selectedTutorialId)
@@ -27,7 +27,7 @@ const getters = {
     },
 }
 
-const mutations = {
+export const mutations = {
     [ADD_TUTORIAL](state, tutorial) {
         state.tutorials = [
             ...state.tutorials,
@@ -61,7 +61,7 @@ const mutations = {
     },
 }
 
-const actions = {
+export const actions = {
     addTutorial({ commit }, tutorial) {
         commit(ADD_TUTORIAL, tutorial)
     },

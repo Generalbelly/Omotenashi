@@ -1,5 +1,10 @@
 import { shallowMount } from '@vue/test-utils'
 import Setting from '../../../../ext/js/components/Tutorial/Setting'
+import BaseModalCard from '../../../../ext/js/components/BaseModalCard'
+import BaseModalCardHeader from '../../../../ext/js/components/BaseModalCardHeader'
+import BaseModalCardFooter from '../../../../ext/js/components/BaseModalCardFooter'
+import BaseTextField from '../../../../ext/js/components/BaseTextField'
+import BaseTextArea from '../../../../ext/js/components/BaseTextArea'
 import BaseButton from '../../../../ext/js/components/BaseButton'
 import Vue from '../../app'
 
@@ -18,15 +23,16 @@ describe('Setting.vue', () => {
     describe(':props', () => {
 
         it(':tutorial - should render a message header with the passed-in header text', done => {
+
             const wrapper = shallowMount(Setting, {
                 localVue: Vue,
             })
 
-            expect(wrapper.find('header.modal-card-head > p.modal-card-title').text()).to.equal('Create Tutorial')
+            expect(wrapper.find(BaseModalCardHeader).text()).to.equal('Create Tutorial')
 
-            expect(wrapper.find('section.modal-card-body > div.field:nth-child(1) > div.control input[type="text"]').text()).to.equal('')
+            expect(wrapper.find(BaseTextField).text()).to.equal('')
 
-            expect(wrapper.find('section.modal-card-body > div.field:nth-child(2) > div.control textarea').text()).to.equal('')
+            expect(wrapper.find(BaseTextArea).text()).to.equal('')
 
             wrapper.setProps({
                 tutorial,
@@ -38,7 +44,7 @@ describe('Setting.vue', () => {
 
             wrapper.vm.$nextTick(() => {
 
-                expect(wrapper.find('header.modal-card-head > p.modal-card-title').text()).to.equal('Edit Tutorial')
+                expect(wrapper.find(BaseModalCardHeader).text()).to.equal('Edit Tutorial')
 
                 done()
             })
@@ -62,9 +68,9 @@ describe('Setting.vue', () => {
 
             expect(wrapper.emitted().cancelClick.length).to.equal(1)
 
-            expect(wrapper.find('section.modal-card-body > div.field:nth-child(1) > div.control input[type="text"]').text()).to.equal('')
+            expect(wrapper.find(BaseTextField).text()).to.equal('')
 
-            expect(wrapper.find('section.modal-card-body > div.field:nth-child(2) > div.control textarea').text()).to.equal('')
+            expect(wrapper.find(BaseTextArea).text()).to.equal('')
 
         })
 
@@ -84,9 +90,9 @@ describe('Setting.vue', () => {
                 description: '',
             })
 
-            expect(wrapper.find('section.modal-card-body > div.field:nth-child(1) > div.control input[type="text"]').text()).to.equal('')
+            expect(wrapper.find(BaseTextField).text()).to.equal('')
 
-            expect(wrapper.find('section.modal-card-body > div.field:nth-child(2) > div.control textarea').text()).to.equal('')
+            expect(wrapper.find(BaseTextArea).text()).to.equal('')
 
             wrapper.setProps({
                 tutorial,
@@ -101,9 +107,9 @@ describe('Setting.vue', () => {
 
                 expect(wrapper.emitted().saveClick[1][0]).to.deep.equal(tutorial)
 
-                expect(wrapper.find('section.modal-card-body > div.field:nth-child(1) > div.control input[type="text"]').text()).to.equal('')
+                expect(wrapper.find(BaseTextField).text()).to.equal('')
 
-                expect(wrapper.find('section.modal-card-body > div.field:nth-child(2) > div.control textarea').text()).to.equal('')
+                expect(wrapper.find(BaseTextArea).text()).to.equal('')
 
                 done()
 

@@ -6,7 +6,7 @@
         <div class="level-right">
             <p class="level-item">
                 <BaseButton
-                    :classes="['is-success']"
+                    is-success
                     @click="$emit('actionClick')"
                 >
                     {{ actionBtnTitle }}

@@ -11,14 +11,14 @@ import {
 
 Vue.use(Vuex)
 
-const state = {
+export const state = {
     extLog: {
         userIsFirstTime: true,
         checkedMessages: [],
     },
 }
 
-const mutations = {
+export const mutations = {
     [RETRIEVE_LOG] (state) {
         try {
             const savedLog = JSON.parse(localStorage.getItem(EXT_LOG_KEY))
@@ -42,7 +42,7 @@ const mutations = {
     },
 }
 
-const actions = {
+export const actions = {
     retrieveLog({ commit }, tutorial) {
         commit(RETRIEVE_LOG, tutorial)
     },
