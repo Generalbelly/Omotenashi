@@ -17,10 +17,9 @@
     </div>
 </template>
 <script>
-
-    import Tutorial from './features/Tutorial'
-    import GreetingModal from './components/App/GreetingModal'
-    import Navbar from "./components/App/Navbar"
+    import Tutorial from './components/pages/Tutorial'
+    import GreetingModal from './components/organisms/GreetingModal'
+    import Navbar from "./components/organisms/Navbar"
     import {
         mapActions,
         mapState

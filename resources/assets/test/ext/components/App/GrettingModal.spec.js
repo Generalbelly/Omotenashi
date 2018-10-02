@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils'
-import GreetingModal from '../../../../ext/js/components/App/GreetingModal'
-import BaseModal from '../../../../ext/js/components/BaseModal'
-import BaseButton from '../../../../ext/js/components/BaseButton'
+import GreetingModal from '../../../../ext/js/components/organisms/GreetingModal'
+import BaseModal from '../../../../ext/js/components/molecules/Modal'
+import BaseButton from '../../../../ext/js/components/atoms/BaseButton'
 import Vue from '../../app'
 
 describe('GreetingModal.vue', () => {

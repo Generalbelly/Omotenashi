@@ -9,8 +9,13 @@
         :is-info="isInfo"
         :is-warning="isWarning"
     >
-        <BaseMessageHeader>
+        <BaseMessageHeader @closeClick="$emit('closeClick')">
             <slot name="header"></slot>
+            <button
+                class="delete is-paddingless"
+                aria-label="delete"
+                @click.stop="$emit('closeClick')"
+            ></button>
         </BaseMessageHeader>
         <BaseMessageBody>
             <slot name="body"></slot>
@@ -27,10 +32,10 @@
 </template>
 
 <script>
-    import BaseMessage from '../BaseMessage'
-    import BaseMessageHeader from '../BaseMessageHeader'
-    import BaseMessageBody from '../BaseMessageBody'
-    import BaseCheckBox from "../BaseCheckBox";
+    import BaseMessage from '../atoms/BaseMessage'
+    import BaseMessageHeader from '../atoms/BaseMessageHeader'
+    import BaseMessageBody from '../atoms/BaseMessageBody'
+    import BaseCheckBox from "../atoms/BaseCheckBox";
 
     export default {
         name: "HelpMessage",

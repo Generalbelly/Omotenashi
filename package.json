@@ -1,102 +1,113 @@
 {
-    "private": true,
-    "scripts": {
-        "dev": "npm run development",
-        "development": "--mode=development webpack --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "watch-ext": "webpack --mode=development --watch --progress --colors --config=./webpack.ext.dev.config.js",
-        "test-ext": "mocha-webpack --webpack-config ./webpack.ext.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/test/ext/**/*.spec.js ./resources/assets/test/ext/components/**/*.spec.js",
-        "watch-poll": "npm run watch -- --watch-poll",
-        "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "prod": "npm run production",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "test-ci": "mocha-webpack --webpack-config ./webpack.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/test/ext/**/*.spec.js",
-        "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test-ci"
-    },
-    "devDependencies": {
-        "@babel/core": "^7.0.0",
-        "@babel/plugin-proposal-class-properties": "^7.0.0",
-        "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-        "@babel/preset-env": "^7.0.0",
-        "@vue/test-utils": "^1.0.0-beta.25",
-        "axios": "^0.18",
-        "babel-loader": "^8.0.2",
-        "babel-plugin-transform-imports": "^1.5.1",
-        "chai": "^4.1.2",
-        "clean-webpack-plugin": "^0.1.19",
-        "cross-env": "^5.1",
-        "css-loader": "^0.28.11",
-        "expect": "^23.6.0",
-        "extract-text-webpack-plugin": "^4.0.0-beta.0",
-        "file-loader": "^1.1.11",
-        "html-webpack-plugin": "^3.2.0",
-        "istanbul-instrumenter-loader": "^3.0.1",
-        "jsdom": "^12.0.0",
-        "jsdom-global": "^3.0.2",
-        "mini-css-extract-plugin": "^0.4.1",
-        "mocha": "^5.2.0",
-        "mocha-webpack": "^2.0.0-beta.0",
-        "node-sass": "^4.9.2",
-        "nyc": "^13.0.1",
-        "popper.js": "^1.12",
-        "sass-loader": "^7.1.0",
-        "sinon": "^6.2.0",
-        "style-loader": "^0.20.3",
-        "stylus": "^0.54.5",
-        "stylus-loader": "^3.0.2",
-        "uglifyjs-webpack-plugin": "^1.1.8",
-        "url-loader": "^1.0.1",
-        "uuid": "^3.3.2",
-        "vue": "^2.5.17",
-        "vue-loader": "^14.1.1",
-        "vue-router": "^3.0.1",
-        "vue-style-loader": "^4.0.2",
-        "vue-template-compiler": "^2.5.17",
-        "webpack": "^4.16.5",
-        "webpack-cli": "^3.1.0",
-        "webpack-md5-hash": "0.0.6",
-        "webpack-node-externals": "^1.7.2"
-    },
-    "dependencies": {
-        "@fortawesome/fontawesome-svg-core": "^1.2.2",
-        "@fortawesome/free-solid-svg-icons": "^5.2.0",
-        "@fortawesome/vue-fontawesome": "^0.1.1",
-        "@medv/finder": "^1.1.0",
-        "bulma": "^0.7.1",
-        "dompurify": "^1.0.8",
-        "dotenv": "^6.0.0",
-        "driver.js": "^0.7.1",
-        "i": "^0.3.6",
-        "logrocket": "^0.6.16",
-        "npm": "^6.4.1",
-        "pell": "^1.0.4",
-        "unique-selector": "^0.3.6",
-        "vee-validate": "^2.1.0-beta.8",
-        "vuex": "^3.0.1"
-    },
-    "babel": {
-        "presets": [
-            "@babel/preset-env"
-        ],
-        "plugins": [
-            "@babel/plugin-proposal-class-properties",
-            "@babel/plugin-proposal-object-rest-spread",
-            [
-                "transform-imports",
-                {
-                    "@fortawesome": {
-                        "transform": "@fortawesome/free-solid-svg-icons/${member}",
-                        "preventFullImport": true
-                    }
-                }
-            ]
-        ]
-    },
-    "nyc": {
-        "instrument": false,
-        "sourceMap": false,
-        "include": [
-            "resources/assets/ext/**/*.{js,vue}",
-            "resources/assets/js/**/*.{js,vue}"
-        ]
-    }
+  "private": true,
+  "scripts": {
+    "dev": "npm run development",
+    "development": "--mode=development webpack --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch-ext": "webpack --mode=development --watch --progress --colors --config=./webpack.ext.dev.config.js",
+    "test-ext": "mocha-webpack --webpack-config ./webpack.ext.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/test/ext/**/*.spec.js ./resources/assets/test/ext/components/**/*.spec.js",
+    "watch-poll": "npm run watch -- --watch-poll",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "prod": "npm run production",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "test-ci": "mocha-webpack --webpack-config ./webpack.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/test/ext/**/*.spec.js",
+    "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test-ci",
+    "storybook-ext": "start-storybook -p 9001 -c ./resources/assets/.storybook -s ./public/ext"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@storybook/addon-actions": "^4.0.0-alpha.23",
+    "@storybook/addon-links": "^4.0.0-alpha.23",
+    "@storybook/addons": "^4.0.0-alpha.23",
+    "@storybook/vue": "^4.0.0-alpha.23",
+    "@vue/test-utils": "^1.0.0-beta.25",
+    "axios": "^0.18",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.2",
+    "babel-plugin-transform-imports": "^1.5.1",
+    "babel-preset-vue": "^2.0.2",
+    "chai": "^4.1.2",
+    "clean-webpack-plugin": "^0.1.19",
+    "cross-env": "^5.1",
+    "css-loader": "^0.28.11",
+    "expect": "^23.6.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.2.0",
+    "istanbul-instrumenter-loader": "^3.0.1",
+    "jsdom": "^12.0.0",
+    "jsdom-global": "^3.0.2",
+    "mini-css-extract-plugin": "^0.4.1",
+    "mocha": "^5.2.0",
+    "mocha-webpack": "^2.0.0-beta.0",
+    "node-sass": "^4.9.2",
+    "nyc": "^13.0.1",
+    "popper.js": "^1.12",
+    "sass-loader": "^7.1.0",
+    "sinon": "^6.2.0",
+    "style-loader": "^0.20.3",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "uglifyjs-webpack-plugin": "^1.1.8",
+    "url-loader": "^1.0.1",
+    "uuid": "^3.3.2",
+    "vue": "^2.5.17",
+    "vue-loader": "^14.1.1",
+    "vue-router": "^3.0.1",
+    "vue-style-loader": "^4.0.2",
+    "vue-template-compiler": "^2.5.17",
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0",
+    "webpack-md5-hash": "0.0.6",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.2",
+    "@fortawesome/free-solid-svg-icons": "^5.2.0",
+    "@fortawesome/vue-fontawesome": "^0.1.1",
+    "@medv/finder": "^1.1.0",
+    "bulma": "^0.7.1",
+    "dompurify": "^1.0.8",
+    "dotenv": "^6.0.0",
+    "driver.js": "^0.7.1",
+    "i": "^0.3.6",
+    "logrocket": "^0.6.16",
+    "npm": "^6.4.1",
+    "pell": "^1.0.4",
+    "unique-selector": "^0.3.6",
+    "vee-validate": "^2.1.0-beta.8",
+    "vuex": "^3.0.1"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-object-rest-spread",
+      [
+        "transform-imports",
+        {
+          "@fortawesome": {
+            "transform": "@fortawesome/free-solid-svg-icons/${member}",
+            "preventFullImport": true
+          }
+        }
+      ]
+    ]
+  },
+  "nyc": {
+    "instrument": false,
+    "sourceMap": false,
+    "include": [
+      "resources/assets/ext/**/*.{js,vue}",
+      "resources/assets/js/**/*.{js,vue}"
+    ]
+  },
+  "name": "omotenashi",
+  "version": "1.0.0",
+  "repository": "git@Generalbelly-GitLab:Generalbelly/omotenashi.git",
+  "author": "Nobuyoshi Shimmen <nobuyoshi.shimmen@gmail.com>"
 }

@@ -12,10 +12,10 @@
                 Your are about to delete "{{ tutorial.name }}".<br/>
                 Please type in the name of the tutorial to confirm.
             </p>
-            <base-text-field
+            <BaseTextField
                 v-model="tutorialName"
             >
-            </base-text-field>
+            </BaseTextField>
             <div class="field">
                 <BaseButton
                     is-danger
@@ -31,11 +31,11 @@
     </BaseMessage>
 </template>
 <script>
-    import BaseMessage from '../BaseMessage'
-    import BaseMessageHeader from '../BaseMessageHeader'
-    import BaseMessageBody from '../BaseMessageBody'
-    import BaseButton from '../BaseButton'
-    import BaseTextField from '../BaseTextField'
+    import BaseMessage from '../atoms/BaseMessage'
+    import BaseMessageHeader from '../atoms/BaseMessageHeader'
+    import BaseMessageBody from '../atoms/BaseMessageBody'
+    import BaseButton from '../atoms/BaseButton'
+    import BaseTextField from '../atoms/BaseTextField'
 
     export default {
         name: 'DeleteConfirmationMessage',

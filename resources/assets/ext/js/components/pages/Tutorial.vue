@@ -57,7 +57,7 @@
         >
         </Setting>
 
-        <HelpMessage
+        <Message
             v-show="selectorChoicesAvailableMessageShown"
             :has-dont-show-me-option="true"
             :dont-show-me="dontShowMeChecked('selectorChoicesAvailable')"
@@ -65,36 +65,36 @@
             @closeClick="hideMessage"
             @dontShowMeChenge="removeMessage"
         >
-            <template slot="head">Tips</template>
+            <template slot="header">Tips</template>
             <template slot="body">
                 If the element is not correctly highlighted,<br>
                 please keep clicking until you find the right one.
             </template>
-        </HelpMessage>
+        </Message>
 
-        <HelpMessage
+        <Message
             v-show="noStepAddedYetMessageShown"
             is-warning
             @closeClick="hideMessage"
         >
-            <template slot="head">Oops</template>
+            <template slot="header">Oops</template>
             <template slot="body">
                 You haven't added any step yet.
             </template>
-        </HelpMessage>
+        </Message>
 
-        <HelpMessage
+        <Message
             v-show="noMoreSelectorChoicesMessageShown"
             is-warning
             @closeClick="hideMessage"
         >
-            <template slot="head">Oops</template>
+            <template slot="header">Oops</template>
             <template slot="body">
                 Looks like we don't have any other elements to show you.
             </template>
-        </HelpMessage>
+        </Message>
 
-        <HelpMessage
+        <Message
             v-show="clickToAddStepMessageShown"
             :has-dont-show-me-option="true"
             :dont-show-me="dontShowMeChecked('clickToAddStep')"
@@ -102,25 +102,25 @@
             @closeClick="hideMessage"
             @dontShowMeChenge="removeMessage"
         >
-            <template slot="head">Tips</template>
+            <template slot="header">Tips</template>
             <template slot="body">
                 Click anywhere you want to attract your user attention.
             </template>
-        </HelpMessage>
+        </Message>
     </div>
 </template>
 <script>
     import uuidv4 from 'uuid/v4'
     import finder from '@medv/finder'
     import { mapActions, mapGetters, mapState,} from 'vuex'
-    import Driver from '../../driver.js/src'
-    import HelpMessage from '../components/Tutorial/HelpMessage'
-    import Menu from '../components/Tutorial/Menu'
-    import Setting from '../components/Tutorial/Setting'
-    import DeleteConfirmationMessage from "../components/Tutorial/DeleteConfirmationMessage";
+    import Driver from '../../../driver.js/src/index'
+    import Message from '../molecules/Message'
+    import Menu from '../organisms/Menu'
+    import Setting from '../organisms/Setting'
+    import DeleteConfirmationMessage from "../organisms/DeleteConfirmationMessage";
 
     import purify from 'dompurify'
-    import BaseButton from "../components/BaseButton";
+    import BaseButton from "../atoms/BaseButton";
 
     export const messageKeys = {
         clickToAddStep: 'clickToAddStep',
@@ -444,7 +444,7 @@
         components: {
             BaseButton,
             DeleteConfirmationMessage,
-            HelpMessage,
+            Message,
             Menu,
             Setting,
         },

@@ -8,9 +8,6 @@
 </template>
 <script>
     export default {
-        props: {},
-        data() {
-            return {};
-        }
+        name: 'BaseModalCard',
     }
 </script>

@@ -5,9 +5,6 @@
 </template>
 <script>
     export default {
-        props: {},
-        data() {
-            return {};
-        },
+        name: 'BaseCardModalBody',
     }
 </script>

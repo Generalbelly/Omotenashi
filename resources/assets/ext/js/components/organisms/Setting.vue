@@ -5,14 +5,14 @@
         </BaseModalCardHeader>
         <BaseModalCardBody>
             <BaseTextField
-                    label="Name"
-                    v-model="updatedTutorial.name"
-                    placeholder="First timers"
+                label="Name"
+                v-model="updatedTutorial.name"
+                placeholder="First timers"
             ></BaseTextField>
             <BaseTextArea
-                    label="Description (Optional)"
-                    v-model="updatedTutorial.description"
-                    placeholder="Tutorial for the first time customers."
+                label="Description (Optional)"
+                v-model="updatedTutorial.description"
+                placeholder="Tutorial for the first time customers."
             ></BaseTextArea>
         </BaseModalCardBody>
         <BaseModalCardFooter>
@@ -31,13 +31,13 @@
     </BaseModalCard>
 </template>
 <script>
-    import BaseButton from '../BaseButton'
-    import BaseTextField from '../BaseTextField'
-    import BaseTextArea from '../BaseTextArea'
-    import BaseModalCard from '../BaseModalCard'
-    import BaseModalCardHeader from '../BaseModalCardHeader'
-    import BaseModalCardBody from '../BaseModalCardBody'
-    import BaseModalCardFooter from '../BaseModalCardFooter'
+    import BaseButton from '../atoms/BaseButton'
+    import BaseTextField from '../atoms/BaseTextField'
+    import BaseTextArea from '../atoms/BaseTextArea'
+    import BaseModalCard from '../atoms/BaseCardModal'
+    import BaseModalCardHeader from '../atoms/BaseCardModalHeader'
+    import BaseModalCardBody from '../atoms/BaseCardModalBody'
+    import BaseModalCardFooter from '../atoms/BaseCardModalFooter'
 
     export default {
         props: {

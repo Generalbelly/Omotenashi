@@ -1,8 +1,6 @@
 <template>
     <div @click.stop.self="$emit('closeClick')">
-        <article
-            class="message"
-        >
+        <article class="message">
             <slot></slot>
         </article>
     </div>

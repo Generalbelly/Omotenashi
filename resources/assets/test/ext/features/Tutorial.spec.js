@@ -7,12 +7,12 @@ import Vuex from 'vuex'
 import Tutorial, {
     userActions,
     messageKeys
-} from '../../../ext/js/features/Tutorial'
-import BaseButton from '../../../ext/js/components/BaseButton'
-import Menu from '../../../ext/js/components/Tutorial/Menu'
-import DeleteConfirmationMessage from '../../../ext/js/components/Tutorial/DeleteConfirmationMessage'
-import Setting from '../../../ext/js/components/Tutorial/Setting'
-import HelpMessage from '../../../ext/js/components/Tutorial/HelpMessage'
+} from '../../../ext/js/components/pages/Tutorial'
+import BaseButton from '../../../ext/js/components/atoms/BaseButton'
+import Menu from '../../../ext/js/components/organisms/Menu'
+import DeleteConfirmationMessage from '../../../ext/js/components/organisms/DeleteConfirmationMessage'
+import Setting from '../../../ext/js/components/organisms/Setting'
+import HelpMessage from '../../../ext/js/components/molecules/Message'
 import { tutorials } from "../mock";
 
 const localVue = createLocalVue()
