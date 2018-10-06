@@ -12,7 +12,7 @@
             <BaseTextArea
                 label="Description (Optional)"
                 v-model="updatedTutorial.description"
-                placeholder="Tutorial for the first time customers."
+                placeholder="Tutorial for first time customers."
             ></BaseTextArea>
         </BaseModalCardBody>
         <BaseModalCardFooter>

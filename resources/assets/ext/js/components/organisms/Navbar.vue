@@ -9,7 +9,7 @@
                     is-success
                     @click="$emit('actionClick')"
                 >
-                    {{ actionBtnTitle }}
+                    Tutorials
                 </BaseButton>
             </p>
             <p class="level-item">
@@ -25,12 +25,6 @@
 
     export default {
         name: 'Navbar',
-        props: {
-            actionBtnTitle: {
-                type: String,
-                default: 'Get started',
-            },
-        },
         components: {
             BaseButton,
         }

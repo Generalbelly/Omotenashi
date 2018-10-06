@@ -2,7 +2,6 @@
     <div id="omotenashi">
         <Navbar
             v-show="!tutorialFeature.isActivated"
-            :action-btn-title="extLog.userIsFirstTime ? 'Get started': 'Tutorials'"
             @actionClick="tutorialFeature.isActivated = true"
         ></Navbar>
         <GreetingModal

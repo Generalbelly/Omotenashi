@@ -67,8 +67,9 @@
         >
             <template slot="header">Tips</template>
             <template slot="body">
-                If the element is not correctly highlighted,<br>
-                please keep clicking until you find the right one.
+                Selections start small.<br>
+                The more you click, the larger your section to edit will become.<br>
+                To select a different small section, press cancel and click a new section.
             </template>
         </Message>
 
@@ -79,7 +80,7 @@
         >
             <template slot="header">Oops</template>
             <template slot="body">
-                You haven't added any step yet.
+                You haven't added any steps yet.
             </template>
         </Message>
 
@@ -90,7 +91,7 @@
         >
             <template slot="header">Oops</template>
             <template slot="body">
-                Looks like we don't have any other elements to show you.
+                Looks like we don't have any other options to show you.
             </template>
         </Message>
 
@@ -104,7 +105,7 @@
         >
             <template slot="header">Tips</template>
             <template slot="body">
-                Click anywhere you want to attract your user attention.
+                Click to select and edit text.
             </template>
         </Message>
     </div>
@@ -321,7 +322,7 @@
                     this.showMessage(messageKeys.selectorChoicesAvailable)
                 }
             },
-            highlight({ id=null, element, popover={ content: '<div><h1>Title</h1><div>Some description here</div></div>' } }) {
+            highlight({ id=null, element, popover={ content: '<div><h1>Title</h1><div>Your description here</div></div>' } }) {
                 // If there is a step with the same selector, we use it again.
                 if (!id) {
                     const step = this.selectedTutorial.steps.find(s => s.element === element)

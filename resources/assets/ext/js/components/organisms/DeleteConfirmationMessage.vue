@@ -9,7 +9,7 @@
         <BaseMessageHeader></BaseMessageHeader>
         <BaseMessageBody>
             <p class="has-padding-top-1 has-padding-bottom-4">
-                Your are about to delete "{{ tutorial.name }}".<br/>
+                You are about to delete "{{ tutorial.name }}".<br/>
                 Please type in the name of the tutorial to confirm.
             </p>
             <BaseTextField
