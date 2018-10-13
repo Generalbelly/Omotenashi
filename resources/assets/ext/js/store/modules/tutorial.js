@@ -17,6 +17,8 @@ import {
     REQUEST_ADD_TUTORIAL_SUCCESS,
     REQUEST_ADD_TUTORIAL_FAILURE,
     REQUEST_UPDATE_TUTORIAL,
+    REQUEST_UPDATE_TUTORIAL_SUCCESS,
+    REQUEST_UPDATE_TUTORIAL_FAILURE,
     REQUEST_DELETE_TUTORIAL,
 } from '../mutation-types'
 
@@ -43,16 +45,13 @@ export const getters = {
 }
 
 export const mutations = {
-    [ADD_TUTORIAL](state, { id, ...data }) {
+    [ADD_TUTORIAL](state, { data }) {
         state.tutorials = [
             ...state.tutorials,
-            {
-                id,
-                ...data
-            },
+            data,
         ]
     },
-    [UPDATE_TUTORIAL](state, { id, ...data }) {
+    [UPDATE_TUTORIAL](state, { id, data }) {
         const tutorialIndex = state.tutorials.findIndex(t => t.id === id)
         state.tutorials = [
             ...state.tutorials.slice(0, tutorialIndex),
@@ -81,6 +80,15 @@ export const mutations = {
     [REQUEST_ADD_TUTORIAL_FAILURE](state, { errorCode, errorMsg }) {
         state.isRequesting = false
     },
+    [REQUEST_UPDATE_TUTORIAL](state) {
+        state.isRequesting = true
+    },
+    [REQUEST_UPDATE_TUTORIAL_SUCCESS](state) {
+        state.isRequesting = false
+    },
+    [REQUEST_UPDATE_TUTORIAL_FAILURE](state, { errorCode, errorMsg }) {
+        state.isRequesting = false
+    },
     [ADD_STEP](state, { data }) {
 
     },
@@ -107,8 +115,10 @@ export const actions = {
         })
             .then((data) => {
                 commit(REQUEST_ADD_TUTORIAL_SUCCESS)
-                commit(ADD_TUTORIAL, data)
-                commit(SELECT_TUTORIAL, { id: data.id })
+                commit(ADD_TUTORIAL, { data })
+                commit(SELECT_TUTORIAL, {
+                    id: data.id
+                })
                 commit(SELECT_STEP, { id: null })
             })
             .catch((error) => {
@@ -116,15 +126,22 @@ export const actions = {
             })
     },
     updateTutorial({ commit }, { id, data }) {
-        // commit(REQUEST_UPDATE_TUTORIAL)
+        commit(REQUEST_UPDATE_TUTORIAL)
         makeRequest({
             id,
             data,
             mutationType: UPDATE_TUTORIAL,
         })
             .then((data) => {
-                // commit(REQUEST_ADD_TUTORIAL_SUCCESS)
-                commit(UPDATE_TUTORIAL, data)
+                commit(REQUEST_UPDATE_TUTORIAL_SUCCESS)
+                commit(UPDATE_TUTORIAL, {
+                    id: data.id,
+                    data,
+                })
+                commit(SELECT_TUTORIAL, {
+                    id: data.id
+                })
+                commit(SELECT_STEP, { id: null })
             })
             .catch(() => {
                 // commit(REQUEST_ADD_TUTORIAL_FAILURE)

@@ -20,7 +20,7 @@ export const makeRequest = (params) => {
                         id: uuidv4(),
                         ...data
                     })
-                }, 3000)
+                }, 1500)
             })
         case UPDATE_TUTORIAL:
             return new Promise((resolve, reject) => {
@@ -28,8 +28,14 @@ export const makeRequest = (params) => {
                     resolve({
                         id,
                         ...data,
+                        steps: data.steps.map(s => {
+                            if(!s.id) {
+                                s.id = uuidv4()
+                            }
+                            return s
+                        }),
                     })
-                }, 3000)
+                }, 1500)
             })
         case DELETE_TUTORIAL:
             return new Promise((resolve, reject) => {
@@ -38,7 +44,7 @@ export const makeRequest = (params) => {
                         id,
                         ...data,
                     })
-                }, 3000)
+                }, 1500)
             })
         default:
             break

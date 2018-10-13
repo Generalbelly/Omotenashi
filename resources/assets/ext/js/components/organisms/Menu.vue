@@ -148,6 +148,7 @@
                 this.$emit('switchSideClick')
             },
             isActiveStep(step) {
+                if (!this.selectedStep) return false
                 return step.id === this.selectedStep.id
             }
         }

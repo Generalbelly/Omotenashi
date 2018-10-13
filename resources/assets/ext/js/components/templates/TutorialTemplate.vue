@@ -14,7 +14,7 @@
             @closeClick="$emit('closeClick')"
             @previewClick="onPreviewClick"
             @addStepClick="onAddStepClick"
-            @stepClick="e => $emit('stepClick', e)"
+            @stepClick="onStepClick"
             @deleteStepClick="e => $emit('deleteStepClick', e)"
             @addTutorialClick="onAddTutorialClick"
             @editTutorialClick="onEditTutorialClick"
@@ -31,18 +31,18 @@
         </DeleteConfirmationMessage>
 
         <DriverEditor
-            class="has-padding-4 is-fixed-bottom-right driver-editor"
-            v-show="isEditingPopover"
-            :tutorial="selectedTutorial"
+            ref="editor"
+            class="driver-editor"
+            :steps="selectedTutorial ? selectedTutorial.steps : []"
+            :is-highlight-selection-active="isAddingStep"
             @saveClick="e => $emit('stepSaveClick', e)"
             @cancelClick="updateUserAction('beingHome')"
-            @reset="updateUserAction('beingHome')"
-            @sameElementSelect="e => $emit('stepChange', e)"
+            @done="updateUserAction('beingHome')"
         >
         </DriverEditor>
 
         <Setting
-            v-show="isEditingTutorial || isCreatingTutorial"
+            v-show="isEditingTutorial || isAddingTutorial"
             :tutorial="isEditingTutorial ? selectedTutorial : null"
             @saveClick="onTutorialSaveClick"
             @cancelClick="updateUserAction('beingHome')"
@@ -122,11 +122,11 @@
 
     export const userActions = {
         beingHome: 'beingHome',
-        creatingStep: 'creatingStep',
-        creatingTutorial: 'creatingTutorial',
+        addingTutorial: 'addingTutorial',
         editingTutorial: 'editingTutorial',
         deletingTutorial: 'deletingTutorial',
-        editingPopover: 'editingPopover',
+        addingStep: 'addingStep',
+        editingStep: 'editingStep',
         previewing: 'previewing',
     }
 
@@ -203,10 +203,10 @@
                 })
             },
             onAddStepClick() {
-                this.updateUserAction(userActions.creatingStep)
+                this.updateUserAction(userActions.addingStep)
             },
             onAddTutorialClick() {
-                this.updateUserAction(userActions.creatingTutorial)
+                this.updateUserAction(userActions.addingTutorial)
             },
             onDeleteTutorialClick() {
                 this.updateUserAction(userActions.deletingTutorial)
@@ -218,33 +218,24 @@
             onEditTutorialClick() {
                 this.updateUserAction(userActions.editingTutorial)
             },
+            onStepClick(id) {
+                this.$refs.editor.highlight({ id })
+                this.updateUserAction(userActions.editingStep)
+                this.$emit('stepClick', { id })
+            },
             onPreviewClick() {
                 if (this.selectedTutorial.steps.length === 0) {
                     this.showMessage(messageKeys.noStepAddedYet)
                     return
                 }
                 this.updateUserAction(userActions.previewing)
-                this.preview()
+                this.$refs.editor.preview()
             },
         },
         watch: {
             userAction(newValue, oldValue) {
                 switch (newValue) {
-                    // case userActions.beingHome:
-                    //     if (oldValue === userActions.previewing) {
-                    //         this.driver.options.allowClose = false
-                    //         this.driver.options.onReset = () => {}
-                    //     }
-                    //
-                    //     if (oldValue === userActions.editingPopover) {
-                    //         this.driver.reset()
-                    //         this.driver.options.isEditMode = false
-                    //
-                    //         this.selectorChoices = []
-                    //         this.selectorChoiceIndex = 0
-                    //     }
-                    //     break
-                    case userActions.creatingStep:
+                    case userActions.addingStep:
                         this.showMessage(messageKeys.clickToCreateStep)
                         break
                     default:
@@ -260,11 +251,11 @@
             isHome() {
                 return (this.userAction === userActions.beingHome)
             },
-            isCreatingStep() {
-                return (this.userAction === userActions.creatingStep)
+            isAddingStep() {
+                return (this.userAction === userActions.addingStep)
             },
-            isCreatingTutorial() {
-                return (this.userAction === userActions.creatingTutorial)
+            isAddingTutorial() {
+                return (this.userAction === userActions.addingTutorial)
             },
             isEditingTutorial() {
                 return (this.userAction === userActions.editingTutorial)
@@ -272,8 +263,8 @@
             isDeletingTutorial() {
                 return (this.userAction === userActions.deletingTutorial)
             },
-            isEditingPopover() {
-                return (this.userAction === userActions.editingPopover)
+            isEditingStep() {
+                return (this.userAction === userActions.editingStep)
             },
             isPreviewing() {
                 return (this.userAction === userActions.previewing)

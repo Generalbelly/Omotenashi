@@ -12,7 +12,6 @@
         @deleteStepClick="deleteStep"
         @stepSaveClick="onStepSaveClick"
         @deleteClick="deleteTutorial(selectedTutorial)"
-        @stepChange="selectStep"
     >
     </TutorialTemplate>
 </template>
@@ -63,7 +62,7 @@
                     description,
                     steps,
                 }
-
+                console.log(data)
                 if (id) {
                     this.updateTutorial({
                         id,
@@ -79,21 +78,23 @@
             onTutorialChange(id) {
                 this.selectTutorial({ id });
             },
-            onStepSaveClick(step) {
-                if (this.selectedStepId) {
+            onStepSaveClick({ id, element, popover }) {
+                if (id) {
                     this.updateStep({
-                        id: this.selectedStepId,
-                        element,
-                        popover,
+                        data: {
+                            element,
+                            popover,
+                        },
+                        id,
                     })
                 } else {
                     this.addStep({
-                        id: uuidv4(),
-                        element,
-                        popover,
+                        data: {
+                            element,
+                            popover,
+                        },
                     })
                 }
-                console.log('onStepSaveClick')
             },
             // onSameElementSelect(step) {
             //     this.selectStep(step.id)

@@ -1,5 +1,8 @@
 <template>
-    <div class="step-editing-actions has-padding-4 is-fixed-bottom-right">
+    <div
+        v-show="isSelectingHighlight"
+        class="has-padding-4 is-fixed-bottom-right"
+    >
         <BaseButton
             id="om-adding-step-save"
             @click="onSaveClick"
@@ -23,10 +26,10 @@
     import BaseButton from '../atoms/BaseButton'
 
     export const userActions = {
-        creatingPopover: 'creatingPopover',
         creatingHighlight: 'creatingHighlight',
+        selectingHighlight: 'selectingHighlight',
+        previewing: 'previewing',
         editingPopover: 'editingPopover',
-        // selectingHighlight: 'selectingHighlight',
     }
 
     export default {
@@ -47,42 +50,55 @@
             })
         },
         props: {
-            tutorial: {
-                type: Object,
-                default: null,
+            isHighlightSelectionActive: {
+                type: Boolean,
+                default: false,
             },
-            stepId: {
-                type: String,
-                default: null,
+            steps: {
+                type: Array,
+                default() {
+                    return []
+                },
             },
         },
         data() {
             return {
                 driver: null,
-                userAction: userActions.creatingHighlight,
+                userAction: null,
                 selectorChoices: [],
                 selectorChoiceIndex: 0,
                 maxRetries: 5,
+                step: null,
             }
         },
         computed: {
-            step() {
-                return this.tutorial && this.stepId ? this.tutorial.steps.find(step => step.id === this.stepId) : null
-            },
-            isCreatingPopover() {
-                return this.userAction === userActions.creatingPopover
-            },
             isCreatingHighlight() {
                 return this.userAction === userActions.creatingHighlight
             },
-            isEditingPopover() {
-                return this.userAction === userActions.editingPopover
+            isSelectingHighlight() {
+                return this.userAction === userActions.selectingHighlight
             },
-            // isSelectingHighlight() {
-            //     return this.userAction === userActions.selectingHighlight
-            // },
         },
         watch: {
+            userAction(newValue, oldValue) {
+                if (newValue === userActions.creatingHighlight && oldValue != null){
+                    this.$emit('done')
+                }
+
+                if (oldValue === userActions.selectingHighlight) {
+                    this.driver.reset()
+                    this.driver.options.allowClose = true
+                    this.driver.options.isEditMode = false
+                    this.selectorChoices = []
+                    this.selectorChoiceIndex = 0
+                    this.step = null
+                }
+            },
+            isHighlightSelectionActive(value) {
+                if (value) {
+                    this.updateUserAction(userActions.creatingHighlight)
+                }
+            }
         },
         methods: {
             updateUserAction(userAction = null) {
@@ -123,8 +139,15 @@
             },
             onSaveClick() {
                 const activeElement = this.driver.getHighlightedElement()
-                const step = this.createStep(activeElement)
-                this.$emit('saveClick', step)
+                const updatedStep = this.createStep(activeElement)
+                if (this.step) {
+                    this.$emit('saveClick', {
+                        ...this.step,
+                        ...updatedStep,
+                    })
+                } else {
+                    this.$emit('saveClick', updatedStep)
+                }
                 this.updateUserAction(userActions.creatingHighlight)
             },
             extractSelectorChoices(e) {
@@ -149,11 +172,12 @@
                 ]
             },
             userScreenClickHandler(e) {
+                if (!this.isHighlightSelectionActive) return;
                 // omotenashiの要素のクリックは無視
                 if (e.composedPath().find(el => el.id === 'omotenashi')) return
                 e.preventDefault() // for driver.js
                 e.stopPropagation() // for driver.js
-                if (this.isCreatingPopover) {
+                if (this.isSelectingHighlight) {
                     if (e.target.id === 'om-adding-step-cancel' || e.target.id === 'om-adding-step-save') return
                     if (this.selectorChoices.length > 0) {
                         this.showAnotherChoice()
@@ -171,38 +195,45 @@
                     // this.showMessage(messageKeys.selectorChoicesAvailable)
                 }
             },
-            highlight({ id=null, element, popover={ content: '<div><h1>Title</h1><div>Your description here</div></div>' } }) {
-                // If there is a step with the same selector, we use it again.
-                if (id) {
-                    const step = this.tutorial.steps.find(s => s.element === element)
-                    if (step) {
-                        this.$emit('sameElementSelect', step)
-                        return
+            highlight({ id = null, element, popover={ content: '<div><h1>Title</h1><div>Your description here</div></div>' } }) {
+                let el = element
+                let po = popover
+
+                if (!this.step) {
+                    this.step = id ? this.steps.find(s => s.id === id) : this.steps.find(s => s.element === element)
+                    if (this.step) {
+                        el = this.step.element
+                        po = this.step.popover
                     }
                 }
+
+                if (!this.isSelectingHighlight) {
+                    this.updateUserAction(userActions.selectingHighlight)
+                }
+
                 this.driver.options.allowClose = false
                 this.driver.options.isEditMode = true
 
-                const userAction = id ? userActions.editingPopover : userActions.creatingPopover
-                this.updateUserAction(userAction)
-
                 this.driver.highlight({
-                    element,
-                    popover,
+                    element: el,
+                    popover: po,
                 })
 
-                if (this.isCreatingPopover) {
+                if (this.isHighlightSelectionActive && this.isSelectingHighlight) {
                     this.selectorChoiceIndex += 1
                 }
             },
             preview() {
                 this.driver.options.allowClose = true
-                this.driver.options.onReset = () => this.$emit('reset')
-                this.driver.defineSteps(this.tutorial.steps)
+                this.driver.options.onReset = () => {
+                    this.updateUserAction(userActions.creatingHighlight)
+                }
+                this.driver.defineSteps(this.steps)
                 this.driver.start()
+                this.updateUserAction(userActions.previewing)
             },
             showAnotherChoice() {
-                if (!this.isCreatingPopover) return
+                if (!this.isSelectingHighlight) return
                 if (this.selectorChoiceIndex === (this.selectorChoices.length - 1) || (this.selectorChoiceIndex + 1) > this.maxRetries ) {
                     // this.showMessage(messageKeys.noMoreSelectorChoices)
                     this.selectorChoiceIndex = 0
