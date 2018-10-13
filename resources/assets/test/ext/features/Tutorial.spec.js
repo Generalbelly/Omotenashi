@@ -7,7 +7,7 @@ import Vuex from 'vuex'
 import Tutorial, {
     userActions,
     messageKeys
-} from '../../../ext/js/components/pages/Tutorial'
+} from '../../../ext/js/components/pages/TutorialPage'
 import BaseButton from '../../../ext/js/components/atoms/BaseButton'
 import Menu from '../../../ext/js/components/organisms/Menu'
 import DeleteConfirmationMessage from '../../../ext/js/components/organisms/DeleteConfirmationMessage'
@@ -81,15 +81,15 @@ describe('Tutorial.vue', () => {
 
     describe('@events', () => {
 
-        it('@homeClick - should be emitted when the "homeClick" event is emitted from Menu component', () => {
+        it('@closeClick - should be emitted when the "closeClick" event is emitted from Menu component', () => {
 
             const wrapper = shallowMount(Tutorial, {
                 localVue,
                 store,
             })
             const menu = wrapper.find(Menu)
-            menu.vm.$emit('homeClick')
-            expect(wrapper.emitted().homeClick.length).to.equal(1)
+            menu.vm.$emit('closeClick')
+            expect(wrapper.emitted().closeClick.length).to.equal(1)
         })
 
     })

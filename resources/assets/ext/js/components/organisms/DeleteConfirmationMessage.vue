@@ -8,7 +8,10 @@
     >
         <BaseMessageHeader></BaseMessageHeader>
         <BaseMessageBody>
-            <p class="has-padding-top-1 has-padding-bottom-4">
+            <p
+                v-if="tutorial"
+                class="has-padding-top-1 has-padding-bottom-4"
+            >
                 You are about to delete "{{ tutorial.name }}".<br/>
                 Please type in the name of the tutorial to confirm.
             </p>
@@ -42,9 +45,7 @@
         props: {
             tutorial: {
                 type: Object,
-                default() {
-                    return {}
-                }
+                default: null,
             },
         },
         data() {

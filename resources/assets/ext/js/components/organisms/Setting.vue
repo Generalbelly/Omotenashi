@@ -1,9 +1,9 @@
 <template>
-    <BaseModalCard>
-        <BaseModalCardHeader>
+    <CardModal>
+        <div slot="header" class="has-margin-0">
             {{ isCreate ? 'Create' : 'Edit' }} Tutorial
-        </BaseModalCardHeader>
-        <BaseModalCardBody>
+        </div>
+        <div slot="body">
             <BaseTextField
                 label="Name"
                 v-model="updatedTutorial.name"
@@ -14,8 +14,11 @@
                 v-model="updatedTutorial.description"
                 placeholder="Tutorial for first time customers."
             ></BaseTextArea>
-        </BaseModalCardBody>
-        <BaseModalCardFooter>
+        </div>
+        <div
+            slot="footer"
+            class="has-margin-0"
+        >
             <BaseButton
                 @click="onSaveClick"
                 is-success
@@ -27,17 +30,14 @@
             >
                 Cancel
             </BaseButton>
-        </BaseModalCardFooter>
-    </BaseModalCard>
+        </div>
+    </CardModal>
 </template>
 <script>
     import BaseButton from '../atoms/BaseButton'
     import BaseTextField from '../atoms/BaseTextField'
     import BaseTextArea from '../atoms/BaseTextArea'
-    import BaseModalCard from '../atoms/BaseCardModal'
-    import BaseModalCardHeader from '../atoms/BaseCardModalHeader'
-    import BaseModalCardBody from '../atoms/BaseCardModalBody'
-    import BaseModalCardFooter from '../atoms/BaseCardModalFooter'
+    import CardModal from '../molecules/CardModal'
 
     export default {
         props: {
@@ -88,10 +88,7 @@
             BaseButton,
             BaseTextField,
             BaseTextArea,
-            BaseModalCard,
-            BaseModalCardHeader,
-            BaseModalCardBody,
-            BaseModalCardFooter,
+            CardModal,
         }
     }
 

@@ -1,15 +1,30 @@
 import {
+    makeRequest
+} from '../../api'
+
+import {
     ADD_TUTORIAL,
     UPDATE_TUTORIAL,
     DELETE_TUTORIAL,
     SELECT_TUTORIAL,
+
+    ADD_STEP,
+    UPDATE_STEP,
+    DELETE_STEP,
     SELECT_STEP,
-} from './mutation-types'
+
+    REQUEST_ADD_TUTORIAL,
+    REQUEST_ADD_TUTORIAL_SUCCESS,
+    REQUEST_ADD_TUTORIAL_FAILURE,
+    REQUEST_UPDATE_TUTORIAL,
+    REQUEST_DELETE_TUTORIAL,
+} from '../mutation-types'
 
 const state = {
     tutorials: [],
     selectedTutorialId: null,
     selectedStepId: null,
+    isRequesting: false,
 }
 
 export const getters = {
@@ -28,86 +43,152 @@ export const getters = {
 }
 
 export const mutations = {
-    [ADD_TUTORIAL](state, tutorial) {
+    [ADD_TUTORIAL](state, { id, ...data }) {
         state.tutorials = [
             ...state.tutorials,
-            tutorial,
+            {
+                id,
+                ...data
+            },
         ]
-        state.selectedTutorialId = tutorial.id
-        state.selectedStepId = null
     },
-    [UPDATE_TUTORIAL](state, tutorial) {
-        const tutorialIndex = state.tutorials.findIndex(t => t.id === tutorial.id)
+    [UPDATE_TUTORIAL](state, { id, ...data }) {
+        const tutorialIndex = state.tutorials.findIndex(t => t.id === id)
         state.tutorials = [
             ...state.tutorials.slice(0, tutorialIndex),
-            tutorial,
+            {
+                id,
+                ...data
+            },
             ...state.tutorials.slice(tutorialIndex+1),
         ]
     },
-    [DELETE_TUTORIAL](state, tutorial) {
-        state.selectedTutorialId = state.tutorials[0].id
+    [DELETE_TUTORIAL](state, { id }) {
+        state.selectedTutorialId = state.tutorials.length > 0 ? state.tutorials[0].id : null;
 
-        const tutorialIndex = state.tutorials.findIndex(t => t.id === tutorial.id)
+        const tutorialIndex = state.tutorials.findIndex(t => t.id === id)
         state.tutorials = [
             ...state.tutorials.slice(0, tutorialIndex),
             ...state.tutorials.slice(tutorialIndex+1),
         ]
     },
-    [SELECT_TUTORIAL](state, tutorialId) {
-        state.selectedTutorialId = tutorialId
+    [REQUEST_ADD_TUTORIAL](state) {
+        state.isRequesting = true
     },
-    [SELECT_STEP](state, stepId) {
-        state.selectedStepId = stepId
+    [REQUEST_ADD_TUTORIAL_SUCCESS](state) {
+        state.isRequesting = false
+    },
+    [REQUEST_ADD_TUTORIAL_FAILURE](state, { errorCode, errorMsg }) {
+        state.isRequesting = false
+    },
+    [ADD_STEP](state, { data }) {
+
+    },
+    [UPDATE_STEP](state, {id, data}) {
+
+    },
+    [DELETE_STEP](state, { id }) {
+
+    },
+    [SELECT_TUTORIAL](state, { id }) {
+        state.selectedTutorialId = id
+    },
+    [SELECT_STEP](state, { id }) {
+        state.selectedStepId = id
     },
 }
 
 export const actions = {
-    addTutorial({ commit }, tutorial) {
-        commit(ADD_TUTORIAL, tutorial)
-    },
-    updateTutorial({ commit }, tutorial) {
-        commit(UPDATE_TUTORIAL, tutorial)
-    },
-    deleteTutorial({ commit }, tutorial) {
-        commit(DELETE_TUTORIAL, tutorial)
-    },
-    selectTutorial({ commit }, tutorialId) {
-        commit(SELECT_TUTORIAL, tutorialId)
-        commit(SELECT_STEP, null)
-    },
-    addStep({ commit, getters }, step) {
-        commit(UPDATE_TUTORIAL, {
-            ...getters.selectedTutorial,
-            steps: [
-                ...getters.selectedTutorial.steps,
-                step,
-            ]
+    addTutorial({ commit }, { data }) {
+        commit(REQUEST_ADD_TUTORIAL)
+        makeRequest({
+            data,
+            mutationType: ADD_TUTORIAL,
         })
-        commit(SELECT_STEP, step.id)
+            .then((data) => {
+                commit(REQUEST_ADD_TUTORIAL_SUCCESS)
+                commit(ADD_TUTORIAL, data)
+                commit(SELECT_TUTORIAL, { id: data.id })
+                commit(SELECT_STEP, { id: null })
+            })
+            .catch((error) => {
+                commit(REQUEST_ADD_TUTORIAL_FAILURE, error)
+            })
     },
-    updateStep({ commit, getters, state }, step) {
-        const stepIndex = getters.selectedTutorial.steps.findIndex(s => s.id === step.id)
-        commit(UPDATE_TUTORIAL, {
-            ...getters.selectedTutorial,
-            steps: [
-                ...getters.selectedTutorial.steps.slice(0, stepIndex),
-                step,
-                ...getters.selectedTutorial.steps.slice(stepIndex+1),
-            ],
+    updateTutorial({ commit }, { id, data }) {
+        // commit(REQUEST_UPDATE_TUTORIAL)
+        makeRequest({
+            id,
+            data,
+            mutationType: UPDATE_TUTORIAL,
+        })
+            .then((data) => {
+                // commit(REQUEST_ADD_TUTORIAL_SUCCESS)
+                commit(UPDATE_TUTORIAL, data)
+            })
+            .catch(() => {
+                // commit(REQUEST_ADD_TUTORIAL_FAILURE)
+            })
+    },
+    deleteTutorial({ commit }, { id }) {
+        // commit(REQUEST_DELETE_TUTORIAL)
+        makeRequest({
+            id,
+            mutationType: DELETE_TUTORIAL,
+        })
+            .then((data) => {
+                // commit(REQUEST_DELETE_TUTORIAL_SUCCESS)
+                commit(DELETE_TUTORIAL, { id })
+            })
+            .catch(() => {
+                // commit(REQUEST_DELETE_TUTORIAL_FAILURE)
+            })
+    },
+    selectTutorial({ commit }, { id }) {
+        commit(SELECT_TUTORIAL, { id })
+        commit(SELECT_STEP, { id: null })
+    },
+    addStep({ commit, getters, dispatch }, { data }) {
+        dispatch('updateTutorial', {
+            id: getters.selectedTutorial.id,
+            data: {
+                ...getters.selectedTutorial,
+                steps: [
+                    ...getters.selectedTutorial.steps,
+                    data,
+                ]
+            },
         })
     },
-    deleteStep({ commit, getters, state }, step) {
-        const stepIndex = getters.selectedTutorial.steps.findIndex(s => s.id === step.id)
-        commit(UPDATE_TUTORIAL, {
-            ...getters.selectedTutorial,
-            steps: [
-                ...getters.selectedTutorial.steps.slice(0, stepIndex),
-                ...getters.selectedTutorial.steps.slice(stepIndex+1),
-            ],
+    updateStep({ commit, getters, dispatch }, { id, data }) {
+        const stepIndex = getters.selectedTutorial.steps.findIndex(s => s.id === id)
+        dispatch('updateTutorial', {
+            id: getters.selectedTutorial.id,
+            data: {
+                ...getters.selectedTutorial,
+                steps: [
+                    ...getters.selectedTutorial.steps.slice(0, stepIndex),
+                    data,
+                    ...getters.selectedTutorial.steps.slice(stepIndex+1),
+                ],
+            },
         })
     },
-    selectStep({ commit }, stepId) {
-        commit(SELECT_STEP, stepId)
+    deleteStep({ commit, getters, dispatch }, { id }) {
+        const stepIndex = getters.selectedTutorial.steps.findIndex(s => s.id === id)
+        dispatch('updateTutorial', {
+            id: getters.selectedTutorial.id,
+            data: {
+                ...getters.selectedTutorial,
+                steps: [
+                    ...getters.selectedTutorial.steps.slice(0, stepIndex),
+                    ...getters.selectedTutorial.steps.slice(stepIndex+1),
+                ],
+            },
+        })
+    },
+    selectStep({ commit }, { id }) {
+        commit(SELECT_STEP, { id })
     },
 }
 

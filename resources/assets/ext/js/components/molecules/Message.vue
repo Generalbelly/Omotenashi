@@ -1,34 +1,30 @@
 <template>
-    <BaseMessage
-        class="message-container"
-        @closeClick="$emit('closeClick')"
-        :is-fixed-top-right="isFixedTopRight"
-        :is-fixed-top-left="isFixedTopLeft"
-        :is-fixed-bottom-right="isFixedBottomRight"
-        :is-fixed-bottom-left="isFixedBottomLeft"
-        :is-info="isInfo"
-        :is-warning="isWarning"
-    >
-        <BaseMessageHeader @closeClick="$emit('closeClick')">
-            <slot name="header"></slot>
-            <button
-                class="delete is-paddingless"
-                aria-label="delete"
-                @click.stop="$emit('closeClick')"
-            ></button>
-        </BaseMessageHeader>
-        <BaseMessageBody>
-            <slot name="body"></slot>
-            <p v-if="hasDontShowMeOption" class="has-margin-top-3">
-                <BaseCheckBox
-                    :value="dontShowMe"
-                    @change="onDontShowMeChenge"
-                >
-                    Don't show me this message again.
-                </BaseCheckBox>
-            </p>
-        </BaseMessageBody>
-    </BaseMessage>
+    <div @click.stop.self="$emit('closeClick')" class="message__container">
+        <BaseMessage
+            @closeClick="$emit('closeClick')"
+            :class="messageClasses"
+        >
+            <BaseMessageHeader @closeClick="$emit('closeClick')">
+                <slot name="header"></slot>
+                <button
+                    class="delete is-paddingless"
+                    aria-label="delete"
+                    @click.stop="$emit('closeClick')"
+                ></button>
+            </BaseMessageHeader>
+            <BaseMessageBody>
+                <slot name="body"></slot>
+                <p v-if="hasDontShowMeOption" class="has-margin-top-3">
+                    <BaseCheckBox
+                        :value="dontShowMe"
+                        @change="onDontShowMeChenge"
+                    >
+                        Don't show me this message again.
+                    </BaseCheckBox>
+                </p>
+            </BaseMessageBody>
+        </BaseMessage>
+    </div>
 </template>
 
 <script>
@@ -39,6 +35,12 @@
 
     export default {
         name: "HelpMessage",
+        components: {
+            BaseCheckBox,
+            BaseMessage,
+            BaseMessageHeader,
+            BaseMessageBody,
+        },
         props: {
             hasDontShowMeOption: {
                 type: Boolean,
@@ -65,11 +67,16 @@
                 default: false,
             },
         },
-        components: {
-            BaseCheckBox,
-            BaseMessage,
-            BaseMessageHeader,
-            BaseMessageBody,
+        computed: {
+            messageClasses() {
+                return {
+                    ...this.colorClasses,
+                    'is-fixed-top-right': this.isFixedTopRight,
+                    'is-fixed-top-left': this.isFixedTopLeft,
+                    'is-fixed-bottom-right': this.isFixedBottomRight,
+                    'is-fixed-bottom-left': this.isFixedBottomLeft,
+                }
+            }
         },
         methods: {
             onDontShowMeChenge(e) {
@@ -80,7 +87,7 @@
 </script>
 
 <style scoped>
-    .message-container {
+    .message__container {
         position: fixed;
         top: 0;
         left: 0;

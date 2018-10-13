@@ -240,7 +240,7 @@ describe('Menu.vue', () => {
 
         })
 
-        it('@homeClick - should be emitted when the home icon is clicked', () => {
+        it('@closeClick - should be emitted when the home icon is clicked', () => {
 
             const wrapper = shallowMount(Menu, {
                 localVue: Vue,
@@ -254,7 +254,7 @@ describe('Menu.vue', () => {
             const homeButton = wrapper.find('div.panel-block > span.has-cursor-pointer.icon:nth-child(2)')
             homeButton.trigger('click')
 
-            expect(wrapper.emitted().homeClick.length).equal(1)
+            expect(wrapper.emitted().closeClick.length).equal(1)
 
         })
 

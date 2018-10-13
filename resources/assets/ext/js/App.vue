@@ -8,15 +8,15 @@
             v-show="extLog.userIsFirstTime"
             @startClick="onStartClick"
         ></GreetingModal>
-        <Tutorial
+        <TutorialPage
             v-show="tutorialFeature.isActivated"
-            @homeClick="tutorialFeature.isActivated = false"
+            @closeClick="tutorialFeature.isActivated = false"
         >
-        </Tutorial>
+        </TutorialPage>
     </div>
 </template>
 <script>
-    import Tutorial from './components/pages/Tutorial'
+    import TutorialPage from './components/pages/TutorialPage'
     import GreetingModal from './components/organisms/GreetingModal'
     import Navbar from "./components/organisms/Navbar"
     import {
@@ -25,8 +25,10 @@
     } from 'vuex'
 
     export default {
-        created() {
-            this.retrieveLog()
+        components: {
+            Navbar,
+            TutorialPage,
+            GreetingModal,
         },
         data() {
             return {
@@ -38,6 +40,9 @@
         computed: {
             ...mapState(['extLog']),
         },
+        created() {
+            this.retrieveLog()
+        },
         methods: {
             ...mapActions([
                 'retrieveLog',
@@ -45,14 +50,9 @@
             ]),
             onStartClick() {
                 if (this.extLog.userIsFirstTime) {
-                    this.saveLog({userIsFirstTime: false})
+                    this.saveLog({ userIsFirstTime: false })
                 }
             }
         },
-        components: {
-            Navbar,
-            Tutorial,
-            GreetingModal,
-        }
     }
 </script>

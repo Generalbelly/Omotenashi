@@ -11,6 +11,7 @@
         <slot></slot>
     </label>
 </template>
+
 <script>
     export default {
         name: 'BaseCheckBox',

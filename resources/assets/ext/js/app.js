@@ -12,6 +12,7 @@ import {
     faPen,
     faEdit,
     faExchangeAlt,
+    faTimes,
 } from '@fortawesome'
 
 import store from './store'
@@ -27,7 +28,8 @@ library.add(
     faTrash,
     faPen,
     faEdit,
-    faExchangeAlt
+    faExchangeAlt,
+    faTimes,
 )
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

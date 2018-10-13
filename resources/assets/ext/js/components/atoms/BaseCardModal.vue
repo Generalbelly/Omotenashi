@@ -6,8 +6,9 @@
         </div>
     </div>
 </template>
+
 <script>
     export default {
-        name: 'BaseModalCard',
+        name: 'BaseCardModal',
     }
 </script>

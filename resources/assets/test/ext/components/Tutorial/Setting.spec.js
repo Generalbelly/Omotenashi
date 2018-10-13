@@ -1,8 +1,8 @@
 import { shallowMount } from '@vue/test-utils'
 import Setting from '../../../../ext/js/components/organisms/Setting'
-import BaseModalCard from '../../../../ext/js/components/atoms/BaseCardModal'
-import BaseModalCardHeader from '../../../../ext/js/components/atoms/BaseCardModalHeader'
-import BaseModalCardFooter from '../../../../ext/js/components/atoms/BaseCardModalFooter'
+import BaseCardModal from '../../../../ext/js/components/atoms/BaseCardModal'
+import BaseCardModalHeader from '../../../../ext/js/components/atoms/BaseCardModalHeader'
+import BaseCardModalFooter from '../../../../ext/js/components/atoms/BaseCardModalFooter'
 import BaseTextField from '../../../../ext/js/components/atoms/BaseTextField'
 import BaseTextArea from '../../../../ext/js/components/atoms/BaseTextArea'
 import BaseButton from '../../../../ext/js/components/atoms/BaseButton'
@@ -28,7 +28,7 @@ describe('Setting.vue', () => {
                 localVue: Vue,
             })
 
-            expect(wrapper.find(BaseModalCardHeader).text()).to.equal('Create Tutorial')
+            expect(wrapper.find(BaseCardModalHeader).text()).to.equal('Create Tutorial')
 
             expect(wrapper.find(BaseTextField).text()).to.equal('')
 
@@ -44,7 +44,7 @@ describe('Setting.vue', () => {
 
             wrapper.vm.$nextTick(() => {
 
-                expect(wrapper.find(BaseModalCardHeader).text()).to.equal('Edit Tutorial')
+                expect(wrapper.find(BaseCardModalHeader).text()).to.equal('Edit Tutorial')
 
                 done()
             })

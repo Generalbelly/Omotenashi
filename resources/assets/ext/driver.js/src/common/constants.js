@@ -7,17 +7,15 @@ export const ALLOW_KEYBOARD_CONTROL = true;
 export const SHOULD_OUTSIDE_CLICK_NEXT = false;
 
 export const IS_EDIT_MODE = false;
+export const ID_POPOVER_EDITOR = 'om-editor';
 
 export const ESC_KEY_CODE = 27;
 export const LEFT_KEY_CODE = 37;
-
 export const RIGHT_KEY_CODE = 39;
+
 export const ID_OVERLAY = 'driver-page-overlay';
 export const ID_STAGE = 'driver-highlighted-element-stage';
-
 export const ID_POPOVER = 'driver-popover-item';
-
-export const ID_POPOVER_EDITOR = 'om-editor';
 
 export const CLASS_DRIVER_HIGHLIGHTED_ELEMENT = 'driver-highlighted-element';
 export const CLASS_POSITION_RELATIVE = 'driver-position-relative';

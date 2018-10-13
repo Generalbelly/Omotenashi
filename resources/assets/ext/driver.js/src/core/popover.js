@@ -109,8 +109,8 @@ export default class Popover extends Element {
    */
   show(position) {
     this.setInitialState();
-    // Set the title and descriptions
-    console.log(this.options.isEditMode);
+
+    // Set the content
     if (this.options.isEditMode) {
       this.attachPell(this.contentNode, this.options.content);
     } else {

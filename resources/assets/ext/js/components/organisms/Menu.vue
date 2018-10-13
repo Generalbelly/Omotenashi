@@ -1,5 +1,5 @@
 <template>
-    <nav class="panel has-background-white">
+    <nav class="panel has-background-white menu">
         <p class="panel-heading level has-margin-bottom-0">
             <span class="is-size-4 has-text-weight-semibold">Tutorial</span>
             <BaseButton
@@ -8,116 +8,119 @@
                 class="tutorial-add-button"
                 @click="$emit('addTutorialClick')"
             >
-                <span class="icon">
-                    <font-awesome-icon icon="plus"></font-awesome-icon>
-                </span>
+                <BaseIcon icon="plus"></BaseIcon>
                 <span>Add</span>
             </BaseButton>
         </p>
-        <p class="panel-block level has-margin-bottom-0">
-            <span class="select">
-                <select
-                    @change="onTutorialChange($event.target.value)"
-                    v-model="selectedTutorialId"
-                >
-                    <option
-                        v-for="tutorial in tutorials"
-                        :key="tutorial.id"
-                        :value="tutorial.id"
+        <div class="panel-block level has-margin-bottom-0">
+            <template v-if="tutorials.length > 0">
+                <BaseSelectField
+                    :value="selectedTutorial.id"
+                    @change="e => $emit('tutorialChange', e)"
+                    :items="tutorials"
+                    item-value="id"
+                    item-text="name"
+                ></BaseSelectField>
+                <div class="field is-grouped has-margin-left-auto">
+                    <span
+                        class="control"
+                        :class="{ 'has-margin-right-0': tutorials.length === 1}"
                     >
-                        {{ tutorial.name }}
-                    </option>
-                </select>
-            </span>
-            <span class="field is-grouped has-margin-left-auto">
-                <p class="control">
-                    <BaseButton
-                        @click="$emit('editTutorialClick')"
-                    >
-                        <span class="icon">
-                            <font-awesome-icon icon="pen"></font-awesome-icon>
-                        </span>
-                        <span>Edit</span>
-                    </BaseButton>
-                </p>
-                <p class="control">
-                    <BaseButton
-                        v-show="tutorials.length > 1"
-                        @click="$emit('deleteTutorialClick')"
-                    >
-                        <span class="icon">
-                            <font-awesome-icon icon="trash"></font-awesome-icon>
-                        </span>
-                        <span>Delete</span>
-                    </BaseButton>
-                </p>
-            </span>
-        </p>
+                        <BaseButton
+                                @click="$emit('editTutorialClick')"
+                        >
+                            <BaseIcon icon="pen"></BaseIcon>
+                            <span>Edit</span>
+                        </BaseButton>
+                    </span>
+                        <span class="control">
+                        <BaseButton
+                            v-show="tutorials.length > 1"
+                            @click="$emit('deleteTutorialClick')"
+                        >
+                            <BaseIcon icon="trash"></BaseIcon>
+                            <span>Delete</span>
+                        </BaseButton>
+                    </span>
+                </div>
+            </template>
+            <template v-else>
+                You haven't added any tutorials yet.
+            </template>
+        </div>
         <template v-if="selectedTutorial">
             <a
                 class="panel-block has-padding-top-4 has-padding-bottom-4"
                 :key="step.id"
                 v-for="(step, stepIndex) in selectedTutorial.steps"
                 :class="{ 'is-active':isActiveStep(step) }"
-                @click.stop="$emit('stepClick', step)"
+                @click.stop="$emit('stepClick', step.id)"
             >
                 <span class="panel-icon">
-                     <font-awesome-icon icon="circle"></font-awesome-icon>
+                    <font-awesome-icon icon="circle"></font-awesome-icon>
                 </span>
                     Step {{ stepIndex+1 }}
                 <span
                     class="panel-icon block has-margin-left-auto has-cursor-pointer"
-                    @click.stop="$emit('deleteStepClick', step)"
+                    @click.stop="$emit('deleteStepClick', step.id)"
                 >
-                     <font-awesome-icon icon="trash"></font-awesome-icon>
+                    <font-awesome-icon icon="trash"></font-awesome-icon>
                 </span>
             </a>
+            <div class="panel-block">
+                <BaseButton
+                        is-link
+                        is-outlined
+                        is-fullwidth
+                        @click="$emit('addStepClick')"
+                >
+                    <BaseIcon icon="plus"></BaseIcon>
+                    <span>Add Step</span>
+                </BaseButton>
+            </div>
+            <div class="panel-block">
+                <BaseButton
+                        is-primary
+                        is-outlined
+                        is-fullwidth
+                        @click="$emit('previewClick')"
+                >
+                    <BaseIcon icon="play"></BaseIcon>
+                    <span>Preview</span>
+                </BaseButton>
+            </div>
         </template>
         <div class="panel-block">
-            <BaseButton
-                is-link
-                is-outlined
-                is-fullwidth
-                @click="$emit('addStepClick')"
+            <BaseIconButton
+                class="has-margin-left-auto"
+                icon="exchange-alt"
+                @click="onSwitchSideClick"
             >
-                <span class="icon">
-                    <font-awesome-icon icon="plus"></font-awesome-icon>
-                </span>
-                <span>Add Step</span>
-            </BaseButton>
+            </BaseIconButton>
         </div>
-        <div class="panel-block">
-            <BaseButton
-                is-primary
-                is-outlined
-                is-fullwidth
-                @click="$emit('previewClick')"
-            >
-                <span class="icon">
-                    <font-awesome-icon icon="play"></font-awesome-icon>
-                </span>
-                <span>Preview</span>
-            </BaseButton>
-        </div>
-        <div class="panel-block">
-            <span
-                class="has-cursor-pointer icon is-flex has-margin-right-auto"
-                @click="$emit('switchSideClick')"
-            >
-                <font-awesome-icon icon="exchange-alt"></font-awesome-icon>
-            </span>
-            <span
-                class="has-cursor-pointer icon"
-                @click="$emit('homeClick')"
-            >
-                <font-awesome-icon icon="home"></font-awesome-icon>
-            </span>
-        </div>
+        <BaseIconButton
+            class="menu-close-button"
+            :class="{ 'menu-close-button--is-on-left': !isOnRight }"
+            icon="times"
+            @click="$emit('closeClick')"
+            has-background-gray
+        >
+        </BaseIconButton>
     </nav>
 </template>
 <script>
+    import BaseIcon from '../atoms/BaseIcon'
     import BaseButton from '../atoms/BaseButton'
+    import BaseSelectField from '../atoms/BaseSelectField'
+    import BaseIconButton from '../atoms/BaseIconButton'
+
     export default {
+        components: {
+            BaseIcon,
+            BaseButton,
+            BaseIconButton,
+            BaseSelectField
+        },
         props: {
             tutorials: {
                 type: Array,
@@ -136,29 +139,17 @@
         },
         data() {
             return {
-                selectedTutorialId: null
-            }
-        },
-        watch: {
-            selectedTutorial: {
-                immediate: true,
-                handler (value) {
-                    if (value) {
-                        this.selectedTutorialId = value.id
-                    }
-                }
+                isOnRight: true,
             }
         },
         methods: {
-            onTutorialChange(tutorialId) {
-                this.$emit('tutorialChange', tutorialId)
+            onSwitchSideClick() {
+                this.isOnRight = !this.isOnRight
+                this.$emit('switchSideClick')
             },
             isActiveStep(step) {
-                return this.selectedStep && step.id === this.selectedStep.id
+                return step.id === this.selectedStep.id
             }
-        },
-        components: {
-            BaseButton,
         }
     }
 </script>
@@ -168,6 +159,23 @@
     }
     .panel-heading,
     .panel-block {
-        padding: 1em !important;
+        padding: 18px 20px !important;
+    }
+    .menu {
+        position: relative !important;
+    }
+    .menu-close-button {
+        position: absolute;
+        left: -16px;
+        top: -16px;
+        right: unset;
+        padding: 16px;
+        background-color: hsl(0, 0%, 21%);
+        color: white;
+        border-radius: 16px;
+    }
+    .menu-close-button--is-on-left {
+        left: unset;
+        right: -16px;
     }
 </style>

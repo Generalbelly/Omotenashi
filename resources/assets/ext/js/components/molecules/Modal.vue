@@ -1,19 +1,17 @@
 <template>
-    <BaseModal>
-        <slot>
-            <BaseModalContent
-                    :content-class="contentClass"
-                    :modal-class="modalClass"
-            >
-            </BaseModalContent>
-        </slot>
+    <BaseModal class="modal">
+        <BaseModalContent :class="contentClasses">
+            <slot></slot>
+        </BaseModalContent>
         <button
+            v-if="showClose"
             class="modal-close is-large is-paddingless"
             aria-label="close"
             @click="$emit('closeClick')"
         ></button>
     </BaseModal>
 </template>
+
 <script>
     import BaseModalContent from "../atoms/BaseModalContent";
     import BaseModal from "../atoms/BaseModal";
@@ -24,17 +22,23 @@
                 type: Boolean,
                 default: true,
             },
-            modalClass: {
-                type: String,
-                default: '',
-            },
             contentClass: {
-                type: String,
-                default: '',
+                type: Array,
+                default() {
+                    return [];
+                },
             },
         },
         data() {
             return {};
+        },
+        computed: {
+            contentClasses() {
+                return [
+                    ...this.contentClass,
+                    'modal__content',
+                ];
+            },
         },
         components: {
             BaseModal,
@@ -42,8 +46,13 @@
         }
     };
 </script>
-<style>
+<style scoped>
     .modal {
         z-index: 10000000000 !important;
+    }
+    .modal__content {
+        flex-direction: column !important;
+        background: #fff;
+        padding: 20px;
     }
 </style>

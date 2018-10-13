@@ -1,8 +1,9 @@
 <template>
-    <footer class="modal-card-foot has-margin-0">
+    <footer class="modal-card-foot">
         <slot></slot>
     </footer>
 </template>
+
 <script>
     export default {
         name: 'BaseCardModalFooter',

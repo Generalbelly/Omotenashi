@@ -402,7 +402,7 @@ div#driver-highlighted-element-stage {
       min-height: 32px;
       min-width: 32px;
       width: 32px; }
-  #omotenashi .button.is-loading::after, #omotenashi .select.is-loading::after, #omotenashi .control.is-loading::after, #omotenashi .loader {
+  #omotenashi .button.is-loading::after, #omotenashi .select.is-loading::after, #omotenashi .control.is-loading::after, #omotenashi .loader, #omotenashi div.is-loading:after {
     animation: spinAround 500ms infinite linear;
     border: 2px solid #dbdbdb;
     border-radius: 290486px;
@@ -6534,6 +6534,17 @@ div#driver-highlighted-element-stage {
     margin: auto; }
   #omotenashi .has-padding-auto {
     padding: auto; }
+  #omotenashi div.is-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.5; }
+    #omotenashi div.is-loading:after {
+      position: absolute;
+      top: calc(50% - 2.5em);
+      left: calc(50% - 2.5em);
+      width: 5em;
+      height: 5em;
+      border-width: 0.25em; }
   #omotenashi .is-fixed-bottom-right {
     position: fixed !important;
     bottom: 0 !important;
