@@ -171,7 +171,7 @@
                     // this.showMessage(messageKeys.selectorChoicesAvailable)
                 }
             },
-            highlight({ id=null, element, popover={ content: '<div><h1>Title</h1><div>Some description here</div></div>' } }) {
+            highlight({ id=null, element, popover={ content: '<div><h1>Title</h1><div>Your description here</div></div>' } }) {
                 // If there is a step with the same selector, we use it again.
                 if (id) {
                     const step = this.tutorial.steps.find(s => s.element === element)
