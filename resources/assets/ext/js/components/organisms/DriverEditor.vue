@@ -1,7 +1,18 @@
 <template>
-    <div
-        v-show="isEdit"
-    >
+    <div>
+        <Message
+            v-show="hasClickToAddStepMessage && showClickToAddStepMessage"
+            :has-dont-show-me-option="true"
+            :dont-show-me="!hasClickToAddStepMessage"
+            is-info
+            @closeClick="showClickToAddStepMessage = false"
+            @dontShowMeChange="e => $emit('dontShowMeChange', { messageKey: 'clickToAddStep', value: e })"
+        >
+            <template slot="header">Tips</template>
+            <template slot="body">
+                Click to select and edit text.
+            </template>
+        </Message>
         <Message
             v-show="showNoMoreSelectorChoicesMessage"
             is-warning
@@ -14,12 +25,12 @@
         </Message>
 
         <Message
-            v-show="showSelectorChoicesAvailableMessage"
+            v-show="hasSelectorChoicesAvailableMessage && showSelectorChoicesAvailableMessage"
             :has-dont-show-me-option="true"
-            :dont-show-me="hasSelectorChoicesAvailableMessage"
+            :dont-show-me="!hasSelectorChoicesAvailableMessage"
             is-info
             @closeClick="showSelectorChoicesAvailableMessage = false"
-            @dontShowMeChenge="e => $emit('dontShowMeChenge', { messageKey: 'selectorChoicesAvailable', value: e })"
+            @dontShowMeChange="e => $emit('dontShowMeChange', { messageKey: 'selectorChoicesAvailable', value: e })"
         >
             <template slot="header">Tips</template>
             <template slot="body">
@@ -29,20 +40,35 @@
             </template>
         </Message>
 
-        <div class="has-padding-4 is-fixed-bottom-right editor-action">
-            <BaseButton
-                id="om-adding-step-save"
-                @click="onSaveClick"
-                is-success
-            >
-                Save
-            </BaseButton>
-            <BaseButton
-                id="om-adding-step-cancel"
-                @click="onCancelClick"
-            >
-                Cancel
-            </BaseButton>
+        <Message
+            v-show="showNoStepAddedYetMessage"
+            is-warning
+            @closeClick="showNoStepAddedYetMessage = false"
+        >
+            <template slot="header">Oops</template>
+            <template slot="body">
+                You haven't added any steps yet.
+            </template>
+        </Message>
+
+        <div
+            v-show="isEdit"
+        >
+            <div class="has-padding-4 is-fixed-bottom-right editor-action">
+                <BaseButton
+                    id="om-adding-step-save"
+                    @click="onSaveClick"
+                    is-success
+                >
+                    Save
+                </BaseButton>
+                <BaseButton
+                    id="om-adding-step-cancel"
+                    @click="onCancelClick"
+                >
+                    Cancel
+                </BaseButton>
+            </div>
         </div>
     </div>
 </template>
@@ -80,7 +106,11 @@
             hasSelectorChoicesAvailableMessage: {
                 type: Boolean,
                 default: true,
-            }
+            },
+            hasClickToAddStepMessage: {
+                type: Boolean,
+                default: true,
+            },
         },
         data() {
             return {
@@ -92,6 +122,8 @@
                 step: null,
                 showNoMoreSelectorChoicesMessage: false,
                 showSelectorChoicesAvailableMessage: false,
+                showClickToAddStepMessage: false,
+                showNoStepAddedYetMessage: false,
             }
         },
         computed: {
@@ -118,11 +150,15 @@
                     this.$emit('editDone')
                 }
             },
-            isHighlightSelectionActive(value) {
-                if (value) {
-                    this.updateState(states.initial)
+            isHighlightSelectionActive: {
+                immediate: true,
+                handler(value) {
+                    if (value) {
+                        this.showClickToAddStepMessage = true
+                        this.updateState(states.initial)
+                    }
                 }
-            }
+            },
         },
         created() {
             document.querySelectorAll( 'body *' ).forEach(el => {
@@ -222,6 +258,8 @@
                         this.showAnotherChoice()
                     }
                 } else if (this.isDefault) {
+                    this.showClickToAddStepMessage = false
+
                     if (this.selectorChoices.length === 0) {
                         this.selectorChoices = this.extractSelectorChoices(e)
                     }
@@ -264,6 +302,11 @@
                 }
             },
             preview() {
+                if (this.steps.length === 0) {
+                    this.showNoStepAddedYetMessage = true
+                    return
+                }
+
                 this.driver.options.allowClose = true
                 this.driver.options.onReset = () => {
                     this.updateState(states.initial)

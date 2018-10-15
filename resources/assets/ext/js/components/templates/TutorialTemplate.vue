@@ -33,13 +33,14 @@
         <DriverEditor
             ref="editor"
             :steps="selectedTutorial ? selectedTutorial.steps : []"
-            :hasSelectorChoicesAvailableMessage="dontShowMeChecked('selectorChoicesAvailable')"
+            :has-selector-choices-available-message="!dontShowMeChecked('selectorChoicesAvailable')"
+            :has-click-to-add-step-message="!dontShowMeChecked('clickToAddStep')"
             :is-highlight-selection-active="isAddingStep"
             @saveClick="e => $emit('stepSaveClick', e)"
             @cancelClick="updateUserAction('beingHome')"
             @previewDone="updateUserAction('beingHome')"
             @editDone="updateUserAction('beingHome')"
-            @dontShowMeChenge="removeMessage"
+            @dontShowMeChange="removeMessage"
         >
         </DriverEditor>
 
@@ -51,36 +52,11 @@
         >
         </Setting>
 
-        <Message
-            v-show="noStepAddedYetMessageShown"
-            is-warning
-            @closeClick="hideMessage"
-        >
-            <template slot="header">Oops</template>
-            <template slot="body">
-                You haven't added any steps yet.
-            </template>
-        </Message>
-
-        <Message
-            v-show="clickToCreateStepMessageShown"
-            :has-dont-show-me-option="true"
-            :dont-show-me="dontShowMeChecked('clickToCreateStep')"
-            is-info
-            @closeClick="hideMessage"
-            @dontShowMeChenge="removeMessage"
-        >
-            <template slot="header">Tips</template>
-            <template slot="body">
-                Click to select and edit text.
-            </template>
-        </Message>
         <LoadingModal v-show="isRequesting"></LoadingModal>
     </div>
 </template>
 <script>
     import { mapActions, mapGetters, mapState,} from 'vuex'
-    import Message from '../molecules/Message'
     import LoadingModal from '../molecules/LoadingModal'
     import Menu from '../organisms/Menu'
     import Setting from '../organisms/Setting'
@@ -89,9 +65,7 @@
     import BaseButton from "../atoms/BaseButton";
 
     export const messageKeys = {
-        clickToCreateStep: 'clickToCreateStep',
         noStepAddedYet: 'noStepAddedYet',
-        noMoreSelectorChoices: 'noMoreSelectorChoices',
     }
 
     export const userActions = {
@@ -136,7 +110,6 @@
             DriverEditor,
             BaseButton,
             DeleteConfirmationMessage,
-            Message,
             Menu,
             Setting,
         },
@@ -157,15 +130,9 @@
                     this.userAction = userAction
                 }
             },
-            showMessage(messageKey = null) {
-                if (Object.values(messageKeys).includes(messageKey) && !this.dontShowMeChecked(messageKey)) {
-                    this.messageShown = messageKey
-                }
-            },
-            hideMessage() {
-                this.messageShown = null
-            },
             dontShowMeChecked(messageKey) {
+                console.log(messageKey);
+                console.log(this.extLog.checkedMessages && this.extLog.checkedMessages.includes(messageKey));
                 return (this.extLog.checkedMessages && this.extLog.checkedMessages.includes(messageKey));
             },
             removeMessage({ messageKey, value }) {
@@ -173,7 +140,7 @@
                     this.saveLog({
                         checkedMessages: [
                             ...this.extLog.checkedMessages,
-                            this.messageShown,
+                            messageKey,
                         ]
                     })
                 } else {
@@ -215,23 +182,11 @@
                 this.$emit('deleteStepClick', { id })
             },
             onPreviewClick() {
-                if (this.selectedTutorial.steps.length === 0) {
-                    this.showMessage(messageKeys.noStepAddedYet)
-                    return
-                }
                 this.updateUserAction(userActions.previewing)
                 this.$refs.editor.preview()
             },
         },
         watch: {
-            userAction(newValue, oldValue) {
-                switch (newValue) {
-                    case userActions.addingStep:
-                        this.showMessage(messageKeys.clickToCreateStep)
-                        break
-                    default:
-                }
-            },
             tutorials(newValue, oldValue) {
                 if ((oldValue.length - newValue.length) === 1) {
                     this.updateUserAction('beingHome')
@@ -259,15 +214,6 @@
             },
             isPreviewing() {
                 return (this.userAction === userActions.previewing)
-            },
-            noStepAddedYetMessageShown() {
-                return (this.messageShown === messageKeys.noStepAddedYet)
-            },
-            noMoreSelectorChoicesMessageShown() {
-                return (this.messageShown === messageKeys.noMoreSelectorChoices)
-            },
-            clickToCreateStepMessageShown() {
-                return (this.messageShown === messageKeys.clickToCreateStep)
             },
         },
     }

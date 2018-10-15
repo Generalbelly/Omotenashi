@@ -80,7 +80,7 @@
         },
         methods: {
             onDontShowMeChenge(e) {
-                this.$emit('dontShowMeChenge', e)
+                this.$emit('dontShowMeChange', e)
             }
         }
     }
