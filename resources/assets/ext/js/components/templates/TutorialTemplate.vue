@@ -64,10 +64,6 @@
     import DriverEditor from "../organisms/DriverEditor";
     import BaseButton from "../atoms/BaseButton";
 
-    export const messageKeys = {
-        noStepAddedYet: 'noStepAddedYet',
-    }
-
     export const userActions = {
         beingHome: 'beingHome',
         addingTutorial: 'addingTutorial',
