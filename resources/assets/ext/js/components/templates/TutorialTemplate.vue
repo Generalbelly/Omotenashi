@@ -32,13 +32,14 @@
 
         <DriverEditor
             ref="editor"
-            class="driver-editor"
             :steps="selectedTutorial ? selectedTutorial.steps : []"
+            :hasSelectorChoicesAvailableMessage="dontShowMeChecked('selectorChoicesAvailable')"
             :is-highlight-selection-active="isAddingStep"
             @saveClick="e => $emit('stepSaveClick', e)"
             @cancelClick="updateUserAction('beingHome')"
             @previewDone="updateUserAction('beingHome')"
             @editDone="updateUserAction('beingHome')"
+            @dontShowMeChenge="removeMessage"
         >
         </DriverEditor>
 
@@ -51,22 +52,6 @@
         </Setting>
 
         <Message
-            v-show="selectorChoicesAvailableMessageShown"
-            :has-dont-show-me-option="true"
-            :dont-show-me="dontShowMeChecked('selectorChoicesAvailable')"
-            is-info
-            @closeClick="hideMessage"
-            @dontShowMeChenge="removeMessage"
-        >
-            <template slot="header">Tips</template>
-            <template slot="body">
-                Selections start small.<br>
-                The more you click, the larger your section to edit will become.<br>
-                To select a different small section, press cancel and click a new section.
-            </template>
-        </Message>
-
-        <Message
             v-show="noStepAddedYetMessageShown"
             is-warning
             @closeClick="hideMessage"
@@ -74,17 +59,6 @@
             <template slot="header">Oops</template>
             <template slot="body">
                 You haven't added any steps yet.
-            </template>
-        </Message>
-
-        <Message
-            v-show="noMoreSelectorChoicesMessageShown"
-            is-warning
-            @closeClick="hideMessage"
-        >
-            <template slot="header">Oops</template>
-            <template slot="body">
-                Looks like we don't have any other options to show you.
             </template>
         </Message>
 
@@ -116,7 +90,6 @@
 
     export const messageKeys = {
         clickToCreateStep: 'clickToCreateStep',
-        selectorChoicesAvailable: 'selectorChoicesAvailable',
         noStepAddedYet: 'noStepAddedYet',
         noMoreSelectorChoices: 'noMoreSelectorChoices',
     }
@@ -195,13 +168,23 @@
             dontShowMeChecked(messageKey) {
                 return (this.extLog.checkedMessages && this.extLog.checkedMessages.includes(messageKey));
             },
-            removeMessage() {
-                this.saveLog({
-                    checkedMessages: [
-                        ...this.extLog.checkedMessages,
-                        this.messageShown,
-                    ]
-                })
+            removeMessage({ messageKey, value }) {
+                if (value) {
+                    this.saveLog({
+                        checkedMessages: [
+                            ...this.extLog.checkedMessages,
+                            this.messageShown,
+                        ]
+                    })
+                } else {
+                    const index = this.extLog.checkedMessages.findIndex(key => key === messageKey)
+                    this.saveLog({
+                        checkedMessages: [
+                            ...this.extLog.checkedMessages.slice(0, index),
+                            ...this.extLog.checkedMessages.slice(index+1),
+                        ]
+                    })
+                }
             },
             onAddStepClick() {
                 this.updateUserAction(userActions.addingStep)
@@ -277,9 +260,6 @@
             isPreviewing() {
                 return (this.userAction === userActions.previewing)
             },
-            selectorChoicesAvailableMessageShown() {
-                return (this.messageShown === messageKeys.selectorChoicesAvailable)
-            },
             noStepAddedYetMessageShown() {
                 return (this.messageShown === messageKeys.noStepAddedYet)
             },
@@ -298,9 +278,5 @@
         max-width: 30vw;
         width: 30vw;
         z-index: 10000000;
-    }
-    .driver-editor {
-        height: 50px;
-        z-index: 100000000;
     }
 </style>

@@ -1,21 +1,49 @@
 <template>
     <div
         v-show="isEdit"
-        class="has-padding-4 is-fixed-bottom-right"
     >
-        <BaseButton
-            id="om-adding-step-save"
-            @click="onSaveClick"
-            is-success
+        <Message
+            v-show="showNoMoreSelectorChoicesMessage"
+            is-warning
+            @closeClick="showNoMoreSelectorChoicesMessage = false"
         >
-            Save
-        </BaseButton>
-        <BaseButton
-            id="om-adding-step-cancel"
-            @click="onCancelClick"
+            <template slot="header">Oops</template>
+            <template slot="body">
+                Looks like we don't have any other options to show you.
+            </template>
+        </Message>
+
+        <Message
+            v-show="showSelectorChoicesAvailableMessage"
+            :has-dont-show-me-option="true"
+            :dont-show-me="hasSelectorChoicesAvailableMessage"
+            is-info
+            @closeClick="showSelectorChoicesAvailableMessage = false"
+            @dontShowMeChenge="e => $emit('dontShowMeChenge', { messageKey: 'selectorChoicesAvailable', value: e })"
         >
-            Cancel
-        </BaseButton>
+            <template slot="header">Tips</template>
+            <template slot="body">
+                Selections start small.<br>
+                The more you click, the larger your section to edit will become.<br>
+                To select a different small section, press cancel and click a new section.
+            </template>
+        </Message>
+
+        <div class="has-padding-4 is-fixed-bottom-right editor-action">
+            <BaseButton
+                id="om-adding-step-save"
+                @click="onSaveClick"
+                is-success
+            >
+                Save
+            </BaseButton>
+            <BaseButton
+                id="om-adding-step-cancel"
+                @click="onCancelClick"
+            >
+                Cancel
+            </BaseButton>
+        </div>
     </div>
 </template>
 
@@ -24,6 +52,7 @@
     import purify from 'dompurify'
     import Driver from '../../../../../../../driver.js/src/index'
     import BaseButton from '../atoms/BaseButton'
+    import Message from '../molecules/Message'
 
     export const states = {
         initial: 'initial',
@@ -33,20 +62,9 @@
 
     export default {
         name: "DriverEditor",
-        created() {
-            document.querySelectorAll( 'body *' ).forEach(el => {
-                el.addEventListener('click', this.userScreenClickHandler)
-            })
-
-            this.driver = new Driver({
-                animate: false,
-            })
-        },
-        destroyed() {
-            this.driver = null
-            document.querySelectorAll( 'body *' ).forEach(el => {
-                el.removeEventListener('click', this.userScreenClickHandler)
-            })
+        components: {
+            BaseButton,
+            Message,
         },
         props: {
             isHighlightSelectionActive: {
@@ -59,6 +77,10 @@
                     return []
                 },
             },
+            hasSelectorChoicesAvailableMessage: {
+                type: Boolean,
+                default: true,
+            }
         },
         data() {
             return {
@@ -68,6 +90,8 @@
                 selectorChoiceIndex: 0,
                 maxRetries: 5,
                 step: null,
+                showNoMoreSelectorChoicesMessage: false,
+                showSelectorChoicesAvailableMessage: false,
             }
         },
         computed: {
@@ -99,6 +123,21 @@
                     this.updateState(states.initial)
                 }
             }
+        },
+        created() {
+            document.querySelectorAll( 'body *' ).forEach(el => {
+                el.addEventListener('click', this.userScreenClickHandler)
+            })
+
+            this.driver = new Driver({
+                animate: false,
+            })
+        },
+        destroyed() {
+            this.driver = null
+            document.querySelectorAll( 'body *' ).forEach(el => {
+                el.removeEventListener('click', this.userScreenClickHandler)
+            })
         },
         methods: {
             updateState(state = null) {
@@ -192,7 +231,7 @@
                         element: selector,
                     })
 
-                    // this.showMessage(messageKeys.selectorChoicesAvailable)
+                    this.showSelectorChoicesAvailableMessage = true
                 }
             },
             highlight({ id = null, element, popover={ content: '<div><h1>Title</h1><div>Your description here</div></div>' } }) {
@@ -236,7 +275,7 @@
             showAnotherChoice() {
                 if (!this.isEdit) return
                 if (this.selectorChoiceIndex === (this.selectorChoices.length - 1) || (this.selectorChoiceIndex + 1) > this.maxRetries ) {
-                    // this.showMessage(messageKeys.noMoreSelectorChoices)
+                    this.showNoMoreSelectorChoicesMessage = true
                     this.selectorChoiceIndex = 0
                 } else {
                     this.highlight({
@@ -244,9 +283,13 @@
                     })
                 }
             }
-        },
-        components: {
-            BaseButton,
         }
     }
 </script>
+
+<style scoped>
+    .editor-action {
+        height: 50px;
+        z-index: 100004;
+    }
+</style>
