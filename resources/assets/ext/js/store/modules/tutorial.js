@@ -16,10 +16,14 @@ import {
     REQUEST_ADD_TUTORIAL,
     REQUEST_ADD_TUTORIAL_SUCCESS,
     REQUEST_ADD_TUTORIAL_FAILURE,
+
     REQUEST_UPDATE_TUTORIAL,
     REQUEST_UPDATE_TUTORIAL_SUCCESS,
     REQUEST_UPDATE_TUTORIAL_FAILURE,
+
     REQUEST_DELETE_TUTORIAL,
+    REQUEST_DELETE_TUTORIAL_SUCCESS,
+    REQUEST_DELETE_TUTORIAL_FAILURE,
 } from '../mutation-types'
 
 const state = {
@@ -89,6 +93,15 @@ export const mutations = {
     [REQUEST_UPDATE_TUTORIAL_FAILURE](state, { errorCode, errorMsg }) {
         state.isRequesting = false
     },
+    [REQUEST_DELETE_TUTORIAL](state) {
+        state.isRequesting = true
+    },
+    [REQUEST_DELETE_TUTORIAL_SUCCESS](state) {
+        state.isRequesting = false
+    },
+    [REQUEST_DELETE_TUTORIAL_FAILURE](state, { errorCode, errorMsg }) {
+        state.isRequesting = false
+    },
     [ADD_STEP](state, { data }) {
 
     },
@@ -98,8 +111,12 @@ export const mutations = {
     [DELETE_STEP](state, { id }) {
 
     },
-    [SELECT_TUTORIAL](state, { id }) {
-        state.selectedTutorialId = id
+    [SELECT_TUTORIAL](state, { id = null }) {
+        if (id) {
+            state.selectedTutorialId = id
+        } else {
+            state.selectedTutorialId = state.tutorials.length > 0 ? state.tutorials[state.tutorials.length - 1] : null;
+        }
     },
     [SELECT_STEP](state, { id }) {
         state.selectedStepId = id
@@ -144,21 +161,27 @@ export const actions = {
                 commit(SELECT_STEP, { id: null })
             })
             .catch(() => {
-                // commit(REQUEST_ADD_TUTORIAL_FAILURE)
+                commit(REQUEST_UPDATE_TUTORIAL_FAILURE)
             })
     },
     deleteTutorial({ commit }, { id }) {
-        // commit(REQUEST_DELETE_TUTORIAL)
+        commit(REQUEST_DELETE_TUTORIAL)
         makeRequest({
             id,
             mutationType: DELETE_TUTORIAL,
         })
             .then((data) => {
-                // commit(REQUEST_DELETE_TUTORIAL_SUCCESS)
-                commit(DELETE_TUTORIAL, { id })
+                commit(REQUEST_DELETE_TUTORIAL_SUCCESS)
+                commit(DELETE_TUTORIAL, {
+                    id: data.id
+                })
+                commit(SELECT_TUTORIAL, {
+                    id: null
+                })
+                commit(SELECT_STEP, { id: null })
             })
             .catch(() => {
-                // commit(REQUEST_DELETE_TUTORIAL_FAILURE)
+                commit(REQUEST_DELETE_TUTORIAL_FAILURE)
             })
     },
     selectTutorial({ commit }, { id }) {

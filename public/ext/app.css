@@ -102,11 +102,11 @@ div#driver-popover-item {
     zoom: 1; }
 
 .driver-stage-no-animation {
-  -webkit-transition: all 0.4s;
-  -moz-transition: all 0.4s;
-  -ms-transition: all 0.4s;
-  -o-transition: all 0.4s;
-  transition: all 0.4s;
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important;
   background: transparent !important;
   outline: 5000px solid rgba(0, 0, 0, 0.75); }
 

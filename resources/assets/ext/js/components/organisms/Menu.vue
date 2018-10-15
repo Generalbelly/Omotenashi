@@ -24,20 +24,14 @@
                 <div class="field is-grouped has-margin-left-auto">
                     <span
                         class="control"
-                        :class="{ 'has-margin-right-0': tutorials.length === 1}"
                     >
-                        <BaseButton
-                                @click="$emit('editTutorialClick')"
-                        >
+                        <BaseButton @click="$emit('editTutorialClick')">
                             <BaseIcon icon="pen"></BaseIcon>
                             <span>Edit</span>
                         </BaseButton>
                     </span>
                         <span class="control">
-                        <BaseButton
-                            v-show="tutorials.length > 1"
-                            @click="$emit('deleteTutorialClick')"
-                        >
+                        <BaseButton @click="$emit('deleteTutorialClick')">
                             <BaseIcon icon="trash"></BaseIcon>
                             <span>Delete</span>
                         </BaseButton>

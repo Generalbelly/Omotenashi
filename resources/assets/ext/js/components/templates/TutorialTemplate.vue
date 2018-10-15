@@ -15,7 +15,7 @@
             @previewClick="onPreviewClick"
             @addStepClick="onAddStepClick"
             @stepClick="onStepClick"
-            @deleteStepClick="e => $emit('deleteStepClick', e)"
+            @deleteStepClick="onDeleteStepClick"
             @addTutorialClick="onAddTutorialClick"
             @editTutorialClick="onEditTutorialClick"
             @deleteTutorialClick="onDeleteTutorialClick"
@@ -26,7 +26,7 @@
             v-show="isDeletingTutorial"
             :tutorial="selectedTutorial ? selectedTutorial : null"
             @closeClick="updateUserAction('beingHome')"
-            @deleteClick="e => $emit('deleteClick', e)"
+            @deleteClick="onDeleteConfirmTutorialClick"
         >
         </DeleteConfirmationMessage>
 
@@ -37,7 +37,8 @@
             :is-highlight-selection-active="isAddingStep"
             @saveClick="e => $emit('stepSaveClick', e)"
             @cancelClick="updateUserAction('beingHome')"
-            @done="updateUserAction('beingHome')"
+            @previewDone="updateUserAction('beingHome')"
+            @editDone="updateUserAction('beingHome')"
         >
         </DriverEditor>
 
@@ -211,6 +212,10 @@
             onDeleteTutorialClick() {
                 this.updateUserAction(userActions.deletingTutorial)
             },
+            onDeleteConfirmTutorialClick(id) {
+                this.$emit('deleteTutorialConfirmClick', { id })
+                this.updateUserAction(userActions.deletingTutorial)
+            },
             onTutorialSaveClick(tutorial) {
                 this.$emit('tutorialSaveClick', tutorial)
                 this.updateUserAction(userActions.beingHome)
@@ -222,6 +227,9 @@
                 this.$refs.editor.highlight({ id })
                 this.updateUserAction(userActions.editingStep)
                 this.$emit('stepClick', { id })
+            },
+            onDeleteStepClick(id) {
+                this.$emit('deleteStepClick', { id })
             },
             onPreviewClick() {
                 if (this.selectedTutorial.steps.length === 0) {

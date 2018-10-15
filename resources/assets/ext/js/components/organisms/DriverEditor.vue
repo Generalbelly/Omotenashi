@@ -1,6 +1,6 @@
 <template>
     <div
-        v-show="isSelectingHighlight"
+        v-show="isEdit"
         class="has-padding-4 is-fixed-bottom-right"
     >
         <BaseButton
@@ -25,11 +25,10 @@
     import Driver from '../../../../../../../driver.js/src/index'
     import BaseButton from '../atoms/BaseButton'
 
-    export const userActions = {
-        creatingHighlight: 'creatingHighlight',
-        selectingHighlight: 'selectingHighlight',
-        previewing: 'previewing',
-        editingPopover: 'editingPopover',
+    export const states = {
+        initial: 'initial',
+        edit: 'edit',
+        preview: 'preview',
     }
 
     export default {
@@ -52,11 +51,11 @@
         props: {
             isHighlightSelectionActive: {
                 type: Boolean,
-                default: false,
+                initial: false,
             },
             steps: {
                 type: Array,
-                default() {
+                initial() {
                     return []
                 },
             },
@@ -64,7 +63,7 @@
         data() {
             return {
                 driver: null,
-                userAction: null,
+                state: null,
                 selectorChoices: [],
                 selectorChoiceIndex: 0,
                 maxRetries: 5,
@@ -72,38 +71,39 @@
             }
         },
         computed: {
-            isCreatingHighlight() {
-                return this.userAction === userActions.creatingHighlight
+            isDefault() {
+                return this.state === states.initial
             },
-            isSelectingHighlight() {
-                return this.userAction === userActions.selectingHighlight
+            isEdit() {
+                return this.state === states.edit
             },
         },
         watch: {
-            userAction(newValue, oldValue) {
-                if (newValue === userActions.creatingHighlight && oldValue != null){
-                    this.$emit('done')
+            state(newValue, oldValue) {
+                if (oldValue == states.preview) {
+                    this.$emit('previewDone')
                 }
 
-                if (oldValue === userActions.selectingHighlight) {
+                if (oldValue === states.edit) {
                     this.driver.reset()
                     this.driver.options.allowClose = true
                     this.driver.options.isEditMode = false
                     this.selectorChoices = []
                     this.selectorChoiceIndex = 0
                     this.step = null
+                    this.$emit('editDone')
                 }
             },
             isHighlightSelectionActive(value) {
                 if (value) {
-                    this.updateUserAction(userActions.creatingHighlight)
+                    this.updateState(states.initial)
                 }
             }
         },
         methods: {
-            updateUserAction(userAction = null) {
-                if (Object.values(userActions).includes(userAction)) {
-                    this.userAction = userAction
+            updateState(state = null) {
+                if (Object.values(states).includes(state)) {
+                    this.state = state
                 }
             },
             getSelector(node) {
@@ -135,7 +135,7 @@
             },
             onCancelClick() {
                 this.$emit('cancelClick')
-                this.updateUserAction(userActions.creatingHighlight)
+                this.updateState(states.initial)
             },
             onSaveClick() {
                 const activeElement = this.driver.getHighlightedElement()
@@ -148,7 +148,7 @@
                 } else {
                     this.$emit('saveClick', updatedStep)
                 }
-                this.updateUserAction(userActions.creatingHighlight)
+                this.updateState(states.initial)
             },
             extractSelectorChoices(e) {
                 let upperElements = []
@@ -177,12 +177,12 @@
                 if (e.composedPath().find(el => el.id === 'omotenashi')) return
                 e.preventDefault() // for driver.js
                 e.stopPropagation() // for driver.js
-                if (this.isSelectingHighlight) {
+                if (this.isEdit) {
                     if (e.target.id === 'om-adding-step-cancel' || e.target.id === 'om-adding-step-save') return
                     if (this.selectorChoices.length > 0) {
                         this.showAnotherChoice()
                     }
-                } else if (this.isCreatingHighlight) {
+                } else if (this.isDefault) {
                     if (this.selectorChoices.length === 0) {
                         this.selectorChoices = this.extractSelectorChoices(e)
                     }
@@ -207,10 +207,11 @@
                     }
                 }
 
-                if (!this.isSelectingHighlight) {
-                    this.updateUserAction(userActions.selectingHighlight)
+                if (!this.isEdit) {
+                    this.updateState(states.edit)
                 }
 
+                // watchdeでセットすると遅いのでここでやってる
                 this.driver.options.allowClose = false
                 this.driver.options.isEditMode = true
 
@@ -219,21 +220,21 @@
                     popover: po,
                 })
 
-                if (this.isHighlightSelectionActive && this.isSelectingHighlight) {
+                if (this.isHighlightSelectionActive && this.isEdit) {
                     this.selectorChoiceIndex += 1
                 }
             },
             preview() {
                 this.driver.options.allowClose = true
                 this.driver.options.onReset = () => {
-                    this.updateUserAction(userActions.creatingHighlight)
+                    this.updateState(states.initial)
                 }
                 this.driver.defineSteps(this.steps)
                 this.driver.start()
-                this.updateUserAction(userActions.previewing)
+                this.updateState(states.preview)
             },
             showAnotherChoice() {
-                if (!this.isSelectingHighlight) return
+                if (!this.isEdit) return
                 if (this.selectorChoiceIndex === (this.selectorChoices.length - 1) || (this.selectorChoiceIndex + 1) > this.maxRetries ) {
                     // this.showMessage(messageKeys.noMoreSelectorChoices)
                     this.selectorChoiceIndex = 0

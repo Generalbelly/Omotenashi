@@ -11,12 +11,11 @@
         @stepClick="selectStep"
         @deleteStepClick="deleteStep"
         @stepSaveClick="onStepSaveClick"
-        @deleteClick="deleteTutorial(selectedTutorial)"
+        @deleteTutorialConfirmClick="deleteTutorial"
     >
     </TutorialTemplate>
 </template>
 <script>
-    import uuidv4 from 'uuid';
     import { mapActions, mapGetters, mapState,} from 'vuex'
     import TutorialTemplate from '../templates/TutorialTemplate'
     import tutorial from "../../store/modules/tutorial";
