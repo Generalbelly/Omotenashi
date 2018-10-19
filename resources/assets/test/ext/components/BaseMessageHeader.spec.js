@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import BaseMessageHeader from '../../../ext/js/components/atoms/BaseMessageHeader'
+import BaseMessageHeader from '../../../js/components/atoms/BaseMessageHeader'
 import Vue from '../app'
 
 describe('BaseMessageHeader.vue', () => {

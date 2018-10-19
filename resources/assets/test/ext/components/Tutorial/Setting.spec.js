@@ -1,11 +1,11 @@
 import { shallowMount } from '@vue/test-utils'
 import Setting from '../../../../ext/js/components/organisms/Setting'
-import BaseCardModal from '../../../../ext/js/components/atoms/BaseCardModal'
-import BaseCardModalHeader from '../../../../ext/js/components/atoms/BaseCardModalHeader'
-import BaseCardModalFooter from '../../../../ext/js/components/atoms/BaseCardModalFooter'
-import BaseTextField from '../../../../ext/js/components/atoms/BaseTextField'
-import BaseTextArea from '../../../../ext/js/components/atoms/BaseTextArea'
-import BaseButton from '../../../../ext/js/components/atoms/BaseButton'
+import BaseCardModal from '../../../../js/components/atoms/BaseCardModal'
+import BaseCardModalHeader from '../../../../js/components/atoms/BaseCardModalHeader'
+import BaseCardModalFooter from '../../../../js/components/atoms/BaseCardModalFooter'
+import BaseTextField from '../../../../js/components/atoms/BaseTextField'
+import BaseTextArea from '../../../../js/components/atoms/BaseTextArea'
+import BaseButton from '../../../../js/components/atoms/BaseButton'
 import Vue from '../../app'
 
 describe('Setting.vue', () => {

@@ -8,11 +8,17 @@
                 label="Name"
                 v-model="updatedTutorial.name"
                 placeholder="First timers"
+                name="name"
+                v-validate="'required'"
+                :error-messages="errors.collect('name')"
             ></BaseTextField>
             <BaseTextArea
                 label="Description (Optional)"
                 v-model="updatedTutorial.description"
                 placeholder="Tutorial for first time customers."
+                name="description"
+                v-validate="'required'"
+                :error-messages="errors.collect('description')"
             ></BaseTextArea>
         </div>
         <div
@@ -34,10 +40,10 @@
     </CardModal>
 </template>
 <script>
-    import BaseButton from '../atoms/BaseButton'
-    import BaseTextField from '../atoms/BaseTextField'
-    import BaseTextArea from '../atoms/BaseTextArea'
-    import CardModal from '../molecules/CardModal'
+    import BaseButton from '../../../../js/components/atoms/BaseButton'
+    import BaseTextField from '../../../../js/components/atoms/BaseTextField'
+    import BaseTextArea from '../../../../js/components/atoms/BaseTextArea'
+    import CardModal from '../../../../js/components/molecules/CardModal'
 
     export default {
         props: {
@@ -61,8 +67,20 @@
                 this.clear()
             },
             onSaveClick() {
-                this.$emit('saveClick', this.updatedTutorial)
-                this.clear()
+                return new Promise((resolve, reject) => {
+                    this.$validator.validateAll()
+                        .then(result => {
+                            console.log(result)
+                            if (result) {
+                                this.$emit('saveClick', this.updatedTutorial)
+                                this.clear()
+                                resolve()
+                            }
+                        })
+                        .catch(() => {
+                            reject()
+                        })
+                });
             },
             clear() {
                 this.updatedTutorial = {

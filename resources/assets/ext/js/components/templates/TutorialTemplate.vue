@@ -57,12 +57,12 @@
 </template>
 <script>
     import { mapActions, mapGetters, mapState,} from 'vuex'
-    import LoadingModal from '../molecules/LoadingModal'
+    import LoadingModal from '../../../../js/components/molecules/LoadingModal'
     import Menu from '../organisms/Menu'
     import Setting from '../organisms/Setting'
     import DeleteConfirmationMessage from "../organisms/DeleteConfirmationMessage";
     import DriverEditor from "../organisms/DriverEditor";
-    import BaseButton from "../atoms/BaseButton";
+    import BaseButton from "../../../../js/components/atoms/BaseButton";
 
     export const userActions = {
         beingHome: 'beingHome',

@@ -20,8 +20,8 @@
     </Modal>
 </template>
 <script>
-    import Modal from '../molecules/Modal';
-    import BaseButton from '../atoms/BaseButton';
+    import Modal from '../../../../js/components/molecules/Modal';
+    import BaseButton from '../../../../js/components/atoms/BaseButton';
 
     export default {
         components: {

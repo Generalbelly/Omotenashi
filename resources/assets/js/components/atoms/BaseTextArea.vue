@@ -3,6 +3,8 @@
         <label class="label">{{ label }}</label>
         <div class="control">
             <textarea
+                :id="id"
+                :name="name"
                 :value="value"
                 @input="$emit('input', $event.target.value)"
                 class="textarea"
@@ -10,6 +12,13 @@
             >
             </textarea>
         </div>
+        <p
+            v-for="errorMessage in errorMessages"
+            :key="errorMessage"
+            class="has-text-danger has-margin-top-3"
+        >
+            {{ errorMessage }}
+        </p>
     </div>
 </template>
 
@@ -32,6 +41,20 @@
             label: {
                 type: String,
                 default: '',
+            },
+            id: {
+                type: String,
+                default: '',
+            },
+            name: {
+                type: String,
+                default: '',
+            },
+            errorMessages: {
+                type: Array,
+                default() {
+                    return [];
+                }
             }
         }
     }

@@ -1,18 +1,6 @@
 version: '3'
 
 services:
-  # mysql:
-  #   image: mysql:5.7
-  #   container_name: mysql-omotenashi
-  #   ports:
-  #     - 3306:3306
-  #   environment:
-  #     MYSQL_USER: omotenashi
-  #     MYSQL_PASSWORD: omotenashi
-  #     MYSQL_DATABASE: omotenashi
-  #     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-  #     MYSQL_ROOT_HOST: '%'
-
   app:
     build: ./.docker/
     container_name: omotenashi
@@ -29,4 +17,4 @@ services:
 networks:
   default:
     external:
-      name: common_link
+      name: agito

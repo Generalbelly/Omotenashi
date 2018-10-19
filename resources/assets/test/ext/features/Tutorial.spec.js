@@ -8,11 +8,11 @@ import Tutorial, {
     userActions,
     messageKeys
 } from '../../../ext/js/components/pages/TutorialPage'
-import BaseButton from '../../../ext/js/components/atoms/BaseButton'
+import BaseButton from '../../../js/components/atoms/BaseButton'
 import Menu from '../../../ext/js/components/organisms/Menu'
 import DeleteConfirmationMessage from '../../../ext/js/components/organisms/DeleteConfirmationMessage'
 import Setting from '../../../ext/js/components/organisms/Setting'
-import HelpMessage from '../../../ext/js/components/molecules/Message'
+import HelpMessage from '../../../js/components/molecules/Message'
 import { tutorials } from "../mock";
 
 const localVue = createLocalVue()

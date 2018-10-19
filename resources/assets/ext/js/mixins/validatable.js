@@ -1,44 +1,35 @@
 export default {
-    data() {
-        return {
-            serverErrors: {},
-            clientErrors: {},
-        }
-    },
     watch: {
-        errors: {
+        serverErrors: {
             deep: true,
-            immediate: true,
             handler(value) {
                 if (value) {
-                    this.clientErrors = {
-                        ...value.collect(),
-                    }
-                } else {
-                    this.clientErrors = {}
+                    if (!this.$validator) return;
+                    Object.keys(value).forEach(fieldName => {
+                        const field = this.$validator.fields.find({ name: fieldName });
+                        if (!field) return;
+                        value[fieldName].forEach(msg => {
+                            const error = {
+                                id: field.id,
+                                field: fieldName,
+                                msg,
+                            };
+                            this.errors.add(error);
+                        });
+
+                        field.setFlags({
+                            valid: !!value[fieldName].length,
+                            dirty: true,
+                        });
+                    });
                 }
-            }
-        },
+            },
+        }
     },
-    methods: {
-        getErrors(key) {
-            const errors = {
-                ...this.clientErrors,
-                ...this.serverErrors,
-            }
-            if (!errors[key]) return []
-            return errors[key]
-        },
-        validate() {
-            return new Promise(((resolve, reject) => {
-                this.$validator.validate()
-                    .then(result => {
-                        resolve(result)
-                    })
-                    .catch(() => {
-                        reject()
-                    })
-            }))
-        },
-    },
-}
+    computed: {
+        serverErrors() {
+            if (!this.$store) return {};
+            return this.$store.state.serverErrors;
+        }
+    }
+};

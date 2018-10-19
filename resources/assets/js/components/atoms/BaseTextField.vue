@@ -6,9 +6,18 @@
                 class="input"
                 :type="type"
                 :placeholder="placeholder"
+                :name="name"
+                :id="id"
                 :value="value"
                 @input="$emit('input', $event.target.value)"
             >
+        </p>
+        <p
+            v-for="errorMessage in errorMessages"
+            :key="errorMessage"
+            class="has-text-danger has-margin-top-3"
+        >
+            {{ errorMessage }}
         </p>
     </div>
 </template>
@@ -33,6 +42,20 @@
                 type: String,
                 default: '',
             },
+            id: {
+                type: String,
+                default: '',
+            },
+            name: {
+                type: String,
+                default: '',
+            },
+            errorMessages: {
+                type: Array,
+                default() {
+                    return [];
+                }
+            }
         }
     }
 </script>

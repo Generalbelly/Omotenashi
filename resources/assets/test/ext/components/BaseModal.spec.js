@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import BaseModal from '../../../ext/js/components/molecules/Modal'
+import BaseModal from '../../../js/components/molecules/Modal'
 import Vue from '../app'
 
 describe('BaseModal.vue', () => {

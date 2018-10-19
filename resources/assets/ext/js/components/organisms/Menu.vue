@@ -103,10 +103,10 @@
     </nav>
 </template>
 <script>
-    import BaseIcon from '../atoms/BaseIcon'
-    import BaseButton from '../atoms/BaseButton'
-    import BaseSelectField from '../atoms/BaseSelectField'
-    import BaseIconButton from '../atoms/BaseIconButton'
+    import BaseIcon from '../../../../js/components/atoms/BaseIcon'
+    import BaseButton from '../../../../js/components/atoms/BaseButton'
+    import BaseSelectField from '../../../../js/components/atoms/BaseSelectField'
+    import BaseIconButton from '../../../../js/components/atoms/BaseIconButton'
 
     export default {
         components: {

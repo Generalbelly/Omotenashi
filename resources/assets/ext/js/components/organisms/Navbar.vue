@@ -21,7 +21,7 @@
     </nav>
 </template>
 <script>
-    import BaseButton from '../atoms/BaseButton'
+    import BaseButton from '../../../../js/components/atoms/BaseButton'
 
     export default {
         name: 'Navbar',
