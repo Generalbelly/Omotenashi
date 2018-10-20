@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGAsTable extends Migration
+class CreateGAOauthsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateGAsTable extends Migration
      */
     public function up()
     {
-        Schema::create('gas', function (Blueprint $table) {
+        Schema::create('ga_oauths', function (Blueprint $table) {
             $table->string('id');
             $table->timestamps();
             $table->softDeletes();
@@ -27,6 +27,6 @@ class CreateGAsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gas');
+        Schema::dropIfExists('ga_oauths');
     }
 }

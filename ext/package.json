@@ -1,0 +1,10 @@
+{
+  "name": "ext",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "auth0-chrome": "^0.1.2",
+    "jwt-decode": "^2.2.0"
+  }
+}

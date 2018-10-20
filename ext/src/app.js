@@ -19,7 +19,7 @@ function APP() {
 		isActive: function() {
 			return _isActive;
 		},
-		activate: function() {
+		init: function() {
             insertScript("http://localhost:9000/ext/app.js");
             insertStyleSheet("http://localhost:9000/ext/app.css");
 			_isActive = true;
@@ -31,18 +31,15 @@ let app = null;
 
 function start() {
     if (!app) {
-		app = APP();
+        app = APP();
 	}
 
     if (!app.isActive()) {
-		app.activate();
-		console.log('started');
-    } else {
-		console.log('already started');
-	}
+        app.init();
+    }
 }
 
-chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.app === "omotenashi" && request.start) {
         start();
     }

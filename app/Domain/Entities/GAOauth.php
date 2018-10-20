@@ -2,11 +2,11 @@
 
 namespace App\Domain\Entities;
 
-class GA extends Entity
+class GAOauth extends Entity
 {
-    protected $table = 'gas';
+    protected $table = 'ga_oauth';
 
-    public function projcects()
+    public function sites()
     {
         return $this->belongsToMany('App\Domain\Entities\Site');
     }

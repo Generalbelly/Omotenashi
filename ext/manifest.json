@@ -1,8 +1,8 @@
 {
-  "name": "CHANGE THIS : Extension boilerplate",
+  "name": "Omotenashi",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "This extension was created with the awesome extensionizr.com",
+  "description": "Omotenashi makes it easy and fun to build and maintain tutorials for user onboarding by enabling you to create code-free",
   "homepage_url": "http://extensionizr.com",
   "icons": {
     "16": "icons/icon16.png",
@@ -11,17 +11,24 @@
   },
   "default_locale": "en",
   "background": {
-    "scripts": ["js/background.js"],
+    "scripts": [
+      "env.js",
+      "node_modules/auth0-chrome/dist/auth0chrome.min.js",
+      "src/background.js"
+    ],
     "persistent": false
   },
   "browser_action": {
     "default_icon": "icons/icon19.png",
-    "default_title": "omotenashi"
+    "default_title": "Omotenashi",
+    "default_popup": "src/browser_action/browser_action.html"
   },
   "permissions": [
+    "*://*/*",
     "tabs",
     "background",
-    "*://*/*"
+    "identity",
+    "notifications"
   ],
   "content_scripts": [
     {
@@ -29,10 +36,10 @@
         "*://*/*"
       ],
       "css": [
-        "css/content.css"
+        "css/app.css"
       ],
       "js": [
-        "js/content.js"
+        "src/app.js"
       ]
     }
   ]

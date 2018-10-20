@@ -11,9 +11,9 @@ class Site extends Entity
         return $this->belongsTo('App\Domain\Entities\User');
     }
 
-    public function gases()
+    public function gaOauths()
     {
-        return $this->belongsToMany('App\Domain\Entities\GA');
+        return $this->belongsToMany('App\Domain\Entities\GAOauth');
     }
 
     public function tutorials()
