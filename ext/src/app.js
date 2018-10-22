@@ -20,8 +20,8 @@ function APP() {
 			return _isActive;
 		},
 		init: function() {
-            insertScript("http://localhost:9000/ext/app.js");
-            insertStyleSheet("http://localhost:9000/ext/app.css");
+            insertScript('http://docker.omotenashi.today/ext/app.js');
+            insertStyleSheet('http://docker.omotenashi.today/ext/app.css');
 			_isActive = true;
 		}
 	};

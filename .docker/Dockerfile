@@ -24,7 +24,8 @@ RUN yum install -y \
     libmcrypt \
     libtool-ltdl \
     which \
-    gcc gcc-c++
+    gcc gcc-c++ \
+    net-tools
 
 # install php7.2 nginx
 RUN amazon-linux-extras install php7.2 nginx1.12
@@ -36,6 +37,19 @@ RUN yum install -y --disablerepo=amzn-main,amzn-updates --enablerepo=remi,remi-p
 
 RUN rm -f /etc/nginx/default.d/php.conf
 ADD ./nginx/default.conf /etc/nginx/conf.d/default.conf
+
+
+RUN mkdir /var/lib/php/session_nginx && \
+    chown root.nginx /var/lib/php/session_nginx && \
+    chmod 0775 /var/lib/php/session_nginx
+
+RUN mkdir /var/lib/php/wsdlcache_nginx && \
+    chown root.nginx /var/lib/php/wsdlcache_nginx && \
+    chmod 0775 /var/lib/php/wsdlcache_nginx
+
+RUN mkdir /var/lib/php/opcache_nginx && \
+    chown root.nginx /var/lib/php/opcache_nginx && \
+    chmod 0775 /var/lib/php/opcache_nginx
 
 ADD ./php-fpm/www.conf /etc/php-fpm.d/www.conf
 ADD ./php/php.ini /etc/php.ini

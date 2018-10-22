@@ -35,9 +35,7 @@
       "matches": [
         "*://*/*"
       ],
-      "css": [
-        "css/app.css"
-      ],
+      "css": [],
       "js": [
         "src/app.js"
       ]

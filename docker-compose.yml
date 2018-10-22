@@ -4,15 +4,15 @@ services:
   app:
     build: ./.docker/
     container_name: omotenashi
-    # links:
-    #   - mysql
     ports:
       - 9000:80
     volumes:
       - ./:/var/www
-    tty: true
-    privileged: true
+    environment:
+      - VIRTUAL_HOST=docker.omotenashi.today
     command: /sbin/init
+    privileged: true
+    tty: true
 
 networks:
   default:

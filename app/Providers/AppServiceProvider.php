@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Auth0\Login\Contract\Auth0UserRepository;
+use App\Domain\Entities\User;
+use App\Domain\Entities\Observers\UserObserver;
+use App\Repositories\UserRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        User::observe(UserObserver::class);
     }
 
     /**
@@ -23,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(
+            Auth0UserRepository::class,
+            UserRepository::class
+        );
     }
 }
