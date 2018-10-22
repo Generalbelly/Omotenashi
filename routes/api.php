@@ -21,6 +21,6 @@ Route::get('/public', function (Request $request) {
     return response()->json(["message" => "Hello from a public endpoint! You dont't need any token to access."]);
 });
 
-Route::middleware('auth:api')->get('/private', function (Request $request) {
+Route::middleware('jwt')->get('/private', function (Request $request) {
     return response()->json(["message" => "Access token is valid. Welcome to this private endpoint."]);
 });
