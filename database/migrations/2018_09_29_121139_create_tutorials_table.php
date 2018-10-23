@@ -21,7 +21,8 @@ class CreateTutorialsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index(['site_id', 'path'], 'idx_site_path_id');
+            $table->primary('id');
+            $table->index(['site_id', 'path'], 'idx_site_id_path');
         });
     }
 

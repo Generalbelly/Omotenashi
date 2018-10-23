@@ -17,8 +17,12 @@ class CreateSitesTable extends Migration
             $table->string('id');
             $table->string('name');
             $table->string('domain');
+
             $table->timestamps();
             $table->softDeletes();
+
+            $table->primary('id');
+            $table->index('id', 'idx_id');
         });
     }
 

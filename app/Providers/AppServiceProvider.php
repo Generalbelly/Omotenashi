@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Auth0\Login\Contract\Auth0UserRepository;
-use App\Domain\Entities\User;
-use App\Domain\Entities\Observers\UserObserver;
+use App\Entities\User;
+use App\Entities\Observers\UserObserver;
 use App\Repositories\UserRepository;
 
 class AppServiceProvider extends ServiceProvider

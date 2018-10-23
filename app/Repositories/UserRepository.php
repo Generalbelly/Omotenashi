@@ -2,9 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Domain\Entities\User;
+use App\Entities\User;
 
-use Log;
 use Auth0\Login\Auth0User;
 use Auth0\Login\Auth0JWTUser;
 use Auth0\Login\Repository\Auth0UserRepository;

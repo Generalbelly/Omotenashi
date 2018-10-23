@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Entities\Observers;
+namespace App\Entities\Observers;
 
 use Ramsey\Uuid\Uuid;
 

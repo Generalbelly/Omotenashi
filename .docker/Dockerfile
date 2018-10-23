@@ -67,6 +67,8 @@ RUN curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
 RUN sudo yum -y install nodejs
 RUN sudo yum -y install gcc-c++ make
 
+EXPOSE 80
+
 WORKDIR /root
 
 # start

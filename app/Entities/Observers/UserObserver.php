@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Entities\Observers;
+namespace App\Entities\Observers;
 
-use App\Domain\Entities\User;
+use App\Entities\User;
 
 class UserObserver extends Observer
 {

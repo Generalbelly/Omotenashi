@@ -4,8 +4,6 @@ services:
   app:
     build: ./.docker/
     container_name: omotenashi
-    ports:
-      - 9000:80
     volumes:
       - ./:/var/www
     environment:

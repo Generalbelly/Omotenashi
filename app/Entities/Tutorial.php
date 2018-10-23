@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Entities;
+namespace App\Entities;
 
 class Tutorial extends Entity
 {
@@ -8,6 +8,6 @@ class Tutorial extends Entity
 
     public function site()
     {
-        return $this->belongsTo('App\Domain\Entities\Site');
+        return $this->belongsTo('App\Entities\Site');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGAOauthsTable extends Migration
+class CreateGAOAuthsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,8 +15,15 @@ class CreateGAOauthsTable extends Migration
     {
         Schema::create('ga_oauths', function (Blueprint $table) {
             $table->string('id');
+            $table->string('email');
+            $table->string('access_token');
+            $table->string('refresh_token');
+
             $table->timestamps();
             $table->softDeletes();
+
+            $table->primary('id');
+            $table->index('id', 'idx_id');
         });
     }
 
