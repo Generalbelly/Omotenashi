@@ -152,6 +152,7 @@ return [
          */
 
         Auth0\Login\LoginServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         /*
          * Application Service Providers...

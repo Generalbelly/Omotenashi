@@ -15,7 +15,9 @@ class CreateTutorialsTable extends Migration
     {
         Schema::create('tutorials', function (Blueprint $table) {
             $table->string('id');
-            $table->text('driver');
+            $table->string('name');
+            $table->string('description');
+            $table->text('steps');
             $table->string('path');
             $table->string('site_id');
             $table->timestamps();

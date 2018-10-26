@@ -4,9 +4,21 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Usecases\CreateTutorialUsecase\CreateTutorialUsecase;
+use App\Usecases\CreateTutorialUsecase\CreateTutorialRequest;
 
 class TutorialController extends Controller
 {
+    /**
+     * @var CreateTutorialUsecase
+     */
+    private $createUsecase;
+
+    public function __construct(CreateTutorialUsecase $createUsecase)
+    {
+        $this->createUsecase = $createUsecase;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +37,11 @@ class TutorialController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $createTutorialRequest = new CreateTutorialRequest($request->all());
+        $createTutorialResponse = $this->createUsecase->handle($createTutorialRequest);
+
+        return response()->json($createTutorialResponse);
     }
 
     /**
