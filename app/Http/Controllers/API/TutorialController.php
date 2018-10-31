@@ -4,19 +4,21 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Usecases\CreateTutorialUsecase\CreateTutorialUsecase;
-use App\Usecases\CreateTutorialUsecase\CreateTutorialRequest;
+use App\Http\Requests\AddTutorialRequest;
+use App\Usecases\AddTutorialUsecase\AddTutorialUsecase;
+use App\Usecases\AddTutorialUsecase\AddTutorialRequestModel;
+use Log, Auth;
 
 class TutorialController extends Controller
 {
     /**
-     * @var CreateTutorialUsecase
+     * @var AddTutorialUsecase
      */
-    private $createUsecase;
+    private $addTutorialUsecase;
 
-    public function __construct(CreateTutorialUsecase $createUsecase)
+    public function __construct(AddTutorialUsecase $addTutorialUsecase)
     {
-        $this->createUsecase = $createUsecase;
+        $this->addTutorialUsecase = $addTutorialUsecase;
     }
 
     /**
@@ -32,16 +34,17 @@ class TutorialController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\AddTutorialRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AddTutorialRequest $request)
     {
+        Log::error('controller');
+        Log::error(Auth::user());
+        $addTutorialRequest = new AddTutorialRequestModel($request->all());
+        $addTutorialResponse = $this->addTutorialUsecase->handle($addTutorialRequest);
 
-        $createTutorialRequest = new CreateTutorialRequest($request->all());
-        $createTutorialResponse = $this->createUsecase->handle($createTutorialRequest);
-
-        return response()->json($createTutorialResponse);
+        return response()->json($addTutorialResponse);
     }
 
     /**

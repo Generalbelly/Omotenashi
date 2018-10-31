@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Usecases\CreateTutorialUsecase;
+namespace App\Usecases\AddTutorialUsecase;
 
-use Log;
+class AddTutorialRequestModel {
 
-class CreateTutorialRequest {
+    /**
+     * @var string
+     */
+    public $domain;
 
     /**
      * @var string
@@ -26,14 +29,19 @@ class CreateTutorialRequest {
      */
     public $path;
 
+    /**
+     * @var string
+     */
+    public $sub;
+
     public function __construct(array $attributes)
     {
-        Log::error($attributes);
+        $this->domain = $attributes['domain'];
         $this->name = $attributes['name'];
         $this->description = $attributes['description'];
         $this->steps = $attributes['steps'];
         $this->path = $attributes['path'];
-        Log::error($this->name);
+        $this->sub = $attributes['sub'];
     }
 
 }

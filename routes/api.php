@@ -12,12 +12,7 @@ Route::middleware('jwt')->get('/private', function (Request $request) {
     return response()->json(["message" => "Access token is valid. Welcome to this private endpoint."]);
 });
 
-//Route::prefix('tutorials')->middleware('jwt')->group(function() use ($regexpUUID) {
-//
-//    Route::apiResource('tutorials', 'TutorialController');
-//
-//});
 
-Route::prefix('tutorials')->group(function() use ($regexpUUID) {
+Route::prefix('tutorials')->middleware('jwt')->group(function() use ($regexpUUID) {
     Route::post('/store', 'API\TutorialController@store');
 });

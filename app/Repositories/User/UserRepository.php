@@ -2,13 +2,14 @@
 
 namespace App\Repositories\User;
 
-use App\Entities\User;
+use App\Domains\Entities\UserEntity;
+use Log;
 
 use Auth0\Login\Auth0User;
-use Auth0\Login\Auth0JWTUser;
+use App\Domains\Models\Auth0JWTUser;
 use Auth0\Login\Repository\Auth0UserRepository;
 
-class UserRepository extends Auth0UserRepository
+class UserRepository extends Auth0UserRepository implements UserRepositoryContract
 {
 
     /**
@@ -16,16 +17,16 @@ class UserRepository extends Auth0UserRepository
     *
     * @param array $profile - Auth0 profile
     *
-    * @return User
+    * @return UserEntity
     */
     protected function upsertUser($profile)
     {
         // See if we have a user that matches the Auth0 user_id
-        $user = User::where('sub', $profile['sub'])->first();
+        $user = UserEntity::where('sub', $profile['sub'])->first();
 
         // In not, add them to the database
         if (!$user) {
-            $user = new User();
+            $user = new UserEntity();
 
             // All are required, no default set
             $user->setAttribute('email', $profile['email']);
@@ -66,4 +67,57 @@ class UserRepository extends Auth0UserRepository
         );
     }
 
+    /**
+     * @param string $id
+     * @return \App\Domains\Entities\UserEntity
+     */
+    public function findById(string $id)
+    {
+        return UserEntity::find($id);
+    }
+
+    /**
+     * @param string $sub
+     * @return \App\Domains\Entities\UserEntity
+     */
+    public function findBySub(string $sub)
+    {
+        return UserEntity::where('sub', $sub)->first();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAll()
+    {
+        return UserEntity::all();
+    }
+
+    /**
+     * @param array $attributes ;
+     * @return \App\Domains\Entities\UserEntity
+     */
+    public function add(array $attributes)
+    {
+        // TODO: Implement add() method.
+    }
+
+    /**
+     * @param string $id ;
+     * @param array $attributes ;
+     * @return \App\Domains\Entities\UserEntity
+     */
+    public function update(string $id, array $attributes)
+    {
+        // TODO: Implement update() method.
+    }
+
+    /**
+     * @param string $id ;
+     * @return \App\Domains\Entities\UserEntity
+     */
+    public function delete(string $id)
+    {
+        // TODO: Implement delete() method.
+    }
 }

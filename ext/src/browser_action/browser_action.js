@@ -25,9 +25,9 @@ function renderAfterLoginView(authResult) {
         $('.loading').classList.add('is-hidden');
         $('.after-login').classList.remove('is-hidden');
         $('.logout-button').addEventListener('click', logout);
-        console.log('come');
         chrome.runtime.sendMessage({
-            type: "login"
+            type: "login",
+            token: authResult.access_token,
         });
     }).catch(logout);
 }

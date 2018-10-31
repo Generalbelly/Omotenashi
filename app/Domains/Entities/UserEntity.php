@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Entities;
+namespace App\Domains\Entities;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticatable
+class UserEntity extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
+
+    protected $table = 'users';
 
     /**
      * The attributes that are mass assignable.

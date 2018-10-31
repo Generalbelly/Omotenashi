@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entities;
+namespace App\Domains\Entities;
 
-class Tutorial extends Entity
+class TutorialEntity extends Entity
 {
     protected $table = 'tutorials';
 
@@ -17,6 +17,6 @@ class Tutorial extends Entity
 
     public function site()
     {
-        return $this->belongsTo('App\Entities\Site');
+        return $this->belongsTo('App\Domains\Entities\SiteEntity');
     }
 }

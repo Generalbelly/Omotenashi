@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Repositories\Site;
+namespace App\Repositories\User;
 
-interface SiteRepositoryContract {
+interface UserRepositoryContract {
 
     /**
      * @param string $id
-     * @return \App\Domains\Entities\SiteEntity
+     * @return \App\Domains\Entities\UserEntity
      */
     public function findById(string $id);
 
     /**
-     * @param string $domain
-     * @return \App\Domains\Entities\SiteEntity
+     * @param string $sub
+     * @return \App\Domains\Entities\UserEntity
      */
-    public function findByDomain(string $domain);
+    public function findBySub(string $sub);
 
     /**
      * @return \Illuminate\Database\Eloquent\Collection
@@ -23,20 +23,20 @@ interface SiteRepositoryContract {
 
     /**
      * @param array $attributes;
-     * @return \App\Domains\Entities\SiteEntity
+     * @return \App\Domains\Entities\UserEntity
      */
     public function add(array $attributes);
 
     /**
      * @param string $id;
      * @param array $attributes;
-     * @return \App\Domains\Entities\SiteEntity
+     * @return \App\Domains\Entities\UserEntity
      */
     public function update(string $id, array $attributes);
 
     /**
      * @param string $id;
-     * @return \App\Domains\Entities\SiteEntity
+     * @return \App\Domains\Entities\UserEntity
      */
     public function delete(string $id);
 

@@ -6,31 +6,31 @@ interface TutorialRepositoryContract {
 
     /**
      * @param string $id
-     * @return \App\Entities\Tutorial
+     * @return \App\Domains\Entities\TutorialEntity
      */
-    public function find(string $id);
+    public function findById(string $id);
 
     /**
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function findAll();
+    public function getAll();
 
     /**
      * @param array $attributes;
-     * @return \App\Entities\Tutorial
+     * @return \App\Domains\Entities\TutorialEntity
      */
-    public function create(array $attributes);
+    public function add(array $attributes);
 
     /**
      * @param string $id;
      * @param array $attributes;
-     * @return \App\Entities\Tutorial
+     * @return \App\Domains\Entities\TutorialEntity
      */
     public function update(string $id, array $attributes);
 
     /**
      * @param string $id;
-     * @return \App\Entities\Tutorial
+     * @return \App\Domains\Entities\TutorialEntity
      */
     public function delete(string $id);
 

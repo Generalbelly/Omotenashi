@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Usecases\CreateTutorialUsecase;
+namespace App\Usecases\AddTutorialUsecase;
 
-class CreateTutorialResponse {
+class AddTutorialResponseModel {
 
     /**
      * @var string

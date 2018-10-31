@@ -59,7 +59,7 @@ return array(
     |   This is used to verify the decoded tokens when using RS256
     |
     */
-    'authorized_issuers'  => [ env( 'AUTH0_DOMAIN' ) ],
+    'authorized_issuers'  => [ 'https://'.env( 'AUTH0_DOMAIN' ).'/' ],
 
     /*
     |--------------------------------------------------------------------------
@@ -67,7 +67,7 @@ return array(
     |--------------------------------------------------------------------------
     |
     */
-    // 'api_identifier'  => '',
+    'api_identifier'  => getenv('API_IDENTIFIER'),
 
     /*
     |--------------------------------------------------------------------------
@@ -95,13 +95,5 @@ return array(
     |
     */
     // 'guzzle_options' => []
-
-    'valid_audiences' => [
-        env('APP_PROTOCOL').'://'.env('APP_URL'),
-    ],
-
-    'authorized_iss' => [
-        'https://'.env('AUTH0_DOMAIN'),
-    ],
 
 );

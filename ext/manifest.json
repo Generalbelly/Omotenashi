@@ -37,7 +37,7 @@
       ],
       "css": [],
       "js": [
-        "src/app.js"
+        "src/index.js"
       ]
     }
   ]

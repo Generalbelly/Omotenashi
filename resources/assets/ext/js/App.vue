@@ -25,6 +25,9 @@
     } from 'vuex'
 
     export default {
+        created() {
+            console.log(_ot_ext_token);
+        },
         components: {
             Navbar,
             TutorialPage,

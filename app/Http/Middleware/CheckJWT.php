@@ -1,15 +1,11 @@
-// /app/Http/Middleware/CheckJWT.php
-
 <?php
 
 namespace App\Http\Middleware;
 
 use Auth0\Login\Contract\Auth0UserRepository;
-use Auth0\SDK\JWTVerifier;
-use Auth0\SDK\Helpers\Cache\FileSystemCacheHandler;
 use Auth0\SDK\Exception\CoreException;
 use Auth0\SDK\Exception\InvalidTokenException;
-use Auth;
+use Auth, Log;
 use Closure;
 
 class CheckJWT
@@ -35,16 +31,12 @@ class CheckJWT
      */
     public function handle($request, Closure $next)
     {
+        $auth0 = \App::make('auth0');
+
         $accessToken = $request->bearerToken();
         try {
-            $verifier = new JWTVerifier([
-                'valid_audiences' => config('laravel-auth0.valid_audiences'),
-                'authorized_iss' => config('laravel-auth0.authorized_iss'),
-                'cache' => new FileSystemCacheHandler() // This parameter is optional. By default no cache is used to fetch the JSON Web Keys.
-            ]);
-            $decodedToken = $verifier->verifyAndDecode($accessToken);
-
-            $user = $this->userRepository->getUserByDecodedJWT($decodedToken);
+            $tokenInfo = $auth0->decodeJWT($accessToken);
+            $user = $this->userRepository->getUserByDecodedJWT($tokenInfo);
             if (!$user) {
                 return response()->json(["message" => "Unauthorized user"], 401);
             }

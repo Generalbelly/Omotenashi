@@ -2,24 +2,24 @@
 
 namespace App\Repositories\Tutorial;
 
-use App\Entities\Tutorial;
+use App\Domains\Entities\TutorialEntity;
 
 class TutorialRepository implements TutorialRepositoryContract
 {
 
-    public function find(string $id)
+    public function findById(string $id)
     {
-        return Tutorial::find($id);
+        return TutorialEntity::find($id);
     }
 
-    public function findAll()
+    public function getAll()
     {
-        return Tutorial::all();
+        return TutorialEntity::all();
     }
 
-    public function create(array $attributes)
+    public function add(array $attributes)
     {
-        $tutorial = new Tutorial;
+        $tutorial = new TutorialEntity;
         $tutorial->name = $attributes['name'];
         $tutorial->description = $attributes['description'];
         $tutorial->steps = $attributes['steps'];

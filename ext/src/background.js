@@ -1,7 +1,11 @@
 
 chrome.runtime.onMessage.addListener(function (request) {
 
-    function sendActivateMessage() {
+    function generateRandomString() {
+        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    }
+
+    function sendActivateMessage(token) {
         chrome.tabs.query({
             active: true,
             currentWindow: true,
@@ -10,6 +14,7 @@ chrome.runtime.onMessage.addListener(function (request) {
             chrome.tabs.sendMessage(activeTab.id, {
                 app: "omotenashi",
                 start: true,
+                token,
             });
         });
     }
@@ -21,14 +26,18 @@ chrome.runtime.onMessage.addListener(function (request) {
         //  - offline_access if you want a Refresh Token returned
         // device
         //  - required if requesting the offline_access scope.
+
+        const nonce = generateRandomString();
         let options = {
-            scope: 'openid offline_access',
-            device: 'chrome-extension'
+            audience: 'http://docker.omotenashi.today',
+            response_type: 'id_token token',
+            nonce,
         };
 
         new Auth0Chrome(env.AUTH0_DOMAIN, env.AUTH0_CLIENT_ID)
             .authenticate(options)
             .then(function (authResult) {
+                console.log(authResult);
                 localStorage.authResult = JSON.stringify(authResult);
                 chrome.notifications.create({
                     type: 'basic',
@@ -39,7 +48,7 @@ chrome.runtime.onMessage.addListener(function (request) {
                 chrome.runtime.sendMessage({
                     result: true,
                 });
-                sendActivateMessage();
+                sendActivateMessage(authResult.access_token);
             }).catch(function (err) {
                 chrome.notifications.create({
                     type: 'basic',
@@ -52,6 +61,6 @@ chrome.runtime.onMessage.addListener(function (request) {
                 });
         });
     } else if (request.type === 'login') {
-        sendActivateMessage();
+        sendActivateMessage(request.token);
     }
 });

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Entities\Observers;
+namespace App\Domains\Entities\Observers;
 
 use Ramsey\Uuid\Uuid;
 
-class Observer
+class EntityObserver
 {
     public function generateKey($class, $column)
     {

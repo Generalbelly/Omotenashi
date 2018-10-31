@@ -2,40 +2,62 @@
 
 namespace App\Repositories\Site;
 
-use App\Entities\Site;
+use App\Domains\Entities\SiteEntity;
 
 class SiteRepository implements SiteRepositoryContract
 {
 
-    public function find(string $id)
+    /**
+     * @param string $id
+     * @return \App\Domains\Entities\SiteEntity
+     */
+    public function findById(string $id)
     {
-        return Site::find($id);
+        return SiteEntity::find($id);
     }
 
-    public function findAll()
+    /**
+     * @param string $domain
+     * @return \App\Domains\Entities\SiteEntity
+     */
+    public function findByDomain(string $domain)
     {
-        return Site::all();
+        return SiteEntity::where('domain', $domain);
     }
 
-    public function create(array $attributes)
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAll()
     {
-        $tutorial = new Site;
-        $tutorial->save($attributes);
-        return $tutorial;
+        // TODO: Implement getAll() method.
     }
 
+    /**
+     * @param array $attributes ;
+     * @return \App\Domains\Entities\SiteEntity
+     */
+    public function add(array $attributes)
+    {
+        // TODO: Implement add() method.
+    }
+
+    /**
+     * @param string $id ;
+     * @param array $attributes ;
+     * @return \App\Domains\Entities\SiteEntity
+     */
     public function update(string $id, array $attributes)
     {
-        $tutorial = $this->find($id);
-        $tutorial->save($attributes);
-        return $tutorial;
+        // TODO: Implement update() method.
     }
 
+    /**
+     * @param string $id ;
+     * @return \App\Domains\Entities\SiteEntity
+     */
     public function delete(string $id)
     {
-        $tutorial = $this->find($id);
-        $tutorial->delete();
-        return $tutorial;
+        // TODO: Implement delete() method.
     }
-
 }

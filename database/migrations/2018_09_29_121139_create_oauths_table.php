@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGAOAuthsTable extends Migration
+class CreateOAuthsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class CreateGAOAuthsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ga_oauths', function (Blueprint $table) {
+        Schema::create('oauths', function (Blueprint $table) {
             $table->string('id');
+            $table->string('service');
             $table->string('email');
             $table->string('access_token');
             $table->string('refresh_token');
@@ -34,6 +35,6 @@ class CreateGAOAuthsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ga_oauths');
+        Schema::dropIfExists('oauths');
     }
 }

@@ -1,9 +1,13 @@
 import uuidv4 from 'uuid'
+import axios from 'axios'
 import {
     ADD_TUTORIAL,
     UPDATE_TUTORIAL,
     DELETE_TUTORIAL,
 } from '../store/mutation-types'
+
+axios.defaults.baseURL = 'http://docker.omotenashi.today/api/tutorials';
+axios.defaults.headers.common['Authorization'] = `Bearer ${_ot_ext_token}`;
 
 export const makeRequest = (params) => {
     const {
@@ -12,15 +16,12 @@ export const makeRequest = (params) => {
         mutationType,
     } = params
 
+    console.log(_ot_ext_token);
+
     switch (mutationType) {
         case ADD_TUTORIAL:
-            return new Promise((resolve, reject) => {
-                window.setTimeout(() => {
-                    resolve({
-                        id: uuidv4(),
-                        ...data
-                    })
-                }, 1500)
+            return axios.post('/store', {
+                data,
             })
         case UPDATE_TUTORIAL:
             return new Promise((resolve, reject) => {

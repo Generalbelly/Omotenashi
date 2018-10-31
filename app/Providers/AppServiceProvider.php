@@ -2,26 +2,29 @@
 
 namespace App\Providers;
 
+use App\Repositories\User\UserRepositoryContract;
 use Illuminate\Support\ServiceProvider;
 
 use Auth0\Login\Contract\Auth0UserRepository;
 
-use App\Entities\User;
-use App\Entities\Site;
-use App\Entities\Tutorial;
-use App\Entities\GAOAuth;
+use App\Domains\Entities\UserEntity;
+use App\Domains\Entities\SiteEntity;
+use App\Domains\Entities\TutorialEntity;
+use App\Domains\Entities\OAuthEntity;
 
-use App\Entities\Observers\UserObserver;
-use App\Entities\Observers\TutorialObserver;
-use App\Entities\Observers\SiteObserver;
-use App\Entities\Observers\GAOAuthObserver;
+use App\Domains\Entities\Observers\UserEntityObserver;
+use App\Domains\Entities\Observers\TutorialEntityObserver;
+use App\Domains\Entities\Observers\SiteEntityObserver;
+use App\Domains\Entities\Observers\OAuthEntityObserver;
 
 use App\Repositories\User\UserRepository;
 use App\Repositories\Site\SiteRepositoryContract;
+use App\Repositories\Site\SiteRepository;
+use App\Repositories\Tutorial\TutorialRepositoryContract;
 use App\Repositories\Tutorial\TutorialRepository;
 
-use App\Usecases\CreateTutorialUsecase\CreateTutorialUsecase;
-use App\Usecases\CreateTutorialUsecase\CreateTutorialUsecaseInteractor;
+use App\Usecases\AddTutorialUsecase\AddTutorialUsecase;
+use App\Usecases\AddTutorialUsecase\AddTutorialUsecaseInteractor;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,10 +35,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        User::observe(UserObserver::class);
-        Tutorial::observe(TutorialObserver::class);
-        Site::observe(SiteObserver::class);
-        GAOAuth::observe(GAOAuthObserver::class);
+        UserEntity::observe(UserEntityObserver::class);
+        TutorialEntity::observe(TutorialEntityObserver::class);
+        SiteEntity::observe(SiteEntityObserver::class);
+        OAuthEntity::observe(OAuthEntityObserver::class);
     }
 
     /**
@@ -51,13 +54,23 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            SiteRepositoryContract::class,
+            UserRepositoryContract::class,
+            UserRepository::class
+        );
+
+        $this->app->bind(
+            TutorialRepositoryContract::class,
             TutorialRepository::class
         );
 
         $this->app->bind(
-            CreateTutorialUsecase::class,
-            CreateTutorialUsecaseInteractor::class
+            SiteRepositoryContract::class,
+            SiteRepository::class
+        );
+
+        $this->app->bind(
+            AddTutorialUsecase::class,
+            AddTutorialUsecaseInteractor::class
         );
 
         if ($this->app->environment() !== 'production') {
