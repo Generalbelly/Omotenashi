@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
-use App\Repositories\User\UserRepositoryContract;
 use Illuminate\Support\ServiceProvider;
 
-use Auth0\Login\Contract\Auth0UserRepository;
+use App\Repositories\BaseRepository;
+use App\Repositories\BaseRepositoryContract;
+use App\Repositories\User\UserRepositoryContract;
 
 use App\Domains\Entities\UserEntity;
 use App\Domains\Entities\SiteEntity;
@@ -23,8 +24,11 @@ use App\Repositories\Site\SiteRepository;
 use App\Repositories\Tutorial\TutorialRepositoryContract;
 use App\Repositories\Tutorial\TutorialRepository;
 
-use App\Usecases\AddTutorialUsecase\AddTutorialUsecase;
-use App\Usecases\AddTutorialUsecase\AddTutorialUsecaseInteractor;
+use App\Usecases\AddTutorial\AddTutorialUsecase;
+use App\Usecases\AddTutorial\AddTutorialUsecaseInteractor;
+
+use App\Usecases\ListTutorials\ListTutorialsUsecase;
+use App\Usecases\ListTutorials\ListTutorialsUsecaseInteractor;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -48,9 +52,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+
         $this->app->bind(
-            Auth0UserRepository::class,
-            UserRepository::class
+            BaseRepositoryContract::class,
+            BaseRepository::class
         );
 
         $this->app->bind(
@@ -71,6 +76,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             AddTutorialUsecase::class,
             AddTutorialUsecaseInteractor::class
+        );
+
+        $this->app->bind(
+            ListTutorialsUsecase::class,
+            ListTutorialsUsecaseInteractor::class
         );
 
         if ($this->app->environment() !== 'production') {

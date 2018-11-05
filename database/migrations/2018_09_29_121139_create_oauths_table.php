@@ -14,7 +14,7 @@ class CreateOAuthsTable extends Migration
     public function up()
     {
         Schema::create('oauths', function (Blueprint $table) {
-            $table->string('id');
+            $table->string('id')->unique();
             $table->string('service');
             $table->string('email');
             $table->string('access_token');

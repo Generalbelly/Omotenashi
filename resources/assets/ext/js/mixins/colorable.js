@@ -44,6 +44,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        isText: {
+            type: Boolean,
+            default: false,
+        },
         hasBackgroundGrey: {
             type: Boolean,
             default: false,
@@ -71,6 +75,7 @@ export default {
                 'is-successful': this.isSuccessful,
                 'is-warning': this.isWarning,
                 'is-danger': this.isDanger,
+                'is-text': this.isText,
                 'has-background-grey': this.hasBackgroundGrey,
                 'has-background-white': this.hasBackgroundWhite,
                 'has-text-white': this.hasTextWhite,

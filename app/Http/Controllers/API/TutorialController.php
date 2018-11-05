@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Usecases\ListTutorials\ListTutorialsRequestModel;
+use App\Usecases\ListTutorials\ListTutorialsUsecase;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddTutorialRequest;
-use App\Usecases\AddTutorialUsecase\AddTutorialUsecase;
-use App\Usecases\AddTutorialUsecase\AddTutorialRequestModel;
+use App\Usecases\AddTutorial\AddTutorialUsecase;
+use App\Usecases\AddTutorial\AddTutorialRequestModel;
 use Log, Auth;
 
 class TutorialController extends Controller
@@ -15,10 +17,14 @@ class TutorialController extends Controller
      * @var AddTutorialUsecase
      */
     private $addTutorialUsecase;
+    private $listTutorialsUsecase;
 
-    public function __construct(AddTutorialUsecase $addTutorialUsecase)
-    {
+    public function __construct(
+        AddTutorialUsecase $addTutorialUsecase,
+        ListTutorialsUsecase $listTutorialsUsecase
+    ){
         $this->addTutorialUsecase = $addTutorialUsecase;
+        $this->listTutorialsUsecase = $listTutorialsUsecase;
     }
 
     /**
@@ -26,9 +32,33 @@ class TutorialController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $url = $request->get('url');
+        $userKey = $request->user()->key;
+        $search = $request->get('q');
+        $page = $request->get('page');
+        $perPage = $request->get('per_page');
+        $orders = [
+            ['column' => 'created_at', 'direction' => 'desc'],
+        ];
+        $direction = $request->get('desc') === 'desc' ? 'desc' : 'asc';
+        $column = $request->get('order_by');
+        if ($direction && $column) {
+            $orders[] = ['column' => $column, 'direction' => $direction];
+        }
+
+        $listTutorialsRequest = new ListTutorialsRequestModel([
+            'url' => $url,
+            'user_id' => $userKey,
+            'orders' => $orders,
+            'page' => $page,
+            'search' => $search,
+            'perPage' => $perPage,
+        ]);
+        $listTutorialsResponse = $this->listTutorialsUsecase($listTutorialsRequest);
+
+        return response()->json($listTutorialsResponse);
     }
 
     /**
@@ -39,9 +69,12 @@ class TutorialController extends Controller
      */
     public function store(AddTutorialRequest $request)
     {
-        Log::error('controller');
-        Log::error(Auth::user());
-        $addTutorialRequest = new AddTutorialRequestModel($request->all());
+        $addTutorialRequest = new AddTutorialRequestModel(array_merge(
+            $request->all(),
+            [
+                'userKey' => $request->user()->key
+            ]
+        ));
         $addTutorialResponse = $this->addTutorialUsecase->handle($addTutorialRequest);
 
         return response()->json($addTutorialResponse);

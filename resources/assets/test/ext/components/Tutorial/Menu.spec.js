@@ -1,6 +1,6 @@
 import { shallowMount, mount } from '@vue/test-utils'
-import Menu from '../../../../ext/js/components/organisms/Menu'
-import BaseButton from '../../../../js/components/atoms/BaseButton'
+import Menu from '../../../../ext/js/components/organisms/Menu/Menu'
+import BaseButton from '../../../../js/components/atoms/BaseButton/BaseButton'
 import Vue from '../../app'
 import { tutorials } from '../../mock'
 

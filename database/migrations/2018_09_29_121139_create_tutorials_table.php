@@ -14,17 +14,17 @@ class CreateTutorialsTable extends Migration
     public function up()
     {
         Schema::create('tutorials', function (Blueprint $table) {
-            $table->string('id');
+            $table->string('id')->unique();
             $table->string('name');
             $table->string('description');
             $table->text('steps');
-            $table->string('path');
+            $table->string('url');
             $table->string('site_id');
             $table->timestamps();
             $table->softDeletes();
 
             $table->primary('id');
-            $table->index(['site_id', 'path'], 'idx_site_id_path');
+            $table->index(['site_id', 'url'], 'idx_site_id_url');
         });
     }
 

@@ -60,7 +60,7 @@ function renderDefaultView() {
 
 function main () {
     const authResult = JSON.parse(localStorage.authResult || '{}');
-    const token = authResult.id_token;
+    const token = authResult.access_token;
     if (token && isLoggedIn(token)) {
         renderAfterLoginView(authResult);
     } else {

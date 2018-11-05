@@ -4,7 +4,7 @@ function APP() {
     function insertScript(src, cb) {
         let script = document.createElement('script');
         if (cb) script.onload = cb;
-        if (src.includes('http')) {
+        if (src.includes('http')||src.includes('//')) {
             script.src = src
         } else {
             script.textContent = src;
@@ -23,30 +23,30 @@ function APP() {
         isActive: function() {
             return _isActive;
         },
-        init: function(token) {
+        init: function(token, jsFilePath, cssFilePath) {
             _isActive = true;
             insertScript(`const _ot_ext_token = "${token}"`);
-            insertScript('http://docker.omotenashi.today/ext/app.js');
-            insertStyleSheet('http://docker.omotenashi.today/ext/app.css');
+            insertScript(jsFilePath);
+            insertStyleSheet(cssFilePath);
         }
     };
 }
 
 let app = null;
 
-function start(token) {
+function start(token, jsFilePath, cssFilePath) {
     if (!app) {
         app = APP();
     }
 
     if (!app.isActive()) {
-        app.init(token);
+        app.init(token, jsFilePath, cssFilePath);
     }
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.app === "omotenashi" && request.start && request.token) {
-        start(request.token);
+        start(request.token, request.jsFilePath, request.cssFilePath);
     }
 });
 

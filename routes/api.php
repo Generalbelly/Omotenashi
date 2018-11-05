@@ -8,11 +8,14 @@ Route::get('/public', function (Request $request) {
     return response()->json(["message" => "Hello from a public endpoint! You dont't need any token to access."]);
 });
 
-Route::middleware('jwt')->get('/private', function (Request $request) {
-    return response()->json(["message" => "Access token is valid. Welcome to this private endpoint."]);
+Route::group(['middleware' => 'cors'], function() {
+
+    Route::prefix('tutorials')->middleware('jwt')->group(function() use ($regexpUUID) {
+
+        Route::get('/', 'API\TutorialController@index');
+
+        Route::post('/store', 'API\TutorialController@store');
+    });
+
 });
 
-
-Route::prefix('tutorials')->middleware('jwt')->group(function() use ($regexpUUID) {
-    Route::post('/store', 'API\TutorialController@store');
-});

@@ -18,7 +18,7 @@
 <script>
     import TutorialPage from './components/pages/TutorialPage'
     import GreetingModal from './components/organisms/GreetingModal'
-    import Navbar from "./components/organisms/Navbar"
+    import Navbar from "./components/organisms/Navbar/Navbar"
     import {
         mapActions,
         mapState

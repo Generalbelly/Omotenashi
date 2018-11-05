@@ -3,6 +3,7 @@ import {
 } from '../../api'
 
 import {
+    GET_TUTORIALS,
     ADD_TUTORIAL,
     UPDATE_TUTORIAL,
     DELETE_TUTORIAL,
@@ -12,6 +13,10 @@ import {
     UPDATE_STEP,
     DELETE_STEP,
     SELECT_STEP,
+
+    REQUEST_GET_TUTORIALS,
+    REQUEST_GET_TUTORIALS_SUCCESS,
+    REQUEST_GET_TUTORIALS_FAILURE,
 
     REQUEST_ADD_TUTORIAL,
     REQUEST_ADD_TUTORIAL_SUCCESS,
@@ -49,6 +54,9 @@ export const getters = {
 }
 
 export const mutations = {
+    [GET_TUTORIALS](state, data) {
+        state.tutorials = data;
+    },
     [ADD_TUTORIAL](state, { data }) {
         state.tutorials = [
             ...state.tutorials,
@@ -124,13 +132,28 @@ export const mutations = {
 }
 
 export const actions = {
+    getTutorials({ commit }) {
+        commit(REQUEST_GET_TUTORIALS)
+        makeRequest({
+            mutationType: REQUEST_GET_TUTORIALS,
+        })
+            .then(({ data }) => {
+                commit(REQUEST_GET_TUTORIALS_SUCCESS)
+                commit(GET_TUTORIALS, data)
+                commit(SELECT_TUTORIAL)
+                commit(SELECT_STEP, { id: null })
+            })
+            .catch((error) => {
+                commit(REQUEST_GET_TUTORIALS_FAILURE, error)
+            });
+    },
     addTutorial({ commit }, { data }) {
         commit(REQUEST_ADD_TUTORIAL)
         makeRequest({
             data,
             mutationType: ADD_TUTORIAL,
         })
-            .then((data) => {
+            .then(({ data }) => {
                 commit(REQUEST_ADD_TUTORIAL_SUCCESS)
                 commit(ADD_TUTORIAL, { data })
                 commit(SELECT_TUTORIAL, {
@@ -149,7 +172,7 @@ export const actions = {
             data,
             mutationType: UPDATE_TUTORIAL,
         })
-            .then((data) => {
+            .then(({ data }) => {
                 commit(REQUEST_UPDATE_TUTORIAL_SUCCESS)
                 commit(UPDATE_TUTORIAL, {
                     id: data.id,

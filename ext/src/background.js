@@ -1,24 +1,38 @@
-
 chrome.runtime.onMessage.addListener(function (request) {
+
+    function notifyLoginFailure(error) {
+        chrome.notifications.create({
+            type: 'basic',
+            title: 'Login Failed',
+            message: error.message,
+            iconUrl: 'icons/icon128.png'
+        });
+    };
 
     function sendActivateMessage(token) {
         chrome.tabs.query({
             active: true,
             currentWindow: true,
         }, function (tabs) {
-            const activeTab = tabs[0];
-            chrome.tabs.sendMessage(activeTab.id, {
-                app: "omotenashi",
-                start: true,
-                token,
-            });
+            try {
+                const activeTab = tabs[0];
+                chrome.tabs.sendMessage(activeTab.id, {
+                    app: "omotenashi",
+                    start: true,
+                    jsFilePath: env.JS_FILE_PATH,
+                    cssFilePath: env.CSS_FILE_PATH,
+                    token,
+                });
+            } catch (e) {
+                notifyLoginFailure(e);
+            }
         });
     }
 
     if (request.type === 'authenticate') {
 
         let options = {
-            audience: 'http://docker.omotenashi.today',
+            audience: env.AUTH0_AUDIENCE,
             response_type: 'id_token token',
         };
 
@@ -36,13 +50,8 @@ chrome.runtime.onMessage.addListener(function (request) {
                     result: true,
                 });
                 sendActivateMessage(authResult.access_token);
-            }).catch(function (err) {
-                chrome.notifications.create({
-                    type: 'basic',
-                    title: 'Login Failed',
-                    message: err.message,
-                    iconUrl: 'icons/icon128.png'
-                });
+            }).catch(function (e) {
+                notifyLoginFailure(e);
                 chrome.runtime.sendMessage({
                     result: false,
                 });
@@ -50,4 +59,5 @@ chrome.runtime.onMessage.addListener(function (request) {
     } else if (request.type === 'login') {
         sendActivateMessage(request.token);
     }
+
 });

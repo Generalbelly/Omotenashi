@@ -2,42 +2,30 @@
 
 namespace App\Repositories\User;
 
-interface UserRepositoryContract {
+use Auth0\Login\Contract\Auth0UserRepository;
 
-    /**
-     * @param string $id
-     * @return \App\Domains\Entities\UserEntity
-     */
-    public function findById(string $id);
+interface UserRepositoryContract extends Auth0UserRepository {
 
-    /**
-     * @param string $sub
-     * @return \App\Domains\Entities\UserEntity
-     */
-    public function findBySub(string $sub);
+    public function all();
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getAll();
+    public function create(array $data);
 
-    /**
-     * @param array $attributes;
-     * @return \App\Domains\Entities\UserEntity
-     */
-    public function add(array $attributes);
+    public function update($id, array $data);
 
-    /**
-     * @param string $id;
-     * @param array $attributes;
-     * @return \App\Domains\Entities\UserEntity
-     */
-    public function update(string $id, array $attributes);
+    public function delete($id);
 
-    /**
-     * @param string $id;
-     * @return \App\Domains\Entities\UserEntity
-     */
-    public function delete(string $id);
+    public function getEntity();
+
+    public function setEntity($entity);
+
+    public function with($relations);
+
+    public function find($id);
+
+    public function selectOne($predicates);
+
+    public function select($predicates);
+
+    public function paging($predicates=[], $orders=[], $page=0, $search=null, $perPage=null);
 
 }

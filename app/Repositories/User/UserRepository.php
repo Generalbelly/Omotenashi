@@ -3,7 +3,6 @@
 namespace App\Repositories\User;
 
 use App\Domains\Entities\UserEntity;
-use Log;
 
 use Auth0\Login\Auth0User;
 use App\Domains\Models\Auth0JWTUser;
@@ -11,6 +10,7 @@ use Auth0\Login\Repository\Auth0UserRepository;
 
 class UserRepository extends Auth0UserRepository implements UserRepositoryContract
 {
+    protected $entity;
 
     /**
     * Get an existing user or create a new one
@@ -67,57 +67,105 @@ class UserRepository extends Auth0UserRepository implements UserRepositoryContra
         );
     }
 
-    /**
-     * @param string $id
-     * @return \App\Domains\Entities\UserEntity
-     */
-    public function findById(string $id)
+    public function all()
     {
-        return UserEntity::find($id);
+        return $this->entity->all();
     }
 
-    /**
-     * @param string $sub
-     * @return \App\Domains\Entities\UserEntity
-     */
-    public function findBySub(string $sub)
+    public function create(array $data)
     {
-        return UserEntity::where('sub', $sub)->first();
+        return $this->entity->create($data);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getAll()
+    public function update($id, array $data)
     {
-        return UserEntity::all();
+        $record = $this->find($id);
+        return $record->update($data);
     }
 
-    /**
-     * @param array $attributes ;
-     * @return \App\Domains\Entities\UserEntity
-     */
-    public function add(array $attributes)
+    public function delete($id)
     {
-        // TODO: Implement add() method.
+        return $this->entity->destroy($id);
     }
 
-    /**
-     * @param string $id ;
-     * @param array $attributes ;
-     * @return \App\Domains\Entities\UserEntity
-     */
-    public function update(string $id, array $attributes)
+    public function getEntity()
     {
-        // TODO: Implement update() method.
+        return $this->entity;
     }
 
-    /**
-     * @param string $id ;
-     * @return \App\Domains\Entities\UserEntity
-     */
-    public function delete(string $id)
+    public function setEntity($entity)
     {
-        // TODO: Implement delete() method.
+        $this->entity = $entity;
+        return $this;
     }
+
+    public function with($relations)
+    {
+        return $this->entity->with($relations);
+    }
+
+    public function find($id)
+    {
+        return $this->entity-findOrFail($id);
+    }
+
+    public function selectOne($predicates)
+    {
+        return $this->entity->where(function($query) use ($predicates){
+            foreach($predicates as $column => $value){
+                $query->where($column, '=', $value);
+            }
+        })->first();
+    }
+
+    public function select($predicates)
+    {
+        return $this->entity->where(function($query) use ($predicates){
+            foreach($predicates as $column => $value){
+                $query->where($column, '=', $value);
+            }
+        })->get();
+    }
+
+    public function paging($predicates=[], $orders=[], $page=0, $search=null, $perPage=null)
+    {
+        $query = $this->entity->newQuery();
+        foreach($predicates as $predicate){
+            $query->where($predicate['column'], $predicate['operator'], $predicate['value']);
+        }
+        if($search){
+            $query->where(function($query) use ($search){
+                foreach($this->searchColumns as $column){
+                    $query->orWhere($column, 'like', "%$search%");
+                }
+            });
+        }
+        foreach($orders as $order){
+            $query->orderBy($order['column'], $order['direction']);
+        }
+        $total = $query->count('id');
+        $perPage = $perPage ? $perPage : $this->perPage;
+        $pages = ceil($total/$perPage);
+        // 1 2 3 4 5 [6] 7 8 9 10
+        $start = $page - 6;
+        $end = $page + 4;
+        if($start < 0){
+            $start = 1;
+            $end = 10;
+        }else if($pages > $end){
+            $start = $pages - 10;
+            $end = $pages;
+        }
+        $query->offset($page*$perPage);
+        $query->limit($perPage);
+        $entities = $query->get();
+
+        return [
+            'total'  => $total,
+            'start'  => $start,
+            'end'    => $end,
+            'entities' => $entities,
+        ];
+    }
+
 }

@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
-import NavBar from '../../../../ext/js/components/organisms/Navbar'
-import BaseButton from '../../../../js/components/atoms/BaseButton'
+import NavBar from '../../../../ext/js/components/organisms/Navbar/Navbar'
+import BaseButton from '../../../../js/components/atoms/BaseButton/BaseButton'
 import Vue from '../../app'
 
 describe('NavBar.vue', () => {

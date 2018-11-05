@@ -24,10 +24,9 @@ class AddTutorialRequest extends FormRequest
     public function rules()
     {
         return [
-            'domain' => 'required',
             'name' => 'required|max:100',
             'description' => 'required|max:100',
-            'path' => 'required',
+            'url' => 'required|url',
             'steps' => 'array',
             'steps.*.element' => 'required_if:steps',
             'steps.*.popover' => 'required_if:steps',

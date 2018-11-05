@@ -3,7 +3,7 @@ import axios from 'axios'
 import {
     ADD_TUTORIAL,
     UPDATE_TUTORIAL,
-    DELETE_TUTORIAL,
+    DELETE_TUTORIAL, REQUEST_GET_TUTORIALS,
 } from '../store/mutation-types'
 
 axios.defaults.baseURL = 'http://docker.omotenashi.today/api/tutorials';
@@ -16,13 +16,31 @@ export const makeRequest = (params) => {
         mutationType,
     } = params
 
-    console.log(_ot_ext_token);
-
     switch (mutationType) {
+        case REQUEST_GET_TUTORIALS:
+            return new Promise((resolve, reject) => {
+                axios.get('/')
+                    .then((response) => {
+                        console.log(response);
+                        resolve(response);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        reject(error);
+                    });
+            });
         case ADD_TUTORIAL:
-            return axios.post('/store', {
-                data,
-            })
+            return new Promise((resolve, reject) => {
+                axios.post('/store', data)
+                    .then((response) => {
+                        console.log(response);
+                        resolve(response);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        reject(error);
+                    });
+            });
         case UPDATE_TUTORIAL:
             return new Promise((resolve, reject) => {
                 window.setTimeout(() => {

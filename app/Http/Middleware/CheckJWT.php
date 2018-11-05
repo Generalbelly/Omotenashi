@@ -15,9 +15,9 @@ class CheckJWT
     /**
      * CheckJWT constructor.
      *
-     * @param Auth0UserRepository $userRepository
+     * @param UserRepositoryContract $userRepository
      */
-    public function __construct(Auth0UserRepository $userRepository)
+    public function __construct(UserRepositoryContract $userRepository)
     {
         $this->userRepository = $userRepository;
     }
@@ -40,13 +40,14 @@ class CheckJWT
             if (!$user) {
                 return response()->json(["message" => "Unauthorized user"], 401);
             }
-
             Auth::login($user);
 
         } catch (InvalidTokenException $e) {
             return response()->json(["message" => $e->getMessage()], 401);
         } catch (CoreException $e) {
             return response()->json(["message" => $e->getMessage()], 401);
+        } catch (\Exception $e) {
+            return response()->json(["message" => $e->getMessage()], 500);
         }
 
         return $next($request);

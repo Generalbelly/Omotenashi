@@ -5,6 +5,11 @@ namespace App\Domains\Entities;
 class SiteEntity extends Entity
 {
     protected $table = 'sites';
+    protected $fillable = [
+        'name',
+        'domain',
+        'user_id',
+    ];
 
     public function user()
     {

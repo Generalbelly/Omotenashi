@@ -3,47 +3,12 @@
 namespace App\Repositories\Tutorial;
 
 use App\Domains\Entities\TutorialEntity;
+use App\Repositories\BaseRepository;
 
-class TutorialRepository implements TutorialRepositoryContract
+class TutorialRepository extends BaseRepository implements TutorialRepositoryContract
 {
-
-    public function findById(string $id)
+    public function __construct(TutorialEntity $tutorialEntity)
     {
-        return TutorialEntity::find($id);
+        $this->entity = $tutorialEntity;
     }
-
-    public function getAll()
-    {
-        return TutorialEntity::all();
-    }
-
-    public function add(array $attributes)
-    {
-        $tutorial = new TutorialEntity;
-        $tutorial->name = $attributes['name'];
-        $tutorial->description = $attributes['description'];
-        $tutorial->steps = $attributes['steps'];
-        $tutorial->path = $attributes['path'];
-        $tutorial->site_id = $attributes['site_id'];
-        $tutorial->save($attributes);
-        return $tutorial;
-    }
-
-    public function update(string $id, array $attributes)
-    {
-        $tutorial = $this->find($id);
-        $tutorial->name = $attributes['name'];
-        $tutorial->description = $attributes['description'];
-        $tutorial->steps = $attributes['steps'];
-        $tutorial->save($attributes);
-        return $tutorial;
-    }
-
-    public function delete(string $id)
-    {
-        $tutorial = $this->find($id);
-        $tutorial->delete();
-        return $tutorial;
-    }
-
 }

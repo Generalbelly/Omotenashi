@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils'
-import DeleteConfirmationMessage from '../../../../ext/js/components/organisms/DeleteConfirmationMessage'
-import BaseMessage from '../../../../js/components/atoms/BaseMessage'
-import BaseButton from '../../../../js/components/atoms/BaseButton'
+import DeleteConfirmationMessage from '../../../../ext/js/components/organisms/DeleteConfirmationMessage/DeleteConfirmationMessage'
+import BaseMessage from '../../../../js/components/atoms/BaseMessage/BaseMessage'
+import BaseButton from '../../../../js/components/atoms/BaseButton/BaseButton'
 import Vue from '../../app'
 
 describe('DeleteConfirmationMessage.vue', () => {
