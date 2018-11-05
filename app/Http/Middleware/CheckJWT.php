@@ -15,9 +15,9 @@ class CheckJWT
     /**
      * CheckJWT constructor.
      *
-     * @param UserRepositoryContract $userRepository
+     * @param Auth0UserRepository $userRepository
      */
-    public function __construct(UserRepositoryContract $userRepository)
+    public function __construct(Auth0UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
     }

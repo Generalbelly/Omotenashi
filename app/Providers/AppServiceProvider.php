@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+use Auth0\Login\Contract\Auth0UserRepository;
 use App\Repositories\BaseRepository;
 use App\Repositories\BaseRepositoryContract;
 use App\Repositories\User\UserRepositoryContract;
@@ -53,9 +54,16 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
 
+
+
         $this->app->bind(
             BaseRepositoryContract::class,
             BaseRepository::class
+        );
+
+        $this->app->bind(
+            Auth0UserRepository::class,
+            UserRepository::class
         );
 
         $this->app->bind(
