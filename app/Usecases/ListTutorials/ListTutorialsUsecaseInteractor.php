@@ -3,22 +3,32 @@
 namespace App\Usecases\ListTutorials;
 
 use App\Repositories\Tutorial\TutorialRepositoryContract;
+use App\Repositories\Site\SiteRepositoryContract;
+use Log;
 
 class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
 
     /**
-     * @var TutorialRepository
+     * @var TutorialRepositoryContract
      */
     private $tutorialRepository;
 
     /**
-     * ListTutorialUsecaseInteractor constructor.
+     * @var SiteRepositoryContract
+     */
+    private $siteRepository;
+
+    /**
+     * ListTutorialsUsecaseInteractor constructor.
      * @param TutorialRepositoryContract $tutorialRepository
+     * @param SiteRepositoryContract $siteRepository
      */
     public function __construct(
-        TutorialRepositoryContract $tutorialRepository
+        TutorialRepositoryContract $tutorialRepository,
+        SiteRepositoryContract $siteRepository
     ){
         $this->tutorialRepository = $tutorialRepository;
+        $this->siteRepository = $siteRepository;
     }
 
 
@@ -30,11 +40,41 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
      */
     public function handle(ListTutorialsRequestModel $request)
     {
-        $tutorials = $this->tutorialRepository->paging([
-            'user_id', $request->userKey,
-            'url', $request->url,
+        $site = $this->siteRepository->selectOne([
+            'user_id' => $request->userKey,
+            'domain' => $request->domain,
         ]);
 
-        return new ListTutorialsResponseModel($tutorials);
+        $result = [
+            'total' => null,
+            'start' => null,
+            'end' => null,
+            'entities' => [],
+        ];
+
+        if ($site) {
+            $predicates = [
+                [
+                    'column' => 'site_id',
+                    'operator' => '=',
+                    'value' => $site->id,
+                ],
+                [
+                    'column' => 'path',
+                    'operator' => '=',
+                    'value' => $request->path,
+                ],
+            ];
+
+            $result = $this->tutorialRepository->paging(
+                $predicates,
+                $request->orders,
+                $request->page,
+                $request->search,
+                $request->perPage
+            );
+        }
+
+        return new ListTutorialsResponseModel($result);
     }
 }

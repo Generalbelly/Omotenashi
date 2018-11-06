@@ -1,9 +1,10 @@
 import uuidv4 from 'uuid'
 import axios from 'axios'
 import {
+    REQUEST_GET_TUTORIALS,
     ADD_TUTORIAL,
     UPDATE_TUTORIAL,
-    DELETE_TUTORIAL, REQUEST_GET_TUTORIALS,
+    DELETE_TUTORIAL,
 } from '../store/mutation-types'
 
 axios.defaults.baseURL = 'http://docker.omotenashi.today/api/tutorials';
@@ -19,7 +20,9 @@ export const makeRequest = (params) => {
     switch (mutationType) {
         case REQUEST_GET_TUTORIALS:
             return new Promise((resolve, reject) => {
-                axios.get('/')
+                axios.get('/', {
+                    params: data,
+                })
                     .then((response) => {
                         console.log(response);
                         resolve(response);

@@ -140,7 +140,7 @@
                     if (newValue.length === 0 && oldValue.length > 0) {
                         this.showParameterFields = false
                     }
-                    this.updatedTutorial.url = this.getUrl() + this.formatParameters(this.updatedTutorial.parameters)
+                    this.updateUrl()
                 }
             },
             showParameterFields(value){
@@ -152,6 +152,9 @@
         methods: {
             getUrl() {
                 return window.location.href
+            },
+            updateUrl() {
+                this.updatedTutorial.url = this.getUrl() + this.formatParameters(this.updatedTutorial.parameters)
             },
             formatParameters(params) {
                 return params.reduce((total, current, index) => {

@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Repositories;
+use Log;
 
 class BaseRepository implements BaseRepositoryContract
 {
     protected $entity;
+
+    protected $perPage = 20;
 
     public function all()
     {

@@ -63,7 +63,6 @@
                     steps,
                     url,
                 }
-                console.log(data)
                 if (id) {
                     this.updateTutorial({
                         id,
@@ -98,7 +97,11 @@
             },
         },
         created() {
-            this.getTutorials();
+            this.getTutorials({
+                data: {
+                    url: window.location.href,
+                }
+            });
         }
     }
 </script>

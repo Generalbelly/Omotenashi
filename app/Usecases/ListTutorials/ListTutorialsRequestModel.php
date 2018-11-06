@@ -39,25 +39,23 @@ class ListTutorialsRequestModel {
      */
     public $perPage;
 
-//    /**
-//     * @var string
-//     */
-//    public $path;
-//
-//    /**
-//     * @var string
-//     */
-//    public $query;
+    /**
+     * @var string
+     */
+    public $path;
 
     public function __construct(array $data)
     {
         $this->url = $data['url'];
         $this->userKey = $data['userKey'];
+        $this->orders = $data['orders'];
+        $this->page = $data['page'];
+        $this->search = $data['search'];
+        $this->perPage = $data['perPage'];
 
         $parsedUrl = parse_url($this->url);
         $this->domain = $parsedUrl['host'];
-//        $this->path = $parsedUrl['path'];
-//        $this->query = $parsedUrl['query'];
+        $this->path = $parsedUrl['path'];
     }
 
 }

@@ -24,6 +24,6 @@ interface BaseRepositoryContract {
 
     public function select($predicates);
 
-    public function paging($predicates=[], $orders=[], $page=0, $search=null, $perPage=null);
+    public function paging($predicates=[], $orders=[], $page=0, $search=null, $perPage=20);
 
 }

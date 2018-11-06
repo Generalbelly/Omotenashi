@@ -32,6 +32,9 @@ import {
 } from '../mutation-types'
 
 const state = {
+    total: null,
+    start: null,
+    end: null,
     tutorials: [],
     selectedTutorialId: null,
     selectedStepId: null,
@@ -54,8 +57,11 @@ export const getters = {
 }
 
 export const mutations = {
-    [GET_TUTORIALS](state, data) {
-        state.tutorials = data;
+    [GET_TUTORIALS](state, { total, start, end, entities }) {
+        state.total = total;
+        state.start = start;
+        state.end = end;
+        state.tutorials = entities;
     },
     [ADD_TUTORIAL](state, { data }) {
         state.tutorials = [
@@ -82,6 +88,15 @@ export const mutations = {
             ...state.tutorials.slice(0, tutorialIndex),
             ...state.tutorials.slice(tutorialIndex+1),
         ]
+    },
+    [REQUEST_GET_TUTORIALS](state) {
+        state.isRequesting = true
+    },
+    [REQUEST_GET_TUTORIALS_SUCCESS](state) {
+        state.isRequesting = false
+    },
+    [REQUEST_GET_TUTORIALS_FAILURE](state, { errorCode, errorMsg }) {
+        state.isRequesting = false
     },
     [REQUEST_ADD_TUTORIAL](state) {
         state.isRequesting = true
@@ -132,16 +147,27 @@ export const mutations = {
 }
 
 export const actions = {
-    getTutorials({ commit }) {
+    getTutorials({ commit }, { data }) {
         commit(REQUEST_GET_TUTORIALS)
         makeRequest({
             mutationType: REQUEST_GET_TUTORIALS,
+            data,
         })
             .then(({ data }) => {
                 commit(REQUEST_GET_TUTORIALS_SUCCESS)
-                commit(GET_TUTORIALS, data)
-                commit(SELECT_TUTORIAL)
-                commit(SELECT_STEP, { id: null })
+                const { total, start, end, entities } = data
+                commit(GET_TUTORIALS, { total, start, end, entities })
+
+                if (entities.length > 0) {
+                    const firstTutorial = entities[0]
+                    const firstTutorialSteps = firstTutorial.steps[0]
+                    commit(SELECT_TUTORIAL, {
+                        id: firstTutorial.id,
+                    })
+                    commit(SELECT_STEP, {
+                        id: firstTutorialSteps.length > 0 ? firstTutorialSteps[0].id : null
+                    })
+                }
             })
             .catch((error) => {
                 commit(REQUEST_GET_TUTORIALS_FAILURE, error)

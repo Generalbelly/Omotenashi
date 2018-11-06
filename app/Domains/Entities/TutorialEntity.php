@@ -10,6 +10,8 @@ class TutorialEntity extends Entity
         'description',
         'steps',
         'url',
+        'path',
+        'query',
         'site_id',
     ];
 

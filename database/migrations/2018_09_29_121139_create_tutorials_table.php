@@ -19,6 +19,8 @@ class CreateTutorialsTable extends Migration
             $table->string('description');
             $table->text('steps');
             $table->string('url');
+            $table->string('path');
+            $table->string('query');
             $table->string('site_id');
             $table->timestamps();
             $table->softDeletes();

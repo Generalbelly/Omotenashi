@@ -39,24 +39,23 @@ class TutorialController extends Controller
         $search = $request->get('q');
         $page = $request->get('page');
         $perPage = $request->get('per_page');
-        $orders = [
-            ['column' => 'created_at', 'direction' => 'desc'],
-        ];
+
+        $orders = [];
         $direction = $request->get('desc') === 'desc' ? 'desc' : 'asc';
         $column = $request->get('order_by');
         if ($direction && $column) {
-            $orders[] = ['column' => $column, 'direction' => $direction];
+            $orders = ['column' => $column, 'direction' => $direction];
         }
 
         $listTutorialsRequest = new ListTutorialsRequestModel([
             'url' => $url,
-            'user_id' => $userKey,
+            'userKey' => $userKey,
             'orders' => $orders,
             'page' => $page,
             'search' => $search,
             'perPage' => $perPage,
         ]);
-        $listTutorialsResponse = $this->listTutorialsUsecase($listTutorialsRequest);
+        $listTutorialsResponse = $this->listTutorialsUsecase->handle($listTutorialsRequest);
 
         return response()->json($listTutorialsResponse);
     }

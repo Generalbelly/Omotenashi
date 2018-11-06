@@ -53,6 +53,8 @@ class AddTutorialUsecaseInteractor implements AddTutorialUsecase {
             'description' => $request->description,
             'steps' => $request->steps,
             'url' => $request->url,
+            'path' => $request->path,
+            'query' => $request->query,
             'site_id' => $site->id,
         ]);
         return new AddTutorialResponseModel($tutorial->toArray());
