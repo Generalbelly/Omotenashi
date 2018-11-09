@@ -81,8 +81,6 @@ export const mutations = {
         ]
     },
     [DELETE_TUTORIAL](state, { id }) {
-        state.selectedTutorialId = state.tutorials.length > 0 ? state.tutorials[0].id : null;
-
         const tutorialIndex = state.tutorials.findIndex(t => t.id === id)
         state.tutorials = [
             ...state.tutorials.slice(0, tutorialIndex),
@@ -219,7 +217,7 @@ export const actions = {
             id,
             mutationType: DELETE_TUTORIAL,
         })
-            .then((data) => {
+            .then(({ data }) => {
                 commit(REQUEST_DELETE_TUTORIAL_SUCCESS)
                 commit(DELETE_TUTORIAL, {
                     id: data.id

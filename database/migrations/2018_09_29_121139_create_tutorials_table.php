@@ -20,7 +20,7 @@ class CreateTutorialsTable extends Migration
             $table->text('steps');
             $table->string('url');
             $table->string('path');
-            $table->string('query');
+            $table->string('query')->nullable();
             $table->string('site_id');
             $table->timestamps();
             $table->softDeletes();

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddTutorialRequest extends FormRequest
+class UpdateTutorialRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,11 +26,10 @@ class AddTutorialRequest extends FormRequest
         return [
             'name' => 'required|max:100',
             'description' => 'required|max:100',
-            'url' => 'required|url',
             'steps' => 'array',
-//            'steps.*.element' => 'required_with:steps.*.popover',
-//            'steps.*.popover' => 'required_with_all:steps.*.element',
-//            'steps.*.popover.content' => 'required_with:steps.*.popover',
+            'steps.*.element' => 'required_with:steps.*.popover',
+            'steps.*.popover' => 'required_with_all:steps.*.element',
+            'steps.*.popover.content' => 'required_with:steps.*.popover',
         ];
     }
 }

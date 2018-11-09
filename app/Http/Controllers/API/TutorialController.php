@@ -2,35 +2,43 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Usecases\DeleteTutorial\DeleteTutorialRequestModel;
+use Illuminate\Http\Request;
+
+use App\Http\Controllers\Controller;
 use App\Usecases\ListTutorials\ListTutorialsRequestModel;
 use App\Usecases\ListTutorials\ListTutorialsUsecase;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\AddTutorialRequest;
-use App\Usecases\AddTutorial\AddTutorialUsecase;
 use App\Usecases\AddTutorial\AddTutorialRequestModel;
+use App\Usecases\AddTutorial\AddTutorialUsecase;
+use App\Http\Requests\UpdateTutorialRequest;
+use App\Usecases\UpdateTutorial\UpdateTutorialRequestModel;
+use App\Usecases\UpdateTutorial\UpdateTutorialUsecase;
+use App\Usecases\DeleteTutorial\DeleteTutorialUsecase;
 use Log, Auth;
 
 class TutorialController extends Controller
 {
-    /**
-     * @var AddTutorialUsecase
-     */
-    private $addTutorialUsecase;
     private $listTutorialsUsecase;
+    private $addTutorialUsecase;
+    private $updateTutorialUsecase;
+    private $deleteTutorialUsecase;
 
     public function __construct(
+        ListTutorialsUsecase $listTutorialsUsecase,
         AddTutorialUsecase $addTutorialUsecase,
-        ListTutorialsUsecase $listTutorialsUsecase
+        UpdateTutorialUsecase $updateTutorialUsecase,
+        DeleteTutorialUsecase $deleteTutorialUsecase
     ){
-        $this->addTutorialUsecase = $addTutorialUsecase;
         $this->listTutorialsUsecase = $listTutorialsUsecase;
+        $this->addTutorialUsecase = $addTutorialUsecase;
+        $this->updateTutorialUsecase = $updateTutorialUsecase;
+        $this->deleteTutorialUsecase = $deleteTutorialUsecase;
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -61,10 +69,8 @@ class TutorialController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\AddTutorialRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param AddTutorialRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(AddTutorialRequest $request)
     {
@@ -80,36 +86,34 @@ class TutorialController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param UpdateTutorialRequest $request
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function update(UpdateTutorialRequest $request, string $id)
     {
-        //
+        $updateTutorialRequest = new UpdateTutorialRequestModel(array_merge(
+            $request->all(),
+            [
+                'id' => $id,
+                'userKey' => $request->user()->key
+            ]
+        ));
+        $updateTutorialResponse = $this->updateTutorialUsecase->handle($updateTutorialRequest);
+
+        return response()->json($updateTutorialResponse);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param UpdateTutorialRequest $request
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function destroy(string $id)
     {
-        //
-    }
+        $deleteTutorialRequest = new DeleteTutorialRequestModel(['id' => $id]);
+        $deleteTutorialResponse = $this->deleteTutorialUsecase->handle($deleteTutorialRequest);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json($deleteTutorialResponse);
     }
 }

@@ -47,7 +47,7 @@ class CheckJWT
         } catch (CoreException $e) {
             return response()->json(["message" => $e->getMessage()], 401);
         } catch (\Exception $e) {
-            return response()->json(["message" => $e->getMessage()], 500);
+            return response()->json(["message" => $e->getMessage()], 401);
         }
 
         return $next($request);

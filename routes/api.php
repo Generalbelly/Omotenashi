@@ -9,4 +9,6 @@ Route::prefix('tutorials')->middleware('jwt')->group(function() use ($regexpUUID
     Route::get('/', 'API\TutorialController@index');
 
     Route::post('/store', 'API\TutorialController@store');
+    Route::put('/{id}', 'API\TutorialController@update');
+    Route::delete('/{id}', 'API\TutorialController@destroy');
 });

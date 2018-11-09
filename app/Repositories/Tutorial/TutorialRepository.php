@@ -9,6 +9,6 @@ class TutorialRepository extends BaseRepository implements TutorialRepositoryCon
 {
     public function __construct(TutorialEntity $tutorialEntity)
     {
-        $this->entity = $tutorialEntity;
+        parent::__construct($tutorialEntity);
     }
 }

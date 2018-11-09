@@ -24,17 +24,25 @@ export const makeRequest = (params) => {
                     params: data,
                 })
                     .then((response) => {
-                        console.log(response);
                         resolve(response);
                     })
                     .catch((error) => {
-                        console.log(error);
                         reject(error);
-                    });
+                    })
             });
         case ADD_TUTORIAL:
             return new Promise((resolve, reject) => {
                 axios.post('/store', data)
+                    .then((response) => {
+                        resolve(response);
+                    })
+                    .catch((error) => {
+                        reject(error);
+                    })
+            });
+        case UPDATE_TUTORIAL:
+            return new Promise((resolve, reject) => {
+                axios.put(`/${id}`, data)
                     .then((response) => {
                         console.log(response);
                         resolve(response);
@@ -42,31 +50,19 @@ export const makeRequest = (params) => {
                     .catch((error) => {
                         console.log(error);
                         reject(error);
-                    });
-            });
-        case UPDATE_TUTORIAL:
-            return new Promise((resolve, reject) => {
-                window.setTimeout(() => {
-                    resolve({
-                        id,
-                        ...data,
-                        steps: data.steps.map(s => {
-                            if(!s.id) {
-                                s.id = uuidv4()
-                            }
-                            return s
-                        }),
                     })
-                }, 1500)
             })
         case DELETE_TUTORIAL:
             return new Promise((resolve, reject) => {
-                window.setTimeout(() => {
-                    resolve({
-                        id,
-                        ...data,
+                axios.delete(`/${id}`, data)
+                    .then((response) => {
+                        console.log(response);
+                        resolve(response);
                     })
-                }, 1500)
+                    .catch((error) => {
+                        console.log(error);
+                        reject(error);
+                    })
             })
         default:
             break

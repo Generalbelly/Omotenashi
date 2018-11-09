@@ -28,6 +28,12 @@ use App\Repositories\Tutorial\TutorialRepository;
 use App\Usecases\AddTutorial\AddTutorialUsecase;
 use App\Usecases\AddTutorial\AddTutorialUsecaseInteractor;
 
+use App\Usecases\UpdateTutorial\UpdateTutorialUsecase;
+use App\Usecases\UpdateTutorial\UpdateTutorialUsecaseInteractor;
+
+use App\Usecases\DeleteTutorial\DeleteTutorialUsecase;
+use App\Usecases\DeleteTutorial\DeleteTutorialUsecaseInteractor;
+
 use App\Usecases\ListTutorials\ListTutorialsUsecase;
 use App\Usecases\ListTutorials\ListTutorialsUsecaseInteractor;
 
@@ -82,13 +88,22 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
+            ListTutorialsUsecase::class,
+            ListTutorialsUsecaseInteractor::class
+        );
+
+        $this->app->bind(
             AddTutorialUsecase::class,
             AddTutorialUsecaseInteractor::class
         );
 
         $this->app->bind(
-            ListTutorialsUsecase::class,
-            ListTutorialsUsecaseInteractor::class
+            UpdateTutorialUsecase::class,
+            UpdateTutorialUsecaseInteractor::class
+        );
+        $this->app->bind(
+            DeleteTutorialUsecase::class,
+            DeleteTutorialUsecaseInteractor::class
         );
 
         if ($this->app->environment() !== 'production') {

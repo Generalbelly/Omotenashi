@@ -39,6 +39,11 @@ class AddTutorialRequestModel {
      */
     public $path;
 
+    /**
+     * @var string
+     */
+    public $query;
+
     public function __construct(array $data)
     {
         $this->userKey = $data['userKey'];
@@ -50,6 +55,7 @@ class AddTutorialRequestModel {
         $parsedUrl = parse_url($this->url);
         $this->domain = $parsedUrl['host'];
         $this->path = $parsedUrl['path'];
+        $this->query = isset($parsedUrl['query']) ? $parsedUrl['query'] : null;
     }
 
 }

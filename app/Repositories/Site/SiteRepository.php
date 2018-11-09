@@ -13,6 +13,6 @@ class SiteRepository extends BaseRepository implements SiteRepositoryContract
      */
     public function __construct(SiteEntity $siteEntity)
     {
-        $this->entity = $siteEntity;
+        parent::__construct($siteEntity);
     }
 }

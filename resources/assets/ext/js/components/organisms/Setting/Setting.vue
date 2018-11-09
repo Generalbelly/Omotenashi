@@ -130,7 +130,7 @@
                         this.isCreate = false;
                         this.updatedTutorial = this.createTutorial(value);
                     } else {
-                        this.setInitialTutorial();
+                        this.clear();
                     }
                 },
             },
@@ -180,16 +180,15 @@
             },
             onCancelClick() {
                 this.$emit('cancelClick')
-                this.setInitialTutorial()
+                this.clear()
             },
             onSaveClick() {
                 return new Promise((resolve, reject) => {
                     this.$validator.validateAll()
                         .then(result => {
-                            console.log(result)
                             if (result) {
                                 this.$emit('saveClick', this.updatedTutorial)
-                                this.setInitialTutorial()
+                                this.clear()
                                 resolve()
                             }
                         })
@@ -198,10 +197,11 @@
                         })
                 });
             },
-            setInitialTutorial() {
+            clear() {
                 this.updatedTutorial = this.createTutorial({
                     url: this.getUrl(),
                 });
+                this.$validator.reset();
             },
             addParameter() {
                 this.updatedTutorial.parameters = [
@@ -219,7 +219,7 @@
                     ...this.updatedTutorial.parameters.slice(0, index),
                     ...this.updatedTutorial.parameters.slice(index+1),
                 ];
-            }
+            },
         }
     }
 

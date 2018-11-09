@@ -23,8 +23,8 @@
         ></Menu>
 
         <DeleteConfirmationMessage
-            v-show="isDeletingTutorial"
-            :tutorial="selectedTutorial ? selectedTutorial : null"
+            v-if="isDeletingTutorial"
+            :tutorial="selectedTutorial"
             @closeClick="updateUserAction('beingHome')"
             @deleteClick="onDeleteConfirmTutorialClick"
         >
@@ -70,8 +70,6 @@
         editingTutorial: 'editingTutorial',
         deletingTutorial: 'deletingTutorial',
         addingStep: 'addingStep',
-        editingStep: 'editingStep',
-        previewing: 'previewing',
     }
 
     export default {
@@ -182,6 +180,8 @@
         },
         watch: {
             tutorials(newValue, oldValue) {
+                console.log(newValue);
+                console.log(oldValue);
                 if ((oldValue.length - newValue.length) === 1) {
                     this.updateUserAction('beingHome')
                 }
@@ -203,20 +203,17 @@
             isDeletingTutorial() {
                 return (this.userAction === userActions.deletingTutorial)
             },
-            isEditingStep() {
-                return (this.userAction === userActions.editingStep)
-            },
-            isPreviewing() {
-                return (this.userAction === userActions.previewing)
-            },
         },
     }
 </script>
 <style scoped>
     .menu {
-        min-width: 30vw;
-        max-width: 30vw;
-        width: 30vw;
         z-index: 10000000;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .menu {
+            width: 100%;
+        }
     }
 </style>

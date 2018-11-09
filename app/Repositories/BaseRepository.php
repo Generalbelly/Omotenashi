@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repositories;
+use App\Domains\Entities\Entity;
 use Log;
 
 class BaseRepository implements BaseRepositoryContract
@@ -8,6 +9,12 @@ class BaseRepository implements BaseRepositoryContract
     protected $entity;
 
     protected $perPage = 20;
+
+    // Constructor to bind model to repo
+    public function __construct(Entity $entity)
+    {
+        $this->entity = $entity;
+    }
 
     public function all()
     {
@@ -22,12 +29,15 @@ class BaseRepository implements BaseRepositoryContract
     public function update($id, array $data)
     {
         $record = $this->find($id);
-        return $record->update($data);
+        $record->update($data);
+        return $record;
     }
 
     public function delete($id)
     {
-        return $this->entity->destroy($id);
+        $record = $this->find($id);
+        $record->delete();
+        return $record;
     }
 
     public function getEntity()
@@ -48,7 +58,7 @@ class BaseRepository implements BaseRepositoryContract
 
     public function find($id)
     {
-        return $this->entity-findOrFail($id);
+        return $this->entity->findOrFail($id);
     }
 
     public function selectOne($predicates)

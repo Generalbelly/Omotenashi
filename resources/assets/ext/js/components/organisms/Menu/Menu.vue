@@ -15,7 +15,8 @@
         <div class="panel-block level has-margin-bottom-0">
             <template v-if="tutorials.length > 0">
                 <BaseSelectField
-                    :value="selectedTutorial.id"
+                    class="has-margin-right-3"
+                    :value="selectedTutorial ? selectedTutorial.id : null"
                     @change="e => $emit('tutorialChange', e)"
                     :items="tutorials"
                     item-value="id"
@@ -156,7 +157,7 @@
         padding: 18px 20px !important;
     }
     .menu {
-        position: relative !important;
+        width: 400px;
     }
     .menu-close-button {
         position: absolute;
