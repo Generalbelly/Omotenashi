@@ -5,8 +5,9 @@
             class="menu"
             :class="{
                 'is-fixed-bottom-right': menuIsOnTheRight,
-                'is-fixed-bottom-left': !menuIsOnTheRight
+                'is-fixed-bottom-left': !menuIsOnTheRight,
             }"
+            :is-loading="isRequesting === 'REQUEST_GET_TUTORIALS'"
             :tutorials="tutorials"
             :selected-tutorial="selectedTutorial"
             :selected-step="selectedStep"
@@ -25,7 +26,7 @@
         <DeleteConfirmationMessage
             v-if="isDeletingTutorial"
             :tutorial="selectedTutorial"
-            @closeClick="updateUserAction('beingHome')"
+            @closeClick="updateState('beingHome')"
             @deleteClick="onDeleteConfirmTutorialClick"
         >
         </DeleteConfirmationMessage>
@@ -37,9 +38,9 @@
             :has-click-to-add-step-message="!dontShowMeChecked('clickToAddStep')"
             :is-highlight-selection-active="isAddingStep"
             @saveClick="e => $emit('stepSaveClick', e)"
-            @cancelClick="updateUserAction('beingHome')"
-            @previewDone="updateUserAction('beingHome')"
-            @editDone="updateUserAction('beingHome')"
+            @cancelClick="updateState('beingHome')"
+            @previewDone="updateState('beingHome')"
+            @editDone="updateState('beingHome')"
             @dontShowMeChange="removeMessage"
         >
         </DriverEditor>
@@ -48,11 +49,24 @@
             v-show="isEditingTutorial || isAddingTutorial"
             :tutorial="isEditingTutorial ? selectedTutorial : null"
             @saveClick="onTutorialSaveClick"
-            @cancelClick="updateUserAction('beingHome')"
+            @cancelClick="updateState('beingHome')"
         >
         </Setting>
 
-        <LoadingModal v-show="isRequesting"></LoadingModal>
+        <Message
+            v-show="showUrlChangeAlert"
+            is-warning
+            @closeClick="showUrlChangeAlert = false"
+        >
+            <template slot="header">Alert</template>
+            <template slot="body">
+                URL might've changed.
+            </template>
+        </Message>
+
+        <LoadingModal
+            v-show="isRequesting && isRequesting !== 'REQUEST_GET_TUTORIALS'"
+        ></LoadingModal>
     </div>
 </template>
 <script>
@@ -62,14 +76,16 @@
     import Setting from '../../organisms/Setting'
     import DeleteConfirmationMessage from "../../organisms/DeleteConfirmationMessage"
     import DriverEditor from "../../organisms/DriverEditor"
-    import BaseButton from "../../../../../js/components/atoms/BaseButton"
+    import Message from "../../../../../js/components/molecules/Message";
 
-    export const userActions = {
+    export const states = {
         beingHome: 'beingHome',
         addingTutorial: 'addingTutorial',
         editingTutorial: 'editingTutorial',
         deletingTutorial: 'deletingTutorial',
         addingStep: 'addingStep',
+        editingStep: 'editingStep',
+        previewing: 'previewing',
     }
 
     export default {
@@ -89,7 +105,7 @@
                 default: null,
             },
             isRequesting: {
-                type: Boolean,
+                type: [Boolean, String],
                 default: false,
             },
             extLog: {
@@ -97,21 +113,45 @@
                 default() {
                     return {};
                 },
+            },
+            domain: {
+                type: String,
+                default: null,
             }
         },
         components: {
+            Message,
             LoadingModal,
             DriverEditor,
-            BaseButton,
             DeleteConfirmationMessage,
             Menu,
             Setting,
         },
         data() {
             return {
-                userAction: userActions.beingHome,
+                state: states.beingHome,
                 messageShown: null,
                 menuIsOnTheRight: true,
+                showUrlChangeAlert: false,
+            }
+        },
+        mounted() {
+            const self = this;
+            const proxiedOpen = XMLHttpRequest.prototype.open
+            window.XMLHttpRequest.prototype.open = function (method, url) {
+                this._url = url;
+                return proxiedOpen.apply(this, arguments);
+            };
+
+            const proxiedSend = window.XMLHttpRequest.prototype.send
+            window.XMLHttpRequest.prototype.send = function() {
+                // https://stackoverflow.com/questions/10783463/javascript-detect-ajax-requests
+                if (this._url.includes(self.domain) && self.selectedTutorial) {
+                    if (this._url !== self.selectedTutorial.url) {
+                        self.showUrlChangeAlert = true
+                    }
+                }
+                return proxiedSend.apply(this, [].slice.call(arguments))
             }
         },
         methods: {
@@ -119,9 +159,19 @@
                 'retrieveLog',
                 'saveLog'
             ]),
-            updateUserAction(userAction = null) {
-                if (Object.values(userActions).includes(userAction)) {
-                    this.userAction = userAction
+            showTutorialUrlChangeAlert() {
+                return new Promise(resolve => {
+                    this.$refs.tutorialUrlChangeAlert.subscribe('confirm', () => {
+                        resolve(true);
+                    })
+                    this.$refs.tutorialUrlChangeAlert.subscribe('cancel', () => {
+                        resolve(false);
+                    })
+                })
+            },
+            updateState(state = null) {
+                if (Object.values(states).includes(state)) {
+                    this.state = state
                 }
             },
             dontShowMeChecked(messageKey) {
@@ -146,62 +196,60 @@
                 }
             },
             onAddStepClick() {
-                this.updateUserAction(userActions.addingStep)
+                this.updateState(states.addingStep)
             },
             onAddTutorialClick() {
-                this.updateUserAction(userActions.addingTutorial)
+                this.updateState(states.addingTutorial)
             },
             onDeleteTutorialClick() {
-                this.updateUserAction(userActions.deletingTutorial)
+                this.updateState(states.deletingTutorial)
             },
             onDeleteConfirmTutorialClick(id) {
                 this.$emit('deleteTutorialConfirmClick', { id })
-                this.updateUserAction(userActions.deletingTutorial)
+                this.updateState(states.deletingTutorial)
             },
             onTutorialSaveClick(tutorial) {
                 this.$emit('tutorialSaveClick', tutorial)
-                this.updateUserAction(userActions.beingHome)
+                this.updateState(states.beingHome)
             },
             onEditTutorialClick() {
-                this.updateUserAction(userActions.editingTutorial)
+                this.updateState(states.editingTutorial)
             },
             onStepClick(id) {
                 this.$refs.editor.highlight({ id })
-                this.updateUserAction(userActions.editingStep)
+                this.updateState(states.editingStep)
                 this.$emit('stepClick', { id })
             },
             onDeleteStepClick(id) {
                 this.$emit('deleteStepClick', { id })
             },
             onPreviewClick() {
-                this.updateUserAction(userActions.previewing)
+                this.updateState(states.previewing)
                 this.$refs.editor.preview()
             },
         },
         watch: {
             tutorials(newValue, oldValue) {
-                console.log(newValue);
-                console.log(oldValue);
                 if ((oldValue.length - newValue.length) === 1) {
-                    this.updateUserAction('beingHome')
+                    this.updateState('beingHome')
                 }
             },
         },
         computed: {
             isHome() {
-                return (this.userAction === userActions.beingHome)
+                return (this.state === states.beingHome)
             },
             isAddingStep() {
-                return (this.userAction === userActions.addingStep)
+                return (this.state === states.addingStep)
             },
             isAddingTutorial() {
-                return (this.userAction === userActions.addingTutorial)
+                return (this.state === states.addingTutorial)
             },
             isEditingTutorial() {
-                return (this.userAction === userActions.editingTutorial)
+                return (this.state === states.editingTutorial)
             },
             isDeletingTutorial() {
-                return (this.userAction === userActions.deletingTutorial)
+                return (this.state === states.deletingTutorial)
             },
         },
     }

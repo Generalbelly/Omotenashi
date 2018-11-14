@@ -151,7 +151,7 @@
         },
         methods: {
             getUrl() {
-                return window.location.href
+                return this.tutorial ? this.tutorial.url : window.location.href
             },
             updateUrl() {
                 this.updatedTutorial.url = this.getUrl() + this.formatParameters(this.updatedTutorial.parameters)

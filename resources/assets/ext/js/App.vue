@@ -1,6 +1,7 @@
 <template>
     <div id="omotenashi">
         <Navbar
+            class="navbar"
             v-show="!tutorialFeature.isActivated"
             @actionClick="tutorialFeature.isActivated = true"
         ></Navbar>
@@ -39,10 +40,13 @@
             }
         },
         computed: {
-            ...mapState(['extLog']),
+            ...mapState([
+                'extLog'
+            ]),
         },
         created() {
             this.retrieveLog()
+            console.log(this.extLog);
         },
         methods: {
             ...mapActions([
@@ -57,3 +61,14 @@
         },
     }
 </script>
+
+<style>
+    #omotenashi > .navbar {
+        top: unset;
+        z-index: 10000000 !important;
+    }
+    #omotenashi > .navbar:after,
+    #omotenashi > .navbar:before {
+        content: none;
+    }
+</style>

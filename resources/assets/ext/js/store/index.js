@@ -26,7 +26,6 @@ export const mutations = {
                 state.extLog = savedLog
             }
         } catch(e) {
-            console.log(e)
         }
     },
     [SAVE_LOG](state, data) {
@@ -37,7 +36,6 @@ export const mutations = {
             }
             localStorage.setItem(EXT_LOG_KEY, JSON.stringify(state.extLog))
         } catch (e) {
-            console.log(e)
         }
     },
 }

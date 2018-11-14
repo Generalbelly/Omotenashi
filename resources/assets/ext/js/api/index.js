@@ -44,11 +44,9 @@ export const makeRequest = (params) => {
             return new Promise((resolve, reject) => {
                 axios.put(`/${id}`, data)
                     .then((response) => {
-                        console.log(response);
                         resolve(response);
                     })
                     .catch((error) => {
-                        console.log(error);
                         reject(error);
                     })
             })
@@ -56,11 +54,9 @@ export const makeRequest = (params) => {
             return new Promise((resolve, reject) => {
                 axios.delete(`/${id}`, data)
                     .then((response) => {
-                        console.log(response);
                         resolve(response);
                     })
                     .catch((error) => {
-                        console.log(error);
                         reject(error);
                     })
             })

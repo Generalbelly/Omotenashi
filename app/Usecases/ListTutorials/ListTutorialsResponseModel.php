@@ -15,6 +15,7 @@ class ListTutorialsResponseModel {
         $this->start = $attributes['start'];
         $this->end = $attributes['end'];
         $this->entities = $attributes['entities'];
+        $this->domain = $attributes['domain'];
     }
 
 }

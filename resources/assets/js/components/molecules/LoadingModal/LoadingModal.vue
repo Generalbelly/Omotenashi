@@ -1,15 +1,19 @@
 <template>
-    <BaseModal class="modal">
-        <div class="loading-modal is-loading"></div>
+    <BaseModal class="loading-modal">
+        <BaseProgressCircular
+            is-medium
+        ></BaseProgressCircular>
     </BaseModal>
 </template>
 
 <script>
     import BaseModal from "../../atoms/BaseModal";
+    import BaseProgressCircular from "../../atoms/BaseProgressCircular";
     export default {
         name: 'LoadingModal',
         components: {
-            BaseModal
+            BaseModal,
+            BaseProgressCircular,
         },
     };
 </script>
@@ -24,8 +28,6 @@
         left: 0;
         right: 0;
         bottom: 0;
-    }
-    .modal {
         z-index: 10000000000 !important;
     }
 </style>

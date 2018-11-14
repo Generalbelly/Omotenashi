@@ -17,6 +17,7 @@ class CreateSitesTable extends Migration
             $table->string('id')->unique();
             $table->string('name');
             $table->string('domain');
+            $table->string('type');
             $table->timestamps();
             $table->softDeletes();
             $table->string('user_id');

@@ -73,8 +73,9 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
                 $request->search,
                 $request->perPage
             );
+
         }
 
-        return new ListTutorialsResponseModel($result);
+        return new ListTutorialsResponseModel(array_merge($result, $site->toArray()));
     }
 }

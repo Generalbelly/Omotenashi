@@ -43,7 +43,7 @@
         components: {
             BaseModal,
             BaseModalContent,
-        }
+        },
     };
 </script>
 <style scoped>

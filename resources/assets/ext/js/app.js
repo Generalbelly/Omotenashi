@@ -17,7 +17,7 @@ import {
 } from '@fortawesome'
 
 import store from './store'
-import mixins from './mixins'
+import mixins from '../../js/components/mixins'
 import App from './App.vue'
 
 Vue.use(VeeValidate);
@@ -38,7 +38,7 @@ library.add(
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 
-Vue.mixin(mixins)
+// Vue.mixin(mixins)
 
 // import LogRocket from 'logrocket';
 // LogRocket.init('agnj7d/omotenashi');

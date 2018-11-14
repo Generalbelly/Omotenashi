@@ -11,8 +11,15 @@
 </template>
 
 <script>
+    import colorable from '../../mixins/colorable';
+    import sizable from '../../mixins/sizable';
+
     export default {
         name: 'BaseButton',
+        mixins: [
+            colorable,
+            sizable,
+        ],
         props: {
             id: {
                 type: String,
@@ -39,6 +46,7 @@
             buttonClasses() {
                 return {
                     ...this.colorClasses,
+                    ...this.sizeClasses,
                     'is-outlined': this.isOutlined,
                     'is-fullwidth': this.isFullwidth,
                 }

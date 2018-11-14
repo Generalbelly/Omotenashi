@@ -8,6 +8,7 @@ class SiteEntity extends Entity
     protected $fillable = [
         'name',
         'domain',
+        'type',
         'user_id',
     ];
 

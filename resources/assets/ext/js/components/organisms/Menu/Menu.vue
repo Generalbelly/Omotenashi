@@ -12,8 +12,16 @@
                 <span>Add</span>
             </BaseButton>
         </p>
-        <div class="panel-block level has-margin-bottom-0">
-            <template v-if="tutorials.length > 0">
+        <div
+            class="panel-block level has-margin-bottom-0"
+        >
+            <template v-if="isLoading">
+                <div class="menu__loading-screen">
+                    <BaseProgressCircular is-small>
+                    </BaseProgressCircular>
+                </div>
+            </template>
+            <template v-else-if="tutorials.length > 0">
                 <BaseSelectField
                     class="has-margin-right-3"
                     :value="selectedTutorial ? selectedTutorial.id : null"
@@ -94,8 +102,8 @@
             </BaseIcon>
         </div>
         <BaseIcon
-            class="menu-close-button has-cursor-pointer"
-            :class="{ 'menu-close-button--is-on-left': !isOnRight }"
+            class="menu__close-button has-cursor-pointer"
+            :class="{ 'menu__close-button--is-on-left': !isOnRight }"
             icon="times"
             @click="$emit('closeClick')"
             has-background-gray
@@ -107,15 +115,20 @@
     import BaseButton from '../../../../../js/components/atoms/BaseButton'
     import BaseSelectField from '../../../../../js/components/atoms/BaseSelectField'
     import BaseIcon from '../../../../../js/components/atoms/BaseIcon'
+    import BaseProgressCircular from '../../../../../js/components/atoms/BaseProgressCircular'
 
     export default {
         components: {
             BaseIcon,
             BaseButton,
-            BaseIcon,
-            BaseSelectField
+            BaseSelectField,
+            BaseProgressCircular
         },
         props: {
+            isLoading: {
+                type: Boolean,
+                default: false,
+            },
             tutorials: {
                 type: Array,
                 default() {
@@ -156,10 +169,25 @@
     .panel-block {
         padding: 18px 20px !important;
     }
+    /*.panel-block:first-child {*/
+        /*min-height: 300px;*/
+    /*}*/
+    /*.panel-block:first-child > is-loading {*/
+        /*display: flex;*/
+        /*align-self: center;*/
+        /*justify-self: center;*/
+    /*}*/
     .menu {
         width: 400px;
     }
-    .menu-close-button {
+    .menu__loading-screen {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+    }
+    .menu__close-button {
         position: absolute;
         left: -16px;
         top: -16px;
@@ -169,7 +197,7 @@
         color: white;
         border-radius: 16px;
     }
-    .menu-close-button--is-on-left {
+    .menu__close-button--is-on-left {
         left: unset;
         right: -16px;
     }

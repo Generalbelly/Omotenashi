@@ -30,13 +30,3 @@
         }
     }
 </script>
-<style scoped>
-    .navbar {
-        top: unset;
-        z-index: 10000000;
-    }
-    .navbar:after,
-    .navbar:before {
-        content: none;
-    }
-</style>

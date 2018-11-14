@@ -13,7 +13,7 @@ import {
     faExchangeAlt,
 } from '@fortawesome'
 // import store from './store'
-import mixins from '../../ext/js/mixins'
+import mixins from '../../js/components/mixins'
 
 library.add(
     faHome,

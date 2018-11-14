@@ -32,6 +32,7 @@ import {
 } from '../mutation-types'
 
 const state = {
+    domain: null,
     total: null,
     start: null,
     end: null,
@@ -57,7 +58,8 @@ export const getters = {
 }
 
 export const mutations = {
-    [GET_TUTORIALS](state, { total, start, end, entities }) {
+    [GET_TUTORIALS](state, { domain, total, start, end, entities }) {
+        state.domain = domain;
         state.total = total;
         state.start = start;
         state.end = end;
@@ -88,7 +90,7 @@ export const mutations = {
         ]
     },
     [REQUEST_GET_TUTORIALS](state) {
-        state.isRequesting = true
+        state.isRequesting = REQUEST_GET_TUTORIALS;
     },
     [REQUEST_GET_TUTORIALS_SUCCESS](state) {
         state.isRequesting = false
@@ -97,7 +99,7 @@ export const mutations = {
         state.isRequesting = false
     },
     [REQUEST_ADD_TUTORIAL](state) {
-        state.isRequesting = true
+        state.isRequesting = REQUEST_ADD_TUTORIAL
     },
     [REQUEST_ADD_TUTORIAL_SUCCESS](state) {
         state.isRequesting = false
@@ -106,7 +108,7 @@ export const mutations = {
         state.isRequesting = false
     },
     [REQUEST_UPDATE_TUTORIAL](state) {
-        state.isRequesting = true
+        state.isRequesting = REQUEST_UPDATE_TUTORIAL
     },
     [REQUEST_UPDATE_TUTORIAL_SUCCESS](state) {
         state.isRequesting = false
@@ -115,7 +117,7 @@ export const mutations = {
         state.isRequesting = false
     },
     [REQUEST_DELETE_TUTORIAL](state) {
-        state.isRequesting = true
+        state.isRequesting = REQUEST_DELETE_TUTORIAL
     },
     [REQUEST_DELETE_TUTORIAL_SUCCESS](state) {
         state.isRequesting = false

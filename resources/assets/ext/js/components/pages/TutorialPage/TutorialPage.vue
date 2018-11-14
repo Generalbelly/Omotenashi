@@ -24,17 +24,17 @@
         components: {
             TutorialTemplate
         },
-        data() {
-            return {}
-        },
         computed: {
             ...mapState('tutorial', [
                 'tutorials',
                 'selectedTutorialId',
                 'selectedStepId',
                 'isRequesting',
+                'domain',
             ]),
-            ...mapState(['extLog']),
+            ...mapState([
+                'extLog'
+            ]),
             ...mapGetters('tutorial', [
                 'selectedTutorial',
                 'selectedStep',
