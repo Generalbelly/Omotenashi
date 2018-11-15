@@ -51,7 +51,7 @@
                 You haven't added any tutorials yet.
             </template>
         </div>
-        <template v-if="selectedTutorial">
+        <template v-if="selectedTutorial && !isLoading">
             <a
                 class="panel-block has-padding-top-4 has-padding-bottom-4"
                 :key="step.id"

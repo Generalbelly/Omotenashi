@@ -32,7 +32,6 @@ import {
 } from '../mutation-types'
 
 const state = {
-    domain: null,
     total: null,
     start: null,
     end: null,
@@ -58,8 +57,7 @@ export const getters = {
 }
 
 export const mutations = {
-    [GET_TUTORIALS](state, { domain, total, start, end, entities }) {
-        state.domain = domain;
+    [GET_TUTORIALS](state, { total, start, end, entities }) {
         state.total = total;
         state.start = start;
         state.end = end;
@@ -155,8 +153,18 @@ export const actions = {
         })
             .then(({ data }) => {
                 commit(REQUEST_GET_TUTORIALS_SUCCESS)
-                const { total, start, end, entities } = data
-                commit(GET_TUTORIALS, { total, start, end, entities })
+                const {
+                    total,
+                    start,
+                    end,
+                    entities,
+                } = data
+                commit(GET_TUTORIALS, {
+                    total,
+                    start,
+                    end,
+                    entities,
+                })
 
                 if (entities.length > 0) {
                     const firstTutorial = entities[0]

@@ -46,7 +46,6 @@
         },
         created() {
             this.retrieveLog()
-            console.log(this.extLog);
         },
         methods: {
             ...mapActions([

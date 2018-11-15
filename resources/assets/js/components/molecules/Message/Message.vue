@@ -35,7 +35,7 @@
     import BaseCheckBox from "../../atoms/BaseCheckBox"
 
     export default {
-        name: "HelpMessage",
+        name: "Message",
         mixins: [ colorable ],
         components: {
             BaseCheckBox,

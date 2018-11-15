@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Usecases\ListTutorials;
+use Log;
 
 class ListTutorialsRequestModel {
 
@@ -54,8 +55,10 @@ class ListTutorialsRequestModel {
         $this->perPage = $data['perPage'];
 
         $parsedUrl = parse_url($this->url);
-        $this->domain = $parsedUrl['host'];
-        $this->path = $parsedUrl['path'];
+        if ($parsedUrl) {
+            $this->domain = isset($parsedUrl['host']) ? $parsedUrl['host'] : null;
+            $this->path = isset($parsedUrl['path']) ? $parsedUrl['path'] : null;
+        }
     }
 
 }

@@ -40,6 +40,7 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
      */
     public function handle(ListTutorialsRequestModel $request)
     {
+        Log::error($request->domain);
         $site = $this->siteRepository->selectOne([
             'user_id' => $request->userKey,
             'domain' => $request->domain,
@@ -50,6 +51,7 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
             'start' => null,
             'end' => null,
             'entities' => [],
+            'domain' => null,
         ];
 
         if ($site) {
@@ -74,8 +76,9 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
                 $request->perPage
             );
 
+            $result['domain'] = $site->domain;
         }
 
-        return new ListTutorialsResponseModel(array_merge($result, $site->toArray()));
+        return new ListTutorialsResponseModel($result);
     }
 }

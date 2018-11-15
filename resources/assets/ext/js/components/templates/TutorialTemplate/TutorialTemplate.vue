@@ -54,13 +54,14 @@
         </Setting>
 
         <Message
-            v-show="showUrlChangeAlert"
+            v-show="showUrlChangeAlert && isRequesting === 'REQUEST_GET_TUTORIALS'"
             is-warning
             @closeClick="showUrlChangeAlert = false"
         >
             <template slot="header">Alert</template>
             <template slot="body">
-                URL might've changed.
+                Fetching tutorials for this page as you move to a different page.<br>
+                Tutorials must be created per a url.
             </template>
         </Message>
 
@@ -117,6 +118,10 @@
             domain: {
                 type: String,
                 default: null,
+            },
+            urlDidChange: {
+                type: Boolean,
+                default: false,
             }
         },
         components: {
@@ -132,26 +137,7 @@
                 state: states.beingHome,
                 messageShown: null,
                 menuIsOnTheRight: true,
-                showUrlChangeAlert: false,
-            }
-        },
-        mounted() {
-            const self = this;
-            const proxiedOpen = XMLHttpRequest.prototype.open
-            window.XMLHttpRequest.prototype.open = function (method, url) {
-                this._url = url;
-                return proxiedOpen.apply(this, arguments);
-            };
-
-            const proxiedSend = window.XMLHttpRequest.prototype.send
-            window.XMLHttpRequest.prototype.send = function() {
-                // https://stackoverflow.com/questions/10783463/javascript-detect-ajax-requests
-                if (this._url.includes(self.domain) && self.selectedTutorial) {
-                    if (this._url !== self.selectedTutorial.url) {
-                        self.showUrlChangeAlert = true
-                    }
-                }
-                return proxiedSend.apply(this, [].slice.call(arguments))
+                showUrlChangeAlert: false
             }
         },
         methods: {
@@ -234,6 +220,9 @@
                     this.updateState('beingHome')
                 }
             },
+            urlDidChange(value) {
+                this.showUrlChangeAlert = value;
+            }
         },
         computed: {
             isHome() {

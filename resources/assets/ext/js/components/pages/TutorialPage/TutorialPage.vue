@@ -3,8 +3,9 @@
         :tutorials="tutorials"
         :selected-tutorial="selectedTutorial"
         :selected-step="selectedStep"
-        :isRequesting="isRequesting"
-        :extLog="extLog"
+        :is-requesting="isRequesting"
+        :ext-log="extLog"
+        :url-did-change="urlDidChange"
         @tutorialSaveClick="onTutorialSaveClick"
         @tutorialChange="onTutorialChange"
         @closeClick="$emit('closeClick')"
@@ -24,13 +25,18 @@
         components: {
             TutorialTemplate
         },
+        data() {
+            return {
+                urlDidChange: false,
+                path: null,
+            };
+        },
         computed: {
             ...mapState('tutorial', [
                 'tutorials',
                 'selectedTutorialId',
                 'selectedStepId',
                 'isRequesting',
-                'domain',
             ]),
             ...mapState([
                 'extLog'
@@ -39,6 +45,22 @@
                 'selectedTutorial',
                 'selectedStep',
             ]),
+        },
+        watch: {
+            selectedTutorial: {
+                deep: true,
+                handler(value) {
+                    if (value) {
+                        const url = new URL(value.url);
+                        this.path = url.pathname;
+                    }
+                    this.urlDidChange = false;
+                }
+            },
+        },
+        created() {
+            this.startWatchingUrlForSPA()
+            this.fetchTutorials(window.location.href)
         },
         methods: {
             ...mapActions('tutorial', [
@@ -56,6 +78,13 @@
                 'retrieveLog',
                 'saveLog'
             ]),
+            fetchTutorials(url) {
+                this.getTutorials({
+                    data: {
+                        url,
+                    }
+                });
+            },
             onTutorialSaveClick({ id=null, name='', description='', steps=[], url='' }) {
                 const data = {
                     name,
@@ -95,13 +124,21 @@
                     })
                 }
             },
-        },
-        created() {
-            this.getTutorials({
-                data: {
-                    url: window.location.href,
+            startWatchingUrlForSPA() {
+                const self = this;
+                const proxiedPushState = window.history.pushState
+                window.history.pushState = function(stateObj, title, URL) {
+                    const newPath = arguments[2]
+                    console.log('new',newPath);
+                    console.log('old', self.path);
+                    if (newPath !== self.path) {
+                        self.path = newPath
+                        self.urlDidChange = true
+                        self.fetchTutorials(window.location.origin + newPath);
+                    }
+                    return proxiedPushState.apply(this, arguments)
                 }
-            });
-        }
+            }
+        },
     }
 </script>
