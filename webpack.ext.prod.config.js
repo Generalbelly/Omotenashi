@@ -1,13 +1,11 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const WebpackMd5Hash = require('webpack-md5-hash');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
     mode: 'production',
     entry: { app: './resources/assets/ext/js/app.js' },
     output: {
-        // filename: '[name].[chunkhash].js',
         path: path.resolve(__dirname, "public/ext")
     },
     module: {
@@ -45,31 +43,27 @@ module.exports = {
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: ['babel-preset-stage-2']
+                            presets: ['@babel/preset-env'],
+                            plugins: [
+                                '@babel/plugin-proposal-class-properties',
+                                '@babel/plugin-proposal-object-rest-spread',
+                                ["transform-imports", {
+                                    "@fortawesome": {
+                                        "transform": "@fortawesome/free-solid-svg-icons/${member}",
+                                        "preventFullImport": true,
+                                        "skipDefaultConversion": true,
+                                    }
+                                }],
+                            ]
                         }
                     }
                 ],
             }
         ]
     },
-    // optimization: {
-    //     runtimeChunk: 'single',
-    //     splitChunks: {
-    //         cacheGroups: {
-    //             vendor: {
-    //             test: /[\\/]node_modules[\\/]/,
-    //                 name: 'vendors',
-    //                 chunks: 'all'
-    //             }
-    //         }
-    //     }
-    // },
     plugins: [
         new CleanWebpackPlugin('public/ext', {}),
-        new MiniCssExtractPlugin({
-            // filename: 'app.[contenthash].css'
-        }),
-        new WebpackMd5Hash()
+        new MiniCssExtractPlugin(),
     ],
     resolve: {
         extensions: ['.js', '.vue'],
@@ -77,5 +71,4 @@ module.exports = {
             vue: 'vue/dist/vue.esm.js'
         }
     },
-    devtool: 'inline-cheap-module-source-map'
 };

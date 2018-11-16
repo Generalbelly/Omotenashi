@@ -1,13 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "dev": "yarn run development",
-    "development": "webpack --mode=development --progress --hide-modules --config=./webpack.dev.config.js",
-    "watch-ext": "webpack --mode=development --watch --progress --colors --config=./webpack.ext.dev.config.js",
+    "build-ext": "webpack --config=./webpack.ext.prod.config.js --hide-modules",
+    "watch-ext": "webpack --mode=development --watch --progress --config=./webpack.ext.dev.config.js",
     "test-ext": "mocha-webpack --webpack-config ./webpack.ext.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/test/ext/**/*.spec.js ./resources/assets/test/ext/components/**/*.spec.js",
     "watch-poll": "npm run watch -- --watch-poll",
     "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "prod": "npm run production",
+    "prod": "yarn run production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "test-ci": "mocha-webpack --webpack-config ./webpack.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/test/ext/**/*.spec.js",
     "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test-ci",
@@ -61,6 +60,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.2",
     "@fortawesome/free-solid-svg-icons": "^5.2.0",
     "@fortawesome/vue-fontawesome": "^0.1.1",
