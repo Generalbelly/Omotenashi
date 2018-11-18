@@ -169,14 +169,6 @@
     .panel-block {
         padding: 18px 20px !important;
     }
-    /*.panel-block:first-child {*/
-        /*min-height: 300px;*/
-    /*}*/
-    /*.panel-block:first-child > is-loading {*/
-        /*display: flex;*/
-        /*align-self: center;*/
-        /*justify-self: center;*/
-    /*}*/
     .menu {
         width: 400px;
     }

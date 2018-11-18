@@ -1,6 +1,5 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const WebpackMd5Hash = require('webpack-md5-hash');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
@@ -22,6 +21,14 @@ module.exports = {
                             }
                         }
                     },
+                ]
+            },
+            {
+                test: /\.css$/,
+                use:  [
+                    'style-loader',
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
                 ]
             },
             {
@@ -66,9 +73,8 @@ module.exports = {
         new CleanWebpackPlugin('public/js', {}),
         new CleanWebpackPlugin('public/css', {}),
         new MiniCssExtractPlugin({
-            filename: '../css/app.[contenthash].css'
+            filename: '../css/[name].css',
         }),
-        new WebpackMd5Hash()
     ],
     resolve: {
         extensions: ['.js', '.vue'],

@@ -10,15 +10,9 @@ Route::get( '/auth0/callback', 'Auth\Auth0Controller@callback' )->name( 'auth0-c
 Route::get('/login', 'Auth\Auth0Controller@login' )->name( 'login' );
 Route::get('/logout', 'Auth\Auth0Controller@logout' )->name( 'logout' )->middleware('auth');
 
-//Route::prefix('users')->middleware('auth')->group(function() use ($regexpUUID) {
-//
-//    Route::get('/', 'UserController@index')->name('user.index');
-//
-//});
-
 /******************************************
  * SPA
  ******************************************/
 Route::middleware('auth')->get('/dashboard', function() {
-    return view('spa');
+    return view('dashboard');
 })->name('dashboard');

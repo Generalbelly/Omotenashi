@@ -1,4 +1,3 @@
-@import "~bulma/bulma";
 * {
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
 }
@@ -69,74 +68,6 @@ $positions: (
 .#{$paddingKey}#{$separator}auto {
   padding: auto;
 }
-
-div {
-  &.is-loading {
-    position: relative;
-    pointer-events: none;
-    opacity: 0.5;
-    width: 4em;
-    height: 4em;
-    &:after {
-      @include loader;
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      width: 4em;
-      height: 4em;
-      border-width: 0.25em;
-    }
-    &.is-large {
-      width: 7em;
-      height: 7em;
-      &:after {
-        @include loader;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        width: 7em;
-        height: 7em;
-        border-width: 0.30em;
-      }
-    }
-    &.is-medium {
-      width: 5em;
-      height: 5em;
-      &:after {
-        @include loader;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        width: 5em;
-        height: 5em;
-        border-width: 0.25em;
-      }
-    }
-    &.is-small {
-      width: 3em;
-      height: 3em;
-      &:after {
-        @include loader;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        width: 3em;
-        height: 3em;
-        border-width: 0.2em;
-      }
-    }
-  }
-}
-
-
 
 .is-fixed-bottom-right {
   position: fixed !important;

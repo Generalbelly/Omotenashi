@@ -7,9 +7,6 @@ import {
     DELETE_TUTORIAL,
 } from '../store/mutation-types'
 
-axios.defaults.baseURL = 'http://docker.omotenashi.today/api/tutorials';
-axios.defaults.headers.common['Authorization'] = `Bearer ${_ot_ext_token}`;
-
 const GET_METHOD = 'GET';
 const POST_METHOD = 'POST';
 const PUT_METHOD = 'PUT';

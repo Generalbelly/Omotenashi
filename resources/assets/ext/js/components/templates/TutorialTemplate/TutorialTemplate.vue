@@ -60,8 +60,8 @@
         >
             <template slot="header">Alert</template>
             <template slot="body">
-                Fetching tutorials for this page as you move to a different page.<br>
-                Tutorials must be created per a url.
+               Tutorials must be created per URL.<br>
+                Now fetching tutorials for this page.
             </template>
         </Message>
 

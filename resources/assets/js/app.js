@@ -1,21 +1,22 @@
-import Vue from 'vue';
-import '../sass/app.scss';
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+import Vue from 'vue'
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
+import '../sass/app.scss'
+import VeeValidate from 'vee-validate'
+import store from './store'
+import './bootstrap'
+import App from './App.vue'
 
-require('./bootstrap');
+Vue.use(Buefy, {
+    defaultIconPack: "fa",
+})
+Vue.use(VeeValidate)
 
-window.Vue = Vue;
+// import LogRocket from 'logrocket';
+// LogRocket.init('agnj7d/omotenashi');
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-const app = new Vue({
-    el: '#app'
-});
+new Vue({
+    el: '#app',
+    render: h => h(App),
+    store,
+})

@@ -1,16 +1,15 @@
 {
   "private": true,
   "scripts": {
-    "build-ext": "webpack --config=./webpack.ext.prod.config.js --hide-modules",
-    "watch-ext": "webpack --mode=development --watch --progress --config=./webpack.ext.dev.config.js",
+    "build": "webpack --config=./webpack.ext.prod.config.js --hide-modules --config ./webpack.config.js",
+    "watch": "webpack --config=./webpack.ext.prod.config.js --watch --config ./webpack.dev.config.js",
+    "build-ext": "webpack --config ./webpack.ext.prod.config.js --hide-modules",
+    "watch-ext": "webpack --watch --progress --config ./webpack.ext.dev.config.js",
     "test-ext": "mocha-webpack --webpack-config ./webpack.ext.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/test/ext/**/*.spec.js ./resources/assets/test/ext/components/**/*.spec.js",
-    "watch-poll": "npm run watch -- --watch-poll",
-    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "prod": "yarn run production",
-    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "test-ci": "mocha-webpack --webpack-config ./webpack.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/test/ext/**/*.spec.js",
     "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test-ci",
-    "storybook-ext": "start-storybook -p 9001 -c ./resources/assets/.storybook -s ./public/ext"
+    "storybook-ext": "start-storybook -p 9001 -c ./resources/assets/.storybook -s ./public/ext",
+    "browser-sync": "webpack --watch --config ./webpack.dev.config.js & browser-sync start --config bs-config.js"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -27,6 +26,7 @@
     "babel-loader": "^8.0.2",
     "babel-plugin-transform-imports": "^1.5.1",
     "babel-preset-vue": "^2.0.2",
+    "browser-sync": "^2.26.3",
     "chai": "^4.1.2",
     "clean-webpack-plugin": "^0.1.19",
     "cross-env": "^5.1",
@@ -66,6 +66,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.1",
     "@medv/finder": "^1.1.0",
     "auth0-js": "^9.8.0",
+    "buefy": "^0.7.0",
     "bulma": "^0.7.1",
     "dompurify": "^1.0.8",
     "dotenv": "^6.0.0",
