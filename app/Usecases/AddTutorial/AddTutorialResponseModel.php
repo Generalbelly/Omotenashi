@@ -32,7 +32,7 @@ class AddTutorialResponseModel {
     /**
      * @var string
      */
-    public $site_id;
+    public $project_id;
 
     public function __construct(array $attributes)
     {
@@ -41,7 +41,7 @@ class AddTutorialResponseModel {
         $this->description = $attributes['description'];
         $this->steps = $attributes['steps'];
         $this->url = $attributes['url'];
-        $this->site_id = $attributes['site_id'];
+        $this->project_id = $attributes['project_id'];
     }
 
 }

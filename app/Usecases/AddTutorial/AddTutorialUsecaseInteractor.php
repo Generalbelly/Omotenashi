@@ -2,7 +2,7 @@
 
 namespace App\Usecases\AddTutorial;
 
-use App\Repositories\Site\SiteRepositoryContract;
+use App\Repositories\Project\ProjectRepositoryContract;
 use App\Repositories\Tutorial\TutorialRepositoryContract;
 use Log;
 
@@ -16,19 +16,19 @@ class AddTutorialUsecaseInteractor implements AddTutorialUsecase {
     /**
      * @var SiteRepository
      */
-    private $siteRepository;
+    private $projectRepository;
 
     /**
      * AddTutorialUsecaseInteractor constructor.
      * @param TutorialRepositoryContract $tutorialRepository
-     * @param SiteRepositoryContract $siteRepository
+     * @param ProjectRepositoryContract $projectRepository
      */
     public function __construct(
         TutorialRepositoryContract $tutorialRepository,
-        SiteRepositoryContract $siteRepository
+        ProjectRepositoryContract $projectRepository
     ){
         $this->tutorialRepository = $tutorialRepository;
-        $this->siteRepository = $siteRepository;
+        $this->projectRepository = $projectRepository;
     }
 
     /**
@@ -37,12 +37,12 @@ class AddTutorialUsecaseInteractor implements AddTutorialUsecase {
      */
     public function handle(AddTutorialRequestModel $request)
     {
-        $site = $this->siteRepository->selectOne([
+        $projectEntity = $this->projectRepository->selectOne([
             'domain' => $request->domain,
             'user_id' => $request->userKey,
         ]);
-        if (!$site) {
-            $site = $this->siteRepository->create([
+        if (!$projectEntity) {
+            $projectEntity = $this->projectRepository->create([
                 'name' => $request->domain,
                 'domain' => $request->domain,
                 'user_id' => $request->userKey,
@@ -55,7 +55,7 @@ class AddTutorialUsecaseInteractor implements AddTutorialUsecase {
             'url' => $request->url,
             'path' => $request->path,
             'query' => $request->query,
-            'site_id' => $site->id,
+            'project_id' => $projectEntity->id,
         ]);
         return new AddTutorialResponseModel($tutorial->toArray());
     }

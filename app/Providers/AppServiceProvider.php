@@ -10,18 +10,18 @@ use App\Repositories\BaseRepositoryContract;
 use App\Repositories\User\UserRepositoryContract;
 
 use App\Domains\Entities\UserEntity;
-use App\Domains\Entities\SiteEntity;
+use App\Domains\Entities\ProjectEntity;
 use App\Domains\Entities\TutorialEntity;
 use App\Domains\Entities\OAuthEntity;
 
 use App\Domains\Entities\Observers\UserEntityObserver;
 use App\Domains\Entities\Observers\TutorialEntityObserver;
-use App\Domains\Entities\Observers\SiteEntityObserver;
+use App\Domains\Entities\Observers\ProjectEntityObserver;
 use App\Domains\Entities\Observers\OAuthEntityObserver;
 
 use App\Repositories\User\UserRepository;
-use App\Repositories\Site\SiteRepositoryContract;
-use App\Repositories\Site\SiteRepository;
+use App\Repositories\Project\ProjectRepositoryContract;
+use App\Repositories\Project\ProjectRepository;
 use App\Repositories\Tutorial\TutorialRepositoryContract;
 use App\Repositories\Tutorial\TutorialRepository;
 
@@ -37,6 +37,9 @@ use App\Usecases\DeleteTutorial\DeleteTutorialUsecaseInteractor;
 use App\Usecases\ListTutorials\ListTutorialsUsecase;
 use App\Usecases\ListTutorials\ListTutorialsUsecaseInteractor;
 
+use App\Usecases\ListProjects\ListProjectsUsecase;
+use App\Usecases\ListProjects\ListProjectsUsecaseInteractor;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -48,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
     {
         UserEntity::observe(UserEntityObserver::class);
         TutorialEntity::observe(TutorialEntityObserver::class);
-        SiteEntity::observe(SiteEntityObserver::class);
+        ProjectEntity::observe(ProjectEntityObserver::class);
         OAuthEntity::observe(OAuthEntityObserver::class);
     }
 
@@ -59,9 +62,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
-
-
         $this->app->bind(
             BaseRepositoryContract::class,
             BaseRepository::class
@@ -83,8 +83,8 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            SiteRepositoryContract::class,
-            SiteRepository::class
+            ProjectRepositoryContract::class,
+            ProjectRepository::class
         );
 
         $this->app->bind(
@@ -101,9 +101,15 @@ class AppServiceProvider extends ServiceProvider
             UpdateTutorialUsecase::class,
             UpdateTutorialUsecaseInteractor::class
         );
+
         $this->app->bind(
             DeleteTutorialUsecase::class,
             DeleteTutorialUsecaseInteractor::class
+        );
+
+        $this->app->bind(
+            ListProjectsUsecase::class,
+            ListProjectsUsecaseInteractor::class
         );
 
         if ($this->app->environment() !== 'production') {

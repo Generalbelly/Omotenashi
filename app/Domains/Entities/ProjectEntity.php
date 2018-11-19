@@ -2,13 +2,13 @@
 
 namespace App\Domains\Entities;
 
-class SiteEntity extends Entity
+class ProjectEntity extends Entity
 {
-    protected $table = 'sites';
+    protected $table = 'projects';
     protected $fillable = [
         'name',
         'domain',
-        'type',
+//        'type',
         'user_id',
     ];
 

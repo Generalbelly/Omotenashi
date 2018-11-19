@@ -16,3 +16,12 @@ Route::get('/logout', 'Auth\Auth0Controller@logout' )->name( 'logout' )->middlew
 Route::middleware('auth')->get('/dashboard', function() {
     return view('dashboard');
 })->name('dashboard');
+
+Route::prefix('projects')->middleware('auth')->group(function() use ($regexpUUID) {
+
+    Route::get('/', 'ProjectController@index');
+    Route::post('/', 'ProjectController@store');
+    Route::put('/{id}', 'ProjectController@update');
+    Route::delete('/{id}', 'ProjectController@destroy');
+
+});

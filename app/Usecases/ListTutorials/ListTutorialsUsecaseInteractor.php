@@ -3,7 +3,7 @@
 namespace App\Usecases\ListTutorials;
 
 use App\Repositories\Tutorial\TutorialRepositoryContract;
-use App\Repositories\Site\SiteRepositoryContract;
+use App\Repositories\Project\ProjectRepositoryContract;
 use Log;
 
 class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
@@ -14,21 +14,21 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
     private $tutorialRepository;
 
     /**
-     * @var SiteRepositoryContract
+     * @var ProjectRepositoryContract
      */
-    private $siteRepository;
+    private $projectRepository;
 
     /**
      * ListTutorialsUsecaseInteractor constructor.
      * @param TutorialRepositoryContract $tutorialRepository
-     * @param SiteRepositoryContract $siteRepository
+     * @param ProjectRepositoryContract $projectRepository
      */
     public function __construct(
         TutorialRepositoryContract $tutorialRepository,
-        SiteRepositoryContract $siteRepository
+        ProjectRepositoryContract $projectRepository
     ){
         $this->tutorialRepository = $tutorialRepository;
-        $this->siteRepository = $siteRepository;
+        $this->projectRepository = $projectRepository;
     }
 
 
@@ -40,8 +40,7 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
      */
     public function handle(ListTutorialsRequestModel $request)
     {
-        Log::error($request->domain);
-        $site = $this->siteRepository->selectOne([
+        $projectEntity = $this->projectRepository->selectOne([
             'user_id' => $request->userKey,
             'domain' => $request->domain,
         ]);
@@ -54,12 +53,12 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
             'domain' => null,
         ];
 
-        if ($site) {
+        if ($projectEntity) {
             $predicates = [
                 [
-                    'column' => 'site_id',
+                    'column' => 'project_id',
                     'operator' => '=',
-                    'value' => $site->id,
+                    'value' => $projectEntity->id,
                 ],
                 [
                     'column' => 'path',
@@ -76,7 +75,7 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
                 $request->perPage
             );
 
-            $result['domain'] = $site->domain;
+            $result['domain'] = $projectEntity->domain;
         }
 
         return new ListTutorialsResponseModel($result);

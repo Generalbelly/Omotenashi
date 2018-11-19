@@ -21,12 +21,12 @@ class CreateTutorialsTable extends Migration
             $table->string('url');
             $table->string('path');
             $table->string('query')->nullable();
-            $table->string('site_id');
+            $table->string('project_id');
             $table->timestamps();
             $table->softDeletes();
 
             $table->primary('id');
-            $table->index(['site_id', 'url'], 'idx_site_id_url');
+            $table->index(['project_id', 'path'], 'idx_project_id_path');
         });
     }
 

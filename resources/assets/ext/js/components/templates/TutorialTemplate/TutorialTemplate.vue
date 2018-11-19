@@ -7,7 +7,7 @@
                 'is-fixed-bottom-right': menuIsOnTheRight,
                 'is-fixed-bottom-left': !menuIsOnTheRight,
             }"
-            :is-loading="isRequesting === 'REQUEST_GET_TUTORIALS'"
+            :is-loading="isRequesting === 'REQUEST_LIST_TUTORIALS'"
             :tutorials="tutorials"
             :selected-tutorial="selectedTutorial"
             :selected-step="selectedStep"
@@ -54,7 +54,7 @@
         </Setting>
 
         <Message
-            v-show="showUrlChangeAlert && isRequesting === 'REQUEST_GET_TUTORIALS'"
+            v-show="showUrlChangeAlert && isRequesting === 'REQUEST_LIST_TUTORIALS'"
             is-warning
             @closeClick="showUrlChangeAlert = false"
         >
@@ -66,7 +66,7 @@
         </Message>
 
         <LoadingModal
-            v-show="isRequesting && isRequesting !== 'REQUEST_GET_TUTORIALS'"
+            v-show="isRequesting && isRequesting !== 'REQUEST_LIST_TUTORIALS'"
         ></LoadingModal>
     </div>
 </template>

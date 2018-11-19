@@ -64,7 +64,7 @@
         },
         methods: {
             ...mapActions('tutorial', [
-                'getTutorials',
+                'listTutorials',
                 'addTutorial',
                 'updateTutorial',
                 'deleteTutorial',
@@ -79,7 +79,7 @@
                 'saveLog'
             ]),
             fetchTutorials(url) {
-                this.getTutorials({
+                this.listTutorials({
                     data: {
                         url,
                     }

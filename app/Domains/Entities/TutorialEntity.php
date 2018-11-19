@@ -12,7 +12,7 @@ class TutorialEntity extends Entity
         'url',
         'path',
         'query',
-        'site_id',
+        'project_id',
     ];
 
     /**
@@ -26,6 +26,6 @@ class TutorialEntity extends Entity
 
     public function site()
     {
-        return $this->belongsTo('App\Domains\Entities\SiteEntity');
+        return $this->belongsTo('App\Domains\Entities\ProjectEntity');
     }
 }

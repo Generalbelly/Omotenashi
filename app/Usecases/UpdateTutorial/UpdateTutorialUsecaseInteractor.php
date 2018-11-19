@@ -3,7 +3,7 @@
 namespace App\Usecases\UpdateTutorial;
 
 use App\Repositories\Tutorial\TutorialRepositoryContract;
-use App\Repositories\Site\SiteRepositoryContract;
+use App\Repositories\Project\ProjectRepositoryContract;
 use Log;
 
 class UpdateTutorialUsecaseInteractor implements UpdateTutorialUsecase {
@@ -14,21 +14,21 @@ class UpdateTutorialUsecaseInteractor implements UpdateTutorialUsecase {
     private $tutorialRepository;
 
     /**
-     * @var SiteRepositoryContract
+     * @var ProjectRepositoryContract
      */
-    private $siteRepository;
+    private $projectRepository;
 
     /**
      * UpdateTutorialUsecaseInteractor constructor.
      * @param TutorialRepositoryContract $tutorialRepository
-     * @param SiteRepositoryContract $siteRepository
+     * @param ProjectRepositoryContract $projectRepository
      */
     public function __construct(
         TutorialRepositoryContract $tutorialRepository,
-        SiteRepositoryContract $siteRepository
+        ProjectRepositoryContract $projectRepository
     ){
         $this->tutorialRepository = $tutorialRepository;
-        $this->siteRepository = $siteRepository;
+        $this->projectRepository = $projectRepository;
     }
 
 

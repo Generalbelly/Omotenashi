@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSitesTable extends Migration
+class CreateProjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateSitesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sites', function (Blueprint $table) {
+        Schema::create('projects', function (Blueprint $table) {
             $table->string('id')->unique();
             $table->string('name');
             $table->string('domain');
-            $table->string('type');
+//            $table->string('type');
             $table->timestamps();
             $table->softDeletes();
             $table->string('user_id');
@@ -36,6 +36,6 @@ class CreateSitesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sites');
+        Schema::dropIfExists('projects');
     }
 }

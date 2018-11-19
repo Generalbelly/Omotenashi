@@ -3,7 +3,7 @@ import {
 } from '../../api'
 
 import {
-    GET_TUTORIALS,
+    LIST_TUTORIALS,
     ADD_TUTORIAL,
     UPDATE_TUTORIAL,
     DELETE_TUTORIAL,
@@ -14,9 +14,9 @@ import {
     DELETE_STEP,
     SELECT_STEP,
 
-    REQUEST_GET_TUTORIALS,
-    REQUEST_GET_TUTORIALS_SUCCESS,
-    REQUEST_GET_TUTORIALS_FAILURE,
+    REQUEST_LIST_TUTORIALS,
+    REQUEST_LIST_TUTORIALS_SUCCESS,
+    REQUEST_LIST_TUTORIALS_FAILURE,
 
     REQUEST_ADD_TUTORIAL,
     REQUEST_ADD_TUTORIAL_SUCCESS,
@@ -57,7 +57,7 @@ export const getters = {
 }
 
 export const mutations = {
-    [GET_TUTORIALS](state, { total, start, end, entities }) {
+    [LIST_TUTORIALS](state, { total, start, end, entities }) {
         state.total = total;
         state.start = start;
         state.end = end;
@@ -87,13 +87,13 @@ export const mutations = {
             ...state.tutorials.slice(tutorialIndex+1),
         ]
     },
-    [REQUEST_GET_TUTORIALS](state) {
-        state.isRequesting = REQUEST_GET_TUTORIALS;
+    [REQUEST_LIST_TUTORIALS](state) {
+        state.isRequesting = REQUEST_LIST_TUTORIALS;
     },
-    [REQUEST_GET_TUTORIALS_SUCCESS](state) {
+    [REQUEST_LIST_TUTORIALS_SUCCESS](state) {
         state.isRequesting = false
     },
-    [REQUEST_GET_TUTORIALS_FAILURE](state, { errorCode, errorMsg }) {
+    [REQUEST_LIST_TUTORIALS_FAILURE](state, { errorCode, errorMsg }) {
         state.isRequesting = false
     },
     [REQUEST_ADD_TUTORIAL](state) {
@@ -145,21 +145,21 @@ export const mutations = {
 }
 
 export const actions = {
-    getTutorials({ commit }, { data }) {
-        commit(REQUEST_GET_TUTORIALS)
+    listTutorials({ commit }, { data }) {
+        commit(REQUEST_LIST_TUTORIALS)
         makeRequest({
-            mutationType: REQUEST_GET_TUTORIALS,
+            mutationType: REQUEST_LIST_TUTORIALS,
             data,
         })
             .then(({ data }) => {
-                commit(REQUEST_GET_TUTORIALS_SUCCESS)
+                commit(REQUEST_LIST_TUTORIALS_SUCCESS)
                 const {
                     total,
                     start,
                     end,
                     entities,
                 } = data
-                commit(GET_TUTORIALS, {
+                commit(LIST_TUTORIALS, {
                     total,
                     start,
                     end,
@@ -178,7 +178,7 @@ export const actions = {
                 }
             })
             .catch((error) => {
-                commit(REQUEST_GET_TUTORIALS_FAILURE, error)
+                commit(REQUEST_LIST_TUTORIALS_FAILURE, error)
             });
     },
     addTutorial({ commit }, { data }) {

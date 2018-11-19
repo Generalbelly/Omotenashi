@@ -8,6 +8,6 @@ class OAuthEntity extends Entity
 
     public function sites()
     {
-        return $this->belongsToMany('App\Domains\Entities\SiteEntity');
+        return $this->belongsToMany('App\Domains\Entities\ProjectEntity');
     }
 }

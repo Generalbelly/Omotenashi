@@ -1,7 +1,7 @@
 import uuidv4 from 'uuid'
 import axios from 'axios'
 import {
-    REQUEST_GET_TUTORIALS,
+    REQUEST_LIST_TUTORIALS,
     ADD_TUTORIAL,
     UPDATE_TUTORIAL,
     DELETE_TUTORIAL,
@@ -40,7 +40,7 @@ export const makeRequest = (params) => {
     } = params
 
     switch (mutationType) {
-        case REQUEST_GET_TUTORIALS:
+        case REQUEST_LIST_TUTORIALS:
             return request({
                 url: '/',
                 method: GET_METHOD,
