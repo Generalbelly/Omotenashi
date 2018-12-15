@@ -12,6 +12,6 @@ class Entity extends Model
     protected $dates = ['deleted_at'];
     protected $primaryKey = 'id';
     protected $keyType = 'string';
-
+    public $searchColumns = ['id'];
     public $incrementing = false;
 }

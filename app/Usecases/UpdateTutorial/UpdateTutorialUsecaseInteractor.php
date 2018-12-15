@@ -36,7 +36,7 @@ class UpdateTutorialUsecaseInteractor implements UpdateTutorialUsecase {
      * @param UpdateTutorialRequestModel $request
      * @return UpdateTutorialResponseModel
      */
-    public function handle(UpdateTutorialRequestModel $request)
+    public function handle(UpdateTutorialRequestModel $request): UpdateTutorialResponseModel
     {
         $tutorial = $this->tutorialRepository->update(
             $request->id,

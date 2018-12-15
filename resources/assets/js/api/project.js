@@ -6,36 +6,22 @@ import {
 } from '../store/mutation-types'
 
 import {
-    api
+    APIController
 } from "./common"
 
-const projectApi = api('projects')
+const projectApi = new APIController('projects')
 
-export const makeRequest = (params) => {
-    const {
-        id,
-        data,
-        mutationType,
-    } = params
-
+export const makeRequest = ({ id, data, mutationType, params }) => {
     switch (mutationType) {
         case REQUEST_LIST_PROJECTS:
-            return projectApi.listEntities({
-                data,
-            })
+            console.log(params);
+            return projectApi.listEntities(params)
         case ADD_PROJECT:
-            return projectApi.addEntity({
-                data,
-            })
+            return projectApi.addEntity(data)
         case UPDATE_PROJECT:
-            return projectApi.updateEntity({
-                data
-            })
+            return projectApi.updateEntity(data, id)
         case DELETE_PROJECT:
-            projectApi.deleteEntity({
-                id,
-                data,
-            })
+            projectApi.deleteEntity(id)
         default:
             break
     }

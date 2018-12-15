@@ -10,6 +10,6 @@ interface ListTutorialsUsecase {
      * @param  ListTutorialsRequestModel  $request
      * @return ListTutorialsResponseModel
      */
-    public function handle(ListTutorialsRequestModel $request);
+    public function handle(ListTutorialsRequestModel $request): ListTutorialsResponseModel;
 
 }

@@ -38,7 +38,7 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
      * @param  ListTutorialsRequestModel $request
      * @return ListTutorialsResponseModel
      */
-    public function handle(ListTutorialsRequestModel $request)
+    public function handle(ListTutorialsRequestModel $request): ListTutorialsResponseModel
     {
         $projectEntity = $this->projectRepository->selectOne([
             'user_id' => $request->userKey,

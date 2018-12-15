@@ -77,7 +77,7 @@
     import finder from '@medv/finder'
     import purify from 'dompurify'
     import Driver from '../../../../../../../../driver.js/src/index'
-    import BaseButton from '../../../../../js/components/atoms/BaseButton'
+    import BaseButton from '../../atoms/BaseButton'
     import Message from '../../../../../js/components/molecules/Message'
 
     export const states = {

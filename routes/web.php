@@ -20,6 +20,8 @@ Route::middleware('auth')->get('/dashboard', function() {
 Route::prefix('projects')->middleware('auth')->group(function() use ($regexpUUID) {
 
     Route::get('/', 'ProjectController@index');
+    Route::get('/create', 'ProjectController@index');
+    Route::get('/edit', 'ProjectController@index');
     Route::post('/', 'ProjectController@store');
     Route::put('/{id}', 'ProjectController@update');
     Route::delete('/{id}', 'ProjectController@destroy');

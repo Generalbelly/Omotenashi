@@ -5,8 +5,9 @@
     "watch": "webpack --config=./webpack.ext.prod.config.js --watch --config ./webpack.dev.config.js",
     "build-ext": "webpack --config ./webpack.ext.prod.config.js --hide-modules",
     "watch-ext": "webpack --watch --progress --config ./webpack.ext.dev.config.js",
-    "test-ext": "mocha-webpack --webpack-config ./webpack.ext.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/test/ext/**/*.spec.js ./resources/assets/test/ext/components/**/*.spec.js",
-    "test-ci": "mocha-webpack --webpack-config ./webpack.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/test/ext/**/*.spec.js",
+    "test": "mocha-webpack --webpack-config ./webpack.ext.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/js/components/**/*.spec.js",
+    "test-ext": "mocha-webpack --webpack-config ./webpack.ext.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/js/ext/components/**/*.spec.js",
+    "test-one": "mocha-webpack --webpack-config ./webpack.test.config.js --watch --require ./resources/assets/test/setup.js ./resources/assets/js/components/**/ProjectsTemplate.spec.js",
     "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test-ci",
     "storybook-ext": "start-storybook -p 9001 -c ./resources/assets/.storybook -s ./public/ext",
     "browser-sync": "webpack --watch --config ./webpack.dev.config.js & browser-sync start --config bs-config.js"
@@ -33,6 +34,7 @@
     "css-loader": "^0.28.11",
     "expect": "^23.6.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "faker": "^4.1.0",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
     "istanbul-instrumenter-loader": "^3.0.1",
@@ -75,9 +77,9 @@
     "logrocket": "^0.6.16",
     "npm": "^6.4.1",
     "pell": "^1.0.4",
-    "vee-validate": "^2.1.0-beta.11",
+    "vee-validate": "^2.1.4",
     "vue": "^2.5.17",
-    "vue-router": "^3.0.1",
+    "vue-router": "^3.0.2",
     "vuex": "^3.0.1"
   },
   "babel": {
@@ -85,7 +87,12 @@
       "@babel/preset-env"
     ],
     "plugins": [
-      "@babel/plugin-proposal-class-properties",
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ],
       "@babel/plugin-proposal-object-rest-spread",
       [
         "transform-imports",

@@ -5,12 +5,13 @@ export const POST_METHOD = 'POST';
 export const PUT_METHOD = 'PUT';
 export const DELETE_METHOD = 'DELETE';
 
-const request = ({ url, method, data }) => {
+const request = ({ url, method, data, params }) => {
     return new Promise((resolve, reject) => {
         axios({
             url,
             method,
             data,
+            params,
         })
             .then((response) => {
                 resolve(response);
@@ -21,39 +22,41 @@ const request = ({ url, method, data }) => {
     })
 }
 
-export const api = (basePath) => {
-    const listEntities = ({ data }) => {
+export class APIController {
+
+    constructor(basePath) {
+        this.basePath = basePath
+    }
+
+    listEntities(params) {
+        console.log(params);
         return request({
-            url: `${basePath}/`,
+            url: `${this.basePath}/`,
             method: GET_METHOD,
-            data,
+            params,
         })
     }
-    const addEntity = ({ data }) => {
+
+    addEntity(data) {
         return request({
-            url: `${basePath}/`,
+            url: `${this.basePath}/`,
             method: POST_METHOD,
             data,
         })
     }
-    const updateEntity = ({ data, id }) => {
+
+    updateEntity(data, id) {
         return request({
-            url:`${basePath}/${id}`,
+            url:`${this.basePath}/${id}`,
             method: PUT_METHOD,
             data,
         })
     }
-    const deleteEntity = ({ data, id }) => {
+
+    deleteEntity(id) {
         return request({
-            url: `${basePath}/${id}`,
+            url: `${this.basePath}/${id}`,
             method: DELETE_METHOD,
-            data,
         })
-    }
-    return {
-        listEntities,
-        addEntity,
-        updateEntity,
-        deleteEntity
     }
 }

@@ -5,14 +5,11 @@ namespace App\Domains\Entities;
 class TutorialEntity extends Entity
 {
     protected $table = 'tutorials';
-    protected $fillable = [
+    public $searchColumns = [
         'name',
         'description',
-        'steps',
         'url',
-        'path',
-        'query',
-        'project_id',
+        'path'
     ];
 
     /**

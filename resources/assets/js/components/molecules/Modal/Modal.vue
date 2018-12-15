@@ -13,8 +13,8 @@
 </template>
 
 <script>
-    import BaseModalContent from "../../atoms/BaseModalContent";
-    import BaseModal from "../../atoms/BaseModal";
+    import BaseModalContent from "../../../../ext/js/components/atoms/BaseModalContent";
+    import BaseModal from "../../../../ext/js/components/atoms/BaseModal"; 
 
     export default {
         props: {

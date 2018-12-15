@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import BaseButton from "../../atoms/BaseButton";
+    import BaseButton from "../../../../ext/js/components/atoms/BaseButton";
     import Modal from "../Modal";
 
     export default {

@@ -17,12 +17,13 @@
             </div>
         </header>
         <main>
-            <projects-page></projects-page>
+            <router-view>
+            </router-view>
         </main>
         <footer class="footer">
             <div class="content has-text-centered">
                 <p>
-                    &copy; 2018 Nobuyoshi Shimmen
+                    &copy; 2018 Omotenashi
                 </p>
             </div>
         </footer>
@@ -38,5 +39,4 @@
 </script>
 
 <style scoped>
-
 </style>

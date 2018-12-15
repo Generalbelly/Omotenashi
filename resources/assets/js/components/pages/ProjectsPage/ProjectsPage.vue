@@ -1,41 +1,52 @@
 <template>
     <projects-template
-        :table-items="projects"
-        :table-columns="columns"
+        :query="query"
+        :pagination="pagination"
+        :entities="projects"
+        :columns="columns"
+        :is-loading="!!isRequesting"
+        @select="onProjectSelect"
+        @click:search="onClickSearch"
+        @change:query="onChangeQuery"
+        @change:pagination="onChangePagination"
+        @click:add-button="onClickAddButton"
     >
     </projects-template>
 </template>
 
 <script>
-    import { mapActions, mapState } from 'vuex'
+    import { mapActions, mapState, mapGetters } from 'vuex'
     import ProjectsTemplate from "../../templates/ProjectsTemplate/ProjectsTemplate"
     export default {
         name: "ProjectsPage",
         components: {
             ProjectsTemplate
         },
-        created() {
-            this.listProjects({
-                data: {}
-            })
-        },
         data() {
             return {
+                query: null,
+                pagination: {
+                    page: 0,
+                    perPage: 20,
+                    orderBy: ['created_at', 'desc'],
+                    total: 0,
+                },
                 columns: [
                     {
                         field: 'name',
                         label: 'Name',
-                        customKey: 'id',
+                        to: project => `/projects/${project.id}`,
+                        sortable: true,
                     },
                     {
                         field: 'domain',
                         label: 'Domain',
-                        customKey: 'id',
+                        sortable: true,
                     },
                     {
                         field: 'created_at',
                         label: 'Created at',
-                        customKey: 'id',
+                        sortable: true,
                     },
                 ]
             }
@@ -43,7 +54,12 @@
         computed: {
             ...mapState('project', [
                 'projects',
-            ])
+                'isRequesting',
+                'total',
+            ]),
+        },
+        created() {
+            this.listProjects();
         },
         methods: {
             ...mapActions('project',[
@@ -51,11 +67,36 @@
                 'addProject',
                 'updateProject',
                 'deleteProject',
-            ])
+            ]),
+            onProjectSelect(e) {
+                console.log(e);
+            },
+            onChangePagination(pagination) {
+                this.pagination = {
+                    ...pagination,
+                    orderBy: `${pagination.orderBy[0]} ${pagination.orderBy[1]}`,
+                };
+                this.listProjects({
+                    pagination: this.pagination,
+                })
+            },
+            onChangeQuery(query) {
+                this.query = query
+            },
+            onClickSearch() {
+                this.listProjects({
+                    ...this.pagination,
+                    q: this.query,
+                })
+            },
+            onClickAddButton() {
+                this.$router.push({
+                    name: 'projects.create',
+                })
+            }
         }
     }
 </script>
 
 <style scoped>
-
 </style>

@@ -13,13 +13,13 @@
 </template>
 
 <script>
-    import BaseButton from '../../atoms/BaseButton'
-    import BaseTextField from '../../atoms/BaseTextField'
-    import BaseTextArea from '../../atoms/BaseTextArea'
-    import BaseCardModal from '../../atoms/BaseCardModal'
-    import BaseCardModalHeader from '../../atoms/BaseCardModalHeader'
-    import BaseCardModalBody from '../../atoms/BaseCardModalBody'
-    import BaseCardModalFooter from '../../atoms/BaseCardModalFooter'
+    import BaseButton from '../../../../ext/js/components/atoms/BaseButton'
+    import BaseTextField from '../../../../ext/js/components/atoms/BaseTextField'
+    import BaseTextArea from '../../../../ext/js/components/atoms/BaseTextArea'
+    import BaseCardModal from '../../../../ext/js/components/atoms/BaseCardModal'
+    import BaseCardModalHeader from '../../../../ext/js/components/atoms/BaseCardModalHeader'
+    import BaseCardModalBody from '../../../../ext/js/components/atoms/BaseCardModalBody'
+    import BaseCardModalFooter from '../../../../ext/js/components/atoms/BaseCardModalFooter'
 
     export default {
         components: {

@@ -8,6 +8,6 @@ interface DeleteTutorialUsecase {
      * @param DeleteTutorialRequestModel $request
      * @return DeleteTutorialResponseModel
      */
-    public function handle(DeleteTutorialRequestModel $request);
+    public function handle(DeleteTutorialRequestModel $request): DeleteTutorialResponseModel;
 
 }

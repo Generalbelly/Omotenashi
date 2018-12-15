@@ -34,7 +34,7 @@ class DeleteTutorialUsecaseInteractor implements DeleteTutorialUsecase {
      * @param DeleteTutorialRequestModel $request
      * @return DeleteTutorialResponseModel
      */
-    public function handle(DeleteTutorialRequestModel $request)
+    public function handle(DeleteTutorialRequestModel $request): DeleteTutorialResponseModel
     {
         $tutorial = $this->tutorialRepository->delete($request->id);
         return new DeleteTutorialResponseModel($tutorial->toArray());

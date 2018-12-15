@@ -27,21 +27,15 @@ import {
 
 const state = {
     total: null,
-    start: null,
-    end: null,
     projects: [],
     isRequesting: false,
 }
 
-export const getters = {}
-
 export const mutations = {
-    [LIST_PROJECTS](state, { total, start, end, entities }) {
-        state.total = total;
-        state.start = start;
-        state.end = end;
-        state.projects = entities;
-        console.log(state);
+    [LIST_PROJECTS](state, payload) {
+        const { total, entities } = payload
+        state.total = total
+        state.projects = entities
     },
     [ADD_PROJECT](state, { data }) {
         state.projects = [
@@ -49,7 +43,8 @@ export const mutations = {
             data,
         ]
     },
-    [UPDATE_PROJECT](state, { id, data }) {
+    [UPDATE_PROJECT](state, payload) {
+        const { id, data } = payload
         const projectIndex = state.projects.findIndex(t => t.id === id)
         state.projects = [
             ...state.projects.slice(0, projectIndex),
@@ -60,7 +55,8 @@ export const mutations = {
             ...state.projects.slice(projectIndex+1),
         ]
     },
-    [DELETE_PROJECT](state, { id }) {
+    [DELETE_PROJECT](state, payload) {
+        const { id } = payload
         const projectIndex = state.projects.findIndex(t => t.id === id)
         state.projects = [
             ...state.projects.slice(0, projectIndex),
@@ -68,12 +64,13 @@ export const mutations = {
         ]
     },
     [REQUEST_LIST_PROJECTS](state) {
-        state.isRequesting = REQUEST_LIST_PROJECTS;
+        state.isRequesting = REQUEST_LIST_PROJECTS
     },
     [REQUEST_LIST_PROJECTS_SUCCESS](state) {
         state.isRequesting = false
     },
-    [REQUEST_LIST_PROJECTS_FAILURE](state, { errorCode, errorMsg }) {
+    [REQUEST_LIST_PROJECTS_FAILURE](state, payload) {
+        const { errorCode, errorMsg } = payload
         state.isRequesting = false
     },
     [REQUEST_ADD_PROJECT](state) {
@@ -82,7 +79,8 @@ export const mutations = {
     [REQUEST_ADD_PROJECT_SUCCESS](state) {
         state.isRequesting = false
     },
-    [REQUEST_ADD_PROJECT_FAILURE](state, { errorCode, errorMsg }) {
+    [REQUEST_ADD_PROJECT_FAILURE](state, payload) {
+        const { errorCode, errorMsg } = payload
         state.isRequesting = false
     },
     [REQUEST_UPDATE_PROJECT](state) {
@@ -91,7 +89,8 @@ export const mutations = {
     [REQUEST_UPDATE_PROJECT_SUCCESS](state) {
         state.isRequesting = false
     },
-    [REQUEST_UPDATE_PROJECT_FAILURE](state, { errorCode, errorMsg }) {
+    [REQUEST_UPDATE_PROJECT_FAILURE](state, payload) {
+        const { errorCode, errorMsg } = payload
         state.isRequesting = false
     },
     [REQUEST_DELETE_PROJECT](state) {
@@ -100,39 +99,34 @@ export const mutations = {
     [REQUEST_DELETE_PROJECT_SUCCESS](state) {
         state.isRequesting = false
     },
-    [REQUEST_DELETE_PROJECT_FAILURE](state, { errorCode, errorMsg }) {
+    [REQUEST_DELETE_PROJECT_FAILURE](state, payload) {
+        const { errorCode, errorMsg } = payload
         state.isRequesting = false
     },
 }
 
 export const actions = {
-    listProjects({ commit }, { data }) {
+    listProjects({ commit, state }, payload={}) {
         commit(REQUEST_LIST_PROJECTS)
+        const { pagination={}, q=null, } = payload;
         makeRequest({
             mutationType: REQUEST_LIST_PROJECTS,
-            data,
+            params: {
+                orderBy: pagination.orderBy,
+                q,
+            }
         })
             .then(({ data }) => {
                 commit(REQUEST_LIST_PROJECTS_SUCCESS)
-                const {
-                    total,
-                    start,
-                    end,
-                    entities,
-                } = data
-                commit(LIST_PROJECTS, {
-                    total,
-                    start,
-                    end,
-                    entities,
-                })
+                commit(LIST_PROJECTS, data)
 
             })
             .catch((error) => {
                 commit(REQUEST_LIST_PROJECTS_FAILURE, error)
-            });
+            })
     },
-    addProject({ commit }, { data }) {
+    addProject({ commit }, payload={}) {
+        const { data } = payload
         commit(REQUEST_ADD_PROJECT)
         makeRequest({
             data,
@@ -146,7 +140,8 @@ export const actions = {
                 commit(REQUEST_ADD_PROJECT_FAILURE, error)
             })
     },
-    updateProject({ commit }, { id, data }) {
+    updateProject({ commit }, payload={}) {
+        const { id, data } = payload
         commit(REQUEST_UPDATE_PROJECT)
         makeRequest({
             id,
@@ -164,7 +159,8 @@ export const actions = {
                 commit(REQUEST_UPDATE_PROJECT_FAILURE)
             })
     },
-    deleteProject({ commit }, { id }) {
+    deleteProject({ commit }, payload={}) {
+        const { id } = payload
         commit(REQUEST_DELETE_PROJECT)
         makeRequest({
             id,
@@ -185,7 +181,6 @@ export const actions = {
 export default {
     namespaced: true,
     state,
-    getters,
     mutations,
     actions,
 }

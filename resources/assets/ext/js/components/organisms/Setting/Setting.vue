@@ -92,12 +92,12 @@
 </template>
 <script>
     import uuidv4 from 'uuid'
-    import BaseIcon from '../../../../../js/components/atoms/BaseIcon'
-    import BaseButton from '../../../../../js/components/atoms/BaseButton'
-    import BaseTextField from '../../../../../js/components/atoms/BaseTextField'
-    import BaseTextArea from '../../../../../js/components/atoms/BaseTextArea'
+    import BaseIcon from '../../atoms/BaseIcon'
+    import BaseButton from '../../atoms/BaseButton'
+    import BaseTextField from '../../atoms/BaseTextField'
+    import BaseTextArea from '../../atoms/BaseTextArea'
     import CardModal from '../../../../../js/components/molecules/CardModal'
-    import BaseCheckBox from "../../../../../js/components/atoms/BaseCheckBox"
+    import BaseCheckBox from "../../atoms/BaseCheckBox"
 
     export default {
         name: 'Setting',

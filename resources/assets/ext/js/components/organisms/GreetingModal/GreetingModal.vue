@@ -21,7 +21,7 @@
 </template>
 <script>
     import Modal from '../../../../../js/components/molecules/Modal';
-    import BaseButton from '../../../../../js/components/atoms/BaseButton';
+    import BaseButton from '../../atoms/BaseButton';
 
     export default {
         components: {

@@ -112,10 +112,10 @@
     </nav>
 </template>
 <script>
-    import BaseButton from '../../../../../js/components/atoms/BaseButton'
-    import BaseSelectField from '../../../../../js/components/atoms/BaseSelectField'
-    import BaseIcon from '../../../../../js/components/atoms/BaseIcon'
-    import BaseProgressCircular from '../../../../../js/components/atoms/BaseProgressCircular'
+    import BaseButton from '../../atoms/BaseButton'
+    import BaseSelectField from '../../atoms/BaseSelectField'
+    import BaseIcon from '../../atoms/BaseIcon'
+    import BaseProgressCircular from '../../atoms/BaseProgressCircular'
 
     export default {
         components: {

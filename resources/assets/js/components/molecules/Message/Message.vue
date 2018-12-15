@@ -28,11 +28,11 @@
 </template>
 
 <script>
-    import colorable from '../../mixins/colorable'
-    import BaseMessage from '../../atoms/BaseMessage'
-    import BaseMessageHeader from '../../atoms/BaseMessageHeader'
-    import BaseMessageBody from '../../atoms/BaseMessageBody'
-    import BaseCheckBox from "../../atoms/BaseCheckBox"
+    import colorable from '../../../../ext/js/mixins/colorable'
+    import BaseMessage from '../../../../ext/js/components/atoms/BaseMessage'
+    import BaseMessageHeader from '../../../../ext/js/components/atoms/BaseMessageHeader'
+    import BaseMessageBody from '../../../../ext/js/components/atoms/BaseMessageBody'
+    import BaseCheckBox from "../../../../ext/js/components/atoms/BaseCheckBox"
 
     export default {
         name: "Message",

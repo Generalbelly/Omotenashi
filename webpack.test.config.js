@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const isCoverage = process.env.NODE_ENV === 'coverage';
 
 let config = {
+    mode: 'development',
     module: {
         rules: [
             {
@@ -53,9 +54,7 @@ let config = {
         ],
     },
     plugins: [
-        new MiniCssExtractPlugin({
-            // filename: 'app.[contenthash].css'
-        }),
+        new MiniCssExtractPlugin({}),
     ],
     resolve: {
         extensions: ['.js', '.vue'],
@@ -82,7 +81,5 @@ if (isCoverage) {
         enforce: 'post',
     });
 }
-
-config.mode = "development";
 
 module.exports = config;

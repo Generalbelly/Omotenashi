@@ -40,6 +40,9 @@ use App\Usecases\ListTutorials\ListTutorialsUsecaseInteractor;
 use App\Usecases\ListProjects\ListProjectsUsecase;
 use App\Usecases\ListProjects\ListProjectsUsecaseInteractor;
 
+use App\Usecases\AddProject\AddProjectUsecase;
+use App\Usecases\AddProject\AddProjectUsecaseInteractor;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -110,6 +113,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             ListProjectsUsecase::class,
             ListProjectsUsecaseInteractor::class
+        );
+
+        $this->app->bind(
+            AddProjectsUsecase::class,
+            AddProjectsUsecaseInteractor::class
         );
 
         if ($this->app->environment() !== 'production') {

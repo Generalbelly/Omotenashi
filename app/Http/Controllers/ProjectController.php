@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Usecases\ListProjects\ListProjectsUsecase;
 use App\Usecases\ListProjects\ListProjectsRequestModel;
+use Log;
 
 class ProjectController extends Controller
 {
@@ -13,6 +14,10 @@ class ProjectController extends Controller
 //    private $updateProjectUsecase;
 //    private $deleteProjectUsecase;
 
+    /**
+     * ProjectController constructor.
+     * @param ListProjectsUsecase $listProjectsUsecase
+     */
     public function __construct(
         ListProjectsUsecase $listProjectsUsecase
 //        AddProjectUsecase $addProjectUsecase,
@@ -31,19 +36,20 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $url = $request->get('url');
+        $url = $request->query('url');
         $userKey = $request->user()->key;
-        $search = $request->get('q');
-        $page = $request->get('page');
-        $perPage = $request->get('per_page');
+        $search = $request->query('q');
+        $page = $request->query('page', 0);
+        $perPage = $request->query('perPage', 20);
 
+        $orderBy = $request->query('orderBy');
         $orders = [];
-        $direction = $request->get('desc') === 'desc' ? 'desc' : 'asc';
-        $column = $request->get('order_by');
-        if ($direction && $column) {
-            $orders = ['column' => $column, 'direction' => $direction];
+        if (!is_null($orderBy)) {
+            foreach (explode(',', $orderBy) as $order) {
+                $orderArray = explode(' ', $order);
+                $orders[] = ['column' => $orderArray[0], 'direction' => $orderArray[1]];
+            }
         }
-
         $listProjectsRequest = new ListProjectsRequestModel([
             'url' => $url,
             'userKey' => $userKey,
@@ -52,9 +58,15 @@ class ProjectController extends Controller
             'search' => $search,
             'perPage' => $perPage,
         ]);
+        Log::error($orders);
         $listProjectsResponse = $this->listProjectsUsecase->handle($listProjectsRequest);
 
-        return response()->json($listProjectsResponse);
+        if ($request->isXmlHttpRequest()) {
+            return response()->json($listProjectsResponse);
+        } else {
+            return view('dashboard');
+        }
+
     }
 
     /**

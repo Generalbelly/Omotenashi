@@ -10,6 +10,6 @@ interface AddTutorialUsecase {
      * @param  AddTutorialRequestModel  $request
      * @return AddTutorialResponseModel
      */
-    public function handle(AddTutorialRequestModel $request);
+    public function handle(AddTutorialRequestModel $request): AddTutorialResponseModel;
 
 }

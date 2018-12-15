@@ -6,10 +6,10 @@ import {
 } from '../store/mutation-types'
 
 import {
-    api
+    APIController
 } from "./common"
 
-const tutorialApi = api('tutorials')
+const tutorialApi = new APIController('tutorials')
 
 export const makeRequest = (params) => {
     const {

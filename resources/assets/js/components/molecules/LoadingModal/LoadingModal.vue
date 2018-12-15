@@ -7,8 +7,8 @@
 </template>
 
 <script>
-    import BaseModal from "../../atoms/BaseModal";
-    import BaseProgressCircular from "../../atoms/BaseProgressCircular";
+    import BaseModal from "../../../../ext/js/components/atoms/BaseModal";
+    import BaseProgressCircular from "../../../../ext/js/components/atoms/BaseProgressCircular";
     export default {
         name: 'LoadingModal',
         components: {

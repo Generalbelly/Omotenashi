@@ -8,7 +8,7 @@ use App\Repositories\BaseRepository;
 class ProjectRepository extends BaseRepository implements ProjectRepositoryContract
 {
     /**
-     * SiteRepository constructor.
+     * ProjectRepository constructor.
      * @param ProjectEntity $projectEntity
      */
     public function __construct(ProjectEntity $projectEntity)

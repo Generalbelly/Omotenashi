@@ -36,8 +36,8 @@
 </template>
 <script>
     import Message from '../../../../../js/components/molecules/Message'
-    import BaseButton from '../../../../../js/components/atoms/BaseButton'
-    import BaseTextField from '../../../../../js/components/atoms/BaseTextField'
+    import BaseButton from '../../atoms/BaseButton'
+    import BaseTextField from '../../atoms/BaseTextField'
 
     export default {
         name: 'DeleteConfirmationMessage',

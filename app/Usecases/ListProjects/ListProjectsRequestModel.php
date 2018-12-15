@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Usecases\ListProjects;
-use Log;
 
 class ListProjectsRequestModel {
 
