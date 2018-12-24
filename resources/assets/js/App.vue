@@ -6,7 +6,9 @@
             </div>
             <div class="level-right">
                 <div class="level-item">
-                    <a>Projects</a>
+                    <router-link :to="{ name : 'projects.index'}">
+                        Projects
+                    </router-link>
                 </div>
                 <div class="level-item">
                     <a>Settings</a>

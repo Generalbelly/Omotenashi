@@ -78,7 +78,7 @@
     import purify from 'dompurify'
     import Driver from '../../../../../../../../driver.js/src/index'
     import BaseButton from '../../atoms/BaseButton'
-    import Message from '../../../../../js/components/molecules/Message'
+    import Message from '../../molecules/Message'
 
     export const states = {
         initial: 'initial',

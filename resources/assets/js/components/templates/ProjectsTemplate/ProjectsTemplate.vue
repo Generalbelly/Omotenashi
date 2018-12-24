@@ -1,6 +1,7 @@
 <template>
     <div class="section">
-        <div class="level">
+        <heading>Projects</heading>
+        <div class="level has-margin-bottom-5">
             <div class="level-left">
                 <search-field
                     :value="query"
@@ -16,22 +17,53 @@
         </div>
         <data-table
             :pagination="pagination"
-            :items="entities"
-            :columns="columns"
+            :data="entities"
             :loading="isLoading"
             :total="total"
             @change:pagination="$emit('change:pagination', $event)"
             @select="$emit('select', $event)"
-        ></data-table>
+        >
+            <template slot-scope="{row}">
+                <b-table-column
+                    field="name"
+                    label="Name"
+                    sortable
+                >
+                    {{ row.name }}
+                </b-table-column>
+                <b-table-column
+                    field="domain"
+                    label="Domain"
+                    sortable
+                >
+                    {{ row.domain }}
+                </b-table-column>
+                <b-table-column
+                    field="created_at"
+                    label="Created at"
+                    sortable
+                >
+                    {{ row.created_at }}
+                </b-table-column>
+            </template>
+        </data-table>
     </div>
 </template>
 
 <script>
     import DataTable from "../../molecules/DataTable/DataTable";
     import SearchField from "../../molecules/SearchField/SearchField";
-    import AddButton from "../../molecules/AddButton/AddButton";
+    import AddButton from "../../atoms/buttons/AddButton/AddButton";
+    import Heading from "../../atoms/Heading/Heading";
+
     export default {
         name: "ProjectsTemplate",
+        components: {
+            Heading,
+            AddButton,
+            SearchField,
+            DataTable,
+        },
         props: {
             query: {
                 type: String,
@@ -49,12 +81,6 @@
                     return [];
                 },
             },
-            columns: {
-                type: Array,
-                default() {
-                    return [];
-                },
-            },
             total: {
                 type: Number,
                 default: 0,
@@ -63,11 +89,6 @@
                 type: Boolean,
                 default: false,
             },
-        },
-        components: {
-            AddButton,
-            SearchField,
-            DataTable
         }
     }
 </script>

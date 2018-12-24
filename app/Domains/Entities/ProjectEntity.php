@@ -5,6 +5,11 @@ namespace App\Domains\Entities;
 class ProjectEntity extends Entity
 {
     protected $table = 'projects';
+    protected $fillable = [
+        'name',
+        'domain',
+        'user_id',
+    ];
 
     public $searchColumns = ['name', 'domain'];
 

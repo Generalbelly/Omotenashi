@@ -22,8 +22,9 @@ class CreateProjectsTable extends Migration
             $table->string('user_id');
 
             $table->primary('id');
-            $table->index('id', 'idx_id');
+            $table->unique(['domain', 'user_id']);
 
+            $table->index('id', 'idx_id');
             $table->index(['user_id'], 'idx_user_id');
         });
     }

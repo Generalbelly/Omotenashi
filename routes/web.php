@@ -19,11 +19,19 @@ Route::middleware('auth')->get('/dashboard', function() {
 
 Route::prefix('projects')->middleware('auth')->group(function() use ($regexpUUID) {
 
-    Route::get('/', 'ProjectController@index');
-    Route::get('/create', 'ProjectController@index');
-    Route::get('/edit', 'ProjectController@index');
-    Route::post('/', 'ProjectController@store');
-    Route::put('/{id}', 'ProjectController@update');
-    Route::delete('/{id}', 'ProjectController@destroy');
+    Route::get('/', 'ProjectController@index')
+        ->name('projects.index');
+    Route::get('/create', 'ProjectController@create')
+        ->name('projects.create');
+    Route::get('/{id}', 'ProjectController@show')
+        ->name('projects.show');
+    Route::get('/{id}/edit', 'ProjectController@edit')
+        ->name('projects.edit');
+    Route::post('/', 'ProjectController@store')
+        ->name('projects.store');
+    Route::put('/{id}', 'ProjectController@update')
+        ->name('projects.update');
+    Route::delete('/{id}', 'ProjectController@destroy')
+        ->name('projects.destroy');
 
 });

@@ -21,28 +21,24 @@ trait CommonRepositoryTrait
 
     public function create(array $data)
     {
-        foreach ($data as $key => $value) {
-            $this->entity->setAttribute($key, $value);
-        }
+        $this->entity->fill($data);
         $this->entity->save();
         return $this->entity;
     }
 
-    public function update($id, array $data)
+    public function update(array $data, $id)
     {
-        $record = $this->find($id);
-        foreach ($data as $key => $value) {
-            $record->setAttribute($key, $value);
-        }
-        $record->save();
-        return $record;
+        $entity = $this->find($id);
+        $entity->fill($data);
+        $entity->save();
+        return $entity;
     }
 
     public function delete($id)
     {
-        $record = $this->find($id);
-        $record->delete();
-        return $record;
+        $entity = $this->find($id);
+        $entity->delete();
+        return $entity;
     }
 
     public function getEntity()

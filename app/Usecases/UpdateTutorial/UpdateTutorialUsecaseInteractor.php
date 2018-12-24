@@ -39,12 +39,12 @@ class UpdateTutorialUsecaseInteractor implements UpdateTutorialUsecase {
     public function handle(UpdateTutorialRequestModel $request): UpdateTutorialResponseModel
     {
         $tutorial = $this->tutorialRepository->update(
-            $request->id,
             [
                 'name' => $request->name,
                 'description' => $request->description,
                 'steps' => $request->steps,
-            ]
+            ],
+            $request->id,
         );
 
         return new UpdateTutorialResponseModel($tutorial->toArray());

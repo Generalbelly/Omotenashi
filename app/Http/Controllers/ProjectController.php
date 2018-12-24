@@ -2,40 +2,54 @@
 
 namespace App\Http\Controllers;
 
+use App\Usecases\GetProject\GetProjectRequestModel;
 use Illuminate\Http\Request;
-use App\Usecases\ListProjects\ListProjectsUsecase;
+use App\Http\Requests\AddProjectRequest;
 use App\Usecases\ListProjects\ListProjectsRequestModel;
+use App\Usecases\ListProjects\ListProjectsUsecase;
+use App\Usecases\AddProject\AddProjectRequestModel;
+use App\Usecases\AddProject\AddProjectUsecase;
+use App\Usecases\GetProject\GetProjectUsecase;
+use App\Usecases\UpdateProject\UpdateProjectUsecase;
 use Log;
 
 class ProjectController extends Controller
 {
     private $listProjectsUsecase;
-//    private $addProjectUsecase;
+    private $addProjectUsecase;
+    private $getProjectUsecase;
 //    private $updateProjectUsecase;
 //    private $deleteProjectUsecase;
 
     /**
      * ProjectController constructor.
      * @param ListProjectsUsecase $listProjectsUsecase
+     * @param AddProjectUsecase $addProjectUsecase
      */
     public function __construct(
-        ListProjectsUsecase $listProjectsUsecase
-//        AddProjectUsecase $addProjectUsecase,
-//        UpdateProjectUsecase $updateProjectUsecase,
+        ListProjectsUsecase $listProjectsUsecase,
+        AddProjectUsecase $addProjectUsecase,
+        GeTProjectUsecase $getProjectUsecase,
+        UpdateProjectUsecase $updateProjectUsecase
 //        DeleteProjectUsecase $deleteProjectUsecase
     ){
         $this->listProjectsUsecase = $listProjectsUsecase;
-//        $this->addProjectUsecase = $addProjectUsecase;
-//        $this->updateProjectUsecase = $updateProjectUsecase;
+        $this->addProjectUsecase = $addProjectUsecase;
+        $this->getProjectUsecase = $getProjectUsecase;
+        $this->updateProjectUsecase = $updateProjectUsecase;
 //        $this->deleteProjectUsecase = $deleteProjectUsecase;
     }
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
     public function index(Request $request)
     {
+        if ($request->isXmlHttpRequest() === false) {
+            return view('dashboard');
+        }
+
         $url = $request->query('url');
         $userKey = $request->user()->key;
         $search = $request->query('q');
@@ -58,47 +72,61 @@ class ProjectController extends Controller
             'search' => $search,
             'perPage' => $perPage,
         ]);
-        Log::error($orders);
         $listProjectsResponse = $this->listProjectsUsecase->handle($listProjectsRequest);
 
-        if ($request->isXmlHttpRequest()) {
-            return response()->json($listProjectsResponse);
-        } else {
-            return view('dashboard');
-        }
+        return response()->json($listProjectsResponse);
 
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
-        //
+        return view('dashboard');
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param AddProjectRequest $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
-    public function store(Request $request)
+    public function store(AddProjectRequest $request)
     {
-        //
+        if ($request->isXmlHttpRequest() === false) {
+            return view('dashboard');
+        }
+
+        $addProjectRequest = new AddProjectRequestModel(array_merge(
+            $request->all(),
+            [
+                'userKey' => $request->user()->key
+            ]
+        ));
+        $addProjectResponse = $this->addProjectUsecase->handle($addProjectRequest);
+
+        return response()->json($addProjectResponse);
+
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        if ($request->isXmlHttpRequest() === false) {
+            return view('dashboard');
+        }
+
+        $getProjectRequest = new GetProjectRequestModel([
+            'id' => $id,
+        ]);
+
+        $getProjectResponse = $this->getProjectUsecase->handle($getProjectRequest);
+
+        return response()->json($getProjectResponse);
+
     }
 
     /**
@@ -109,7 +137,7 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('dashboard');
     }
 
     /**

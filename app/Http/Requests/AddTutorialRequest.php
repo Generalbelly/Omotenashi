@@ -27,10 +27,7 @@ class AddTutorialRequest extends FormRequest
             'name' => 'required|max:100',
             'description' => 'required|max:100',
             'url' => 'required|url',
-            'steps' => 'array',
-//            'steps.*.element' => 'required_with:steps.*.popover',
-//            'steps.*.popover' => 'required_with_all:steps.*.element',
-//            'steps.*.popover.content' => 'required_with:steps.*.popover',
+            'steps' => 'required|array',
         ];
     }
 }

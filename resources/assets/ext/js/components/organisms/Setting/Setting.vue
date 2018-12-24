@@ -96,7 +96,7 @@
     import BaseButton from '../../atoms/BaseButton'
     import BaseTextField from '../../atoms/BaseTextField'
     import BaseTextArea from '../../atoms/BaseTextArea'
-    import CardModal from '../../../../../js/components/molecules/CardModal'
+    import CardModal from '../../molecules/CardModal'
     import BaseCheckBox from "../../atoms/BaseCheckBox"
 
     export default {

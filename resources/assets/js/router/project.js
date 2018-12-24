@@ -13,7 +13,7 @@ const projecctRoutes = [
         component: ProjectPage,
     },
     {
-        path: '/projects:id',
+        path: '/projects/:id',
         name: 'projects.show',
         component: ProjectPage,
     },

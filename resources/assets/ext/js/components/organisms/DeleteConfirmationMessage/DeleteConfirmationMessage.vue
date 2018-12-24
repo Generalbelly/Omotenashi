@@ -35,7 +35,7 @@
     </Message>
 </template>
 <script>
-    import Message from '../../../../../js/components/molecules/Message'
+    import Message from '../../molecules/Message'
     import BaseButton from '../../atoms/BaseButton'
     import BaseTextField from '../../atoms/BaseTextField'
 

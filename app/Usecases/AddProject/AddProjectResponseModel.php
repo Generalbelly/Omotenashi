@@ -29,7 +29,7 @@ class AddProjectResponseModel {
         $this->id = $attributes['id'];
         $this->name = $attributes['name'];
         $this->domain = $attributes['domain'];
-        $this->user_id = $attributes['$user_id'];
+        $this->user_id = $attributes['user_id'];
     }
 
 }

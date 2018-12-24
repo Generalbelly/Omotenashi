@@ -72,12 +72,12 @@
 </template>
 <script>
     import { mapActions, mapGetters, mapState,} from 'vuex'
-    import LoadingModal from '../../../../../js/components/molecules/LoadingModal'
+    import LoadingModal from '../../molecules/LoadingModal'
     import Menu from '../../organisms/Menu'
     import Setting from '../../organisms/Setting'
     import DeleteConfirmationMessage from "../../organisms/DeleteConfirmationMessage"
     import DriverEditor from "../../organisms/DriverEditor"
-    import Message from "../../../../../js/components/molecules/Message";
+    import Message from "../../molecules/Message";
 
     export const states = {
         beingHome: 'beingHome',

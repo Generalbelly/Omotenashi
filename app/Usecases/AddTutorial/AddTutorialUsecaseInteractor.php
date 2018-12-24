@@ -41,13 +41,6 @@ class AddTutorialUsecaseInteractor implements AddTutorialUsecase {
             'domain' => $request->domain,
             'user_id' => $request->userKey,
         ]);
-        if (!$projectEntity) {
-            $projectEntity = $this->projectRepository->create([
-                'name' => $request->domain,
-                'domain' => $request->domain,
-                'user_id' => $request->userKey,
-            ]);
-        }
         $tutorial = $this->tutorialRepository->create([
             'name' => $request->name,
             'description' => $request->description,

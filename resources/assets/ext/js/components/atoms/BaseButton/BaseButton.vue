@@ -2,8 +2,7 @@
     <button
         class="button"
         :class="buttonClasses"
-        :id="id"
-        :disabled="disabled"
+        v-bind="$attrs"
         @click.stop.prevent="$emit('click')"
     >
         <slot></slot>
@@ -21,18 +20,6 @@
             sizable,
         ],
         props: {
-            id: {
-                type: String,
-                default: null,
-            },
-            disabled: {
-                type: Boolean,
-                default: false,
-            },
-            href: {
-                type: String,
-                default: null,
-            },
             isOutlined: {
                 type: Boolean,
                 default: false,

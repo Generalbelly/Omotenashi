@@ -5,6 +5,7 @@ import {
 import {
     LIST_PROJECTS,
     ADD_PROJECT,
+    GET_PROJECT,
     UPDATE_PROJECT,
     DELETE_PROJECT,
 
@@ -16,6 +17,10 @@ import {
     REQUEST_ADD_PROJECT_SUCCESS,
     REQUEST_ADD_PROJECT_FAILURE,
 
+    REQUEST_GET_PROJECT,
+    REQUEST_GET_PROJECT_SUCCESS,
+    REQUEST_GET_PROJECT_FAILURE,
+
     REQUEST_UPDATE_PROJECT,
     REQUEST_UPDATE_PROJECT_SUCCESS,
     REQUEST_UPDATE_PROJECT_FAILURE,
@@ -25,10 +30,14 @@ import {
     REQUEST_DELETE_PROJECT_FAILURE,
 } from '../mutation-types'
 
+import ProjectEntity from "../../components/atoms/Entities/ProjectEntity";
+
 const state = {
     total: null,
+    project: new ProjectEntity(),
     projects: [],
     isRequesting: false,
+    requestState: null,
 }
 
 export const mutations = {
@@ -64,37 +73,63 @@ export const mutations = {
         ]
     },
     [REQUEST_LIST_PROJECTS](state) {
-        state.isRequesting = REQUEST_LIST_PROJECTS
+        state.isRequesting = true
+        state.requestState = REQUEST_LIST_PROJECTS
     },
     [REQUEST_LIST_PROJECTS_SUCCESS](state) {
         state.isRequesting = false
+        state.requestState = REQUEST_LIST_PROJECTS_SUCCESS
     },
     [REQUEST_LIST_PROJECTS_FAILURE](state, payload) {
         const { errorCode, errorMsg } = payload
         state.isRequesting = false
+        state.requestState = REQUEST_LIST_PROJECTS_FAILURE
     },
     [REQUEST_ADD_PROJECT](state) {
-        state.isRequesting = REQUEST_ADD_PROJECT
+        state.isRequesting = true
+        state.requestState = REQUEST_ADD_PROJECT
     },
     [REQUEST_ADD_PROJECT_SUCCESS](state) {
         state.isRequesting = false
+        state.requestState = REQUEST_ADD_PROJECT_SUCCESS
     },
     [REQUEST_ADD_PROJECT_FAILURE](state, payload) {
         const { errorCode, errorMsg } = payload
         state.isRequesting = false
+        state.requestState = REQUEST_ADD_PROJECT_FAILURE
+    },
+    [GET_PROJECT](state, data) {
+        state.project = data
+    },
+    [REQUEST_GET_PROJECT](state) {
+        state.isRequesting = true
+        state.requestState = REQUEST_GET_PROJECT
+    },
+    [REQUEST_GET_PROJECT_SUCCESS](state) {
+        state.isRequesting = false
+        state.requestState = REQUEST_GET_PROJECT_SUCCESS
+    },
+    [REQUEST_GET_PROJECT_FAILURE](state, payload) {
+        const { errorCode, errorMsg } = payload
+        state.isRequesting = false
+        state.requestState = REQUEST_GET_PROJECT_FAILURE
     },
     [REQUEST_UPDATE_PROJECT](state) {
-        state.isRequesting = REQUEST_UPDATE_PROJECT
+        state.isRequesting = true
+        state.requestState = REQUEST_UPDATE_PROJECT
     },
     [REQUEST_UPDATE_PROJECT_SUCCESS](state) {
         state.isRequesting = false
+        state.requestState = REQUEST_UPDATE_PROJECT_SUCCESS
     },
     [REQUEST_UPDATE_PROJECT_FAILURE](state, payload) {
         const { errorCode, errorMsg } = payload
         state.isRequesting = false
+        state.requestState = REQUEST_UPDATE_PROJECT_FAILURE
     },
     [REQUEST_DELETE_PROJECT](state) {
-        state.isRequesting = REQUEST_DELETE_PROJECT
+        state.isRequesting = true
+        state.requestState = REQUEST_DELETE_PROJECT
     },
     [REQUEST_DELETE_PROJECT_SUCCESS](state) {
         state.isRequesting = false
@@ -110,7 +145,7 @@ export const actions = {
         commit(REQUEST_LIST_PROJECTS)
         const { pagination={}, q=null, } = payload;
         makeRequest({
-            mutationType: REQUEST_LIST_PROJECTS,
+            mutationType: LIST_PROJECTS,
             params: {
                 orderBy: pagination.orderBy,
                 q,
@@ -134,10 +169,25 @@ export const actions = {
         })
             .then(({ data }) => {
                 commit(REQUEST_ADD_PROJECT_SUCCESS)
-                commit(ADD_PROJECT, { data })
+                commit(ADD_PROJECT, data)
             })
             .catch((error) => {
                 commit(REQUEST_ADD_PROJECT_FAILURE, error)
+            })
+    },
+    getProject({ commit }, payload={}) {
+        const { id } = payload
+        commit(REQUEST_GET_PROJECT)
+        makeRequest({
+            id,
+            mutationType: GET_PROJECT,
+        })
+            .then(({ data }) => {
+                commit(REQUEST_GET_PROJECT_SUCCESS)
+                commit(GET_PROJECT, data)
+            })
+            .catch((error) => {
+                commit(REQUEST_GET_PROJECT_FAILURE, error)
             })
     },
     updateProject({ commit }, payload={}) {

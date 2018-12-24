@@ -3,8 +3,7 @@
         :query="query"
         :pagination="pagination"
         :entities="projects"
-        :columns="columns"
-        :is-loading="!!isRequesting"
+        :is-loading="isRequesting"
         @select="onProjectSelect"
         @click:search="onClickSearch"
         @change:query="onChangeQuery"
@@ -31,24 +30,6 @@
                     orderBy: ['created_at', 'desc'],
                     total: 0,
                 },
-                columns: [
-                    {
-                        field: 'name',
-                        label: 'Name',
-                        to: project => `/projects/${project.id}`,
-                        sortable: true,
-                    },
-                    {
-                        field: 'domain',
-                        label: 'Domain',
-                        sortable: true,
-                    },
-                    {
-                        field: 'created_at',
-                        label: 'Created at',
-                        sortable: true,
-                    },
-                ]
             }
         },
         computed: {
@@ -64,12 +45,15 @@
         methods: {
             ...mapActions('project',[
                 'listProjects',
-                'addProject',
-                'updateProject',
                 'deleteProject',
             ]),
-            onProjectSelect(e) {
-                console.log(e);
+            onProjectSelect(projectEntity) {
+                this.$router.push({
+                    name: 'projects.show',
+                    params: {
+                        id: projectEntity.id,
+                    }
+                })
             },
             onChangePagination(pagination) {
                 this.pagination = {

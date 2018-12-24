@@ -27,17 +27,11 @@ class AddProjectUsecaseInteractor implements AddProjectUsecase {
      */
     public function handle(AddProjectRequestModel $request): AddProjectResponseModel
     {
-        $projectEntity = $this->projectRepository->selectOne([
+        $projectEntity = $this->projectRepository->create([
+            'name' => $request->name,
             'domain' => $request->domain,
             'user_id' => $request->userKey,
         ]);
-        if (!$projectEntity) {
-            $projectEntity = $this->projectRepository->create([
-                'name' => $request->name,
-                'domain' => $request->domain,
-                'user_id' => $request->userKey,
-            ]);
-        }
         return new AddProjectResponseModel($projectEntity->toArray());
     }
 

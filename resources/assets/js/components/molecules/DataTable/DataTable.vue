@@ -1,11 +1,10 @@
 <template>
     <b-table
         v-bind="$attrs"
-        :data="items"
+        :data="data"
         :columns="columns"
         :per-page="pagination.perPage"
         :default-sort="pagination.orderBy"
-        bordered
         hoverable
         mobile-cards
         paginated
@@ -15,49 +14,39 @@
         @sort="onSort"
         @select="onSelect"
     >
-        <slot>
-            <template slot="empty">
-                <section class="section">
-                    <div class="content has-text-grey has-text-centered">
-                        <p>
-                            <b-icon
-                                icon="frown"
-                                size="is-large"
-                            >
-                            </b-icon>
-                        </p>
-                        <p>No projects</p>
-                    </div>
-                </section>
-            </template>
-            <template slot-scope="props">
-                <b-table-column
-                    v-for="column in columns"
-                    :key="column.label"
-                    :field="column.field"
-                    :label="column.label"
-                    :numeric="column.numeric"
-                    :sortable="column.sortable"
-                >
-                    <router-link
-                        v-if="column.to"
-                        :to="column.to(props.row)"
-                    >
-                        {{ props.row[column.field] }}
-                    </router-link>
-                    <span v-else>
-                        {{ props.row[column.field] }}
-                    </span>
-                </b-table-column>
-            </template>
-        </slot>
+        <template slot="empty">
+            <section class="section">
+                <div class="content has-text-grey has-text-centered">
+                    <p>
+                        <b-icon
+                            icon="frown"
+                            size="is-large"
+                        >
+                        </b-icon>
+                    </p>
+                    <p>No items found</p>
+                </div>
+            </section>
+        </template>
+        <template
+            v-for="slot in Object.keys($scopedSlots)"
+            :slot="slot"
+            slot-scope="scope"
+        >
+            <slot
+                :name="slot"
+                v-bind="scope"
+            >
+            </slot>
+        </template>
     </b-table>
 </template>
 
 <script>
     export default {
+        name: 'Table',
         props: {
-            items: {
+            data: {
                 type: Array,
                 default() {
                     return []

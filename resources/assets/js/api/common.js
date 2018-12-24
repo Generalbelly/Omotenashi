@@ -28,34 +28,41 @@ export class APIController {
         this.basePath = basePath
     }
 
-    listEntities(params) {
+    list(params) {
         console.log(params);
         return request({
-            url: `${this.basePath}/`,
+            url: `/${this.basePath}/`,
             method: GET_METHOD,
             params,
         })
     }
 
-    addEntity(data) {
+    add(data) {
         return request({
-            url: `${this.basePath}/`,
+            url: `/${this.basePath}/`,
             method: POST_METHOD,
             data,
         })
     }
 
+    show(id) {
+        return request({
+            url:`/${this.basePath}/${id}`,
+            method: GET_METHOD,
+        })
+    }
+
     updateEntity(data, id) {
         return request({
-            url:`${this.basePath}/${id}`,
+            url:`/${this.basePath}/${id}`,
             method: PUT_METHOD,
             data,
         })
     }
 
-    deleteEntity(id) {
+    delete(id) {
         return request({
-            url: `${this.basePath}/${id}`,
+            url: `/${this.basePath}/${id}`,
             method: DELETE_METHOD,
         })
     }

@@ -20,11 +20,11 @@ export const makeRequest = (params) => {
 
     switch (mutationType) {
         case REQUEST_LIST_TUTORIALS:
-            return tutorialApi.listEntities({
+            return tutorialApi.list({
                 data,
             })
         case ADD_TUTORIAL:
-            return tutorialApi.addEntity({
+            return tutorialApi.add({
                 data,
             })
         case UPDATE_TUTORIAL:
@@ -32,7 +32,7 @@ export const makeRequest = (params) => {
                 data
             })
         case DELETE_TUTORIAL:
-            return tutorialApi.deleteEntity({
+            return tutorialApi.delete({
                 id,
                 data,
             })
