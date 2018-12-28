@@ -27,8 +27,6 @@ import {
 
 const state = {
     total: null,
-    start: null,
-    end: null,
     tutorials: [],
     isRequesting: false,
 }
@@ -36,10 +34,8 @@ const state = {
 export const getters = {}
 
 export const mutations = {
-    [LIST_TUTORIALS](state, { total, start, end, entities }) {
+    [LIST_TUTORIALS](state, { total, entities }) {
         state.total = total;
-        state.start = start;
-        state.end = end;
         state.tutorials = entities;
     },
     [ADD_TUTORIAL](state, { data }) {
@@ -108,21 +104,17 @@ export const actions = {
     listTutorials({ commit }, { data }) {
         commit(REQUEST_LIST_TUTORIALS)
         makeRequest({
-            mutationType: REQUEST_LIST_TUTORIALS,
+            mutationType: LIST_TUTORIALS,
             data,
         })
             .then(({ data }) => {
                 commit(REQUEST_LIST_TUTORIALS_SUCCESS)
                 const {
                     total,
-                    start,
-                    end,
                     entities,
                 } = data
                 commit(LIST_TUTORIALS, {
                     total,
-                    start,
-                    end,
                     entities,
                 })
 

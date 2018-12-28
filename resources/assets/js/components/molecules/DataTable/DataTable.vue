@@ -6,6 +6,7 @@
         :per-page="pagination.perPage"
         :default-sort="pagination.orderBy"
         hoverable
+        striped
         mobile-cards
         paginated
         backend-pagination
@@ -44,7 +45,7 @@
 
 <script>
     export default {
-        name: 'Table',
+        name: 'DataTable',
         props: {
             data: {
                 type: Array,
@@ -93,3 +94,7 @@
         }
     };
 </script>
+
+<style>
+
+</style>

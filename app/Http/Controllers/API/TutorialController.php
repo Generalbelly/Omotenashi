@@ -15,7 +15,8 @@ use App\Http\Requests\UpdateTutorialRequest;
 use App\Usecases\UpdateTutorial\UpdateTutorialRequestModel;
 use App\Usecases\UpdateTutorial\UpdateTutorialUsecase;
 use App\Usecases\DeleteTutorial\DeleteTutorialUsecase;
-use Log, Auth;
+use Exception;
+use DB;
 
 class TutorialController extends Controller
 {
@@ -39,20 +40,23 @@ class TutorialController extends Controller
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
-        $url = $request->get('url');
+        $url = $request->query('url');
         $userKey = $request->user()->key;
-        $search = $request->get('q');
-        $page = $request->get('page');
-        $perPage = $request->get('per_page');
+        $search = $request->query('q');
+        $page = $request->query('page', 0);
+        $perPage = $request->query('perPage', 20);
 
+        $orderBy = $request->query('orderBy', null);
         $orders = [];
-        $direction = $request->get('desc') === 'desc' ? 'desc' : 'asc';
-        $column = $request->get('order_by');
-        if ($direction && $column) {
-            $orders = ['column' => $column, 'direction' => $direction];
+        if (isset($orderBy)) {
+            foreach (explode(',', $orderBy) as $order) {
+                $orderArray = explode(' ', $order);
+                $orders[] = ['column' => $orderArray[0], 'direction' => $orderArray[1]];
+            }
         }
 
         $listTutorialsRequest = new ListTutorialsRequestModel([
@@ -63,7 +67,15 @@ class TutorialController extends Controller
             'search' => $search,
             'perPage' => $perPage,
         ]);
-        $listTutorialsResponse = $this->listTutorialsUsecase->handle($listTutorialsRequest);
+
+        DB::beginTransaction();
+        try {
+            $listTutorialsResponse = $this->listTutorialsUsecase->handle($listTutorialsRequest);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
 
         return response()->json($listTutorialsResponse);
     }
@@ -71,6 +83,7 @@ class TutorialController extends Controller
     /**
      * @param AddTutorialRequest $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws Exception
      */
     public function store(AddTutorialRequest $request)
     {
@@ -80,7 +93,15 @@ class TutorialController extends Controller
                 'userKey' => $request->user()->key
             ]
         ));
-        $addTutorialResponse = $this->addTutorialUsecase->handle($addTutorialRequest);
+
+        DB::beginTransaction();
+        try {
+            $addTutorialResponse = $this->addTutorialUsecase->handle($addTutorialRequest);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
 
         return response()->json($addTutorialResponse);
     }
@@ -89,6 +110,7 @@ class TutorialController extends Controller
      * @param UpdateTutorialRequest $request
      * @param string $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws Exception
      */
     public function update(UpdateTutorialRequest $request, string $id)
     {
@@ -99,20 +121,35 @@ class TutorialController extends Controller
                 'userKey' => $request->user()->key
             ]
         ));
-        $updateTutorialResponse = $this->updateTutorialUsecase->handle($updateTutorialRequest);
+
+        DB::beginTransaction();
+        try {
+            $updateTutorialResponse = $this->updateTutorialUsecase->handle($updateTutorialRequest);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
 
         return response()->json($updateTutorialResponse);
     }
 
     /**
-     * @param UpdateTutorialRequest $request
      * @param string $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws Exception
      */
     public function destroy(string $id)
     {
         $deleteTutorialRequest = new DeleteTutorialRequestModel(['id' => $id]);
-        $deleteTutorialResponse = $this->deleteTutorialUsecase->handle($deleteTutorialRequest);
+        DB::beginTransaction();
+        try {
+            $deleteTutorialResponse = $this->deleteTutorialUsecase->handle($deleteTutorialRequest);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
 
         return response()->json($deleteTutorialResponse);
     }

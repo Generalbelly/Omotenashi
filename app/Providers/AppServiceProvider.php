@@ -49,6 +49,10 @@ use App\Usecases\GetProject\GetProjectUsecaseInteractor;
 use App\Usecases\UpdateProject\UpdateProjectUsecase;
 use App\Usecases\UpdateProject\UpdateProjectUsecaseInteractor;
 
+use App\Usecases\DeleteProject\DeleteProjectUsecase;
+use App\Usecases\DeleteProject\DeleteProjectUsecaseInteractor;
+
+use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -63,6 +67,20 @@ class AppServiceProvider extends ServiceProvider
         TutorialEntity::observe(TutorialEntityObserver::class);
         ProjectEntity::observe(ProjectEntityObserver::class);
         OAuthEntity::observe(OAuthEntityObserver::class);
+
+        Validator::extend(
+            'uuid',
+            function ($attribute, $value, $parameters, $validator) {
+                return preg_match('/^[a-f0-9]{8}\-[a-f0-9]{4}\-4[a-f0-9]{3}\-(8|9|a|b)[a-f0-9]{3}\-[a-f0-9]{12}$/', $value);
+            }
+        );
+
+        Validator::extend(
+            'domain',
+            function ($attribute, $value, $parameters, $validator) {
+                return preg_match('/([A-Za-z0-9][A-Za-z0-9\-]{1,61}[A-Za-z0-9]\.)+[A-Za-z]+/', $value);
+            }
+        );
     }
 
     /**
@@ -135,6 +153,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             UpdateProjectUsecase::class,
             UpdateProjectUsecaseInteractor::class
+        );
+
+        $this->app->bind(
+            DeleteProjectUsecase::class,
+            DeleteProjectUsecaseInteractor::class
         );
 
         if ($this->app->environment() !== 'production') {

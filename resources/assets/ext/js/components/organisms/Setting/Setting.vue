@@ -34,6 +34,7 @@
                 >
                     with parameters
                 </BaseCheckBox>
+                <transition name="fade">
                 <template v-if="showParameterFields">
                     <div
                         v-for="(p, pIndex) in updatedTutorial.parameters"
@@ -70,6 +71,7 @@
                         </BaseButton>
                     </div>
                 </template>
+                </transition>
             </div>
         </div>
         <div
@@ -78,12 +80,13 @@
         >
             <BaseButton
                 @click="onSaveClick"
-                is-success
+                is-primary
             >
                 {{ isCreate ? 'Create' : 'Save' }}
             </BaseButton>
             <BaseButton
                 @click="onCancelClick"
+                is-text
             >
                 Cancel
             </BaseButton>
@@ -233,5 +236,11 @@
     }
     .parameter__trash {
         height: 100% !important;
+    }
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
     }
 </style>

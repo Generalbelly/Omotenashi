@@ -17,7 +17,19 @@ const request = ({ url, method, data, params }) => {
                 resolve(response);
             })
             .catch((error) => {
-                reject(error);
+                console.log('come', error.response);
+                switch(error.response.status) {
+                    case 401:
+                    case 419:
+                        //TODO: 再度ログインしてください的なDialog入れて、再ログインしたら元のページに戻りたい
+                        if (window.location.hostname === 'docker.omotenashi.today') {
+                            document.location.href = '/login'
+                        }
+                        break
+                    default:
+                        reject(error.response)
+                        break
+                }
             })
     })
 }
@@ -29,7 +41,6 @@ export class APIController {
     }
 
     list(params) {
-        console.log(params);
         return request({
             url: `/${this.basePath}/`,
             method: GET_METHOD,
@@ -45,14 +56,14 @@ export class APIController {
         })
     }
 
-    show(id) {
+    get(id) {
         return request({
             url:`/${this.basePath}/${id}`,
             method: GET_METHOD,
         })
     }
 
-    updateEntity(data, id) {
+    update(id, data) {
         return request({
             url:`/${this.basePath}/${id}`,
             method: PUT_METHOD,

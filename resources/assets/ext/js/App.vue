@@ -9,6 +9,10 @@
             v-show="extLog.userIsFirstTime"
             @startClick="onStartClick"
         ></GreetingModal>
+        <ProjectNotFoundModal
+            v-show="projectNotFound"
+        >
+        </ProjectNotFoundModal>
         <TutorialPage
             v-show="tutorialFeature.isActivated"
             @closeClick="tutorialFeature.isActivated = false"
@@ -20,7 +24,7 @@
     import TutorialPage from './components/pages/TutorialPage'
     import GreetingModal from './components/organisms/GreetingModal'
     import Navbar from "./components/organisms/Navbar"
-
+    import ProjectNotFoundModal from "./components/organisms/ProjectNotFoundModal";
     import {
         mapActions,
         mapState
@@ -28,6 +32,7 @@
 
     export default {
         components: {
+            ProjectNotFoundModal,
             Navbar,
             TutorialPage,
             GreetingModal,
@@ -41,7 +46,8 @@
         },
         computed: {
             ...mapState([
-                'extLog'
+                'extLog',
+                'projectNotFound',
             ]),
         },
         created() {
@@ -50,7 +56,7 @@
         methods: {
             ...mapActions([
                 'retrieveLog',
-                'saveLog'
+                'saveLog',
             ]),
             onStartClick() {
                 if (this.extLog.userIsFirstTime) {

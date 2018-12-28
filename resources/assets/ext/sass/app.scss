@@ -117,6 +117,7 @@ $pell-content-height: auto;
 
 #omotenashi {
   box-sizing: border-box !important;
+  @import "../../sass/variables";
   @import "~bulma/bulma";
   @import "../../sass/common";
   div {

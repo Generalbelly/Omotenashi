@@ -17,39 +17,24 @@
             >
             </validatable-text-field>
         </div>
-        <slot name="actions">
-            <div class="buttons">
-                <save-button
-                    @click="$emit('click:save')"
-                ></save-button>
-                <back-button
-                    @click="$emit('click:back')"
-                >
-                </back-button>
-            </div>
-        </slot>
     </div>
 </template>
 
 <script>
     import { Validator } from 'vee-validate'
     import ValidatableTextField from "../../molecules/fields/ValidatableTextField"
-    import SaveButton from "../../atoms/buttons/SaveButton/SaveButton";
-    import CancelButton from "../../atoms/buttons/CancelButton/CancelButton";
-    import BackButton from "../../atoms/buttons/BackButton/BackButton";
+    import DeleteButton from "../../atoms/buttons/DeleteButton/DeleteButton";
 
     Validator.extend('domain', (value, args) => {
-        const re = /^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})$/
+        const re = /([A-Za-z0-9][A-Za-z0-9\-]{1,61}[A-Za-z0-9]\.)+[A-Za-z]+/
         return !!re.exec(value)
     });
 
     export default {
         name: "ProjectForm",
         components: {
-            BackButton,
+            DeleteButton,
             ValidatableTextField,
-            SaveButton,
-            CancelButton,
         },
         props: {
             name: {

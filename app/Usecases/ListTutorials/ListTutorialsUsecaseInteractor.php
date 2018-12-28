@@ -2,9 +2,9 @@
 
 namespace App\Usecases\ListTutorials;
 
+use App\Exceptions\ProjectNotFound;
 use App\Repositories\Tutorial\TutorialRepositoryContract;
 use App\Repositories\Project\ProjectRepositoryContract;
-use Log;
 
 class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
 
@@ -33,10 +33,9 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
 
 
     /**
-     * Handle an incoming request.
-     *
-     * @param  ListTutorialsRequestModel $request
+     * @param ListTutorialsRequestModel $request
      * @return ListTutorialsResponseModel
+     * @throws ProjectNotFound
      */
     public function handle(ListTutorialsRequestModel $request): ListTutorialsResponseModel
     {
@@ -44,14 +43,6 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
             'user_id' => $request->userKey,
             'domain' => $request->domain,
         ]);
-
-        $result = [
-            'total' => null,
-            'start' => null,
-            'end' => null,
-            'entities' => [],
-            'domain' => null,
-        ];
 
         if ($projectEntity) {
             $predicates = [
@@ -76,6 +67,8 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
             );
 
             $result['domain'] = $projectEntity->domain;
+        } else {
+            throw new ProjectNotFound($request->domain);
         }
 
         return new ListTutorialsResponseModel($result);

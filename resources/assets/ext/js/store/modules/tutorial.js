@@ -1,6 +1,6 @@
 import {
     makeRequest
-} from '../../api'
+} from '../../api/tutorial'
 
 import {
     LIST_TUTORIALS,
@@ -29,12 +29,12 @@ import {
     REQUEST_DELETE_TUTORIAL,
     REQUEST_DELETE_TUTORIAL_SUCCESS,
     REQUEST_DELETE_TUTORIAL_FAILURE,
+
+    PROJECT_NOT_FOUND
 } from '../mutation-types'
 
 const state = {
     total: null,
-    start: null,
-    end: null,
     tutorials: [],
     selectedTutorialId: null,
     selectedStepId: null,
@@ -59,8 +59,6 @@ export const getters = {
 export const mutations = {
     [LIST_TUTORIALS](state, { total, start, end, entities }) {
         state.total = total;
-        state.start = start;
-        state.end = end;
         state.tutorials = entities;
     },
     [ADD_TUTORIAL](state, { data }) {
@@ -145,24 +143,23 @@ export const mutations = {
 }
 
 export const actions = {
-    listTutorials({ commit }, { data }) {
+    listTutorials({ commit }, payload) {
         commit(REQUEST_LIST_TUTORIALS)
+        const { url } = payload;
         makeRequest({
-            mutationType: REQUEST_LIST_TUTORIALS,
-            data,
+            mutationType: LIST_TUTORIALS,
+            params: {
+                url,
+            }
         })
             .then(({ data }) => {
                 commit(REQUEST_LIST_TUTORIALS_SUCCESS)
                 const {
                     total,
-                    start,
-                    end,
                     entities,
                 } = data
                 commit(LIST_TUTORIALS, {
                     total,
-                    start,
-                    end,
                     entities,
                 })
 
@@ -179,6 +176,10 @@ export const actions = {
             })
             .catch((error) => {
                 commit(REQUEST_LIST_TUTORIALS_FAILURE, error)
+                const { data } = error;
+                if (data.error && data.error.type === 'ProjectNotFound') {
+                    commit(PROJECT_NOT_FOUND, true, {root: true});
+                }
             });
     },
     addTutorial({ commit }, { data }) {

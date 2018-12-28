@@ -27,10 +27,10 @@ class UpdateProjectUsecaseInteractor implements UpdateProjectUsecase {
      */
     public function handle(UpdateProjectRequestModel $request): UpdateProjectResponseModel
     {
-        $projectEntity = $this->projectRepository->selectOne([
+        $projectEntity = $this->projectRepository->update([
             'domain' => $request->domain,
-            'user_id' => $request->userKey,
-        ]);
+            'name' => $request->name,
+        ], $request->id);
         return new UpdateProjectResponseModel($projectEntity->toArray());
     }
 

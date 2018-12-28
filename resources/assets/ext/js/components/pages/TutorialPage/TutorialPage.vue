@@ -60,7 +60,7 @@
         },
         created() {
             this.startWatchingUrlForSPA()
-            this.fetchTutorials(window.location.href)
+            this.listTutorials({ url: window.location.href })
         },
         methods: {
             ...mapActions('tutorial', [
@@ -78,13 +78,6 @@
                 'retrieveLog',
                 'saveLog'
             ]),
-            fetchTutorials(url) {
-                this.listTutorials({
-                    data: {
-                        url,
-                    }
-                });
-            },
             onTutorialSaveClick({ id=null, name='', description='', steps=[], url='' }) {
                 const data = {
                     name,
@@ -129,12 +122,10 @@
                 const proxiedPushState = window.history.pushState
                 window.history.pushState = function(stateObj, title, URL) {
                     const newPath = arguments[2]
-                    console.log('new',newPath);
-                    console.log('old', self.path);
                     if (newPath !== self.path) {
                         self.path = newPath
                         self.urlDidChange = true
-                        self.fetchTutorials(window.location.origin + newPath);
+                        self.listTutorials({ url: window.location.origin + newPath })
                     }
                     return proxiedPushState.apply(this, arguments)
                 }

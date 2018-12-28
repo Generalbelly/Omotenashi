@@ -118,11 +118,6 @@ trait CommonRepositoryTrait
             'start'  => $start,
             'end'    => $end,
             'entities' => $entities,
-            'perPage' => $perPage,
-            'page' => $page,
-            'orders' => $orders,
-            'predicates' => $predicates,
-            'search' => $search,
         ];
     }
 

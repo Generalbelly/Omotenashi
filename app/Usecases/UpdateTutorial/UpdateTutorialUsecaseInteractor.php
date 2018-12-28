@@ -3,8 +3,6 @@
 namespace App\Usecases\UpdateTutorial;
 
 use App\Repositories\Tutorial\TutorialRepositoryContract;
-use App\Repositories\Project\ProjectRepositoryContract;
-use Log;
 
 class UpdateTutorialUsecaseInteractor implements UpdateTutorialUsecase {
 
@@ -14,21 +12,13 @@ class UpdateTutorialUsecaseInteractor implements UpdateTutorialUsecase {
     private $tutorialRepository;
 
     /**
-     * @var ProjectRepositoryContract
-     */
-    private $projectRepository;
-
-    /**
      * UpdateTutorialUsecaseInteractor constructor.
      * @param TutorialRepositoryContract $tutorialRepository
-     * @param ProjectRepositoryContract $projectRepository
      */
     public function __construct(
-        TutorialRepositoryContract $tutorialRepository,
-        ProjectRepositoryContract $projectRepository
+        TutorialRepositoryContract $tutorialRepository
     ){
         $this->tutorialRepository = $tutorialRepository;
-        $this->projectRepository = $projectRepository;
     }
 
 
@@ -44,7 +34,7 @@ class UpdateTutorialUsecaseInteractor implements UpdateTutorialUsecase {
                 'description' => $request->description,
                 'steps' => $request->steps,
             ],
-            $request->id,
+            $request->id
         );
 
         return new UpdateTutorialResponseModel($tutorial->toArray());

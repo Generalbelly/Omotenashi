@@ -17,13 +17,13 @@ export const makeRequest = ({ id, data, mutationType, params }) => {
         case LIST_PROJECTS:
             return projectApi.list(params)
         case GET_PROJECT:
-            return projectApi.show(id)
+            return projectApi.get(id)
         case ADD_PROJECT:
             return projectApi.add(data)
         case UPDATE_PROJECT:
-            return projectApi.updateEntity(data, id)
+            return projectApi.update(id, data)
         case DELETE_PROJECT:
-            projectApi.delete(id)
+            return projectApi.delete(id)
         default:
             break
     }

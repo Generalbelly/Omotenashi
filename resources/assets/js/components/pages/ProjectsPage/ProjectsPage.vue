@@ -40,7 +40,8 @@
             ]),
         },
         created() {
-            this.listProjects();
+            console.log('created')
+            this.listProjects()
         },
         methods: {
             ...mapActions('project',[

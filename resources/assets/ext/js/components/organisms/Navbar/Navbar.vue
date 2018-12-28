@@ -6,7 +6,7 @@
         <div class="level-right">
             <p class="level-item">
                 <BaseButton
-                    is-success
+                    is-primary
                     @click="$emit('actionClick')"
                 >
                     Tutorials

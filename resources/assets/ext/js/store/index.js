@@ -7,6 +7,7 @@ import {
     RETRIEVE_LOG,
     SAVE_LOG,
     EXT_LOG_KEY,
+    PROJECT_NOT_FOUND,
 } from "./mutation-types";
 
 Vue.use(Vuex)
@@ -16,6 +17,7 @@ export const state = {
         userIsFirstTime: true,
         checkedMessages: [],
     },
+    projectNotFound: false,
 }
 
 export const mutations = {
@@ -26,6 +28,8 @@ export const mutations = {
                 state.extLog = savedLog
             }
         } catch(e) {
+            console.log(e)
+            // TODO: handle exception
         }
     },
     [SAVE_LOG](state, data) {
@@ -36,8 +40,13 @@ export const mutations = {
             }
             localStorage.setItem(EXT_LOG_KEY, JSON.stringify(state.extLog))
         } catch (e) {
+            console.log(e)
+            // TODO: handle exception
         }
     },
+    [PROJECT_NOT_FOUND](state, shouldShow) {
+        state.projectNotFound = shouldShow
+    }
 }
 
 export const actions = {
@@ -47,6 +56,9 @@ export const actions = {
     saveLog({ commit }, data) {
         commit(SAVE_LOG, data)
     },
+    showProjectNotFoundModal({ commit }, shouldShow) {
+        commit(PROJECT_NOT_FOUND, shouldShow)
+    }
 }
 
 export default new Vuex.Store({

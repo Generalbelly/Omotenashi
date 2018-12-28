@@ -1,6 +1,6 @@
 <template>
     <div class="section">
-        <heading>Projects</heading>
+        <heading class="has-margin-bottom-5">Projects</heading>
         <div class="level has-margin-bottom-5">
             <div class="level-left">
                 <search-field
@@ -18,35 +18,37 @@
         <data-table
             :pagination="pagination"
             :data="entities"
+            :columns="columns"
             :loading="isLoading"
             :total="total"
             @change:pagination="$emit('change:pagination', $event)"
             @select="$emit('select', $event)"
         >
-            <template slot-scope="{row}">
-                <b-table-column
-                    field="name"
-                    label="Name"
-                    sortable
-                >
-                    {{ row.name }}
-                </b-table-column>
-                <b-table-column
-                    field="domain"
-                    label="Domain"
-                    sortable
-                >
-                    {{ row.domain }}
-                </b-table-column>
-                <b-table-column
-                    field="created_at"
-                    label="Created at"
-                    sortable
-                >
-                    {{ row.created_at }}
-                </b-table-column>
-            </template>
+            <!--<template slot-scope="{row}">-->
+                <!--<b-table-column-->
+                    <!--field="name"-->
+                    <!--label="Name"-->
+                    <!--sortable-->
+                <!--&gt;-->
+                    <!--{{ row.name }}-->
+                <!--</b-table-column>-->
+                <!--<b-table-column-->
+                    <!--field="domain"-->
+                    <!--label="Domain"-->
+                    <!--sortable-->
+                <!--&gt;-->
+                    <!--{{ row.domain }}-->
+                <!--</b-table-column>-->
+                <!--<b-table-column-->
+                    <!--field="created_at"-->
+                    <!--label="Created at"-->
+                    <!--sortable-->
+                <!--&gt;-->
+                    <!--{{ row.created_at }}-->
+                <!--</b-table-column>-->
+            <!--</template>-->
         </data-table>
+        <router-view></router-view>
     </div>
 </template>
 
@@ -89,6 +91,27 @@
                 type: Boolean,
                 default: false,
             },
+        },
+        data() {
+            return {
+                columns: [
+                    {
+                        field: 'name',
+                        label: 'Name',
+                        sortable: true,
+                    },
+                    {
+                        field: 'domain',
+                        label: 'Domain',
+                        sortable: true,
+                    },
+                    {
+                        field: 'created_at',
+                        label: 'Created at',
+                        sortable: true,
+                    }
+                ]
+            }
         }
     }
 </script>

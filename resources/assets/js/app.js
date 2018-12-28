@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Buefy from 'buefy'
-import 'buefy/dist/buefy.css'
 import VeeValidate from 'vee-validate'
 import store from './store'
 import '../sass/app.scss'
+// import 'buefy/dist/buefy.css'
 import './bootstrap'
 import router from './router'
 import App from './App.vue'
@@ -11,7 +11,6 @@ import App from './App.vue'
 Vue.use(Buefy, {
     defaultIconPack: "fa",
 })
-// Vue.use(VeeValidate)
 Vue.use(VeeValidate, {
     aria: true,
     classNames: {},

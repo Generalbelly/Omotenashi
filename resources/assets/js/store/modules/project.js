@@ -46,7 +46,8 @@ export const mutations = {
         state.total = total
         state.projects = entities
     },
-    [ADD_PROJECT](state, { data }) {
+    [ADD_PROJECT](state, payload) {
+        const { data } = payload
         state.projects = [
             ...state.projects,
             data,
@@ -98,7 +99,8 @@ export const mutations = {
         state.isRequesting = false
         state.requestState = REQUEST_ADD_PROJECT_FAILURE
     },
-    [GET_PROJECT](state, data) {
+    [GET_PROJECT](state, payload) {
+        const { data } = payload;
         state.project = data
     },
     [REQUEST_GET_PROJECT](state) {
@@ -133,10 +135,12 @@ export const mutations = {
     },
     [REQUEST_DELETE_PROJECT_SUCCESS](state) {
         state.isRequesting = false
+        state.requestState = REQUEST_DELETE_PROJECT_SUCCESS
     },
     [REQUEST_DELETE_PROJECT_FAILURE](state, payload) {
         const { errorCode, errorMsg } = payload
         state.isRequesting = false
+        state.requestState = REQUEST_DELETE_PROJECT_FAILURE
     },
 }
 
@@ -152,8 +156,12 @@ export const actions = {
             }
         })
             .then(({ data }) => {
+                console.log(data);
                 commit(REQUEST_LIST_PROJECTS_SUCCESS)
-                commit(LIST_PROJECTS, data)
+                commit(LIST_PROJECTS, {
+                    total: data.total,
+                    entities: data.entities,
+                })
 
             })
             .catch((error) => {
@@ -169,7 +177,9 @@ export const actions = {
         })
             .then(({ data }) => {
                 commit(REQUEST_ADD_PROJECT_SUCCESS)
-                commit(ADD_PROJECT, data)
+                commit(ADD_PROJECT, {
+                    data
+                })
             })
             .catch((error) => {
                 commit(REQUEST_ADD_PROJECT_FAILURE, error)
@@ -177,18 +187,27 @@ export const actions = {
     },
     getProject({ commit }, payload={}) {
         const { id } = payload
-        commit(REQUEST_GET_PROJECT)
-        makeRequest({
-            id,
-            mutationType: GET_PROJECT,
-        })
-            .then(({ data }) => {
-                commit(REQUEST_GET_PROJECT_SUCCESS)
-                commit(GET_PROJECT, data)
+        if (id) {
+            commit(REQUEST_GET_PROJECT)
+            makeRequest({
+                id,
+                mutationType: GET_PROJECT,
             })
-            .catch((error) => {
-                commit(REQUEST_GET_PROJECT_FAILURE, error)
+                .then(({ data }) => {
+                    commit(REQUEST_GET_PROJECT_SUCCESS)
+                    commit(GET_PROJECT, {
+                        data
+                    })
+                })
+                .catch((error) => {
+                    commit(REQUEST_GET_PROJECT_FAILURE, error)
+                })
+        } else {
+            commit(GET_PROJECT, {
+                data: null,
             })
+        }
+
     },
     updateProject({ commit }, payload={}) {
         const { id, data } = payload

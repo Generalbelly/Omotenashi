@@ -36,7 +36,9 @@
     import ProjectsPage from "./components/pages/ProjectsPage/ProjectsPage";
     export default {
         name: "App",
-        components: {ProjectsPage},
+        components: {
+            ProjectsPage
+        },
     }
 </script>
 

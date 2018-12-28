@@ -3,7 +3,6 @@
 namespace App\Usecases\DeleteTutorial;
 
 use App\Repositories\Tutorial\TutorialRepositoryContract;
-use App\Repositories\Project\ProjectRepositoryContract;
 
 class DeleteTutorialUsecaseInteractor implements DeleteTutorialUsecase {
 
@@ -13,21 +12,13 @@ class DeleteTutorialUsecaseInteractor implements DeleteTutorialUsecase {
     private $tutorialRepository;
 
     /**
-     * @var ProjectRepositoryContract
-     */
-    private $projectRepository;
-
-    /**
      * DeleteTutorialUsecaseInteractor constructor.
      * @param TutorialRepositoryContract $tutorialRepository
-     * @param ProjectRepositoryContract $projectRepository
      */
     public function __construct(
-        TutorialRepositoryContract $tutorialRepository,
-        ProjectRepositoryContract $projectRepository
+        TutorialRepositoryContract $tutorialRepository
     ){
         $this->tutorialRepository = $tutorialRepository;
-        $this->projectRepository = $projectRepository;
     }
 
     /**

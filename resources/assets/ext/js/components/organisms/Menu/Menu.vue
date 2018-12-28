@@ -3,7 +3,7 @@
         <p class="panel-heading level has-margin-bottom-0">
             <span class="is-size-4 has-text-weight-semibold">Tutorial</span>
             <BaseButton
-                has-background-grey
+                is-primary
                 has-text-white
                 class="tutorial-add-button"
                 @click="$emit('addTutorialClick')"
@@ -185,7 +185,7 @@
         top: -16px;
         right: unset;
         padding: 16px;
-        background-color: hsl(0, 0%, 21%);
+        background-color: #2f2f2f;
         color: white;
         border-radius: 16px;
     }

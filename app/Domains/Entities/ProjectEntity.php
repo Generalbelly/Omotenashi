@@ -13,18 +13,18 @@ class ProjectEntity extends Entity
 
     public $searchColumns = ['name', 'domain'];
 
-    public function user()
+    public function userEntity()
     {
         return $this->belongsTo('App\Domains\Entities\UserEntity');
     }
 
-    public function oauths()
+    public function oauthEntities()
     {
         return $this->belongsToMany('App\Domains\Entities\OAuthEntity');
     }
 
-    public function tutorials()
+    public function tutorialEntities()
     {
-        return $this->hasMany('App\Domains\Entities\Tutorials');
+        return $this->hasMany('App\Domains\Entities\TutorialEntity');
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="is-size-4 has-text-weight-bold has-margin-bottom-5">
+    <div class="is-size-4 has-text-weight-bold">
         <slot></slot>
     </div>
 </template>

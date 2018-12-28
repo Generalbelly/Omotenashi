@@ -1,5 +1,5 @@
 import {
-    REQUEST_LIST_TUTORIALS,
+    LIST_TUTORIALS,
     ADD_TUTORIAL,
     UPDATE_TUTORIAL,
     DELETE_TUTORIAL,
@@ -11,32 +11,18 @@ import {
 
 const tutorialApi = new APIController('tutorials')
 
-export const makeRequest = (params) => {
-    const {
-        id,
-        data,
-        mutationType,
-    } = params
-
+export const makeRequest = ({ id, data, mutationType, params }) => {
     switch (mutationType) {
-        case REQUEST_LIST_TUTORIALS:
-            return tutorialApi.list({
-                data,
-            })
+        case LIST_TUTORIALS:
+            return tutorialApi.list(params)
         case ADD_TUTORIAL:
-            return tutorialApi.add({
-                data,
-            })
+            return tutorialApi.add(data)
         case UPDATE_TUTORIAL:
-            return tutorialApi.updateEntity({
-                data
-            })
+            return tutorialApi.update(id, data)
         case DELETE_TUTORIAL:
-            return tutorialApi.delete({
-                id,
-                data,
-            })
+            return tutorialApi.delete(id)
         default:
             break
     }
 }
+

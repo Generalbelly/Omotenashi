@@ -2,42 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use App\Usecases\GetProject\GetProjectRequestModel;
 use Illuminate\Http\Request;
 use App\Http\Requests\AddProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
+
 use App\Usecases\ListProjects\ListProjectsRequestModel;
 use App\Usecases\ListProjects\ListProjectsUsecase;
+
 use App\Usecases\AddProject\AddProjectRequestModel;
 use App\Usecases\AddProject\AddProjectUsecase;
+
+use App\Usecases\GetProject\GetProjectRequestModel;
 use App\Usecases\GetProject\GetProjectUsecase;
+
+use App\Usecases\UpdateProject\UpdateProjectRequestModel;
 use App\Usecases\UpdateProject\UpdateProjectUsecase;
-use Log;
+
+use App\Usecases\DeleteProject\DeleteProjectRequestModel;
+use App\Usecases\DeleteProject\DeleteProjectUsecase;
+
+use Exception;
 
 class ProjectController extends Controller
 {
     private $listProjectsUsecase;
     private $addProjectUsecase;
     private $getProjectUsecase;
-//    private $updateProjectUsecase;
-//    private $deleteProjectUsecase;
+    private $updateProjectUsecase;
+    private $deleteProjectUsecase;
 
     /**
      * ProjectController constructor.
      * @param ListProjectsUsecase $listProjectsUsecase
      * @param AddProjectUsecase $addProjectUsecase
+     * @param GetProjectUsecase $getProjectUsecase
+     * @param UpdateProjectUsecase $updateProjectUsecase
+     * @param DeleteProjectUsecase $deleteProjectUsecase
      */
     public function __construct(
         ListProjectsUsecase $listProjectsUsecase,
         AddProjectUsecase $addProjectUsecase,
         GeTProjectUsecase $getProjectUsecase,
-        UpdateProjectUsecase $updateProjectUsecase
-//        DeleteProjectUsecase $deleteProjectUsecase
+        UpdateProjectUsecase $updateProjectUsecase,
+        DeleteProjectUsecase $deleteProjectUsecase
     ){
         $this->listProjectsUsecase = $listProjectsUsecase;
         $this->addProjectUsecase = $addProjectUsecase;
         $this->getProjectUsecase = $getProjectUsecase;
         $this->updateProjectUsecase = $updateProjectUsecase;
-//        $this->deleteProjectUsecase = $deleteProjectUsecase;
+        $this->deleteProjectUsecase = $deleteProjectUsecase;
     }
 
     /**
@@ -56,9 +69,9 @@ class ProjectController extends Controller
         $page = $request->query('page', 0);
         $perPage = $request->query('perPage', 20);
 
-        $orderBy = $request->query('orderBy');
+        $orderBy = $request->query('orderBy', null);
         $orders = [];
-        if (!is_null($orderBy)) {
+        if (isset($orderBy)) {
             foreach (explode(',', $orderBy) as $order) {
                 $orderArray = explode(' ', $order);
                 $orders[] = ['column' => $orderArray[0], 'direction' => $orderArray[1]];
@@ -72,10 +85,13 @@ class ProjectController extends Controller
             'search' => $search,
             'perPage' => $perPage,
         ]);
-        $listProjectsResponse = $this->listProjectsUsecase->handle($listProjectsRequest);
 
+        try {
+            $listProjectsResponse = $this->listProjectsUsecase->handle($listProjectsRequest);
+        } catch (Exception $e) {
+            throw $e;
+        }
         return response()->json($listProjectsResponse);
-
     }
 
     /**
@@ -92,10 +108,6 @@ class ProjectController extends Controller
      */
     public function store(AddProjectRequest $request)
     {
-        if ($request->isXmlHttpRequest() === false) {
-            return view('dashboard');
-        }
-
         $addProjectRequest = new AddProjectRequestModel(array_merge(
             $request->all(),
             [
@@ -130,10 +142,8 @@ class ProjectController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id)
     {
@@ -141,15 +151,21 @@ class ProjectController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param UpdateProjectRequest $request
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
-    public function update(Request $request, $id)
+    public function update(UpdateProjectRequest $request, $id)
     {
-        //
+        $updateProjectRequest = new UpdateProjectRequestModel(array_merge(
+            $request->all(),
+            [
+                'id' => $id,
+            ]
+        ));
+        $updateProjectResponse = $this->updateProjectUsecase->handle($updateProjectRequest);
+
+        return response()->json($updateProjectResponse);
     }
 
     /**
@@ -160,6 +176,13 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $deleteProjectRequest = new DeleteProjectRequestModel(array_merge(
+            [
+                'id' => $id,
+            ]
+        ));
+        $deleteProjectResponse = $this->deleteProjectUsecase->handle($deleteProjectRequest);
+
+        return response()->json($deleteProjectResponse);
     }
 }
