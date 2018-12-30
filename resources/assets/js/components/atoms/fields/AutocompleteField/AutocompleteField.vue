@@ -11,8 +11,8 @@
                 slot-scope="scope"
             >
                 <slot
-                        :name="slot"
-                        v-bind="scope"
+                    :name="slot"
+                    v-bind="scope"
                 >
                 </slot>
             </template>

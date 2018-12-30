@@ -63,6 +63,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // 動作環境がstagingとproductionの場合はSSLを強制する
+        if (env('APP_ENV') === 'staging' || env('APP_ENV') === 'production') {
+            \URL::forceScheme('https');
+        }
+
+
         UserEntity::observe(UserEntityObserver::class);
         TutorialEntity::observe(TutorialEntityObserver::class);
         ProjectEntity::observe(ProjectEntityObserver::class);
@@ -76,9 +82,9 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Validator::extend(
-            'domain',
+            'domain-url',
             function ($attribute, $value, $parameters, $validator) {
-                return preg_match('/([A-Za-z0-9][A-Za-z0-9\-]{1,61}[A-Za-z0-9]\.)+[A-Za-z]+/', $value);
+                return preg_match('/^https?:\/\/([A-Za-z0-9][A-Za-z0-9\-]{1,61}[A-Za-z0-9]\.)+[A-Za-z]+/', $value);
             }
         );
     }

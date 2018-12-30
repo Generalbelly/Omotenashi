@@ -20,17 +20,11 @@ class TutorialEntity extends Entity
         'url',
         'path'
     ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'steps' => 'array',
     ];
 
-    public function site()
+    public function projectEntity()
     {
         return $this->belongsTo('App\Domains\Entities\ProjectEntity');
     }

@@ -1,78 +1,78 @@
 <template>
     <CardModal>
         <div slot="header" class="has-margin-0">
-            {{ isCreate ? 'Create' : 'Edit' }} Tutorial
+            <base-header>{{ isCreate ? 'Create' : 'Edit' }} Tutorial</base-header>
         </div>
         <div slot="body">
-            <BaseTextField
-                label="Name"
-                v-model="updatedTutorial.name"
-                placeholder="First timers"
-                name="name"
-                v-validate="'required'"
-                :error-messages="errors.collect('name')"
-            ></BaseTextField>
-            <BaseTextArea
-                label="Description (Optional)"
-                v-model="updatedTutorial.description"
-                placeholder="Tutorial for first time customers."
-                name="description"
-                v-validate="'required'"
-                :error-messages="errors.collect('description')"
-            ></BaseTextArea>
-            <div>
-                Show this tutorial for a user visiting the following url.
-                <BaseTextField
-                    :value="updatedTutorial.url"
-                    name="url"
-                    v-validate="'required'"
-                    :error-messages="errors.collect('url')"
-                    disabled
-                ></BaseTextField>
-                <BaseCheckBox
-                    v-model="showParameterFields"
-                >
-                    with parameters
-                </BaseCheckBox>
-                <transition name="fade">
-                <template v-if="showParameterFields">
-                    <div
-                        v-for="(p, pIndex) in updatedTutorial.parameters"
-                        :key="pIndex"
-                        class="parameter"
-                        :class="{ 'has-margin-top-4': pIndex === 0 }"
+            <validation-observer ref="observer">
+                <div slot-scope="{invalid}">
+                    <validatable-text-field
+                        label="Name"
+                        v-model="updatedTutorial.name"
+                        placeholder="First timers"
+                        name="name"
+                        rules="required"
                     >
-                        <BaseTextField
-                            label="Key"
-                            v-model="p.key"
-                            v-validate="{'required': showParameterFields}"
-                            :error-messages="errors.collect('parameter key')"
-                            name="parameter key"
-                        ></BaseTextField>
-                        <BaseTextField
-                            label="Value"
-                            v-model="p.value"
-                            v-validate="{'required': showParameterFields}"
-                            :error-messages="errors.collect('parameter value ')"
-                            name="parameter value"
-                        ></BaseTextField>
-                        <BaseIcon
-                            icon="trash"
-                            class="parameter__trash has-cursor-pointer"
-                            @click="deleteParameter(p.id)"
-                        ></BaseIcon>
-                    </div>
-                    <div class="has-margin-top-1">
-                        <BaseButton
-                            is-text
-                            @click="addParameter"
+                    </validatable-text-field>
+                    <validatable-textarea-field
+                        label="Description (Optional)"
+                        v-model="updatedTutorial.description"
+                        placeholder="Tutorial for first time customers."
+                        name="description"
+                        rules="required"
+                    >
+                    </validatable-textarea-field>
+                    <div>
+                        Show this tutorial for a user visiting the following url.
+                        <text-field
+                            :value="updatedTutorial.url"
+                            name="url"
+                            rules="required"
+                            disabled
+                        ></text-field>
+                        <BaseCheckBox
+                            v-model="showParameterFields"
                         >
-                            Add another parameter
-                        </BaseButton>
+                            with parameters
+                        </BaseCheckBox>
+
+                        <template v-if="showParameterFields">
+                            <div
+                                v-for="(p, pIndex) in updatedTutorial.parameters"
+                                :key="pIndex"
+                                class="parameter"
+                                :class="{ 'has-margin-top-4': pIndex === 0 }"
+                            >
+                                <validatable-text-field
+                                    label="Key"
+                                    v-model="p.key"
+                                    :rules="showParameterFields ? 'required' : ''"
+                                    name="parameter key"
+                                ></validatable-text-field>
+                                <validatable-text-field
+                                    label="Value"
+                                    v-model="p.value"
+                                    :rules="showParameterFields ? 'required' : ''"
+                                    name="parameter value"
+                                ></validatable-text-field>
+                                <BaseIcon
+                                    icon="trash"
+                                    class="parameter__trash has-cursor-pointer"
+                                    @click="deleteParameter(p.id)"
+                                ></BaseIcon>
+                            </div>
+                            <div class="has-margin-top-1">
+                                <BaseButton
+                                    is-text
+                                    @click="addParameter"
+                                >
+                                    Add another parameter
+                                </BaseButton>
+                            </div>
+                        </template>
                     </div>
-                </template>
-                </transition>
-            </div>
+                </div>
+            </validation-observer>
         </div>
         <div
             slot="footer"
@@ -94,21 +94,27 @@
     </CardModal>
 </template>
 <script>
+    import { ValidationObserver } from 'vee-validate'
     import uuidv4 from 'uuid'
     import BaseIcon from '../../atoms/BaseIcon'
     import BaseButton from '../../atoms/BaseButton'
-    import BaseTextField from '../../atoms/BaseTextField'
-    import BaseTextArea from '../../atoms/BaseTextArea'
     import CardModal from '../../molecules/CardModal'
     import BaseCheckBox from "../../atoms/BaseCheckBox"
+    import ValidatableTextField from "../../molecules/fields/ValidatableTextField";
+    import TextField from "../../molecules/fields/TextField";
+    import ValidatableTextareaField from "../../molecules/fields/ValidatableTextareaField";
+    import BaseHeader from "../../atoms/BaseHeader/BaseHeader";
 
     export default {
         name: 'Setting',
         components: {
+            BaseHeader,
+            ValidationObserver,
+            ValidatableTextareaField,
+            ValidatableTextField,
+            TextField,
             BaseCheckBox,
             BaseButton,
-            BaseTextField,
-            BaseTextArea,
             CardModal,
             BaseIcon,
         },
@@ -186,25 +192,22 @@
                 this.clear()
             },
             onSaveClick() {
-                return new Promise((resolve, reject) => {
-                    this.$validator.validateAll()
-                        .then(result => {
-                            if (result) {
-                                this.$emit('saveClick', this.updatedTutorial)
-                                this.clear()
-                                resolve()
-                            }
-                        })
-                        .catch(() => {
-                            reject()
-                        })
-                });
+                this.$refs.observer.validate()
+                    .then(result => {
+                        console.log(result);
+                        if (result) {
+                            this.$emit('saveClick', this.updatedTutorial)
+                            this.clear()
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
             },
             clear() {
                 this.updatedTutorial = this.createTutorial({
                     url: this.getUrl(),
                 });
-                this.$validator.reset();
             },
             addParameter() {
                 this.updatedTutorial.parameters = [
@@ -235,12 +238,7 @@
         grid-column-gap: .5em;
     }
     .parameter__trash {
-        height: 100% !important;
-    }
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity .5s;
-    }
-    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-        opacity: 0;
+        align-items: flex-end !important;
+        margin-top: calc(17px + 0.5em) !important;
     }
 </style>

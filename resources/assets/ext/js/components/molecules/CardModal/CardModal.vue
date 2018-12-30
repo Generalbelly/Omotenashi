@@ -13,9 +13,6 @@
 </template>
 
 <script>
-    import BaseButton from '../../atoms/BaseButton'
-    import BaseTextField from '../../atoms/BaseTextField'
-    import BaseTextArea from '../../atoms/BaseTextArea'
     import BaseCardModal from '../../atoms/BaseCardModal'
     import BaseCardModalHeader from '../../atoms/BaseCardModalHeader'
     import BaseCardModalBody from '../../atoms/BaseCardModalBody'
@@ -23,9 +20,6 @@
 
     export default {
         components: {
-            BaseButton,
-            BaseTextField,
-            BaseTextArea,
             BaseCardModal,
             BaseCardModalHeader,
             BaseCardModalBody,

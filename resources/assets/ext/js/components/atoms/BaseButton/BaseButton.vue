@@ -1,7 +1,7 @@
 <template>
     <button
         class="button"
-        :class="buttonClasses"
+        :class="classes"
         v-bind="$attrs"
         @click.stop.prevent="$emit('click')"
     >
@@ -10,8 +10,8 @@
 </template>
 
 <script>
-    import colorable from '../../../mixins/colorable';
-    import sizable from '../../../mixins/sizable';
+    import colorable from '../../mixins/colorable';
+    import sizable from '../../mixins/sizable';
 
     export default {
         name: 'BaseButton',
@@ -30,7 +30,7 @@
             },
         },
         computed: {
-            buttonClasses() {
+            classes() {
                 return {
                     ...this.colorClasses,
                     ...this.sizeClasses,

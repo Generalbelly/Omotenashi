@@ -8,6 +8,7 @@
             :false-value="falseValue"
             @change="$emit('change', $event.target.checked)"
             @input="$emit('input', $event.target.checked)"
+            style="display: inline-block;"
         >
         <slot></slot>
     </label>

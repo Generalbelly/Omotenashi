@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Domains\Entities\Exceptions\OmotenashiException;
+use Log;
 
 class Handler extends ExceptionHandler
 {
@@ -45,7 +47,7 @@ class Handler extends ExceptionHandler
     {
         if (
             $exception instanceof OmotenashiException &&
-            $request->ajax() || $request->wantsJson()
+            ($request->ajax() || $request->wantsJson())
         ) {
             return response()->json([
                 'error' => [

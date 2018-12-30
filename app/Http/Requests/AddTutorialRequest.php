@@ -25,9 +25,9 @@ class AddTutorialRequest extends FormRequest
     {
         return [
             'name' => 'required|max:100',
-            'description' => 'required|max:100',
+            'description' => 'required|max:255',
             'url' => 'required|url',
-            'steps' => 'required|array',
+            'steps' => 'array',
         ];
     }
 }

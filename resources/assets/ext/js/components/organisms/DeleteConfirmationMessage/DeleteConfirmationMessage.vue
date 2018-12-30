@@ -16,10 +16,9 @@
                 You are about to delete "{{ tutorial.name }}".<br/>
                 Please type in the name of the tutorial to confirm.
             </p>
-            <BaseTextField
+            <text-field
                 v-model="tutorialName"
-            >
-            </BaseTextField>
+            ></text-field>
             <div class="field">
                 <BaseButton
                     is-danger
@@ -37,10 +36,15 @@
 <script>
     import Message from '../../molecules/Message'
     import BaseButton from '../../atoms/BaseButton'
-    import BaseTextField from '../../atoms/BaseTextField'
+    import TextField from "../../../../../js/components/atoms/fields/TextField/TextField";
 
     export default {
         name: 'DeleteConfirmationMessage',
+        components: {
+            TextField,
+            Message,
+            BaseButton,
+        },
         props: {
             tutorial: {
                 type: Object,
@@ -54,7 +58,7 @@
         },
         computed: {
             isButtonDisabled() {
-                return (this.tutorialName === '' || this.tutorialName != this.tutorial.name)
+                return (this.tutorialName === '' || this.tutorialName !== this.tutorial.name)
             },
         },
         watch: {
@@ -66,11 +70,6 @@
             onDeleteClick() {
                 this.$emit('deleteClick', this.tutorial.id);
             }
-        },
-        components: {
-            Message,
-            BaseButton,
-            BaseTextField,
         }
     }
 </script>

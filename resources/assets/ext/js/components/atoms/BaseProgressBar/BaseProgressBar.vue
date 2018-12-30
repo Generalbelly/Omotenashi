@@ -17,8 +17,8 @@
 </template>
 
 <script>
-    import colorable from '../../../mixins/colorable';
-    import sizable from '../../../mixins/sizable';
+    import colorable from '../../mixins/colorable';
+    import sizable from '../../mixins/sizable';
 
     export default {
         name: 'BaseProgressBar',

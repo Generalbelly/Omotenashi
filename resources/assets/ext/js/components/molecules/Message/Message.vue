@@ -28,7 +28,7 @@
 </template>
 
 <script>
-    import colorable from '../../../mixins/colorable'
+    import colorable from '../../mixins/colorable'
     import BaseMessage from '../../atoms/BaseMessage'
     import BaseMessageHeader from '../../atoms/BaseMessageHeader'
     import BaseMessageBody from '../../atoms/BaseMessageBody'

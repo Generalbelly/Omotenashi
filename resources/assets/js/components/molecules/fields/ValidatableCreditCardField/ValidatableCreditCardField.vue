@@ -16,7 +16,7 @@
 <script>
     import { ValidationProvider } from 'vee-validate'
     import validatable from "../../../mixins/validatable";
-    import CreditCardField from "../../../atoms/fields/CreditCardField/CreditCardField";
+    import CreditCardField from "../../../atoms/fields/CreditCardField";
 
     export default {
         name: "ValidatableCreditCardField",

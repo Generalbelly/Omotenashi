@@ -3,9 +3,9 @@
         :contentClass="['has-padding-5']"
         :show-close="false"
     >
-        <h1 class="has-padding-bottom-4">Oops, sorry we couldn't find your project.</h1>
-        <p class="has-padding-bottom-4 has-text-left">
-            Seems like you haven't created a project with a domain matching this page's.
+        <p class="has-padding-bottom-4 has-text-weight-bold">Oops! Something went wrong.</p>
+        <p class="has-padding-bottom-5 has-text-left">
+            We couldn't find a project with a domain matching this page's.<br>
             Please create a project first.
         </p>
         <div>

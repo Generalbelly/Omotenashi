@@ -1,7 +1,7 @@
 <template>
     <nav class="panel has-background-white menu">
         <p class="panel-heading level has-margin-bottom-0">
-            <span class="is-size-4 has-text-weight-semibold">Tutorial</span>
+            <base-header>Tutorial</base-header>
             <BaseButton
                 is-primary
                 has-text-white
@@ -116,9 +116,11 @@
     import BaseSelectField from '../../atoms/BaseSelectField'
     import BaseIcon from '../../atoms/BaseIcon'
     import BaseProgressCircular from '../../atoms/BaseProgressCircular'
+    import BaseHeader from "../../atoms/BaseHeader/BaseHeader";
 
     export default {
         components: {
+            BaseHeader,
             BaseIcon,
             BaseButton,
             BaseSelectField,

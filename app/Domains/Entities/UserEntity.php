@@ -12,24 +12,23 @@ class UserEntity extends Authenticatable
     use SoftDeletes;
 
     protected $table = 'users';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
     ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
+    ];
+    protected $dates = ['deleted_at'];
+    public $searchColumns = [
+        'name',
+        'email'
     ];
 
-    protected $dates = ['deleted_at'];
+    public function projectEntities()
+    {
+        return $this->hasMany('App\Domains\Entities\ProjectEntity');
+    }
 }

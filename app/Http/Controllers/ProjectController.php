@@ -22,6 +22,7 @@ use App\Usecases\DeleteProject\DeleteProjectRequestModel;
 use App\Usecases\DeleteProject\DeleteProjectUsecase;
 
 use Exception;
+use DB;
 
 class ProjectController extends Controller
 {
@@ -56,6 +57,7 @@ class ProjectController extends Controller
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws Exception
      */
     public function index(Request $request)
     {
@@ -63,7 +65,6 @@ class ProjectController extends Controller
             return view('dashboard');
         }
 
-        $url = $request->query('url');
         $userKey = $request->user()->key;
         $search = $request->query('q');
         $page = $request->query('page', 0);
@@ -78,7 +79,6 @@ class ProjectController extends Controller
             }
         }
         $listProjectsRequest = new ListProjectsRequestModel([
-            'url' => $url,
             'userKey' => $userKey,
             'orders' => $orders,
             'page' => $page,
@@ -86,9 +86,12 @@ class ProjectController extends Controller
             'perPage' => $perPage,
         ]);
 
+        DB::beginTransaction();
         try {
             $listProjectsResponse = $this->listProjectsUsecase->handle($listProjectsRequest);
+            DB::commit();
         } catch (Exception $e) {
+            DB::rollBack();
             throw $e;
         }
         return response()->json($listProjectsResponse);
@@ -104,7 +107,8 @@ class ProjectController extends Controller
 
     /**
      * @param AddProjectRequest $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @return \Illuminate\Http\JsonResponse
+     * @throws Exception
      */
     public function store(AddProjectRequest $request)
     {
@@ -114,16 +118,23 @@ class ProjectController extends Controller
                 'userKey' => $request->user()->key
             ]
         ));
-        $addProjectResponse = $this->addProjectUsecase->handle($addProjectRequest);
 
+        DB::beginTransaction();
+        try {
+            $addProjectResponse = $this->addProjectUsecase->handle($addProjectRequest);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
         return response()->json($addProjectResponse);
-
     }
 
     /**
      * @param Request $request
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws Exception
      */
     public function show(Request $request, $id)
     {
@@ -135,10 +146,15 @@ class ProjectController extends Controller
             'id' => $id,
         ]);
 
-        $getProjectResponse = $this->getProjectUsecase->handle($getProjectRequest);
-
+        DB::beginTransaction();
+        try {
+            $getProjectResponse = $this->getProjectUsecase->handle($getProjectRequest);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
         return response()->json($getProjectResponse);
-
     }
 
     /**
@@ -153,7 +169,8 @@ class ProjectController extends Controller
     /**
      * @param UpdateProjectRequest $request
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @return \Illuminate\Http\JsonResponse
+     * @throws Exception
      */
     public function update(UpdateProjectRequest $request, $id)
     {
@@ -163,16 +180,22 @@ class ProjectController extends Controller
                 'id' => $id,
             ]
         ));
-        $updateProjectResponse = $this->updateProjectUsecase->handle($updateProjectRequest);
 
+        DB::beginTransaction();
+        try {
+            $updateProjectResponse = $this->updateProjectUsecase->handle($updateProjectRequest);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
         return response()->json($updateProjectResponse);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws Exception
      */
     public function destroy($id)
     {
@@ -181,8 +204,15 @@ class ProjectController extends Controller
                 'id' => $id,
             ]
         ));
-        $deleteProjectResponse = $this->deleteProjectUsecase->handle($deleteProjectRequest);
 
+        DB::beginTransaction();
+        try {
+            $deleteProjectResponse = $this->deleteProjectUsecase->handle($deleteProjectRequest);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
         return response()->json($deleteProjectResponse);
     }
 }

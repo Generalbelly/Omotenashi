@@ -21,7 +21,7 @@
         <p
             v-for="errorMessage in errorMessages"
             :key="errorMessage"
-            class="help is-danger"
+            class="help is-danger has-text-left"
         >
             {{ errorMessage }}
         </p>

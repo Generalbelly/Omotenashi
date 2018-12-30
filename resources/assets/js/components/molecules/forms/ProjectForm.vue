@@ -8,31 +8,36 @@
                 :value="name"
                 @input="$emit('update:name', $event)"
             ></validatable-text-field>
-            <validatable-text-field
+            <validatable-domain-field
                 label="Domain"
                 name="domain"
-                rules="required|domain"
+                rules="required"
                 :value="domain"
                 @input="$emit('update:domain', $event)"
             >
-            </validatable-text-field>
+            </validatable-domain-field>
+            <div class="level">
+                <div class="level-right">
+                    <add-button
+                        class="level-item"
+                    ></add-button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { Validator } from 'vee-validate'
     import ValidatableTextField from "../../molecules/fields/ValidatableTextField"
+    import ValidatableDomainField from "../fields/ValidatableDomainField";
     import DeleteButton from "../../atoms/buttons/DeleteButton/DeleteButton";
-
-    Validator.extend('domain', (value, args) => {
-        const re = /([A-Za-z0-9][A-Za-z0-9\-]{1,61}[A-Za-z0-9]\.)+[A-Za-z]+/
-        return !!re.exec(value)
-    });
+    import AddButton from "../../atoms/buttons/AddButton/AddButton";
 
     export default {
         name: "ProjectForm",
         components: {
+            AddButton,
+            ValidatableDomainField,
             DeleteButton,
             ValidatableTextField,
         },

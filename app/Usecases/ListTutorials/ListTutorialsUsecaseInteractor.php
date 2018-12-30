@@ -2,7 +2,7 @@
 
 namespace App\Usecases\ListTutorials;
 
-use App\Exceptions\ProjectNotFound;
+use App\Domains\Entities\Exceptions\ProjectNotFound;
 use App\Repositories\Tutorial\TutorialRepositoryContract;
 use App\Repositories\Project\ProjectRepositoryContract;
 

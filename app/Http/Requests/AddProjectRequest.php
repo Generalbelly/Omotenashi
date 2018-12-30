@@ -27,7 +27,7 @@ class AddProjectRequest extends FormRequest
             'name' => 'required|max:100',
             'domain' => [
                 'required',
-                'domain',
+                'domain-url',
                 'max:100',
             ],
         ];

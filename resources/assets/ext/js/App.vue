@@ -1,5 +1,5 @@
 <template>
-    <div id="omotenashi">
+    <div id="omotenashi" :class="{ 'font-size-fixer': needsFontSizeFixer }">
         <Navbar
             class="navbar"
             v-show="!tutorialFeature.isActivated"
@@ -42,6 +42,7 @@
                 tutorialFeature: {
                     isActivated: false,
                 },
+                needsFontSizeFixer: false,
             }
         },
         computed: {
@@ -53,6 +54,15 @@
         created() {
             this.retrieveLog()
         },
+        mounted() {
+            const fontSize = this.getRootElementFontSize()
+            if (this.isFontSizeInPixel(fontSize)) {
+                const size = fontSize.replace('px', '')
+                if (size < 16) {
+                    this.needsFontSizeFixer = true
+                }
+            }
+        },
         methods: {
             ...mapActions([
                 'retrieveLog',
@@ -62,6 +72,15 @@
                 if (this.extLog.userIsFirstTime) {
                     this.saveLog({ userIsFirstTime: false })
                 }
+            },
+            isFontSizeInPixel(fontSize) {
+                return !!/px$/.exec(fontSize)
+            },
+            isFontSizeInPercentage(fontSize) {
+                return !!/%$/.exec(fontSize)
+            },
+            getRootElementFontSize() {
+                return window.getComputedStyle(document.documentElement).getPropertyValue('font-size')
             }
         },
     }
@@ -75,5 +94,8 @@
     #omotenashi > .navbar:after,
     #omotenashi > .navbar:before {
         content: none;
+    }
+    #omotenashi.font-size-fixer * {
+        font-size: 16px;
     }
 </style>

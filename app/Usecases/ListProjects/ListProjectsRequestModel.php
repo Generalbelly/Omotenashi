@@ -12,11 +12,6 @@ class ListProjectsRequestModel {
     /**
      * @var string
      */
-    public $url;
-
-    /**
-     * @var string
-     */
     public $domain;
 
     /**
@@ -46,18 +41,11 @@ class ListProjectsRequestModel {
 
     public function __construct(array $data)
     {
-        $this->url = $data['url'];
         $this->userKey = $data['userKey'];
         $this->orders = $data['orders'];
         $this->page = $data['page'];
         $this->search = $data['search'];
         $this->perPage = $data['perPage'];
-
-        $parsedUrl = parse_url($this->url);
-        if ($parsedUrl) {
-            $this->domain = isset($parsedUrl['host']) ? $parsedUrl['host'] : null;
-            $this->path = isset($parsedUrl['path']) ? $parsedUrl['path'] : null;
-        }
     }
 
 }
