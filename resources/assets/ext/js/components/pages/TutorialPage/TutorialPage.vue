@@ -1,5 +1,5 @@
 <template>
-    <TutorialTemplate
+    <tutorial-template
         :tutorials="tutorials"
         :selected-tutorial="selectedTutorial"
         :selected-step="selectedStep"
@@ -8,13 +8,13 @@
         :url-did-change="urlDidChange"
         @tutorialSaveClick="onTutorialSaveClick"
         @tutorialChange="onTutorialChange"
-        @closeClick="$emit('closeClick')"
+        @closeClick="$emit('click:close')"
         @stepClick="selectStep"
         @deleteStepClick="deleteStep"
         @stepSaveClick="onStepSaveClick"
         @deleteTutorialConfirmClick="deleteTutorial"
     >
-    </TutorialTemplate>
+    </tutorial-template>
 </template>
 <script>
     import { mapActions, mapGetters, mapState,} from 'vuex'

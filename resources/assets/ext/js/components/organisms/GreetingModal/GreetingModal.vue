@@ -1,5 +1,5 @@
 <template>
-    <Modal
+    <modal
         @closeClick="$emit('closeClick')"
         :contentClass="['has-padding-5']"
         :show-close="false"
@@ -12,12 +12,12 @@
         <div>
             <BaseButton
                 is-primary
-                @click="$emit('startClick')"
+                @click="$emit('click:start')"
             >
                 Let's get started!
             </BaseButton>
         </div>
-    </Modal>
+    </modal>
 </template>
 <script>
     import Modal from '../../molecules/Modal';

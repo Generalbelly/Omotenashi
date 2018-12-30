@@ -1,6 +1,9 @@
 <template>
     <div class="field">
-        <label class="label">
+        <label
+            v-if="label"
+            class="label"
+        >
             {{ label }}
         </label>
         <p

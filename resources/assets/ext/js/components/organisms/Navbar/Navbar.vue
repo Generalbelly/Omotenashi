@@ -1,32 +1,35 @@
 <template>
-    <nav class="navbar level has-background-dark has-margin-bottom-0 has-padding-4 is-fixed-bottom">
+    <nav class="navbar level has-background-dark has-margin-bottom-0 has-padding-5 is-fixed-bottom">
         <div class="level-left">
-            <h1 class="has-text-white is-size-4 has-text-weight-bold">Omotenashi</h1>
+            <base-header
+                :level="1"
+                class="has-text-white has-cursor-pointer"
+                @click.native="$emit('click:logo')"
+            >
+                Omotenashi
+            </base-header>
         </div>
         <div class="level-right">
             <p class="level-item">
-                <BaseButton
+                <base-button
                     is-primary
-                    @click="$emit('actionClick')"
+                    @click="$emit('click:tutorials-button')"
                 >
                     Tutorials
-                </BaseButton>
-            </p>
-            <p class="level-item">
-                <a class="button" href="#">
-                    Feedback
-                </a>
+                </base-button>
             </p>
         </div>
     </nav>
 </template>
 <script>
     import BaseButton from '../../atoms/BaseButton'
+    import BaseHeader from "../../atoms/BaseHeader"
 
     export default {
         name: 'Navbar',
         components: {
+            BaseHeader,
             BaseButton,
-        }
+        },
     }
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <Modal
+    <modal
         :contentClass="['has-padding-5']"
         :show-close="false"
     >
@@ -12,20 +12,19 @@
             <a
                 class="button is-link"
                 href="http://docker.omotenashi.today"
+                target="_blank"
             >
                 Go to Omotenashi
             </a>
         </div>
-    </Modal>
+    </modal>
 </template>
 <script>
     import Modal from '../../molecules/Modal';
-    import BaseButton from '../../atoms/BaseButton';
 
     export default {
         components: {
             Modal,
-            BaseButton,
         }
     }
 </script>

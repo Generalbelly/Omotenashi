@@ -1,7 +1,12 @@
 <template>
     <CardModal>
         <div slot="header" class="has-margin-0">
-            <base-header>{{ isCreate ? 'Create' : 'Edit' }} Tutorial</base-header>
+            <base-header
+                :level="3"
+                class="has-text-left"
+            >
+                {{ isCreate ? 'Create' : 'Edit' }} Tutorial
+            </base-header>
         </div>
         <div slot="body">
             <validation-observer ref="observer">
@@ -30,27 +35,28 @@
                             rules="required"
                             disabled
                         ></text-field>
-                        <BaseCheckBox
+                        <base-check-box
                             v-model="showParameterFields"
                         >
                             with parameters
-                        </BaseCheckBox>
+                        </base-check-box>
 
                         <template v-if="showParameterFields">
+                            <div class="parameter__labels">
+                                <label class="label">Key</label>
+                                <label class="label">Value</label>
+                            </div>
                             <div
                                 v-for="(p, pIndex) in updatedTutorial.parameters"
                                 :key="pIndex"
-                                class="parameter"
-                                :class="{ 'has-margin-top-4': pIndex === 0 }"
+                                class="parameter__input"
                             >
                                 <validatable-text-field
-                                    label="Key"
                                     v-model="p.key"
                                     :rules="showParameterFields ? 'required' : ''"
                                     name="parameter key"
                                 ></validatable-text-field>
                                 <validatable-text-field
-                                    label="Value"
                                     v-model="p.value"
                                     :rules="showParameterFields ? 'required' : ''"
                                     name="parameter value"
@@ -63,8 +69,8 @@
                             </div>
                             <div class="has-margin-top-1">
                                 <BaseButton
-                                    is-text
                                     @click="addParameter"
+                                    class="is-text"
                                 >
                                     Add another parameter
                                 </BaseButton>
@@ -86,7 +92,7 @@
             </BaseButton>
             <BaseButton
                 @click="onCancelClick"
-                is-text
+                class="is-text"
             >
                 Cancel
             </BaseButton>
@@ -232,13 +238,17 @@
 </script>
 
 <style scoped>
-    .parameter {
+    .parameter__labels {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-top: 10px;
+    }
+    .parameter__input {
         display: grid;
         grid-template-columns: 1fr 1fr auto;
         grid-column-gap: .5em;
     }
     .parameter__trash {
-        align-items: flex-end !important;
-        margin-top: calc(17px + 0.5em) !important;
+        margin-top: 0.5em;
     }
 </style>

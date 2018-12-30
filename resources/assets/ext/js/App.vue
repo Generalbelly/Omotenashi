@@ -1,30 +1,30 @@
 <template>
     <div id="omotenashi" :class="{ 'font-size-fixer': needsFontSizeFixer }">
-        <Navbar
-            class="navbar"
-            v-show="!tutorialFeature.isActivated"
-            @actionClick="tutorialFeature.isActivated = true"
-        ></Navbar>
-        <GreetingModal
+        <navbar
+            v-show="showNav"
+            @click:tutorials-button="onClickTutorialsButton"
+            @click:logo="onClickLogo"
+        ></navbar>
+        <greeting-modal
             v-show="extLog.userIsFirstTime"
-            @startClick="onStartClick"
-        ></GreetingModal>
-        <ProjectNotFoundModal
+            @click:start="onClickStart"
+        ></greeting-modal>
+        <project-not-found-modal
             v-show="projectNotFound"
         >
-        </ProjectNotFoundModal>
-        <TutorialPage
-            v-show="tutorialFeature.isActivated"
-            @closeClick="tutorialFeature.isActivated = false"
+        </project-not-found-modal>
+        <tutorial-page
+            v-show="showTutorials"
+            @click:close="onClickCloseTutorialPage"
         >
-        </TutorialPage>
+        </tutorial-page>
     </div>
 </template>
 <script>
     import TutorialPage from './components/pages/TutorialPage'
     import GreetingModal from './components/organisms/GreetingModal'
     import Navbar from "./components/organisms/Navbar"
-    import ProjectNotFoundModal from "./components/organisms/ProjectNotFoundModal";
+    import ProjectNotFoundModal from "./components/organisms/ProjectNotFoundModal"
     import {
         mapActions,
         mapState
@@ -39,9 +39,8 @@
         },
         data() {
             return {
-                tutorialFeature: {
-                    isActivated: false,
-                },
+                showNav: true,
+                showTutorials: false,
                 needsFontSizeFixer: false,
             }
         },
@@ -68,7 +67,7 @@
                 'retrieveLog',
                 'saveLog',
             ]),
-            onStartClick() {
+            onClickStart() {
                 if (this.extLog.userIsFirstTime) {
                     this.saveLog({ userIsFirstTime: false })
                 }
@@ -76,11 +75,22 @@
             isFontSizeInPixel(fontSize) {
                 return !!/px$/.exec(fontSize)
             },
-            isFontSizeInPercentage(fontSize) {
-                return !!/%$/.exec(fontSize)
-            },
             getRootElementFontSize() {
                 return window.getComputedStyle(document.documentElement).getPropertyValue('font-size')
+            },
+            onClickLogo() {
+                window.open(
+                    'https://docker.omotenashi.today',
+                    '_blank'
+                );
+            },
+            onClickTutorialsButton() {
+                this.showNav = false
+                this.showTutorials = true
+            },
+            onClickCloseTutorialPage() {
+                this.showTutorials = false
+                this.showNav = true
             }
         },
     }

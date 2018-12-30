@@ -8,8 +8,8 @@
                 v-model="protocol"
                 placeholder="Protocol"
             >
-                <option>https</option>
-                <option>http</option>
+                <option>https://</option>
+                <option>http://</option>
             </b-select>
             <b-input
                 v-model="domain"
@@ -31,7 +31,7 @@
         },
         data() {
             return {
-                protocol: 'https',
+                protocol: 'https://',
                 domain: null,
             }
         },
@@ -39,9 +39,10 @@
             value: {
                 immediate: true,
                 handler(value) {
+                    console.log(value);
                     if (value && value.includes('://')) {
-                        const data = this.value.split('://')
-                        this.protocol = data[0]
+                        const data = value.split('://')
+                        this.protocol = `${data[0]}://`
                         this.domain = data[1]
                     }
                 },
@@ -52,7 +53,7 @@
         },
         computed: {
             domainUrl() {
-                return `${this.protocol}://${this.domain ? this.domain : ''}`
+                return this.protocol+this.domain ? this.domain : ''
             }
         }
     }

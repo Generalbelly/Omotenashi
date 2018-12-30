@@ -18,9 +18,8 @@
     import validatable from "../../../mixins/validatable";
     import DomainField from "../../../atoms/fields/DomainField";
 
-
     Validator.extend('domain-url', (value, args) => {
-        const re = /^https?:\/\/([A-Za-z0-9][A-Za-z0-9\-]{1,61}[A-Za-z0-9]\.)+[A-Za-z]+/
+        const re = /^([A-Za-z0-9][A-Za-z0-9\-]{1,61}[A-Za-z0-9]\.)+[A-Za-z]+/
         return !!re.exec(value)
     });
 

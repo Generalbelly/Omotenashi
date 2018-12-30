@@ -1,12 +1,26 @@
-<template>
-    <span class="has-text-weight-bold" style="font-size: 1.5em;">
-        <slot></slot>
-    </span>
-</template>
-
 <script>
     export default {
-        name: "BaseHeader"
+        name: "BaseHeader",
+        props: {
+            level: {
+                type: Number,
+                required: true
+            },
+        },
+        render: function(createElement) {
+            return createElement(
+                'h' + this.level,
+                {
+                    class: {
+                        'has-text-weight-bold': true
+                    },
+                    style: {
+                        'font-size': '1.5em',
+                    },
+                },
+                this.$slots.default // array of children
+            )
+        },
     }
 </script>
 

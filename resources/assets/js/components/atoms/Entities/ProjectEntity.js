@@ -9,6 +9,7 @@ export default class ProjectEntity extends Entity {
     user = null
     oauths = []
     tutorials = []
+    whitelistedDomains = []
 
     constructor(data={}) {
         super()
