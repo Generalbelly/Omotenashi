@@ -1,25 +1,30 @@
 <template>
     <base-field
-        v-bind="$attrs"
+        v-bind="baseFieldProps"
     >
         <base-textarea
+            v-bind="baseTextareaProps"
             v-model="inputValue"
-            slot-scope="{placeholder, readonly, disabled, classes}"
-            :placeholder="placeholder"
-            :readonly="readonly"
-            :disabled="disabled"
-            :class="classes"
-        >
-        </base-textarea>
+        ></base-textarea>
     </base-field>
 </template>
 
 <script>
     import BaseField from "../../../atoms/BaseField"
-    import BaseTextarea from "../../../atoms/BaseTextarea";
+    import BaseTextarea from "../../../atoms/BaseTextarea"
+    import fieldable from '../../../mixins/fieldable'
+    import inputable from '../../../mixins/inputable'
+    import colorable from '../../../mixins/colorable'
+    import sizable from '../../../mixins/sizable'
 
     export default {
-        name: "TextareaField",
+        name: "TextField",
+        mixins: [
+            fieldable,
+            colorable,
+            sizable,
+            inputable,
+        ],
         components: {
             BaseTextarea,
             BaseField
@@ -39,6 +44,21 @@
                     this.$emit('input', newValue)
                 }
             },
+            baseFieldProps() {
+                return {
+                    ...this.fieldableProps,
+                    ...this.colorableProps,
+                    ...this.sizableProps,
+                }
+            },
+            baseTextareaProps() {
+                return {
+                    ...this.inputableProps,
+                    ...this.sizableProps,
+                    ...this.colorableProps,
+                    ...this.inputableProps,
+                }
+            }
         }
     }
 </script>

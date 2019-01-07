@@ -29,6 +29,10 @@ class UserEntity extends Authenticatable
 
     public function projectEntities()
     {
-        return $this->hasMany('App\Domains\Entities\ProjectEntity');
+        return $this->hasMany(
+            'App\Domains\Entities\ProjectEntity',
+            'user_id',
+            'key'
+        );
     }
 }

@@ -9,7 +9,7 @@ import router from './router'
 import App from './App.vue'
 
 Vue.use(Buefy, {
-    defaultIconPack: "fa",
+    defaultIconPack: "fas",
 })
 Vue.use(VeeValidate, {
     aria: true,

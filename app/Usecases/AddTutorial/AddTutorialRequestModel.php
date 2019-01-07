@@ -44,6 +44,11 @@ class AddTutorialRequestModel {
      */
     public $query;
 
+    /**
+     * @var string
+     */
+    public $project_id;
+
     public function __construct(array $data)
     {
         $this->userKey = $data['userKey'];
@@ -51,6 +56,7 @@ class AddTutorialRequestModel {
         $this->description = $data['description'];
         $this->steps = $data['steps'];
         $this->url = $data['url'];
+        $this->project_id = $data['project_id'];
 
         $parsedUrl = parse_url($this->url);
         $this->domain = $parsedUrl['host'];

@@ -19,11 +19,8 @@
             <section class="section">
                 <div class="content has-text-grey has-text-centered">
                     <p>
-                        <b-icon
-                            icon="frown"
-                            size="is-large"
-                        >
-                        </b-icon>
+                        <frown-icon size="is-large">
+                        </frown-icon>
                     </p>
                     <p>No items found</p>
                 </div>
@@ -44,8 +41,10 @@
 </template>
 
 <script>
+    import FrownIcon from "../../atoms/icons/FrownIcon/FrownIcon";
     export default {
         name: 'DataTable',
+        components: {FrownIcon},
         props: {
             data: {
                 type: Array,

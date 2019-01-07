@@ -11,6 +11,7 @@
 </template>
 
 <script>
+    import { convertKeysFromCamelToKebab } from "../../../utils";
     import colorable from '../../mixins/colorable';
     import sizable from '../../mixins/sizable';
 
@@ -29,8 +30,8 @@
         computed: {
             classes() {
                 return {
-                    ...this.colorClasses,
-                    ...this.sizeClasses,
+                    ...this.colorableProps,
+                    ...this.sizableProps,
                 }
             }
         }

@@ -8,7 +8,7 @@
                 'is-fixed-bottom-left': !menuIsOnTheRight,
             }"
             :is-loading="isRequesting === 'REQUEST_LIST_TUTORIALS'"
-            :tutorials="tutorials"
+            :tutorial-entities="tutorialEntities"
             :selected-tutorial="selectedTutorial"
             :selected-step="selectedStep"
             @tutorialChange="e => $emit('tutorialChange', e)"
@@ -91,7 +91,7 @@
 
     export default {
         props: {
-            tutorials: {
+            tutorialEntities: {
                 type: Array,
                 default() {
                     return []
@@ -215,7 +215,7 @@
             },
         },
         watch: {
-            tutorials(newValue, oldValue) {
+            tutorialEntities(newValue, oldValue) {
                 if ((oldValue.length - newValue.length) === 1) {
                     this.updateState('beingHome')
                 }

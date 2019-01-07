@@ -39,7 +39,6 @@
             value: {
                 immediate: true,
                 handler(value) {
-                    console.log(value);
                     if (value && value.includes('://')) {
                         const data = value.split('://')
                         this.protocol = `${data[0]}://`
@@ -53,7 +52,8 @@
         },
         computed: {
             domainUrl() {
-                return this.protocol+this.domain ? this.domain : ''
+                const url = this.protocol+this.domain
+                return url ? url : null
             }
         }
     }

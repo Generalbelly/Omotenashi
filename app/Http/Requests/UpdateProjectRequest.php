@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateProjectRequest extends FormRequest
 {
@@ -31,8 +32,28 @@ class UpdateProjectRequest extends FormRequest
             'name' => 'required|max:100',
             'domain' => [
                 'required',
-                'domain-url',
+                'domain',
                 'max:100',
+            ],
+            'protocol' => [
+                'required',
+                Rule::in(['http', 'https']),
+                'max:20',
+            ],
+            'whitelisted_domain_entities' => [
+                'array',
+                'required',
+            ],
+            'whitelisted_domain_entities.*.id' => [
+                'uuid',
+            ],
+            'whitelisted_domain_entities.*.domain' => [
+                'domain',
+            ],
+            'whitelisted_domain_entities.*.protocol' => [
+                'required',
+                Rule::in(['http', 'https']),
+                'max:20',
             ],
         ];
     }

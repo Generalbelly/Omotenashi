@@ -1,15 +1,11 @@
 <template>
     <base-field
-        v-bind="$attrs"
+        v-bind="baseFieldProps"
     >
         <base-input
+            v-bind="baseInputProps"
             v-model="inputValue"
             type="text"
-            slot-scope="{placeholder, readonly, disabled, classes}"
-            :placeholder="placeholder"
-            :readonly="readonly"
-            :disabled="disabled"
-            :class="classes"
         ></base-input>
     </base-field>
 </template>
@@ -17,9 +13,19 @@
 <script>
     import BaseField from "../../../atoms/BaseField"
     import BaseInput from "../../../atoms/BaseInput"
+    import fieldable from '../../../mixins/fieldable'
+    import inputable from '../../../mixins/inputable'
+    import colorable from '../../../mixins/colorable'
+    import sizable from '../../../mixins/sizable'
 
     export default {
         name: "TextField",
+        mixins: [
+            fieldable,
+            colorable,
+            sizable,
+            inputable,
+        ],
         components: {
             BaseInput,
             BaseField
@@ -39,6 +45,21 @@
                     this.$emit('input', newValue)
                 }
             },
+            baseFieldProps() {
+                return {
+                    ...this.fieldableProps,
+                    ...this.colorableProps,
+                    ...this.sizableProps,
+                }
+            },
+            baseInputProps() {
+                return {
+                    ...this.inputableProps,
+                    ...this.sizableProps,
+                    ...this.colorableProps,
+                    ...this.inputableProps,
+                }
+            }
         }
     }
 </script>

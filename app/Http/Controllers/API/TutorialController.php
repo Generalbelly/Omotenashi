@@ -44,6 +44,10 @@ class TutorialController extends Controller
      */
     public function index(Request $request)
     {
+        $request->validate([
+            'url' => 'url',
+        ]);
+
         $url = $request->query('url');
         $userKey = $request->user()->key;
         $search = $request->query('q');

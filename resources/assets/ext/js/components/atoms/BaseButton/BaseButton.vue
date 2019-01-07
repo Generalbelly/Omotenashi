@@ -2,19 +2,31 @@
     <button
         class="button"
         :class="classes"
-        v-bind="$attrs"
         @click.stop.prevent="$emit('click')"
     >
-        <slot></slot>
+        <template v-if="icon">
+            <base-icon :icon="icon"></base-icon>
+            <span>
+                <slot></slot>
+            </span>
+        </template>
+        <template v-else>
+            <slot></slot>
+        </template>
     </button>
 </template>
 
 <script>
+    import { convertKeysFromCamelToKebab } from "../../../utils";
     import colorable from '../../mixins/colorable';
     import sizable from '../../mixins/sizable';
+    import BaseIcon from "../BaseIcon/BaseIcon";
 
     export default {
         name: 'BaseButton',
+        components: {
+            BaseIcon
+        },
         mixins: [
             colorable,
             sizable,
@@ -28,15 +40,35 @@
                 type: Boolean,
                 default: false,
             },
+            isWhite: {
+                type: Boolean,
+                default: false,
+            },
+            isLight: {
+                type: Boolean,
+                default: false,
+            },
+            isDark: {
+                type: Boolean,
+                default: false,
+            },
+            isBlack: {
+                type: Boolean,
+                default: false,
+            },
+            isText: {
+                type: Boolean,
+                default: false,
+            },
+            icon: {
+                type: String,
+                default: null,
+            },
         },
         computed: {
             classes() {
-                return {
-                    ...this.colorClasses,
-                    ...this.sizeClasses,
-                    'is-outlined': this.isOutlined,
-                    'is-fullwidth': this.isFullwidth,
-                }
+                const { icon, ...classes } = this.$props
+                return convertKeysFromCamelToKebab(classes)
             }
         }
     }

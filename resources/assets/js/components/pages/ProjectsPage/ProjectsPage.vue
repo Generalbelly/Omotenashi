@@ -40,7 +40,6 @@
             ]),
         },
         created() {
-            console.log('created')
             this.listProjects()
         },
         methods: {

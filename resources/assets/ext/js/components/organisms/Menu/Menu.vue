@@ -21,12 +21,12 @@
                     </BaseProgressCircular>
                 </div>
             </template>
-            <template v-else-if="tutorials.length > 0">
+            <template v-else-if="tutorialEntities.length > 0">
                 <BaseSelectField
                     class="has-margin-right-3"
                     :value="selectedTutorial ? selectedTutorial.id : null"
                     @change="e => $emit('tutorialChange', e)"
-                    :items="tutorials"
+                    :items="tutorialEntities"
                     item-value="id"
                     item-text="name"
                 ></BaseSelectField>
@@ -76,20 +76,20 @@
                     is-outlined
                     is-fullwidth
                     @click="$emit('addStepClick')"
+                    icon="plus"
                 >
-                    <BaseIcon icon="plus"></BaseIcon>
-                    <span>Add Step</span>
+                    Add Step
                 </BaseButton>
             </div>
             <div class="panel-block">
                 <BaseButton
-                    is-primary
+                    is-secondary
                     is-outlined
                     is-fullwidth
                     @click="$emit('previewClick')"
+                    icon="play"
                 >
-                    <BaseIcon icon="play"></BaseIcon>
-                    <span>Preview</span>
+                    Preview
                 </BaseButton>
             </div>
         </template>
@@ -131,7 +131,7 @@
                 type: Boolean,
                 default: false,
             },
-            tutorials: {
+            tutorialEntities: {
                 type: Array,
                 default() {
                     return []

@@ -40,7 +40,6 @@
                         >
                             with parameters
                         </base-check-box>
-
                         <template v-if="showParameterFields">
                             <div class="parameter__labels">
                                 <label class="label">Key</label>
@@ -61,19 +60,19 @@
                                     :rules="showParameterFields ? 'required' : ''"
                                     name="parameter value"
                                 ></validatable-text-field>
-                                <BaseIcon
+                                <base-icon
                                     icon="trash"
                                     class="parameter__trash has-cursor-pointer"
                                     @click="deleteParameter(p.id)"
-                                ></BaseIcon>
+                                ></base-icon>
                             </div>
                             <div class="has-margin-top-1">
-                                <BaseButton
+                                <base-button
                                     @click="addParameter"
-                                    class="is-text"
+                                    is-text
                                 >
                                     Add another parameter
-                                </BaseButton>
+                                </base-button>
                             </div>
                         </template>
                     </div>
@@ -84,18 +83,18 @@
             slot="footer"
             class="has-margin-0"
         >
-            <BaseButton
+            <base-button
                 @click="onSaveClick"
                 is-primary
             >
                 {{ isCreate ? 'Create' : 'Save' }}
-            </BaseButton>
-            <BaseButton
+            </base-button>
+            <base-button
                 @click="onCancelClick"
                 class="is-text"
             >
                 Cancel
-            </BaseButton>
+            </base-button>
         </div>
     </CardModal>
 </template>

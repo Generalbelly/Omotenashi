@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <header class="level">
+    <div>
+        <header class="level container">
             <div class="level-left">
                 <div class="level-item">Logo</div>
             </div>
@@ -18,7 +18,7 @@
                 </div>
             </div>
         </header>
-        <main>
+        <main class="container">
             <router-view>
             </router-view>
         </main>

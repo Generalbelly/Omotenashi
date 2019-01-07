@@ -28,6 +28,7 @@ class GetProjectUsecaseInteractor implements GetProjectUsecase {
     public function handle(GetProjectRequestModel $request): GetProjectResponseModel
     {
         $projectEntity = $this->projectRepository->find($request->id);
+        $projectEntity->whitelistedDomainEntities;
         return new GetProjectResponseModel($projectEntity->toArray());
     }
 

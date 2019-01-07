@@ -8,6 +8,7 @@ class ProjectEntity extends Entity
     protected $fillable = [
         'name',
         'domain',
+        'protocol',
         'user_id',
     ];
 
@@ -25,6 +26,19 @@ class ProjectEntity extends Entity
 
     public function tutorialEntities()
     {
-        return $this->hasMany('App\Domains\Entities\TutorialEntity');
+        return $this->hasMany(
+            'App\Domains\Entities\TutorialEntity',
+            'project_id',
+            'id'
+        );
+    }
+
+    public function whitelistedDomainEntities()
+    {
+        return $this->hasMany(
+            'App\Domains\Entities\WhitelistedDomainEntity',
+            'project_id',
+            'id'
+        );
     }
 }

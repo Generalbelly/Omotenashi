@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDomainsTable extends Migration
+class CreateWhitelistedDomainsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateDomainsTable extends Migration
      */
     public function up()
     {
-        Schema::create('domains', function (Blueprint $table) {
+        Schema::create('whitelisted_domains', function (Blueprint $table) {
             $table->string('id')->unique();
             $table->string('protocol');
             $table->string('domain');
@@ -33,6 +33,6 @@ class CreateDomainsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('domains');
+        Schema::dropIfExists('whitelisted_domains');
     }
 }

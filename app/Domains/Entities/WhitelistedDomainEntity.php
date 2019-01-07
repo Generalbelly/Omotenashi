@@ -2,9 +2,9 @@
 
 namespace App\Domains\Entities;
 
-class DomainEntity extends Entity
+class WhitelistedDomainEntity extends Entity
 {
-    protected $table = 'domains';
+    protected $table = 'whitelisted_domains';
     protected $fillable = [
         'protocol',
         'domain',
@@ -17,6 +17,10 @@ class DomainEntity extends Entity
 
     public function projectEntity()
     {
-        return $this->belongsTo('App\Domains\Entities\ProjectEntity');
+        return $this->belongsTo(
+            'App\Domains\Entities\ProjectEntity',
+            'project_id',
+            'id'
+        );
     }
 }

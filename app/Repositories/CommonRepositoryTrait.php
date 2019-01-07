@@ -2,69 +2,65 @@
 
 namespace App\Repositories;
 use App\Domains\Entities\Entity;
+use Log;
 
 trait CommonRepositoryTrait
 {
     protected $entity;
+
+    protected $entityClass;
 
     protected $perPage = 20;
 
     public function __construct(Entity $entity)
     {
         $this->entity = $entity;
+        $this->entityClass = get_class($entity);
     }
 
     public function all()
     {
-        return $this->entity->all();
+        return $this->entityClass::all();
     }
 
     public function create(array $data)
     {
-        $this->entity->fill($data);
-        $this->entity->save();
-        return $this->entity;
+        return $this->entity::create($data);
     }
 
     public function update(array $data, $id)
     {
-        $entity = $this->find($id);
+        $entity = $this->findOrFail($id);
         $entity->fill($data);
         $entity->save();
         return $entity;
     }
 
+    public function destroy($ids)
+    {
+        return $this->entityClass::destroy($ids);
+    }
+
     public function delete($id)
     {
-        $entity = $this->find($id);
+        $entity = $this->findOrFail($id);
         $entity->delete();
         return $entity;
     }
 
-    public function getEntity()
-    {
-        return $this->entity;
-    }
-
-    public function setEntity($entity)
-    {
-        $this->entity = $entity;
-        return $this;
-    }
-
-    public function with($relations)
-    {
-        return $this->entity->with($relations);
-    }
-
     public function find($id)
     {
-        return $this->entity->findOrFail($id);
+        return $this->entityClass::find($id);
+    }
+
+    public function findOrFail($id)
+    {
+        return $this->entityClass::findOrFail($id);
     }
 
     public function selectOne($predicates)
     {
-        return $this->entity->where(function($query) use ($predicates){
+        return $this->entityClass::where(function($query) use ($predicates){
             foreach($predicates as $column => $value){
                 $query->where($column, '=', $value);
             }
@@ -73,11 +69,21 @@ trait CommonRepositoryTrait
 
     public function select($predicates)
     {
-        return $this->entity->where(function($query) use ($predicates){
+        return $this->entityClass::where(function($query) use ($predicates){
             foreach($predicates as $column => $value){
                 $query->where($column, '=', $value);
             }
         })->get();
+    }
+
+    public function where($column, $operator=null, $value=null)
+    {
+        return $this->entityClass::where($column, $operator, $value);
+    }
+
+    public function with($relations)
+    {
+        return $this->entity::with($relations);
     }
 
     public function paging($predicates=[], $orders=[], $page=0, $search=null, $perPage=null)

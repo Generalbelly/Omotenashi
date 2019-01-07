@@ -1,25 +1,25 @@
-export default {
-    props: {
-        isSmall: {
-            type: Boolean,
-            default: false,
-        },
-        isMedium: {
-            type: Boolean,
-            default: false,
-        },
-        isLarge: {
-            type: Boolean,
-            default: false,
-        },
+import { convertKeysFromCamelToKebab } from "../../utils";
+
+const props = {
+    isSmall: {
+        type: Boolean,
+        default: false,
     },
+    isMedium: {
+        type: Boolean,
+        default: false,
+    },
+    isLarge: {
+        type: Boolean,
+        default: false,
+    },
+}
+
+export default {
+    props,
     computed: {
-        sizeClasses() {
-            return {
-                'is-small': this.isSmall,
-                'is-medium': this.isMedium,
-                'is-large': this.isLarge,
-            }
-        }
+        sizableProps() {
+            return convertKeysFromCamelToKebab(props, this.$props)
+        },
     }
 }

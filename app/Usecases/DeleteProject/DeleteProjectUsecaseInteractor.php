@@ -31,6 +31,9 @@ class DeleteProjectUsecaseInteractor implements DeleteProjectUsecase {
         foreach ($projectEntity->tutorialEntities as $tutorialEntity) {
             $tutorialEntity->delete();
         }
+        foreach ($projectEntity->whitelistedDomainEntities as $whitelistedDomainEntity) {
+            $whitelistedDomainEntity->delete();
+        }
         $projectEntity->delete();
 
         return new DeleteProjectResponseModel($projectEntity->toArray());

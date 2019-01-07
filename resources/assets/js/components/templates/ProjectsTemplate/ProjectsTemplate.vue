@@ -1,5 +1,5 @@
 <template>
-    <div class="section">
+    <div>
         <heading class="has-margin-bottom-5">Projects</heading>
         <div class="level has-margin-bottom-5">
             <div class="level-left">
@@ -49,6 +49,21 @@
             <!--</template>-->
         </data-table>
         <router-view></router-view>
+        <div v-if="entities.length > 0">
+            <div class="notification has-text-centered is-size-4">
+                Have you installed our chrome extension yet?<br>
+                It is required to create tutorials.
+                <div class="has-margin-5">
+                    <a
+                        class="button is-complementary"
+                        href=""
+                        target="_blank"
+                    >
+                        Install the extension
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -109,7 +124,7 @@
                         field: 'created_at',
                         label: 'Created at',
                         sortable: true,
-                    }
+                    },
                 ]
             }
         }

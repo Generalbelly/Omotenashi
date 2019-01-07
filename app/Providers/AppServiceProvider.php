@@ -2,28 +2,38 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 
-use Auth0\Login\Contract\Auth0UserRepository;
-use App\Repositories\BaseRepository;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
+
+
 use App\Repositories\BaseRepositoryContract;
+use App\Repositories\BaseRepository;
+
+use App\Repositories\WhitelistedDomain\WhitelistedDomainRepositoryContract;
+use App\Repositories\WhitelistedDomain\WhitelistedDomainRepository;
+
 use App\Repositories\User\UserRepositoryContract;
+use App\Repositories\User\UserRepository;
+use Auth0\Login\Contract\Auth0UserRepository;
+
+use App\Repositories\Project\ProjectRepositoryContract;
+use App\Repositories\Project\ProjectRepository;
+
+use App\Repositories\Tutorial\TutorialRepositoryContract;
+use App\Repositories\Tutorial\TutorialRepository;
 
 use App\Domains\Entities\UserEntity;
 use App\Domains\Entities\ProjectEntity;
 use App\Domains\Entities\TutorialEntity;
 use App\Domains\Entities\OAuthEntity;
+use App\Domains\Entities\WhitelistedDomainEntity;
 
 use App\Domains\Entities\Observers\UserEntityObserver;
 use App\Domains\Entities\Observers\TutorialEntityObserver;
 use App\Domains\Entities\Observers\ProjectEntityObserver;
 use App\Domains\Entities\Observers\OAuthEntityObserver;
-
-use App\Repositories\User\UserRepository;
-use App\Repositories\Project\ProjectRepositoryContract;
-use App\Repositories\Project\ProjectRepository;
-use App\Repositories\Tutorial\TutorialRepositoryContract;
-use App\Repositories\Tutorial\TutorialRepository;
+use App\Domains\Entities\Observers\WhitelistedDomainEntityObserver;
 
 use App\Usecases\AddTutorial\AddTutorialUsecase;
 use App\Usecases\AddTutorial\AddTutorialUsecaseInteractor;
@@ -52,7 +62,6 @@ use App\Usecases\UpdateProject\UpdateProjectUsecaseInteractor;
 use App\Usecases\DeleteProject\DeleteProjectUsecase;
 use App\Usecases\DeleteProject\DeleteProjectUsecaseInteractor;
 
-use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -73,6 +82,7 @@ class AppServiceProvider extends ServiceProvider
         TutorialEntity::observe(TutorialEntityObserver::class);
         ProjectEntity::observe(ProjectEntityObserver::class);
         OAuthEntity::observe(OAuthEntityObserver::class);
+        WhitelistedDomainEntity::observe(WhitelistedDomainEntityObserver::class);
 
         Validator::extend(
             'uuid',
@@ -82,9 +92,9 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Validator::extend(
-            'domain-url',
+            'domain',
             function ($attribute, $value, $parameters, $validator) {
-                return preg_match('/^https?:\/\/([A-Za-z0-9][A-Za-z0-9\-]{1,61}[A-Za-z0-9]\.)+[A-Za-z]+/', $value);
+                return preg_match('/^(https?:\/\/)?(([A-Za-z0-9][A-Za-z0-9\-]{1,61}[A-Za-z0-9]|[A-Za-z0-9]{1,63})\.)+[A-Za-z]+$/', $value);
             }
         );
     }
@@ -119,6 +129,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             ProjectRepositoryContract::class,
             ProjectRepository::class
+        );
+
+        $this->app->bind(
+            WhitelistedDomainRepositoryContract::class,
+            WhitelistedDomainRepository::class
         );
 
         $this->app->bind(

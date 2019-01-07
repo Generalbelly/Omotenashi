@@ -5,6 +5,10 @@
 $pell-content-height: auto;
 @import '~pell/src/pell';
 
+.pell-content * {
+  text-align: left;
+}
+
 .pell-content pre,
 .driver-popover-content pre {
   display: block;
@@ -97,10 +101,7 @@ $pell-content-height: auto;
 .driver-popover-content ol {
   display: block;
   list-style-type: decimal;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  margin-left: 0;
-  margin-right: 0;
+  margin: 1em 0 1em 0;
   padding-left: 40px;
 }
 
@@ -108,10 +109,7 @@ $pell-content-height: auto;
 .driver-popover-content ul {
   display: block;
   list-style-type: disc;
-  margin-top: 1em;
-  margin-bottom: 1 em;
-  margin-left: 0;
-  margin-right: 0;
+  margin: 1em 0 1em 0;
   padding-left: 40px;
 }
 

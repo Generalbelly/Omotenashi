@@ -97,6 +97,12 @@ $positions: (
   margin-left: 15px !important;
   margin-left: 20px !important;
 }
+.has-position-relative {
+  position: relative;
+}
+.has-position-absolute {
+  position: absolute;
+}
 .has-cursor-pointer {
   cursor: pointer;
 }

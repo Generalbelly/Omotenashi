@@ -15,8 +15,9 @@
                     <project-form
                         slot-scope="{invalid}"
                         :name.sync="innerProject.name"
+                        :protocol.sync="innerProject.protocol"
                         :domain.sync="innerProject.domain"
-                        :whitelisted-domains.sync="innerProject.whitelistedDomains"
+                        :whitelisted_domain_entities.sync="innerProject.whitelisted_domain_entities"
                     ></project-form>
                 </validation-observer>
             </section>

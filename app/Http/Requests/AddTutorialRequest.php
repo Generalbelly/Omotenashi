@@ -28,6 +28,7 @@ class AddTutorialRequest extends FormRequest
             'description' => 'required|max:255',
             'url' => 'required|url',
             'steps' => 'array',
+            'project_id' => 'required|uuid',
         ];
     }
 }

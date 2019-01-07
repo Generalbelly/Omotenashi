@@ -1,20 +1,21 @@
-export default {
-    props: {
-        isHovered: {
-            type: Boolean,
-            default: false,
-        },
-        isFocused: {
-            type: Boolean,
-            default: false,
-        },
+import { convertKeysFromCamelToKebab } from "../../utils";
+
+const props = {
+    isHovered: {
+        type: Boolean,
+        default: false,
     },
+    isFocused: {
+        type: Boolean,
+        default: false,
+    },
+}
+
+export default {
+    props,
     computed: {
-        stateClasses() {
-            return {
-                'is-hovered': this.isHovered,
-                'is-focused': this.isFocused,
-            }
-        }
+        statableProps() {
+            return convertKeysFromCamelToKebab(props, this.$props)
+        },
     }
 }

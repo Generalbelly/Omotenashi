@@ -26,6 +26,10 @@ class TutorialEntity extends Entity
 
     public function projectEntity()
     {
-        return $this->belongsTo('App\Domains\Entities\ProjectEntity');
+        return $this->belongsTo(
+            'App\Domains\Entities\ProjectEntity',
+            'project_id',
+            'id'
+        );
     }
 }

@@ -1,11 +1,13 @@
 <template>
     <div class="field">
-        <label
+        <base-label
             v-if="label"
-            class="label"
+            :is-small="isSmall"
+            :is-medium="isMedium"
+            :is-large="isLarge"
         >
             {{ label }}
-        </label>
+        </base-label>
         <p
             class="control has-icons-right"
             :class="{
@@ -13,13 +15,7 @@
                 'is-loading': isLoading
             }"
         >
-            <slot
-                :readonly="readonly"
-                :disabled="disabled"
-                :is-loading="isLoading"
-                :placeholder="placeholder"
-                :class="inputClass"
-            ></slot>
+            <slot></slot>
             <base-icon
                 v-if="icon"
                 :icon="icon"
@@ -52,20 +48,20 @@
 
 <script>
     import colorable from '../../mixins/colorable'
-    import stylable from '../../mixins/stylable'
-    import statable from '../../mixins/statable'
+    import sizable from '../../mixins/sizable'
     import fieldable from '../../mixins/fieldable'
-    import BaseIcon from "../BaseIcon/BaseIcon"
+    import BaseIcon from "../BaseIcon"
+    import BaseLabel from "../BaseLabel";
 
     export default {
         name: "BaseField",
         mixins: [
             colorable,
             fieldable,
-            stylable,
-            statable
+            sizable,
         ],
         components: {
+            BaseLabel,
             BaseIcon,
         },
         computed: {
@@ -74,14 +70,6 @@
                 if (this.isDanger) return 'exclamation-circle'
                 return false
             },
-            inputClass() {
-                return {
-                    ...this.colorClasses,
-                    ...this.sizeClasses,
-                    ...this.styleClasses,
-                    ...this.stateClasses,
-                }
-            }
         },
     }
 </script>

@@ -22,7 +22,8 @@ const request = ({ url, method, data, params }) => {
                     case 401:
                     case 419:
                         //TODO: 再度ログインしてください的なDialog入れて、再ログインしたら元のページに戻りたい
-                        if (window.location.hostname === 'docker.omotenashi.today') {
+                        // TODO: リリース前に消す
+                        if (window.location.hostname === 'docker.omotenashi.today' || 'localhost') {
                             document.location.href = '/login'
                         }
                         break

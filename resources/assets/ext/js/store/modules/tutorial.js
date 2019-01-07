@@ -34,8 +34,9 @@ import {
 } from '../mutation-types'
 
 const state = {
+    projectEntity: null,
     total: null,
-    tutorials: [],
+    tutorialEntities: [],
     selectedTutorialId: null,
     selectedStepId: null,
     isRequesting: false,
@@ -44,7 +45,7 @@ const state = {
 export const getters = {
     selectedTutorial: state => {
         if (state.selectedTutorialId) {
-            return state.tutorials.find(t => t.id === state.selectedTutorialId)
+            return state.tutorialEntities.find(t => t.id === state.selectedTutorialId)
         }
         return null
     },
@@ -57,32 +58,34 @@ export const getters = {
 }
 
 export const mutations = {
-    [LIST_TUTORIALS](state, { total, start, end, entities }) {
-        state.total = total;
-        state.tutorials = entities;
+    [LIST_TUTORIALS](state, payload) {
+        const { total, start, end, entities, projectEntity } = payload
+        state.projectEntity = projectEntity
+        state.total = total
+        state.tutorialEntities = entities
     },
     [ADD_TUTORIAL](state, { data }) {
-        state.tutorials = [
-            ...state.tutorials,
+        state.tutorialEntities = [
+            ...state.tutorialEntities,
             data,
         ]
     },
     [UPDATE_TUTORIAL](state, { id, data }) {
-        const tutorialIndex = state.tutorials.findIndex(t => t.id === id)
-        state.tutorials = [
-            ...state.tutorials.slice(0, tutorialIndex),
+        const tutorialIndex = state.tutorialEntities.findIndex(t => t.id === id)
+        state.tutorialEntities = [
+            ...state.tutorialEntities.slice(0, tutorialIndex),
             {
                 id,
                 ...data
             },
-            ...state.tutorials.slice(tutorialIndex+1),
+            ...state.tutorialEntities.slice(tutorialIndex+1),
         ]
     },
     [DELETE_TUTORIAL](state, { id }) {
-        const tutorialIndex = state.tutorials.findIndex(t => t.id === id)
-        state.tutorials = [
-            ...state.tutorials.slice(0, tutorialIndex),
-            ...state.tutorials.slice(tutorialIndex+1),
+        const tutorialIndex = state.tutorialEntities.findIndex(t => t.id === id)
+        state.tutorialEntities = [
+            ...state.tutorialEntities.slice(0, tutorialIndex),
+            ...state.tutorialEntities.slice(tutorialIndex+1),
         ]
     },
     [REQUEST_LIST_TUTORIALS](state) {
@@ -134,7 +137,7 @@ export const mutations = {
         if (id) {
             state.selectedTutorialId = id
         } else {
-            state.selectedTutorialId = state.tutorials.length > 0 ? state.tutorials[state.tutorials.length - 1] : null;
+            state.selectedTutorialId = state.tutorialEntities.length > 0 ? state.tutorialEntities[state.tutorialEntities.length - 1] : null;
         }
     },
     [SELECT_STEP](state, { id }) {
@@ -157,10 +160,12 @@ export const actions = {
                 const {
                     total,
                     entities,
+                    projectEntity,
                 } = data
                 commit(LIST_TUTORIALS, {
                     total,
                     entities,
+                    projectEntity,
                 })
 
                 if (entities.length > 0) {
@@ -246,7 +251,7 @@ export const actions = {
         commit(SELECT_TUTORIAL, { id })
         commit(SELECT_STEP, { id: null })
     },
-    addStep({ commit, getters, dispatch }, { data }) {
+    addStep({ commit, getters, dispatch, state }, { data }) {
         dispatch('updateTutorial', {
             id: getters.selectedTutorial.id,
             data: {
@@ -254,7 +259,8 @@ export const actions = {
                 steps: [
                     ...getters.selectedTutorial.steps,
                     data,
-                ]
+                ],
+                project_id: state.projectEntity.id,
             },
         })
     },

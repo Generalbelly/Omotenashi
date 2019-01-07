@@ -1,6 +1,6 @@
 <template>
     <tutorial-template
-        :tutorials="tutorials"
+        :tutorial-entities="tutorialEntities"
         :selected-tutorial="selectedTutorial"
         :selected-step="selectedStep"
         :is-requesting="isRequesting"
@@ -33,7 +33,8 @@
         },
         computed: {
             ...mapState('tutorial', [
-                'tutorials',
+                'projectEntity',
+                'tutorialEntities',
                 'selectedTutorialId',
                 'selectedStepId',
                 'isRequesting',
@@ -84,6 +85,7 @@
                     description,
                     steps,
                     url,
+                    project_id: this.projectEntity.id,
                 }
                 if (id) {
                     this.updateTutorial({

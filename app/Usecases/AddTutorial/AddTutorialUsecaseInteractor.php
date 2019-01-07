@@ -37,10 +37,7 @@ class AddTutorialUsecaseInteractor implements AddTutorialUsecase {
      */
     public function handle(AddTutorialRequestModel $request): AddTutorialResponseModel
     {
-        $projectEntity = $this->projectRepository->selectOne([
-            'domain' => $request->domain,
-            'user_id' => $request->userKey,
-        ]);
+        $projectEntity = $this->projectRepository->find($request->project_id);
         $tutorial = $this->tutorialRepository->create([
             'name' => $request->name,
             'description' => $request->description,
