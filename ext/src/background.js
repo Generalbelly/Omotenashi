@@ -61,3 +61,14 @@ chrome.runtime.onMessage.addListener(function (request) {
     }
 
 });
+
+chrome.runtime.onMessageExternal.addListener(function (request, sender, sendResponse) {
+    if (request.message == 'version') {
+        const manifest = chrome.runtime.getManifest();
+        sendResponse({
+            state: 'success',
+            version: manifest.version
+        });
+    }
+    return true;
+});

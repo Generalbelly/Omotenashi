@@ -40,5 +40,11 @@
         "src/index.js"
       ]
     }
-  ]
+  ],
+  "externally_connectable": {
+    "matches": [
+      "*://localhost/*",
+      "*://omotenashi.today/*"
+    ]
+  }
 }

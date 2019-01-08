@@ -1,5 +1,5 @@
 <template>
-    <div class="is-size-3 has-margin-bottom-5">
+    <div class="subtitle">
         <slot></slot>
     </div>
 </template>
