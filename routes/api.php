@@ -12,3 +12,5 @@ Route::prefix('tutorials')->middleware('jwt')->group(function() use ($regexpUUID
     Route::delete('/{id}', 'API\TutorialController@destroy');
 
 });
+
+Route::get('tutorials/{userKey}', 'API\TutorialController@show');

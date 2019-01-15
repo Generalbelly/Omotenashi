@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 
+
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 
@@ -35,6 +36,12 @@ use App\Domains\Entities\Observers\ProjectEntityObserver;
 use App\Domains\Entities\Observers\OAuthEntityObserver;
 use App\Domains\Entities\Observers\WhitelistedDomainEntityObserver;
 
+use App\Usecases\ListTutorials\ListTutorialsUsecase;
+use App\Usecases\ListTutorials\ListTutorialsUsecaseInteractor;
+
+use App\Usecases\GetTutorial\GetTutorialUsecase;
+use App\Usecases\GetTutorial\GetTutorialUsecaseInteractor;
+
 use App\Usecases\AddTutorial\AddTutorialUsecase;
 use App\Usecases\AddTutorial\AddTutorialUsecaseInteractor;
 
@@ -43,9 +50,6 @@ use App\Usecases\UpdateTutorial\UpdateTutorialUsecaseInteractor;
 
 use App\Usecases\DeleteTutorial\DeleteTutorialUsecase;
 use App\Usecases\DeleteTutorial\DeleteTutorialUsecaseInteractor;
-
-use App\Usecases\ListTutorials\ListTutorialsUsecase;
-use App\Usecases\ListTutorials\ListTutorialsUsecaseInteractor;
 
 use App\Usecases\ListProjects\ListProjectsUsecase;
 use App\Usecases\ListProjects\ListProjectsUsecaseInteractor;
@@ -61,6 +65,9 @@ use App\Usecases\UpdateProject\UpdateProjectUsecaseInteractor;
 
 use App\Usecases\DeleteProject\DeleteProjectUsecase;
 use App\Usecases\DeleteProject\DeleteProjectUsecaseInteractor;
+
+use League\OAuth2\Client\Provider\Google;
+use App\Domains\Models\OAuthProviderGoogle;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -142,6 +149,11 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
+            GetTutorialUsecase::class,
+            GetTutorialUsecaseInteractor::class
+        );
+
+        $this->app->bind(
             AddTutorialUsecase::class,
             AddTutorialUsecaseInteractor::class
         );
@@ -180,6 +192,16 @@ class AppServiceProvider extends ServiceProvider
             DeleteProjectUsecase::class,
             DeleteProjectUsecaseInteractor::class
         );
+
+        $this->app->bind(OAuthProvider::class, function($app){
+            return new Google([
+                'clientId'     => env('GOOGLE_ANALYTICS_CLIENT_ID'),
+                'clientSecret' => env('GOOGLE_ANALYTICS_CLIENT_SECRET'),
+                'redirectUri'  => env('GOOGLE_ANALYTICS_CLIENT_REDIRECT_URL'),
+                'accessType'   => 'offline',
+            ]);
+        });
+
 
         if ($this->app->environment() !== 'production') {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);

@@ -9,7 +9,6 @@ class TutorialEntity extends Entity
         'name',
         'description',
         'steps',
-        'url',
         'path',
         'query',
         'project_id',
@@ -17,7 +16,6 @@ class TutorialEntity extends Entity
     public $searchColumns = [
         'name',
         'description',
-        'url',
         'path'
     ];
     protected $casts = [
@@ -32,4 +30,5 @@ class TutorialEntity extends Entity
             'id'
         );
     }
+
 }

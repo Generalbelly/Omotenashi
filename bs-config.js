@@ -16,7 +16,7 @@ module.exports = {
     "ui": {
         "port": 3001
     },
-    files: [
+    "files": [
         "public/js/app.js",
         "public/css/app.css",
     ],
@@ -30,7 +30,9 @@ module.exports = {
         "ignoreInitial": true
     },
     "server": false,
-    "proxy": "docker.omotenashi.today",
+    "proxy": {
+        "target": "https://docker.omotenashi.today"
+    },
     "port": 9001,
     "middleware": false,
     "serveStatic": [],

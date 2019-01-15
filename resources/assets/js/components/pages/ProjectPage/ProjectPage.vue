@@ -1,6 +1,6 @@
 <template>
     <project-template
-        :project="project"
+        :project-entity="projectEntity"
         :is-loading="isRequesting"
         @save="onSave"
         @back="onBack"
@@ -28,14 +28,13 @@
         },
         computed: {
             ...mapState('project', [
-                'project',
+                'projectEntity',
                 'isRequesting',
                 'requestState',
             ]),
         },
         watch: {
             requestState(value) {
-                console.log(value)
                 if (
                     value === REQUEST_ADD_PROJECT_SUCCESS ||
                     value === REQUEST_UPDATE_PROJECT_SUCCESS ||

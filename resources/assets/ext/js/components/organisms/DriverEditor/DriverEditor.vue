@@ -58,7 +58,7 @@
                 <BaseButton
                     id="om-adding-step-save"
                     @click="onSaveClick"
-                    is-success
+                    is-primary
                 >
                     Save
                 </BaseButton>

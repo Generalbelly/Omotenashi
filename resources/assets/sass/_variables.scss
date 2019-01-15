@@ -2,14 +2,17 @@
 @import "~bulma/sass/utilities/_all";
 
 // Set your colors
-$primary: #1976d2;
+$primary: #ef5350;
 $primary-invert: findColorInvert($primary);
-$secondary: #0AD589;
+$secondary: #fce0e0;
 $secondary-invert: findColorInvert($secondary);
-$complementary: #d27519;
+$complementary: #50ecef;
 $complementary-invert: findColorInvert($complementary);
 
-// Setup $colors to use as bulma classes (e.g. 'is-twitter')
+$link: $primary;
+$link-invert: $primary-invert;
+$link-focus-border: $primary;
+
 $colors: (
   "white": ($white, $black),
   "black": ($black, $white),

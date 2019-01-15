@@ -34,8 +34,8 @@ import ProjectEntity from "../../components/atoms/Entities/ProjectEntity";
 
 const state = {
     total: null,
-    project: new ProjectEntity(),
-    projects: [],
+    projectEntity: new ProjectEntity(),
+    projectEntities: [],
     isRequesting: false,
     requestState: null,
 }
@@ -44,33 +44,33 @@ export const mutations = {
     [LIST_PROJECTS](state, payload) {
         const { total, entities } = payload
         state.total = total
-        state.projects = entities
+        state.projectEntities = entities
     },
     [ADD_PROJECT](state, payload) {
         const { data } = payload
-        state.projects = [
-            ...state.projects,
+        state.projectEntities = [
+            ...state.projectEntities,
             data,
         ]
     },
     [UPDATE_PROJECT](state, payload) {
         const { id, data } = payload
-        const projectIndex = state.projects.findIndex(t => t.id === id)
-        state.projects = [
-            ...state.projects.slice(0, projectIndex),
+        const projectIndex = state.projectEntities.findIndex(t => t.id === id)
+        state.projectEntities = [
+            ...state.projectEntities.slice(0, projectIndex),
             {
                 id,
                 ...data
             },
-            ...state.projects.slice(projectIndex+1),
+            ...state.projectEntities.slice(projectIndex+1),
         ]
     },
     [DELETE_PROJECT](state, payload) {
         const { id } = payload
-        const projectIndex = state.projects.findIndex(t => t.id === id)
-        state.projects = [
-            ...state.projects.slice(0, projectIndex),
-            ...state.projects.slice(projectIndex+1),
+        const projectIndex = state.projectEntities.findIndex(t => t.id === id)
+        state.projectEntities = [
+            ...state.projectEntities.slice(0, projectIndex),
+            ...state.projectEntities.slice(projectIndex+1),
         ]
     },
     [REQUEST_LIST_PROJECTS](state) {
@@ -101,7 +101,7 @@ export const mutations = {
     },
     [GET_PROJECT](state, payload) {
         const { data } = payload;
-        state.project = data
+        state.projectEntity = data
     },
     [REQUEST_GET_PROJECT](state) {
         state.isRequesting = true

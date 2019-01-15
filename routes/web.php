@@ -35,3 +35,14 @@ Route::prefix('projects')->middleware('auth')->group(function() use ($regexpUUID
         ->name('projects.destroy');
 
 });
+
+
+Route::prefix('oauth')->middleware('auth')->group(function() use ($regexpUUID){
+    Route::get('/google-analytics/redirect', 'OauthController@googleAnalticsRedirect')->name('oauth.google-analytics.redirect');
+    Route::get('/google-analytics/callback', 'OauthController@googleAnalticsCallback')->name('oauth.google-analytics.callback');
+});
+
+Route::prefix('tags')->middleware('auth')->group(function() use ($regexpUUID){
+    Route::get('{id}', 'TagController@show')
+        ->name('tags.show');
+});

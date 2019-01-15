@@ -2,7 +2,7 @@
     <projects-template
         :query="query"
         :pagination="pagination"
-        :entities="projects"
+        :project-entities="projectEntities"
         :is-loading="isRequesting"
         @select="onProjectSelect"
         @click:search="onClickSearch"
@@ -34,7 +34,7 @@
         },
         computed: {
             ...mapState('project', [
-                'projects',
+                'projectEntities',
                 'isRequesting',
                 'total',
             ]),

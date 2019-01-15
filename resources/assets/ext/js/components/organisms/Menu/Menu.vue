@@ -4,6 +4,7 @@
             <base-header :level="2">Tutorials</base-header>
             <BaseButton
                 is-primary
+                is-outlined
                 has-text-white
                 class="tutorial-add-button"
                 @click="$emit('addTutorialClick')"
@@ -70,21 +71,18 @@
                     <font-awesome-icon icon="trash"></font-awesome-icon>
                 </span>
             </a>
-            <div class="panel-block">
+            <div class="panel-block" style="flex-direction: column;">
                 <BaseButton
-                    is-link
-                    is-outlined
+                    is-primary
                     is-fullwidth
                     @click="$emit('addStepClick')"
                     icon="plus"
+                    class="has-margin-bottom-5"
                 >
                     Add Step
                 </BaseButton>
-            </div>
-            <div class="panel-block">
                 <BaseButton
                     is-secondary
-                    is-outlined
                     is-fullwidth
                     @click="$emit('previewClick')"
                     icon="play"

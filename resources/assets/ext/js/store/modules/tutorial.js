@@ -59,10 +59,10 @@ export const getters = {
 
 export const mutations = {
     [LIST_TUTORIALS](state, payload) {
-        const { total, start, end, entities, projectEntity } = payload
+        const { total, start, end, tutorialEntities, projectEntity } = payload
         state.projectEntity = projectEntity
         state.total = total
-        state.tutorialEntities = entities
+        state.tutorialEntities = tutorialEntities;
     },
     [ADD_TUTORIAL](state, { data }) {
         state.tutorialEntities = [
@@ -159,24 +159,26 @@ export const actions = {
                 commit(REQUEST_LIST_TUTORIALS_SUCCESS)
                 const {
                     total,
-                    entities,
+                    tutorialEntities,
                     projectEntity,
                 } = data
                 commit(LIST_TUTORIALS, {
                     total,
-                    entities,
+                    tutorialEntities,
                     projectEntity,
                 })
 
-                if (entities.length > 0) {
-                    const firstTutorial = entities[0]
-                    const firstTutorialSteps = firstTutorial.steps[0]
+                if (tutorialEntities.length > 0) {
+                    const firstTutorial = tutorialEntities[0]
                     commit(SELECT_TUTORIAL, {
                         id: firstTutorial.id,
                     })
-                    commit(SELECT_STEP, {
-                        id: firstTutorialSteps.length > 0 ? firstTutorialSteps[0].id : null
-                    })
+                    if (firstTutorial.steps.length > 0) {
+                        const firstTutorialSteps = firstTutorial.steps[0]
+                        commit(SELECT_STEP, {
+                            id: firstTutorialSteps[0].id
+                        })
+                    }
                 }
             })
             .catch((error) => {

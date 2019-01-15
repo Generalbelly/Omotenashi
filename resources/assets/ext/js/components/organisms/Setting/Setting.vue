@@ -5,7 +5,7 @@
                 :level="3"
                 class="has-text-left"
             >
-                {{ isCreate ? 'Create' : 'Edit' }} Tutorial
+                {{ !!tutorial ? 'Edit' : 'Create' }} Tutorial
             </base-header>
         </div>
         <div slot="body">
@@ -42,8 +42,8 @@
                         </base-check-box>
                         <template v-if="showParameterFields">
                             <div class="parameter__labels">
-                                <label class="label">Key</label>
-                                <label class="label">Value</label>
+                                <base-label>Key</base-label>
+                                <base-label>Value</base-label>
                             </div>
                             <div
                                 v-for="(p, pIndex) in updatedTutorial.parameters"
@@ -63,7 +63,7 @@
                                 <base-icon
                                     icon="trash"
                                     class="parameter__trash has-cursor-pointer"
-                                    @click="deleteParameter(p.id)"
+                                    @click="deleteParameter(pIndex)"
                                 ></base-icon>
                             </div>
                             <div class="has-margin-top-1">
@@ -87,7 +87,7 @@
                 @click="onSaveClick"
                 is-primary
             >
-                {{ isCreate ? 'Create' : 'Save' }}
+                {{ !!tutorial ? 'Save' : 'Create' }}
             </base-button>
             <base-button
                 @click="onCancelClick"
@@ -100,7 +100,6 @@
 </template>
 <script>
     import { ValidationObserver } from 'vee-validate'
-    import uuidv4 from 'uuid'
     import BaseIcon from '../../atoms/BaseIcon'
     import BaseButton from '../../atoms/BaseButton'
     import CardModal from '../../molecules/CardModal'
@@ -108,11 +107,13 @@
     import ValidatableTextField from "../../molecules/fields/ValidatableTextField";
     import TextField from "../../molecules/fields/TextField";
     import ValidatableTextareaField from "../../molecules/fields/ValidatableTextareaField";
-    import BaseHeader from "../../atoms/BaseHeader/BaseHeader";
+    import BaseHeader from "../../atoms/BaseHeader";
+    import BaseLabel from "../../atoms/BaseLabel";
 
     export default {
         name: 'Setting',
         components: {
+            BaseLabel,
             BaseHeader,
             ValidationObserver,
             ValidatableTextareaField,
@@ -131,17 +132,22 @@
         },
         data() {
             return {
-                isCreate: true,
                 updatedTutorial: null,
                 showParameterFields: false,
             };
+        },
+        computed: {
+            url() {
+                if (!this.tutorial) return null
+                const url = new URL(this.tutorial.url)
+                return url.origin+url.pathname
+            }
         },
         watch: {
             tutorial: {
                 immediate: true,
                 handler(value) {
                     if (value) {
-                        this.isCreate = false;
                         this.updatedTutorial = this.createTutorial(value);
                     } else {
                         this.clear();
@@ -153,8 +159,10 @@
                 handler(newValue, oldValue) {
                     if (newValue.length === 0 && oldValue.length > 0) {
                         this.showParameterFields = false
+                    } else if (newValue.length > 0) {
+                        this.showParameterFields = true
                     }
-                    this.updateUrl()
+                    this.updatedTutorial.url = this.url + this.formatParameters(this.updatedTutorial.parameters)
                 }
             },
             showParameterFields(value){
@@ -164,12 +172,6 @@
             },
         },
         methods: {
-            getUrl() {
-                return this.tutorial ? this.tutorial.url : window.location.href
-            },
-            updateUrl() {
-                this.updatedTutorial.url = this.getUrl() + this.formatParameters(this.updatedTutorial.parameters)
-            },
             formatParameters(params) {
                 return params.reduce((total, current, index) => {
                     if (current.key && current.value) {
@@ -184,11 +186,21 @@
                 }, '');
             },
             createTutorial(defaultValues={}) {
+                let parameters = [];
+                if (defaultValues.query) {
+                    parameters = defaultValues.query.split('&').map(param => {
+                        const pair = param.split('=')
+                        return {
+                            key: pair[0],
+                            value: pair[1],
+                        }
+                    });
+                }
                 return {
                     name: '',
                     description: '',
                     url: '',
-                    parameters: [],
+                    parameters,
                     ...defaultValues,
                 };
             },
@@ -199,7 +211,6 @@
             onSaveClick() {
                 this.$refs.observer.validate()
                     .then(result => {
-                        console.log(result);
                         if (result) {
                             this.$emit('saveClick', this.updatedTutorial)
                             this.clear()
@@ -210,22 +221,18 @@
                     })
             },
             clear() {
-                this.updatedTutorial = this.createTutorial({
-                    url: this.getUrl(),
-                });
+                this.updatedTutorial = this.createTutorial();
             },
             addParameter() {
                 this.updatedTutorial.parameters = [
                     ...this.updatedTutorial.parameters,
                     {
-                        id: uuidv4(),
                         key: '',
                         value: '',
                     }
                 ]
             },
-            deleteParameter(id) {
-                const index = this.updatedTutorial.parameters.findIndex(p => p.id === id)
+            deleteParameter(index) {
                 this.updatedTutorial.parameters = [
                     ...this.updatedTutorial.parameters.slice(0, index),
                     ...this.updatedTutorial.parameters.slice(index+1),

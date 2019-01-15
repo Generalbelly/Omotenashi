@@ -2,11 +2,13 @@
 
 namespace App\Domains\Models;
 
+use Illuminate\Contracts\Auth\Authenticatable;
+
 /**
  * This class represents a generic user initialized with the user information
  * given by Auth0 and provides a way to access to the decoded JWT data.
  */
-class Auth0JWTUser implements \Illuminate\Contracts\Auth\Authenticatable
+class Auth0JWTUser implements Authenticatable
 {
     private $userInfo;
 

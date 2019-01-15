@@ -101,7 +101,7 @@
                 type: Boolean,
                 default: false,
             },
-            project: {
+            projectEntity: {
                 type: Object,
                 default: null,
             },
@@ -113,7 +113,7 @@
             }
         },
         watch: {
-            project: {
+            projectEntity: {
                 immediate: true,
                 handler(value) {
                     if (value) {

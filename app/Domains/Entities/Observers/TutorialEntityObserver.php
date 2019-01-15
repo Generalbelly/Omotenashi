@@ -17,14 +17,14 @@ class TutorialEntityObserver extends EntityObserver
     public function saving(TutorialEntity $tutorialEntity)
     {
         $steps = [];
-        foreach ($tutorialEntity->steps as $step) {
+        foreach ($tutorialEntity->getAttribute('steps') as $step) {
             if (!isset($step['id'])) {
                 do {
                     $uuidObject = Uuid::uuid4();
                     $uuid = $uuidObject->toString();
 
                     $duplicate = false;
-                    foreach ($tutorialEntity->steps as $s) {
+                    foreach ($tutorialEntity->getAttribute('steps') as $s) {
                         if (isset($s['id'])) {
                             $duplicate = $s['id'] === $uuid;
                         }

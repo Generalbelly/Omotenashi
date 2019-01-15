@@ -52,8 +52,7 @@
                 deep: true,
                 handler(value) {
                     if (value) {
-                        const url = new URL(value.url);
-                        this.path = url.pathname;
+                        this.path = value.path;
                     }
                     this.urlDidChange = false;
                 }

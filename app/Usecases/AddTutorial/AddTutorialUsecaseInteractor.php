@@ -2,6 +2,7 @@
 
 namespace App\Usecases\AddTutorial;
 
+use App\Domains\Entities\ProjectEntity;
 use App\Repositories\Project\ProjectRepositoryContract;
 use App\Repositories\Tutorial\TutorialRepositoryContract;
 use Log;
@@ -37,17 +38,23 @@ class AddTutorialUsecaseInteractor implements AddTutorialUsecase {
      */
     public function handle(AddTutorialRequestModel $request): AddTutorialResponseModel
     {
+        /** @var ProjectEntity $projectEntity */
         $projectEntity = $this->projectRepository->find($request->project_id);
         $tutorial = $this->tutorialRepository->create([
             'name' => $request->name,
             'description' => $request->description,
             'steps' => $request->steps,
-            'url' => $request->url,
             'path' => $request->path,
             'query' => $request->query,
-            'project_id' => $projectEntity->id,
+            'project_id' => $projectEntity->getAttribute('id'),
         ]);
-        return new AddTutorialResponseModel($tutorial->toArray());
+        return new AddTutorialResponseModel(array_merge(
+            $tutorial->toArray(),
+            [
+                'protocol' => $projectEntity->getAttribute('protocol'),
+                'domain' => $projectEntity->getAttribute('domain'),
+            ]
+        ));
     }
 
 }

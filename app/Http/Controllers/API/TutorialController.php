@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Usecases\DeleteTutorial\DeleteTutorialRequestModel;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 use App\Usecases\ListTutorials\ListTutorialsRequestModel;
 use App\Usecases\ListTutorials\ListTutorialsUsecase;
+use App\Usecases\GetTutorial\GetTutorialRequestModel;
+use App\Usecases\GetTutorial\GetTutorialUsecase;
 use App\Http\Requests\AddTutorialRequest;
 use App\Usecases\AddTutorial\AddTutorialRequestModel;
 use App\Usecases\AddTutorial\AddTutorialUsecase;
 use App\Http\Requests\UpdateTutorialRequest;
 use App\Usecases\UpdateTutorial\UpdateTutorialRequestModel;
 use App\Usecases\UpdateTutorial\UpdateTutorialUsecase;
+use App\Usecases\DeleteTutorial\DeleteTutorialRequestModel;
 use App\Usecases\DeleteTutorial\DeleteTutorialUsecase;
 use Exception;
 use DB;
@@ -21,17 +23,20 @@ use DB;
 class TutorialController extends Controller
 {
     private $listTutorialsUsecase;
+    private $getTutorialUsecase;
     private $addTutorialUsecase;
     private $updateTutorialUsecase;
     private $deleteTutorialUsecase;
 
     public function __construct(
         ListTutorialsUsecase $listTutorialsUsecase,
+        GetTutorialUsecase $getTutorialUsecase,
         AddTutorialUsecase $addTutorialUsecase,
         UpdateTutorialUsecase $updateTutorialUsecase,
         DeleteTutorialUsecase $deleteTutorialUsecase
     ){
         $this->listTutorialsUsecase = $listTutorialsUsecase;
+        $this->getTutorialUsecase = $getTutorialUsecase;
         $this->addTutorialUsecase = $addTutorialUsecase;
         $this->updateTutorialUsecase = $updateTutorialUsecase;
         $this->deleteTutorialUsecase = $deleteTutorialUsecase;
@@ -82,6 +87,27 @@ class TutorialController extends Controller
         }
 
         return response()->json($listTutorialsResponse);
+    }
+
+    public function show(Request $request, string $userKey)
+    {
+        $url = $request->query('url');
+
+        $getTutorialRequest = new GetTutorialRequestModel([
+            'url' => $url,
+            'userKey' => $userKey,
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $getTutorialResponse = $this->getTutorialUsecase->handle($getTutorialRequest);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return response()->json($getTutorialResponse);
     }
 
     /**

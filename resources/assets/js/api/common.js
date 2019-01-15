@@ -17,7 +17,6 @@ const request = ({ url, method, data, params }) => {
                 resolve(response);
             })
             .catch((error) => {
-                console.log('come', error.response);
                 switch(error.response.status) {
                     case 401:
                     case 419:

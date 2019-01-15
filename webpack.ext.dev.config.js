@@ -1,6 +1,7 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
     mode: 'development',
@@ -64,6 +65,7 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin('public/ext', {}),
         new MiniCssExtractPlugin(),
+        new Dotenv(),
     ],
     resolve: {
         extensions: ['.js', '.vue'],

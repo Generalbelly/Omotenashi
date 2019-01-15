@@ -54,6 +54,9 @@ RUN mkdir /var/lib/php/opcache_nginx && \
 ADD ./php-fpm/www.conf /etc/php-fpm.d/www.conf
 ADD ./php/php.ini /etc/php.ini
 
+ADD ./certs/localhost+1-key.pem  /etc/ssl/certs/localhost+1-key.pem
+ADD ./certs/localhost+1.pem  /etc/ssl/certs/localhost+1.pem
+
 RUN chown -R root:nginx /var/log/nginx
 RUN chmod -R 770 /var/log/nginx/
 

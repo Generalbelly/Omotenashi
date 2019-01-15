@@ -4,7 +4,7 @@ import {
     APIController,
 } from '../../../js/api/common';
 
-axios.defaults.baseURL = 'http://docker.omotenashi.today/api';
+axios.defaults.baseURL = 'https://docker.omotenashi.today/api';
 axios.defaults.headers.common['Authorization'] = `Bearer ${_ot_ext_token}`;
 
 export default APIController;

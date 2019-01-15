@@ -27,11 +27,6 @@ class AddTutorialRequestModel {
     /**
      * @var string
      */
-    public $url;
-
-    /**
-     * @var string
-     */
     public $domain;
 
     /**
@@ -55,10 +50,9 @@ class AddTutorialRequestModel {
         $this->name = $data['name'];
         $this->description = $data['description'];
         $this->steps = $data['steps'];
-        $this->url = $data['url'];
         $this->project_id = $data['project_id'];
 
-        $parsedUrl = parse_url($this->url);
+        $parsedUrl = parse_url($data['url']);
         $this->domain = $parsedUrl['host'];
         $this->path = $parsedUrl['path'];
         $this->query = isset($parsedUrl['query']) ? $parsedUrl['query'] : null;

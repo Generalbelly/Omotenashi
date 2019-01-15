@@ -25,10 +25,6 @@ class UpdateProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => [
-                'required',
-                'uuid'
-            ],
             'name' => 'required|max:100',
             'domain' => [
                 'required',

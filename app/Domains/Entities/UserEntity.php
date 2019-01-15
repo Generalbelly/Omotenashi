@@ -15,10 +15,9 @@ class UserEntity extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'sub',
     ];
     protected $hidden = [
-        'password',
         'remember_token',
     ];
     protected $dates = ['deleted_at'];

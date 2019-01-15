@@ -1,0 +1,98 @@
+$pell-content-height: auto;
+@import '~pell/src/pell';
+
+.pell-content * {
+  text-align: left;
+}
+
+.pell-content pre {
+  display: block;
+  font-family: monospace;
+  white-space: pre;
+  margin: 1em 0;
+}
+
+.pell-content a:link {
+  text-decoration: underline;
+  cursor: auto;
+}
+
+.pell-content a:visited {
+  text-decoration: underline;
+  cursor: auto;
+}
+
+.pell-content b {
+  font-weight: bold;
+}
+
+
+.pell-content h1 {
+  font: 19px/normal sans-serif;
+  margin: 0 0 5px;
+  font-weight: bold;
+  display: block;
+  position: relative;
+  line-height: 1.5;
+  zoom: 1;
+}
+
+.pell-content h2 {
+  font: 17px/normal sans-serif;
+  margin: 0 0 5px;
+  font-weight: bold;
+  display: block;
+  position: relative;
+  line-height: 1.5;
+  zoom: 1;
+}
+
+.pell-content div {
+  display: block;
+  font: 14px/normal sans-serif;
+  line-height: 1.5;
+  color: $text-color;
+  font-weight: normal;
+  zoom: 1;
+}
+
+.pell-content div:last-child {
+  margin-bottom: 0;
+}
+
+.pell-content blockquote {
+  position: relative;
+  padding: 10px 15px 10px 35px;
+  margin: 7px auto;
+  box-sizing: border-box;
+  font-style: italic;
+  background: #efefef;
+  color: #555;
+}
+
+.pell-content blockquote:before {
+  display: inline-block;
+  position: absolute;
+  top: 0px;
+  left: -3px;
+  vertical-align: middle;
+  content: "\201C";
+  font-family: sans-serif;
+  color: #cfcfcf;
+  font-size: 60px;
+  line-height: 1;
+}
+
+.pell-content ol {
+  display: block;
+  list-style-type: decimal;
+  margin: 1em 0 1em 0;
+  padding-left: 40px;
+}
+
+.pell-content ul {
+  display: block;
+  list-style-type: disc;
+  margin: 1em 0 1em 0;
+  padding-left: 40px;
+}

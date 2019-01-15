@@ -18,7 +18,6 @@ class CreateTutorialsTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->text('steps');
-            $table->string('url');
             $table->string('path');
             $table->string('query')->nullable();
             $table->string('project_id');

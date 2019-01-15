@@ -17,7 +17,7 @@
         </div>
         <data-table
             :pagination="pagination"
-            :data="entities"
+            :data="projectEntities"
             :columns="columns"
             :loading="isLoading"
             :total="total"
@@ -77,7 +77,7 @@
                     return {}
                 }
             },
-            entities: {
+            projectEntities: {
                 type: Array,
                 default() {
                     return [];

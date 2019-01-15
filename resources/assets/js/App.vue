@@ -1,45 +1,59 @@
 <template>
     <div>
-        <header class="level container">
-            <div class="level-left">
-                <div class="level-item">Logo</div>
+        <nav class="navbar is-spaced has-shadow" role="navigation" aria-label="main navigation">
+            <div class="container">
+                <div class="navbar-brand">
+                    <span class="navbar-item">
+                        <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+                    </span>
+                    <a
+                        role="button"
+                        class="navbar-burger burger"
+                        :class="{'is-active': burgerMenuActive}"
+                        aria-label="menu"
+                        aria-expanded="false"
+                        @click="burgerMenuActive = !burgerMenuActive"
+                    >
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+
+                <div
+                    class="navbar-menu"
+                    :class="{'is-active': burgerMenuActive}"
+                >
+                    <div class="navbar-start has-text-centered-mobile">
+                        <router-link class="navbar-item" :to="{ name : 'projects.index'}">
+                            <b-icon icon="book" class="has-text-primary" size="is-small"></b-icon>
+                            <span>Projects</span>
+                        </router-link>
+                        <router-link class="navbar-item" :to="{ name : 'projects.index'}">
+                            <b-icon icon="cog" class="has-text-grey-light" size="is-small"></b-icon>
+                            <span>Settings</span>
+                        </router-link>
+                        <router-link class="navbar-item" :to="{ name : 'tags.show', params: { id: 'jojojo' }}">
+                            <b-icon icon="code" class="has-text-success" size="is-small"></b-icon>
+                            <span>Your tag</span>
+                        </router-link>
+                    </div>
+
+                    <div class="navbar-end has-text-centered-mobile">
+                        <a class="navbar-item" href="/logout">
+                            <b-icon icon="sign-out-alt" size="is-small"></b-icon>
+                            <span>Log out</span>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="level-right">
-                <div class="level-item">
-                    <router-link :to="{ name : 'projects.index'}">
-                        Projects
-                    </router-link>
-                </div>
-                <div class="level-item">
-                    <a>Settings</a>
-                </div>
-                <div class="level-item">
-                    <a>Log out</a>
-                </div>
-            </div>
-        </header>
-        <main class="container">
+        </nav>
+        <main class="container has-padding-5">
             <router-view>
             </router-view>
         </main>
-        <section
-            v-if="showExtensionLink"
-            class="hero"
-        >
-            <div class="hero-body has-text-centered is-size-4">
-                Have you installed our chrome extension yet?<br>
-                It is required to create tutorials.
-                <div class="has-margin-5">
-                    <a
-                        class="button is-complementary"
-                        href=""
-                        target="_blank"
-                    >
-                        Install the extension
-                    </a>
-                </div>
-            </div>
-        </section>
+        <extension-install-banner v-if="showExtensionLink">
+        </extension-install-banner>
         <footer class="footer">
             <div class="content has-text-centered">
                 <p>
@@ -51,22 +65,32 @@
 </template>
 
 <script>
+    import { mapState, mapActions } from "vuex";
     import ProjectsPage from "./components/pages/ProjectsPage/ProjectsPage";
+    import ExtensionInstallBanner from "./components/organisms/ExtensionInstallBanner/ExtensionInstallBanner";
     export default {
         name: "App",
         components: {
+            ExtensionInstallBanner,
             ProjectsPage
         },
         data() {
             return {
                 showExtensionLink: false,
-                extensionId: 'jliejbgijlgcajpkjamdclilnnccpebg',
+                extensionId: process.env.CHROME_EXTENSION_ID,
+                burgerMenuActive: false,
             }
+        },
+        created() {
+            this.setUser(userEntity);
         },
         mounted() {
             this.checkIfExtensionInstalled()
         },
         methods: {
+            ...mapActions([
+                'setUser',
+            ]),
             checkIfExtensionInstalled() {
                 const self = this;
                 chrome.runtime.sendMessage(this.extensionId, { message: "version" }, (response) => {
@@ -82,4 +106,8 @@
 </script>
 
 <style scoped>
+    a.navbar-item > .icon {
+        margin-left: -.25em;
+        margin-right: .25em;
+    }
 </style>

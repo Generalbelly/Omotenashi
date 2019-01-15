@@ -11,7 +11,7 @@
         <div>
             <a
                 class="button is-link"
-                href="http://docker.omotenashi.today"
+                :href="url"
                 target="_blank"
             >
                 Go to Omotenashi
@@ -20,11 +20,17 @@
     </modal>
 </template>
 <script>
-    import Modal from '../../molecules/Modal';
+    import Modal from '../../molecules/Modal'
 
     export default {
+        name: 'ProjectNotFoundModal',
         components: {
             Modal,
+        },
+        data() {
+            return {
+                url: `https://${process.env.APP_URL}`,
+            }
         }
     }
 </script>

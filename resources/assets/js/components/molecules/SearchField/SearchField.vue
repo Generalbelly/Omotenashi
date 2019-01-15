@@ -10,7 +10,7 @@
         </b-input>
         <p class="control">
             <button
-                class="button is-primary"
+                class="button is-secondary"
                 @click="$emit('click:search')"
             >
                 Search
