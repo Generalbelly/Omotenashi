@@ -13,6 +13,7 @@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
     <link href="/css/app.css" rel="stylesheet">
+    @include('common.javascript')
 </head>
 <body>
     @yield('content')

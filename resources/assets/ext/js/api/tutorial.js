@@ -5,9 +5,9 @@ import {
     DELETE_TUTORIAL,
 } from '../store/mutation-types'
 
-import APIController from "./common"
+import BaseAPI from "./common"
 
-const tutorialApi = new APIController('tutorials')
+const tutorialApi = new BaseAPI('tutorials')
 
 export const makeRequest = ({ id, data, mutationType, params }) => {
     switch (mutationType) {

@@ -2,9 +2,11 @@
     <project-template
         :project-entity="projectEntity"
         :is-loading="isRequesting"
-        @save="onSave"
-        @back="onBack"
-        @delete="onDelete"
+        :breadcrumb="breadcrumb"
+        @click:save="onSave"
+        @click:cancel="onCancel"
+        @click:delete="onDelete"
+        @click:ga-connect="onClickGAConnect"
     >
     </project-template>
 </template>
@@ -14,17 +16,20 @@
     import ProjectTemplate from "../../templates/ProjectTemplate"
 
     import {
+        REQUEST_GET_PROJECT_SUCCESS,
         REQUEST_ADD_PROJECT_SUCCESS,
-        REQUEST_ADD_PROJECT_FAILURE,
         REQUEST_UPDATE_PROJECT_SUCCESS,
-        REQUEST_UPDATE_PROJECT_FAILURE,
         REQUEST_DELETE_PROJECT_SUCCESS,
-        REQUEST_DELETE_PROJECT_FAILURE,
     } from '../../../store/mutation-types';
     export default {
         name: "ProjectPage",
         components: {
             ProjectTemplate
+        },
+        data() {
+            return {
+                breadcrumb: []
+            }
         },
         computed: {
             ...mapState('project', [
@@ -43,12 +48,20 @@
                     this.$router.push({
                         name: 'projects.index',
                     })
-                } else if (
-                    value === REQUEST_ADD_PROJECT_FAILURE ||
-                    value === REQUEST_UPDATE_PROJECT_FAILURE ||
-                    value === REQUEST_DELETE_PROJECT_FAILURE
-                ) {
-                    this.showServerErrors()
+                } else if (value === REQUEST_GET_PROJECT_SUCCESS) {
+                    this.breadcrumb = [
+                        {
+                            text: 'Projects',
+                            to: '/projects',
+                            exact: true,
+                        },
+                        {
+                            text: this.projectEntity.name,
+                            to: this.$route.params.id,
+                            exact: true,
+                            isActive: true,
+                        }
+                    ]
                 }
             }
         },
@@ -81,17 +94,13 @@
                     id: projectEntity.id,
                 })
             },
-            onBack() {
+            onCancel() {
                 this.$router.push({
                     name: 'projects.index',
                 })
             },
-            showServerErrors() {
-                this.$snackbar.open({
-                    position: 'is-top',
-                    type: 'is-warning',
-                    message: 'Saving failed.',
-                })
+            onClickGAConnect() {
+                window.location.href = '/google-analytics/redirect'
             }
         }
     }

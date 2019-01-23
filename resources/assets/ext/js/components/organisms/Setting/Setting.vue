@@ -51,12 +51,14 @@
                                 class="parameter__input"
                             >
                                 <validatable-text-field
-                                    v-model="p.key"
+                                    :value="p.key"
+                                    @input="updateParameter(pIndex, { key: $event} )"
                                     :rules="showParameterFields ? 'required' : ''"
                                     name="parameter key"
                                 ></validatable-text-field>
                                 <validatable-text-field
-                                    v-model="p.value"
+                                    :value="p.value"
+                                    @input="updateParameter(pIndex, { value: $event })"
                                     :rules="showParameterFields ? 'required' : ''"
                                     name="parameter value"
                                 ></validatable-text-field>
@@ -109,6 +111,7 @@
     import ValidatableTextareaField from "../../molecules/fields/ValidatableTextareaField";
     import BaseHeader from "../../atoms/BaseHeader";
     import BaseLabel from "../../atoms/BaseLabel";
+    import TutorialEntity from "../../../../../js/components/atoms/Entities/TutorialEntity";
 
     export default {
         name: 'Setting',
@@ -136,13 +139,6 @@
                 showParameterFields: false,
             };
         },
-        computed: {
-            url() {
-                if (!this.tutorial) return null
-                const url = new URL(this.tutorial.url)
-                return url.origin+url.pathname
-            }
-        },
         watch: {
             tutorial: {
                 immediate: true,
@@ -162,7 +158,7 @@
                     } else if (newValue.length > 0) {
                         this.showParameterFields = true
                     }
-                    this.updatedTutorial.url = this.url + this.formatParameters(this.updatedTutorial.parameters)
+                    // this.updatedTutorial.url = this.updatedTutorial.urlPath + this.formatParameters(this.updatedTutorial.parameters)
                 }
             },
             showParameterFields(value){
@@ -186,23 +182,7 @@
                 }, '');
             },
             createTutorial(defaultValues={}) {
-                let parameters = [];
-                if (defaultValues.query) {
-                    parameters = defaultValues.query.split('&').map(param => {
-                        const pair = param.split('=')
-                        return {
-                            key: pair[0],
-                            value: pair[1],
-                        }
-                    });
-                }
-                return {
-                    name: '',
-                    description: '',
-                    url: '',
-                    parameters,
-                    ...defaultValues,
-                };
+                return new TutorialEntity(defaultValues);
             },
             onCancelClick() {
                 this.$emit('cancelClick')
@@ -230,6 +210,16 @@
                         key: '',
                         value: '',
                     }
+                ]
+            },
+            updateParameter(index, value) {
+                this.updatedTutorial.parameters = [
+                    ...this.updatedTutorial.parameters.slice(0, index),
+                    {
+                        ...this.updatedTutorial.parameters[index],
+                        ...value,
+                    },
+                    ...this.updatedTutorial.parameters.slice(index+1),
                 ]
             },
             deleteParameter(index) {

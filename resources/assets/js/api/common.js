@@ -1,47 +1,19 @@
 import axios from 'axios'
+import {
+    GET_METHOD,
+    POST_METHOD,
+    PUT_METHOD,
+    DELETE_METHOD,
+} from "../utils/constants";
 
-export const GET_METHOD = 'GET';
-export const POST_METHOD = 'POST';
-export const PUT_METHOD = 'PUT';
-export const DELETE_METHOD = 'DELETE';
-
-const request = ({ url, method, data, params }) => {
-    return new Promise((resolve, reject) => {
-        axios({
-            url,
-            method,
-            data,
-            params,
-        })
-            .then((response) => {
-                resolve(response);
-            })
-            .catch((error) => {
-                switch(error.response.status) {
-                    case 401:
-                    case 419:
-                        //TODO: 再度ログインしてください的なDialog入れて、再ログインしたら元のページに戻りたい
-                        // TODO: リリース前に消す
-                        if (window.location.hostname === 'docker.omotenashi.today' || 'localhost') {
-                            document.location.href = '/login'
-                        }
-                        break
-                    default:
-                        reject(error.response)
-                        break
-                }
-            })
-    })
-}
-
-export class APIController {
+export class BaseAPI {
 
     constructor(basePath) {
         this.basePath = basePath
     }
 
     list(params) {
-        return request({
+        return axios({
             url: `/${this.basePath}/`,
             method: GET_METHOD,
             params,
@@ -49,7 +21,7 @@ export class APIController {
     }
 
     add(data) {
-        return request({
+        return axios({
             url: `/${this.basePath}/`,
             method: POST_METHOD,
             data,
@@ -57,14 +29,14 @@ export class APIController {
     }
 
     get(id) {
-        return request({
+        return axios({
             url:`/${this.basePath}/${id}`,
             method: GET_METHOD,
         })
     }
 
     update(id, data) {
-        return request({
+        return axios({
             url:`/${this.basePath}/${id}`,
             method: PUT_METHOD,
             data,
@@ -72,7 +44,7 @@ export class APIController {
     }
 
     delete(id) {
-        return request({
+        return axios({
             url: `/${this.basePath}/${id}`,
             method: DELETE_METHOD,
         })

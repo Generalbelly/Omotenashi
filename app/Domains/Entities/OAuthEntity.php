@@ -6,9 +6,9 @@ class OAuthEntity extends Entity
 {
     protected $table = 'oauth';
 
-    public function projectEntities()
+    public function projectEntity()
     {
-        return $this->belongsToMany('App\Domains\Entities\ProjectEntity');
+        return $this->belongsTo('App\Domains\Entities\ProjectEntity');
     }
 
     public function userEntity()

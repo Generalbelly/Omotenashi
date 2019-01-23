@@ -3,16 +3,22 @@
 namespace App\Http\Controllers\Auth;
 
 use Auth0\Login\Auth0Controller as BaseController;
+use Illuminate\Http\Request;
+use Log;
 
 class Auth0Controller extends BaseController
 {
     /**
      * Redirect to the Auth0 hosted login page
-     *
+     * @var Request $request
      * @return mixed
      */
-    public function login()
+    public function login(Request $request)
     {
+        $from = $request->input('from');
+        if ($from) {
+            $request->session()->put('from', $from);
+        }
         return \App::make('auth0')->login(null, null, ['scope' => 'openid email email_verified'], 'code');
     }
 
@@ -29,6 +35,7 @@ class Auth0Controller extends BaseController
 
     /**
      * Callback action that should be called by auth0, logs the user in.
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function callback()
     {
@@ -54,6 +61,8 @@ class Auth0Controller extends BaseController
             \Auth::login($user, $service->rememberUser());
         }
 
-        return \Redirect::intended('/dashboard');
+        $from = session('from', null);
+
+        return $from ? \Redirect::to($from) : \Redirect::intended('/dashboard');
     }
 }

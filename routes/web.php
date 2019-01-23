@@ -3,6 +3,9 @@
 $regexpUUID = '^[a-f0-9]{8}\-[a-f0-9]{4}\-4[a-f0-9]{3}\-(8|9|a|b)[a-f0-9]{3}\-[a-f0-9]{12}$';
 
 Route::get('/', function () {
+    if(Auth::check()) {
+        return redirect()->route('dashboard');
+    }
     return view('welcome');
 });
 
@@ -38,8 +41,8 @@ Route::prefix('projects')->middleware('auth')->group(function() use ($regexpUUID
 
 
 Route::prefix('oauth')->middleware('auth')->group(function() use ($regexpUUID){
-    Route::get('/google-analytics/redirect', 'OauthController@googleAnalticsRedirect')->name('oauth.google-analytics.redirect');
-    Route::get('/google-analytics/callback', 'OauthController@googleAnalticsCallback')->name('oauth.google-analytics.callback');
+    Route::get('/google-analytics/redirect', 'OAuthController@googleAnalticsRedirect')->name('oauth.google-analytics.redirect');
+    Route::get('/google-analytics/callback', 'OAuthController@googleAnalticsCallback')->name('oauth.google-analytics.callback');
 });
 
 Route::prefix('tags')->middleware('auth')->group(function() use ($regexpUUID){

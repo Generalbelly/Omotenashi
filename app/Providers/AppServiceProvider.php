@@ -84,6 +84,8 @@ class AppServiceProvider extends ServiceProvider
             \URL::forceScheme('https');
         }
 
+        // https://github.com/auth0/auth0-PHP/issues/56
+        \Firebase\JWT\JWT::$leeway = 30;
 
         UserEntity::observe(UserEntityObserver::class);
         TutorialEntity::observe(TutorialEntityObserver::class);
@@ -193,7 +195,7 @@ class AppServiceProvider extends ServiceProvider
             DeleteProjectUsecaseInteractor::class
         );
 
-        $this->app->bind(OAuthProvider::class, function($app){
+        $this->app->bind(OAuthProviderGoogle::class, function($app){
             return new Google([
                 'clientId'     => env('GOOGLE_ANALYTICS_CLIENT_ID'),
                 'clientSecret' => env('GOOGLE_ANALYTICS_CLIENT_SECRET'),

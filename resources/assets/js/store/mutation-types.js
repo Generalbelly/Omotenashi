@@ -1,5 +1,7 @@
 // ./index
 export const SET_USER = 'SET_USER'
+export const LOG_IN = 'LOG_IN'
+export const SET_ERROR_CODE = 'SET_ERROR_CODE'
 
 // ./modules/project
 export const LIST_PROJECTS = 'LIST_PROJECTS'

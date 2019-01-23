@@ -52,6 +52,8 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
     public function handle(ListTutorialsRequestModel $request): ListTutorialsResponseModel
     {
         /** @var ProjectEntity $projectEntity */
+        Log::error('userKey '.$request->userKey);
+        Log::error('domain '.$request->domain);
         $projectEntity = $this->projectRepository->where('user_id', $request->userKey)->with([
             'whitelistedDomainEntities' => function($query) use ($request) {
                 $query->where('domain', $request->domain);

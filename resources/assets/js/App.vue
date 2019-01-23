@@ -24,16 +24,18 @@
                     class="navbar-menu"
                     :class="{'is-active': burgerMenuActive}"
                 >
-                    <div class="navbar-start has-text-centered-mobile">
-                        <router-link class="navbar-item" :to="{ name : 'projects.index'}">
+                    <div class="navbar-start">
+                        <router-link
+                            :class="navItemClass('/projects')"
+                            :to="{ name : 'projects.index'}"
+                        >
                             <b-icon icon="book" class="has-text-primary" size="is-small"></b-icon>
                             <span>Projects</span>
                         </router-link>
-                        <router-link class="navbar-item" :to="{ name : 'projects.index'}">
-                            <b-icon icon="cog" class="has-text-grey-light" size="is-small"></b-icon>
-                            <span>Settings</span>
-                        </router-link>
-                        <router-link class="navbar-item" :to="{ name : 'tags.show', params: { id: 'jojojo' }}">
+                        <router-link
+                            :class="navItemClass('/tags')"
+                            :to="{ name : 'tags.show', params: { id: userKey }}"
+                        >
                             <b-icon icon="code" class="has-text-success" size="is-small"></b-icon>
                             <span>Your tag</span>
                         </router-link>
@@ -49,11 +51,9 @@
             </div>
         </nav>
         <main class="container has-padding-5">
-            <router-view>
-            </router-view>
+            <router-view></router-view>
         </main>
-        <extension-install-banner v-if="showExtensionLink">
-        </extension-install-banner>
+        <extension-install-banner v-if="showExtensionLink"></extension-install-banner>
         <footer class="footer">
             <div class="content has-text-centered">
                 <p>
@@ -65,14 +65,15 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from "vuex";
+    import { UNAUTHORIZED_401, UNAUTHORIZED_419, INTERNAL_SERVER_ERROR } from "./utils/constants";
+    import { mapState, mapActions, mapGetters } from "vuex";
     import ProjectsPage from "./components/pages/ProjectsPage/ProjectsPage";
     import ExtensionInstallBanner from "./components/organisms/ExtensionInstallBanner/ExtensionInstallBanner";
     export default {
         name: "App",
         components: {
             ExtensionInstallBanner,
-            ProjectsPage
+            ProjectsPage,
         },
         data() {
             return {
@@ -81,8 +82,41 @@
                 burgerMenuActive: false,
             }
         },
+        computed: {
+            ...mapState([
+                'errorCode',
+            ]),
+            ...mapGetters([
+                'userKey',
+            ])
+        },
+        watch: {
+            errorCode: {
+                handler(value) {
+                    if (value) {
+                        switch (value) {
+                            case UNAUTHORIZED_401:
+                            case UNAUTHORIZED_419:
+                                if (window.location.href === `https://${process.env.APP_URL}` ||
+                                    window.location.href === 'https://localhost'
+                                ) {
+                                    window.location.href = `/login?from=${window.location.href}`
+                                }
+                                break
+                            // case INTERNAL_SERVER_ERROR:
+                            //     this.showSnackbar()
+                            //     break
+                            default:
+                                this.showSnackbar()
+                                break
+                        }
+                    }
+                },
+                immediate: true,
+            }
+        },
         created() {
-            this.setUser(userEntity);
+            this.setUser(iam);
         },
         mounted() {
             this.checkIfExtensionInstalled()
@@ -101,6 +135,20 @@
                     }
                 })
             },
+            showSnackbar() {
+                this.$snackbar.open({
+                    position: 'is-top',
+                    type: 'is-warning',
+                    message: 'Oops! Something went wrong.',
+                    indefinite: true,
+                })
+            },
+            navItemClass(path) {
+                return {
+                    'has-text-grey-light': !this.$route.path.includes(path),
+                    'navbar-item': true,
+                }
+            }
         }
     }
 </script>

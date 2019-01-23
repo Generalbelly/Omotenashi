@@ -32,6 +32,8 @@ import {
 
     PROJECT_NOT_FOUND
 } from '../mutation-types'
+import TutorialEntity from "../../../../js/components/atoms/Entities/TutorialEntity";
+import ProjectEntity from "../../../../js/components/atoms/Entities/ProjectEntity";
 
 const state = {
     projectEntity: null,
@@ -60,24 +62,24 @@ export const getters = {
 export const mutations = {
     [LIST_TUTORIALS](state, payload) {
         const { total, start, end, tutorialEntities, projectEntity } = payload
-        state.projectEntity = projectEntity
+        state.projectEntity = new ProjectEntity(projectEntity)
         state.total = total
-        state.tutorialEntities = tutorialEntities;
+        state.tutorialEntities = tutorialEntities.map(tutorialEntity => new TutorialEntity(tutorialEntity))
     },
     [ADD_TUTORIAL](state, { data }) {
         state.tutorialEntities = [
             ...state.tutorialEntities,
-            data,
+            new TutorialEntity(data),
         ]
     },
     [UPDATE_TUTORIAL](state, { id, data }) {
         const tutorialIndex = state.tutorialEntities.findIndex(t => t.id === id)
         state.tutorialEntities = [
             ...state.tutorialEntities.slice(0, tutorialIndex),
-            {
+            new TutorialEntity({
                 id,
                 ...data
-            },
+            }),
             ...state.tutorialEntities.slice(tutorialIndex+1),
         ]
     },

@@ -7,10 +7,10 @@ import {
 } from '../store/mutation-types'
 
 import {
-    APIController
+    BaseAPI
 } from "./common"
 
-const projectApi = new APIController('projects')
+const projectApi = new BaseAPI('projects')
 
 export const makeRequest = ({ id, data, mutationType, params }) => {
     switch (mutationType) {

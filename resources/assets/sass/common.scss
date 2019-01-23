@@ -22,6 +22,7 @@ $positions: (
   ('bottom', 'bottom'),
   ('left', 'left'),
 );
+$directions: ('x', 'y');
 
 @function sizeValue($key, $value) {
   @return if($key == 'none', 0, $value + $sizeUnit);
@@ -36,6 +37,28 @@ $positions: (
   }
   .#{$paddingKey}#{$separator}#{$sizeKey} {
     padding: sizeValue($sizeKey, $sizeValue) !important;
+  }
+
+  @each $direction in $directions {
+    @if($direction == 'y') {
+      .#{$paddingKey}#{$separator}#{$direction}#{$separator}#{$sizeKey} {
+        padding-top: sizeValue($sizeKey, $sizeValue) !important;
+        padding-bottom: sizeValue($sizeKey, $sizeValue) !important;
+      }
+      .#{$marginKey}#{$separator}#{$direction}#{$separator}#{$sizeKey} {
+        margin-top: sizeValue($sizeKey, $sizeValue) !important;
+        margin-bottom: sizeValue($sizeKey, $sizeValue) !important;
+      }
+    } @else {
+      .#{$paddingKey}#{$separator}#{$direction}#{$separator}#{$sizeKey} {
+        padding-left: sizeValue($sizeKey, $sizeValue) !important;
+        padding-right: sizeValue($sizeKey, $sizeValue) !important;
+      }
+      .#{$paddingKey}#{$separator}#{$direction}#{$separator}#{$sizeKey} {
+        margin-left: sizeValue($sizeKey, $sizeValue) !important;
+        margin-right: sizeValue($sizeKey, $sizeValue) !important;
+      }
+    }
   }
 
   @each $position in $positions {

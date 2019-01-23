@@ -1,6 +1,6 @@
 <template>
     <button
-        class="button is-primary"
+        class="button is-outlined"
         @click="$emit('click')"
     >
         <span>Confirm</span>

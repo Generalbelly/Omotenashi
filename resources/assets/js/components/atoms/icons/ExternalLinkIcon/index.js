@@ -1,2 +1,2 @@
-import TrashIcon from './TrashIcon'
-export default TrashIcon
+import ExternalLinkIcon from './ExternalLinkIcon'
+export default ExternalLinkIcon

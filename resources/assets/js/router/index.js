@@ -1,18 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import projectRoutes from './project';
-import tagRoutes from './tag';
+import routes from './routes';
 
 Vue.use(VueRouter);
-
+console.log(routes);
 export default new VueRouter({
     mode: 'history',
-    routes: [
-        {
-            path: '/dashboard',
-            redirect: '/projects',
-        },
-        ...projectRoutes,
-        ...tagRoutes,
-    ],
+    routes,
 });

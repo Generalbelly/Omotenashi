@@ -21,7 +21,11 @@ class ProjectEntity extends Entity
 
     public function oauthEntities()
     {
-        return $this->belongsToMany('App\Domains\Entities\OAuthEntity');
+        return $this->hasMany(
+            'App\Domains\Entities\OAuthEntity',
+            'project_id',
+            'id'
+        );
     }
 
     public function tutorialEntities()

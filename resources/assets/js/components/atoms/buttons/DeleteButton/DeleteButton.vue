@@ -1,14 +1,9 @@
 <template>
     <button
-        class="button is-danger is-outlined"
+        class="button is-text"
         @click="$emit('click')"
     >
-        <b-icon
-            pack="fas"
-            icon="trash"
-        >
-        </b-icon>
-        <span>Delete</span>
+        Delete
     </button>
 </template>
 
