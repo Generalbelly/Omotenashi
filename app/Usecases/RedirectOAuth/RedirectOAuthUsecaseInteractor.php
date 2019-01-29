@@ -3,15 +3,10 @@
 namespace App\Usecases\RedirectOAuth;
 
 use App\Domains\Models\OAuthService;
-use App\Repositories\Project\ProjectRepositoryContract;
-use App\Repositories\WhitelistedDomain\WhitelistedDomainRepositoryContract;
 use Exception;
+use App;
 
 class RedirectOAuthUsecaseInteractor implements RedirectOAuthUsecase {
-
-    public function __construct(
-    ){
-    }
 
     /**
      * @param RedirectOAuthRequestModel $request
@@ -22,7 +17,8 @@ class RedirectOAuthUsecaseInteractor implements RedirectOAuthUsecase {
     {
         switch ($request->service) {
             case OAuthService::GOOGLE_ANALYTICS:
-                $provider =
+                /** @var App\Domains\Models\OAuthProviderGoogle $provider */
+                $provider = App::make('App\Domains\Models\OAuthProviderGoogle');
                 $params = [
                     'scope' => [
                         'https://www.googleapis.com/auth/analytics',
@@ -35,22 +31,10 @@ class RedirectOAuthUsecaseInteractor implements RedirectOAuthUsecase {
                 throw new Exception('OAuth service not found');
         }
 
-        $projectEntity = $this->projectRepository->create([
-            'name' => $request->name,
-            'domain' => $request->domain,
-            'protocol' => $request->protocol,
-            'user_id' => $request->userKey,
+        return new RedirectOAuthResponseModel([
+            'url'   => $provider->getAuthorizationUrl($params),
+            'state' => $provider->getState(),
         ]);
-
-        foreach ($request->whitelistedDomainEntities as $whitelistedDomain) {
-            $this->whitelistedDomainRepository->create([
-                'domain' => $whitelistedDomain['domain'],
-                'protocol' => $whitelistedDomain['protocol'],
-                'project_id' => $projectEntity->id,
-            ]);
-        }
-
-        return new RedirectOAuthResponseModel($projectEntity->toArray());
     }
 
 }

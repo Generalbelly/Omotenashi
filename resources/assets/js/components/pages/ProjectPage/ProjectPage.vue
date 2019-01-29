@@ -100,7 +100,7 @@
                 })
             },
             onClickGAConnect() {
-                window.location.href = '/google-analytics/redirect'
+                window.location.href = '/oauth/google-analytics/redirect'
             }
         }
     }

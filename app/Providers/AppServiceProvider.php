@@ -66,9 +66,13 @@ use App\Usecases\UpdateProject\UpdateProjectUsecaseInteractor;
 use App\Usecases\DeleteProject\DeleteProjectUsecase;
 use App\Usecases\DeleteProject\DeleteProjectUsecaseInteractor;
 
+use App\Domains\Models\OAuthProviderGoogle as IOAuthProviderGoogle;
 use League\OAuth2\Client\Provider\Google;
-use App\Domains\Models\OAuthProviderGoogle;
 
+use App\Domains\Models\OAuthAccessToken as IOAuthAccessToken;
+use League\OAuth2\Client\Token\AccessToken;
+
+use Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -195,11 +199,16 @@ class AppServiceProvider extends ServiceProvider
             DeleteProjectUsecaseInteractor::class
         );
 
-        $this->app->bind(OAuthProviderGoogle::class, function($app){
+        $this->app->bind(
+            IOAuthAccessToken::class,
+            AccessToken::class
+        );
+
+        $this->app->bind(IOAuthProviderGoogle::class, function($app){
             return new Google([
-                'clientId'     => env('GOOGLE_ANALYTICS_CLIENT_ID'),
-                'clientSecret' => env('GOOGLE_ANALYTICS_CLIENT_SECRET'),
-                'redirectUri'  => env('GOOGLE_ANALYTICS_CLIENT_REDIRECT_URL'),
+                'clientId'     => config('services.google.clientId'),
+                'clientSecret' => config('services.google.clientSecret'),
+                'redirectUri'  => config('services.google.redirectUri'),
                 'accessType'   => 'offline',
             ]);
         });

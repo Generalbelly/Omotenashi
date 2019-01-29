@@ -7,7 +7,6 @@ use Auth0\Login\Auth0User;
 use App\Domains\Models\Auth0JWTUser;
 use Auth0\Login\Repository\Auth0UserRepository;
 use App\Repositories\CommonRepositoryTrait;
-use Log;
 
 class UserRepository extends Auth0UserRepository implements UserRepositoryContract
 {

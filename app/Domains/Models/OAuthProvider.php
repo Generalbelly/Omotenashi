@@ -2,14 +2,13 @@
 
 namespace App\Domains\Models;
 
-interface OAuthProvider {
+interface OAuthProvider
+{
+    public function getState();
 
-    public function getAuthorizationUrl(array $options = []): string;
+    public function getAuthorizationUrl(array $options = []);
 
-    public function getState(): string;
+    public function getAccessToken($grant, array $options = []);
 
-    public function getAccessToken($grant, array $options = []): OauthToken;
-
-    public function getResourceOwner(OauthToken $token): OauthOwner;
-
+    public function getResourceOwner(AccessToken $token);
 }

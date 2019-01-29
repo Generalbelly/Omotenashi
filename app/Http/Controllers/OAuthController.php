@@ -2,48 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use App\Usecases\AddOAuth\AddOAuthRequestModel;
+use App\Domains\Models\OAuthService;
 use App\Usecases\AddOAuth\AddOAuthUsecaseInteractor;
+use App\Usecases\RedirectOAuth\RedirectOAuthRequestModel;
+use App\Usecases\RedirectOAuth\RedirectOAuthUsecaseInteractor;
 use Illuminate\Http\Request;
+use Session;
 
 class OAuthController extends Controller
 {
 
     private $addOAuthUsecase;
+    private $redirectOAuthUsecase;
 
-    public function __construct(AddOAuthUsecaseInteractor $addOAuthUsecase)
+    public function __construct(
+        AddOAuthUsecaseInteractor $addOAuthUsecase,
+        RedirectOAuthUsecaseInteractor $redirectOAuthUsecase
+    )
     {
         $this->addOAuthUsecase = $addOAuthUsecase;
+        $this->redirectOAuthUsecase = $redirectOAuthUsecase;
     }
 
     /**
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
-    public function googleAnalticsRedirect()
+    public function googleAnalyticsRedirect()
     {
-        $addOAuthRequest = new AddOAuthRequestModel([
-
-        ])
-        $requestStruct = new RedirectOauthRequestStruct([
-            'medium' => MediaObject::GOOGLE_ADS['medium'],
+        $redirectOAuthRequest = new RedirectOAuthRequestModel([
+            'service' => OAuthService::GOOGLE_ANALYTICS,
         ]);
-        /** @var \App\Domains\UseCases\RedirectOauth\RedirectOauthResponseStruct $responseStrucgt */
-        $responseStruct = RedirectOauthUseCase::handle($requestStruct);
-        Session::flash('oauth2state', $responseStruct->get('state'));
-        return redirect()->to($responseStruct->get('url'));
+        $redirectOAuthResponse = $this->redirectOAuthUsecase->handle($redirectOAuthRequest);
+        Session::flash('oauth2state', $redirectOAuthResponse->state);
+        return redirect()->to($redirectOAuthResponse->url);
     }
 
     /**
-     * @param Request $httpRequest
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function googleAnalticsCallback(Request $httpRequest)
+    public function googleAnalyticsCallback(Request $request)
     {
-        $error = $httpRequest->get('error', false);
+        $error = $request->get('error', false);
         if($error) {
             return redirect()->route('oauths.create');
         }
-        $state = $httpRequest->get('state', false);
+        $state = $request->get('state', false);
         if($state == false || Session::get('oauth2state') != $state) {
             return redirect()->route('oauths.create');
         }

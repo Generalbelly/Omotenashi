@@ -30,9 +30,15 @@ return [
     ],
 
     'stripe' => [
-        'model' => App\User::class,
+        'model' => App\Domains\Entities\UserEntity::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
+
+    'google' => [
+        'clientId'     => env('GOOGLE_ANALYTICS_CLIENT_ID'),
+        'clientSecret' => env('GOOGLE_ANALYTICS_CLIENT_SECRET'),
+        'redirectUri'  => env('GOOGLE_ANALYTICS_CLIENT_REDIRECT_URL'),
+    ]
 
 ];
