@@ -42,8 +42,9 @@ Route::prefix('projects')->middleware('auth')->group(function() use ($regexpUUID
 
 Route::prefix('oauth')->middleware('auth')->group(function() use ($regexpUUID){
     Route::get('/google-analytics/redirect', 'OAuthController@googleAnalyticsRedirect')->name('oauth.google-analytics.redirect');
-    Route::get('/google-analytics/callback', 'OAuthController@googleAnalyticsCallback')->name('oauth.google-analytics.callback');
 });
+
+Route::get('/oauth/google-analytics/callback', 'OAuthController@googleAnalyticsCallback')->name('oauth.google-analytics.callback');
 
 Route::prefix('tags')->middleware('auth')->group(function() use ($regexpUUID){
     Route::get('{id}', 'TagController@show')
