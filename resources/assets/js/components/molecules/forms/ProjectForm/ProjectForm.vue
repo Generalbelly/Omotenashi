@@ -85,56 +85,26 @@
                 </p>
             </div>
             <div class="column">
-                <div v-if="oauth_entities.length === 0" class="connect-google-analytics-button">
+                <div
+                    v-if="googleOAuthEntity"
+                >
+                    <p class="has-margin-bottom-4">Connected with an account whose email is {{ googleOAuthEntity.email }}</p>
+                    <div class="connect-google-analytics-button">
+                        <revoke-google-analytics-button
+                            @click="$emit('click:ga-revoke', googleOAuthEntity)"
+                            class="is-text"
+                        >
+                        ></revoke-google-analytics-button>
+                    </div>
+                </div>
+                <div
+                    v-else
+                    class="connect-google-analytics-button"
+                >
                     <connect-google-analytics-button
                         @click="$emit('click:ga-connect', $event)"
                     ></connect-google-analytics-button>
                 </div>
-                <div v-else>Connected!</div>
-            </div>
-        </div>
-        <div class="columns is-6">
-            <div class="column is-two-fifths">
-            </div>
-            <div class="column">
-                <div class="form-actions">
-                    <delete-button
-                        @click="showDeleteButton = true"
-                        class="is-text has-margin-right-auto"
-                    ></delete-button>
-                    <div class="buttons">
-                        <cancel-button
-                            @click="$emit('click:cancel', $event)"
-                        >
-                        </cancel-button>
-                        <save-button
-                            @click="$emit('click:save', $event)"
-                        ></save-button>
-                    </div>
-                </div>
-                <fade-transition>
-                    <div v-show="showDeleteButton" class="delete-confirmation">
-                        <b-message type="is-danger">
-                            <div class="level">
-                                <div class="level-left">
-                                    <p class="level-item">You are about to delete this project.</p>
-                                </div>
-                                <div class="level-right">
-                                    <confirm-button
-                                        @click="$emit('click:delete', $event)"
-                                        class="level-item is-danger"
-                                    >
-                                    </confirm-button>
-                                    <cancel-button
-                                        @click="showDeleteButton = false"
-                                        class="level-item"
-                                    >
-                                    </cancel-button>
-                                </div>
-                            </div>
-                        </b-message>
-                    </div>
-                </fade-transition>
             </div>
         </div>
     </div>
@@ -143,7 +113,6 @@
 <script>
     import ValidatableTextField from "../../fields/ValidatableTextField"
     import ValidatableDomainField from "../../fields/ValidatableDomainField";
-    import DeleteButton from "../../../atoms/buttons/DeleteButton/DeleteButton";
     import AddButton from "../../../atoms/buttons/AddButton/AddButton";
     import QuestionCircleIcon from "../../../atoms/icons/QuestionCircleIcon";
     import TrashIcon from "../../../atoms/icons/TrashIcon";
@@ -153,17 +122,16 @@
     import FadeTransitionGroup from "../../../atoms/transitions/FadeTransitionGroup";
     import CancelButton from "../../../atoms/buttons/CancelButton";
     import SaveButton from "../../../atoms/buttons/SaveButton";
-    import FadeTransition from "../../../atoms/transitions/FadeTransition";
     import ConfirmButton from "../../../atoms/buttons/ConfirmButton";
-    import ConnectGoogleAnalyticsButton
-        from "../../../atoms/buttons/ConnectGoogleAnalyticsButton/ConnectGoogleAnalyticsButton";
+    import ConnectGoogleAnalyticsButton from "../../../atoms/buttons/ConnectGoogleAnalyticsButton";
+    import RevokeGoogleAnalyticsButton from "../../../atoms/buttons/RevokeGoogleAnalyticsButton";
 
     export default {
         name: "ProjectForm",
         components: {
+            RevokeGoogleAnalyticsButton,
             ConnectGoogleAnalyticsButton,
             ConfirmButton,
-            FadeTransition,
             SaveButton,
             CancelButton,
             FadeTransitionGroup,
@@ -173,7 +141,6 @@
             QuestionCircleIcon,
             AddButton,
             ValidatableDomainField,
-            DeleteButton,
             ValidatableTextField,
         },
         props: {
@@ -209,7 +176,6 @@
         data() {
             return {
                 appName: process.env.APP_NAME,
-                showDeleteButton: false,
             }
         },
         computed: {
@@ -230,6 +196,9 @@
                 set(newValue) {
                     return this.$emit('update:whitelisted_domain_entities', newValue)
                 },
+            },
+            googleOAuthEntity() {
+                return this.oauth_entities.find(entity => entity.service === 'google_analytics');
             }
         },
         watch: {
@@ -308,17 +277,10 @@
     .column > .field {
         margin-bottom: 3em;
     }
-    .form-actions {
-        margin-top: 3em;
-        display: flex;
-        flex-direction: row;
-    }
-    .delete-confirmation {
-        margin-top: 2em;
-    }
     .connect-google-analytics-button {
         height: 100%;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
     }

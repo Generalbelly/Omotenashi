@@ -1,6 +1,6 @@
 <template>
     <button
-        class="button is-secondary"
+        class="button"
         @click="$emit('click')"
     >
         <b-icon
@@ -8,7 +8,7 @@
             icon="plug"
         >
         </b-icon>
-        <span>Connect Google Analytics</span>
+        <span>Connect your Google Analytics account</span>
     </button>
 </template>
 

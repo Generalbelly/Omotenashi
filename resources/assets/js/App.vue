@@ -103,9 +103,9 @@
                                     window.location.href = `/login?from=${window.location.href}`
                                 }
                                 break
-                            // case INTERNAL_SERVER_ERROR:
-                            //     this.showSnackbar()
-                            //     break
+                            case INTERNAL_SERVER_ERROR:
+                                this.showSnackbar()
+                                break
                             default:
                                 this.showSnackbar()
                                 break

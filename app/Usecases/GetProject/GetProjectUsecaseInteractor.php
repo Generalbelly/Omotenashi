@@ -3,6 +3,7 @@
 namespace App\Usecases\GetProject;
 
 use App\Repositories\Project\ProjectRepositoryContract;
+use Log;
 
 class GetProjectUsecaseInteractor implements GetProjectUsecase {
 
@@ -29,6 +30,7 @@ class GetProjectUsecaseInteractor implements GetProjectUsecase {
     {
         $projectEntity = $this->projectRepository->find($request->id);
         $projectEntity->whitelistedDomainEntities;
+        $projectEntity->oauthEntities;
         return new GetProjectResponseModel($projectEntity->toArray());
     }
 

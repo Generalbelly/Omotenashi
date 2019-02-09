@@ -17,7 +17,7 @@ class RedirectOAuthUsecaseInteractor implements RedirectOAuthUsecase {
     {
         switch ($request->service) {
             case OAuthService::GOOGLE_ANALYTICS:
-                /** @var App\Domains\Models\OAuthProviderGoogle $provider */
+                /** @var \App\Domains\Models\OAuthProviderGoogle $provider */
                 $provider = App::make('App\Domains\Models\OAuthProviderGoogle');
                 $params = [
                     'scope' => [

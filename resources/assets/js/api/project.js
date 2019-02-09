@@ -4,6 +4,7 @@ import {
     UPDATE_PROJECT,
     DELETE_PROJECT,
     GET_PROJECT,
+    DELETE_OAUTH,
 } from '../store/mutation-types'
 
 import {
@@ -11,6 +12,7 @@ import {
 } from "./common"
 
 const projectApi = new BaseAPI('projects')
+const oauthApi = new BaseAPI('oauths')
 
 export const makeRequest = ({ id, data, mutationType, params }) => {
     switch (mutationType) {
@@ -24,6 +26,8 @@ export const makeRequest = ({ id, data, mutationType, params }) => {
             return projectApi.update(id, data)
         case DELETE_PROJECT:
             return projectApi.delete(id)
+        case DELETE_OAUTH:
+            return oauthApi.delete(id)
         default:
             break
     }

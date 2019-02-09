@@ -4,9 +4,14 @@ namespace App\Domains\Entities;
 
 class OAuthEntity extends Entity
 {
-    protected $table = 'oauth';
-
-    const GOOGLE_ANALYTICS = 'google_analytics';
+    protected $table = 'oauths';
+    protected $fillable = [
+        'service',
+        'email',
+        'refresh_token',
+        'access_token',
+        'project_id'
+    ];
 
     public function projectEntity()
     {

@@ -21,23 +21,37 @@ class DatabaseSeeder extends Seeder
                     'path' => '/',
                     'steps' => [],
                 ]);
-                $whitelistedDomainEntity = factory(App\Domains\Entities\WhitelistedDomainEntity::class)->make([
+                $whitelistedDomainEntities = [];
+                $whitelistedDomainEntities[] = factory(App\Domains\Entities\WhitelistedDomainEntity::class)->make([
                     'protocol' => 'http',
                     'domain' => 'docker.www.data-silos.com',
+                    'project_id' => $projectEntity->id,
+                ]);
+                $whitelistedDomainEntities[] = factory(App\Domains\Entities\WhitelistedDomainEntity::class)->make([
+                    'protocol' => 'http',
+                    'domain' => 'localhost',
                     'project_id' => $projectEntity->id,
                 ]);
                 $userEntity->sub = 'auth0|5bc9e49fc7d2f35b924027ce'; // auth0
                 $userEntity->email = 'nobuyoshi.shimmen@gmail.com';
                 $userEntity->name = 'Nobu';
                 $userEntity->save();
+
+                $userEntity->projectEntities()->save($projectEntity);
+                $projectEntity->tutorialEntities()->save($tutorialEntity);
+                foreach ($whitelistedDomainEntities as $whitelistedDomainEntity) {
+                    $projectEntity->whitelistedDomainEntities()->save($whitelistedDomainEntity);
+                }
+
             } else {
                 $projectEntity = factory(App\Domains\Entities\ProjectEntity::class)->make();
                 $tutorialEntity = factory(App\Domains\Entities\TutorialEntity::class)->make();
                 $whitelistedDomainEntity = factory(App\Domains\Entities\WhitelistedDomainEntity::class)->make();
+
+                $userEntity->projectEntities()->save($projectEntity);
+                $projectEntity->tutorialEntities()->save($tutorialEntity);
+                $projectEntity->whitelistedDomainEntities()->save($whitelistedDomainEntity);
             }
-            $userEntity->projectEntities()->save($projectEntity);
-            $projectEntity->tutorialEntities()->save($tutorialEntity);
-            $projectEntity->whitelistedDomainEntities()->save($whitelistedDomainEntity);
         });
     }
 }

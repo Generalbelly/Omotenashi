@@ -23,6 +23,9 @@ use App\Usecases\DeleteProject\DeleteProjectUsecase;
 
 use Exception;
 use DB;
+use Log;
+use Session;
+
 
 class ProjectController extends Controller
 {
@@ -154,6 +157,13 @@ class ProjectController extends Controller
             DB::rollBack();
             throw $e;
         }
+
+        $oauthError = Session::get('oauthError');
+        if ($oauthError) {
+            $request->session()->forget('oauthError');
+            return response()->json($getProjectResponse, 500);
+        }
+
         return response()->json($getProjectResponse);
     }
 

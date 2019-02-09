@@ -8,6 +8,7 @@ import {
     GET_PROJECT,
     UPDATE_PROJECT,
     DELETE_PROJECT,
+    DELETE_OAUTH,
 
     REQUEST_LIST_PROJECTS,
     REQUEST_LIST_PROJECTS_SUCCESS,
@@ -28,6 +29,11 @@ import {
     REQUEST_DELETE_PROJECT,
     REQUEST_DELETE_PROJECT_SUCCESS,
     REQUEST_DELETE_PROJECT_FAILURE,
+
+    REQUEST_DELETE_OAUTH,
+    REQUEST_DELETE_OAUTH_SUCCESS,
+    REQUEST_DELETE_OAUTH_FAILURE,
+
     SET_ERROR_CODE,
 } from '../mutation-types'
 
@@ -49,30 +55,54 @@ export const mutations = {
     },
     [ADD_PROJECT](state, payload) {
         const { data } = payload
+        const projectEntity = data
+        state.projectEntity = projectEntity
         state.projectEntities = [
             ...state.projectEntities,
-            data,
+            projectEntity,
         ]
     },
     [UPDATE_PROJECT](state, payload) {
         const { id, data } = payload
-        const projectIndex = state.projectEntities.findIndex(t => t.id === id)
-        state.projectEntities = [
-            ...state.projectEntities.slice(0, projectIndex),
-            new ProjectEntity({
-                id,
-                ...data
-            }),
-            ...state.projectEntities.slice(projectIndex+1),
-        ]
+        const projectEntity = new ProjectEntity({
+            id,
+            ...data
+        })
+        state.projectEntity = projectEntity
+        const projectIndex = state.projectEntities.findIndex(p => p.id === id)
+        if (projectIndex !== -1) {
+            state.projectEntities = [
+                ...state.projectEntities.slice(0, projectIndex),
+                projectEntity,
+                ...state.projectEntities.slice(projectIndex+1),
+            ]
+        }
     },
     [DELETE_PROJECT](state, payload) {
         const { id } = payload
-        const projectIndex = state.projectEntities.findIndex(t => t.id === id)
-        state.projectEntities = [
-            ...state.projectEntities.slice(0, projectIndex),
-            ...state.projectEntities.slice(projectIndex+1),
-        ]
+        const projectIndex = state.projectEntities.findIndex(p => p.id === id)
+        if (projectIndex !== -1) {
+            state.projectEntities = [
+                ...state.projectEntities.slice(0, projectIndex),
+                ...state.projectEntities.slice(projectIndex + 1),
+            ]
+        }
+    },
+    [DELETE_OAUTH](state, payload) {
+        const { id, project_id } = payload
+        const projectEntity = new ProjectEntity({
+            ...state.projectEntity,
+            oauth_entities: state.projectEntity.oauth_entities.filter(o => o.id !== id),
+        })
+        state.projectEntity = projectEntity
+        const projectIndex = state.projectEntities.findIndex(p => p.id === project_id)
+        if (projectIndex !== -1) {
+            state.projectEntities = [
+                ...state.projectEntities.slice(0, projectIndex),
+                projectEntity,
+                ...state.projectEntities.slice(projectIndex+1),
+            ]
+        }
     },
     [REQUEST_LIST_PROJECTS](state) {
         state.isRequesting = true
@@ -142,6 +172,19 @@ export const mutations = {
         const { status, data } = payload
         state.isRequesting = false
         state.requestState = REQUEST_DELETE_PROJECT_FAILURE
+    },
+    [REQUEST_DELETE_OAUTH](state) {
+        state.isRequesting = true
+        state.requestState = REQUEST_DELETE_PROJECT
+    },
+    [REQUEST_DELETE_OAUTH_SUCCESS](state) {
+        state.isRequesting = false
+        state.requestState = REQUEST_DELETE_OAUTH_SUCCESS
+    },
+    [REQUEST_DELETE_OAUTH_FAILURE](state, payload) {
+        const { status, data } = payload
+        state.isRequesting = false
+        state.requestState = REQUEST_DELETE_OAUTH_FAILURE
     },
 }
 
@@ -254,6 +297,25 @@ export const actions = {
             })
             .catch(() => {
                 commit(REQUEST_DELETE_PROJECT_FAILURE)
+            })
+    },
+    deleteOAuth({ commit, dispatch }, payload={}) {
+        const { id } = payload
+        commit(REQUEST_DELETE_OAUTH)
+        dispatch('request', {
+            id,
+            mutationType: DELETE_OAUTH,
+        })
+            .then(({ data }) => {
+                commit(REQUEST_DELETE_OAUTH_SUCCESS)
+                console.log(data);
+                commit(DELETE_OAUTH, {
+                    id: data.id,
+                    project_id: data.project_id,
+                })
+            })
+            .catch(() => {
+                commit(REQUEST_DELETE_OAUTH_FAILURE)
             })
     },
 }

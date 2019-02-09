@@ -2,6 +2,8 @@
 
 namespace App\Domains\Models;
 
+use League\OAuth2\Client\Provider\Google;
+
 interface OAuthProvider
 {
     public function getState();
@@ -10,5 +12,5 @@ interface OAuthProvider
 
     public function getAccessToken($grant, array $options = []);
 
-    public function getResourceOwner(AccessToken $token);
+    public function getResourceOwner(OAuthAccessToken $token);
 }

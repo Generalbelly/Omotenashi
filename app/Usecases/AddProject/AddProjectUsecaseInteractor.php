@@ -2,15 +2,13 @@
 
 namespace App\Usecases\AddProject;
 
+use App\Domains\Entities\ProjectEntity;
 use App\Repositories\Project\ProjectRepositoryContract;
 use App\Repositories\WhitelistedDomain\WhitelistedDomainRepositoryContract;
 use Log;
 
 class AddProjectUsecaseInteractor implements AddProjectUsecase {
 
-    /**
-     * @var ProjectRepository
-     */
     private $projectRepository;
     private $whitelistedDomainRepository;
 
@@ -33,6 +31,7 @@ class AddProjectUsecaseInteractor implements AddProjectUsecase {
      */
     public function handle(AddProjectRequestModel $request): AddProjectResponseModel
     {
+        /** @var ProjectEntity $projectEntity */
         $projectEntity = $this->projectRepository->create([
             'name' => $request->name,
             'domain' => $request->domain,
@@ -44,9 +43,12 @@ class AddProjectUsecaseInteractor implements AddProjectUsecase {
             $this->whitelistedDomainRepository->create([
                 'domain' => $whitelistedDomain['domain'],
                 'protocol' => $whitelistedDomain['protocol'],
-                'project_id' => $projectEntity->id,
+                'project_id' => $projectEntity->getAttribute('id'),
             ]);
         }
+
+        $projectEntity->whitelistedDomainEntities()->get();
+        $projectEntity->oauthEntities()->get();
 
         return new AddProjectResponseModel($projectEntity->toArray());
     }

@@ -2,6 +2,7 @@
 
 namespace App\Usecases\UpdateProject;
 
+use App\Domains\Entities\ProjectEntity;
 use App\Repositories\Project\ProjectRepositoryContract;
 use App\Repositories\WhitelistedDomain\WhitelistedDomainRepositoryContract;
 use Log;
@@ -33,6 +34,7 @@ class UpdateProjectUsecaseInteractor implements UpdateProjectUsecase {
      */
     public function handle(UpdateProjectRequestModel $request): UpdateProjectResponseModel
     {
+        /** @var ProjectEntity $projectEntity */
         $projectEntity = $this->projectRepository->update([
             'domain' => $request->domain,
             'protocol' => $request->protocol,
@@ -65,6 +67,9 @@ class UpdateProjectUsecaseInteractor implements UpdateProjectUsecase {
         );
 
         $this->whitelistedDomainRepository->destroy($entityIdsToDelete);
+
+        $projectEntity->whitelistedDomainEntities()->get();
+        $projectEntity->oauthEntities()->get();
 
         return new UpdateProjectResponseModel($projectEntity->toArray());
     }

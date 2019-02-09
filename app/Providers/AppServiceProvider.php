@@ -4,6 +4,12 @@ namespace App\Providers;
 
 
 
+use App\Usecases\AddOAuth\AddOAuthUsecase;
+use App\Usecases\AddOAuth\AddOAuthUsecaseInteractor;
+use App\Usecases\DeleteOAuth\DeleteOAuthUsecase;
+use App\Usecases\DeleteOAuth\DeleteOAuthUsecaseInteractor;
+use App\Usecases\RedirectOAuth\RedirectOAuthUsecase;
+use App\Usecases\RedirectOAuth\RedirectOAuthUsecaseInteractor;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,6 +19,9 @@ use App\Repositories\BaseRepository;
 
 use App\Repositories\WhitelistedDomain\WhitelistedDomainRepositoryContract;
 use App\Repositories\WhitelistedDomain\WhitelistedDomainRepository;
+
+use App\Repositories\OAuth\OAuthRepositoryContract;
+use App\Repositories\OAuth\OAuthRepository;
 
 use App\Repositories\User\UserRepositoryContract;
 use App\Repositories\User\UserRepository;
@@ -107,6 +116,8 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend(
             'domain',
             function ($attribute, $value, $parameters, $validator) {
+                $localhostCheck = preg_match('/^(https?:\/\/)?localhost$/', $value);
+                if ($localhostCheck) return true;
                 return preg_match('/^(https?:\/\/)?(([A-Za-z0-9][A-Za-z0-9\-]{1,61}[A-Za-z0-9]|[A-Za-z0-9]{1,63})\.)+[A-Za-z]+$/', $value);
             }
         );
@@ -147,6 +158,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             WhitelistedDomainRepositoryContract::class,
             WhitelistedDomainRepository::class
+        );
+
+        $this->app->bind(
+            OAuthRepositoryContract::class,
+            OAuthRepository::class
         );
 
         $this->app->bind(
@@ -197,6 +213,21 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             DeleteProjectUsecase::class,
             DeleteProjectUsecaseInteractor::class
+        );
+
+        $this->app->bind(
+            RedirectOAuthUsecase::class,
+            RedirectOAuthUsecaseInteractor::class
+        );
+
+        $this->app->bind(
+            AddOAuthUsecase::class,
+            AddOAuthUsecaseInteractor::class
+        );
+
+        $this->app->bind(
+            DeleteOAuthUsecase::class,
+            DeleteOAuthUsecaseInteractor::class
         );
 
         $this->app->bind(

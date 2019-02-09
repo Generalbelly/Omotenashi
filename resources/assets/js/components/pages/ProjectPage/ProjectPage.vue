@@ -7,6 +7,7 @@
         @click:cancel="onCancel"
         @click:delete="onDelete"
         @click:ga-connect="onClickGAConnect"
+        @click:ga-revoke="onClickGARevoke"
     >
     </project-template>
 </template>
@@ -40,11 +41,7 @@
         },
         watch: {
             requestState(value) {
-                if (
-                    value === REQUEST_ADD_PROJECT_SUCCESS ||
-                    value === REQUEST_UPDATE_PROJECT_SUCCESS ||
-                    value === REQUEST_DELETE_PROJECT_SUCCESS
-                ) {
+                if (value === REQUEST_DELETE_PROJECT_SUCCESS) {
                     this.$router.push({
                         name: 'projects.index',
                     })
@@ -76,6 +73,7 @@
                 'updateProject',
                 'getProject',
                 'deleteProject',
+                'deleteOAuth',
             ]),
             onSave(projectEntity) {
                 if (projectEntity.id) {
@@ -100,7 +98,12 @@
                 })
             },
             onClickGAConnect() {
-                window.location.href = '/oauth/google-analytics/redirect'
+                window.location.href = `/oauths/google-analytics/redirect?id=${this.projectEntity.id}`
+            },
+            onClickGARevoke(oauthEntity) {
+                this.deleteOAuth({
+                    id: oauthEntity.id,
+                })
             }
         }
     }

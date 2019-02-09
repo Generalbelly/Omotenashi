@@ -7,9 +7,9 @@ interface AddOAuthUsecase {
     /**
      * Handle an incoming request.
      *
-     * @param  AddOAuthRequestModel  $request
+     * @param  DeleteOAuthRequestModel  $request
      * @return AddOAuthResponseModel
      */
-    public function handle(AddOAuthRequestModel $request): AddOAuthResponseModel;
+    public function handle(DeleteOAuthRequestModel $request): AddOAuthResponseModel;
 
 }

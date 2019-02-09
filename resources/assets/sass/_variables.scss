@@ -1,29 +1,209 @@
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
 
-// Set your colors
-$primary: #ef5350;
-$primary-invert: findColorInvert($primary);
-$secondary: #fce0e0;
-$secondary-invert: findColorInvert($secondary);
-$complementary: #50ecef;
-$complementary-invert: findColorInvert($complementary);
+$primary-050: #FFE3EC;
+$primary-100: #FFB8D2;
+$primary-200: #FF8CBA;
+$primary-300: #F364A2;
+$primary-400: #E8368F;
+$primary-500: #DA127D;
+$primary-600: #BC0A6F;
+$primary-700: #A30664;
+$primary-800: #870557;
+$primary-900: #620042;
 
-$link: $primary;
-$link-invert: $primary-invert;
-$link-focus-border: $primary;
+$primary-050-invert: findColorInvert($primary-050);
+$primary-100-invert: findColorInvert($primary-100);
+$primary-200-invert: findColorInvert($primary-200);
+$primary-300-invert: findColorInvert($primary-300);
+$primary-400-invert: findColorInvert($primary-400);
+$primary-500-invert: findColorInvert($primary-500);
+$primary-600-invert: findColorInvert($primary-600);
+$primary-700-invert: findColorInvert($primary-700);
+$primary-800-invert: findColorInvert($primary-800);
+$primary-900-invert: findColorInvert($primary-900);
+
+$neutral-050: #F5F7FA;
+$neutral-100: #E4E7EB;
+$neutral-200: #CBD2D9;
+$neutral-300: #9AA5B1;
+$neutral-400: #7B8794;
+$neutral-500: #616E7C;
+$neutral-600: #52606D;
+$neutral-700: #3E4C59;
+$neutral-800: #323F4B;
+$neutral-900: #1F2933;
+
+$neutral-050-invert: findColorInvert($neutral-050);
+$neutral-100-invert: findColorInvert($neutral-100);
+$neutral-200-invert: findColorInvert($neutral-200);
+$neutral-300-invert: findColorInvert($neutral-300);
+$neutral-400-invert: findColorInvert($neutral-400);
+$neutral-500-invert: findColorInvert($neutral-500);
+$neutral-600-invert: findColorInvert($neutral-600);
+$neutral-700-invert: findColorInvert($neutral-700);
+$neutral-800-invert: findColorInvert($neutral-800);
+$neutral-900-invert: findColorInvert($neutral-900);
+
+$accent-050: #F2EBFE;
+$accent-100: #DAC4FF;
+$accent-200: #B990FF;
+$accent-300: #A368FC;
+$accent-400: #9446ED;
+$accent-500: #8719E0;
+$accent-600: #7A0ECC;
+$accent-700: #690CB0;
+$accent-800: #580A94;
+$accent-900: #44056E;
+
+$accent-050-invert: findColorInvert($accent-050);
+$accent-100-invert: findColorInvert($accent-100);
+$accent-200-invert: findColorInvert($accent-200);
+$accent-300-invert: findColorInvert($accent-300);
+$accent-400-invert: findColorInvert($accent-400);
+$accent-500-invert: findColorInvert($accent-500);
+$accent-600-invert: findColorInvert($accent-600);
+$accent-700-invert: findColorInvert($accent-700);
+$accent-800-invert: findColorInvert($accent-800);
+$accent-900-invert: findColorInvert($accent-900);
+
+$success-050: #E1FCF8;
+$success-100: #C1FEF6;
+$success-200: #92FDF2;
+$success-300: #62F4EB;
+$success-400: #3AE7E1;
+$success-500: #1CD4D4;
+$success-600: #0FB5BA;
+$success-700: #099AA4;
+$success-800: #07818F;
+$success-900: #05606E;
+
+$success-050-invert: findColorInvert($success-050);
+$success-100-invert: findColorInvert($success-100);
+$success-200-invert: findColorInvert($success-200);
+$success-300-invert: findColorInvert($success-300);
+$success-400-invert: findColorInvert($success-400);
+$success-500-invert: findColorInvert($success-500);
+$success-600-invert: findColorInvert($success-600);
+$success-700-invert: findColorInvert($success-700);
+$success-800-invert: findColorInvert($success-800);
+$success-900-invert: findColorInvert($success-900);
+
+$danger-050: #FFE3E3;
+$danger-100: #FFBDBD;
+$danger-200: #FF9B9B;
+$danger-300: #F86A6A;
+$danger-400: #EF4E4E;
+$danger-500: #E12D39;
+$danger-600: #CF1124;
+$danger-700: #AB091E;
+$danger-800: #8A041A;
+$danger-900: #610316;
+
+$danger-050-invert: findColorInvert($danger-050);
+$danger-100-invert: findColorInvert($danger-100);
+$danger-200-invert: findColorInvert($danger-200);
+$danger-300-invert: findColorInvert($danger-300);
+$danger-400-invert: findColorInvert($danger-400);
+$danger-500-invert: findColorInvert($danger-500);
+$danger-600-invert: findColorInvert($danger-600);
+$danger-700-invert: findColorInvert($danger-700);
+$danger-800-invert: findColorInvert($danger-800);
+$danger-900-invert: findColorInvert($danger-900);
+
+$warning-050: #FFFBEA;
+$warning-100: #FFF3C4;
+$warning-200: #FCE588;
+$warning-300: #FADB5F;
+$warning-400: #F7C948;
+$warning-500: #F0B429;
+$warning-600: #DE911D;
+$warning-700: #CB6E17;
+$warning-800: #B44D12;
+$warning-900: #8D2B0B;
+
+$warning-050-invert: findColorInvert($warning-050);
+$warning-100-invert: findColorInvert($warning-100);
+$warning-200-invert: findColorInvert($warning-200);
+$warning-300-invert: findColorInvert($warning-300);
+$warning-400-invert: findColorInvert($warning-400);
+$warning-500-invert: findColorInvert($warning-500);
+$warning-600-invert: findColorInvert($warning-600);
+$warning-700-invert: findColorInvert($warning-700);
+$warning-800-invert: findColorInvert($warning-800);
+$warning-900-invert: findColorInvert($warning-900);
+
 
 $colors: (
-  "white": ($white, $black),
-  "black": ($black, $white),
-  "light": ($light, $light-invert),
-  "dark": ($dark, $dark-invert),
-  "primary": ($primary, $primary-invert),
-  "info": ($info, $info-invert),
-  "success": ($success, $success-invert),
-  "warning": ($warning, $warning-invert),
-  "danger": ($danger, $danger-invert),
-  "link": ($link, $link-invert, $link-focus-border),
-  "secondary": ($secondary, $secondary-invert),
-  "complementary": ($complementary, $complementary-invert)
+    "white": ($neutral-100, $neutral-100-invert),
+    "black": ($neutral-900, $neutral-900-invert),
+    "light": ($neutral-300, $neutral-300-invert),
+    "dark": ($neutral-700, $neutral-700-invert),
+    "primary": ($primary-500, $primary-500-invert),
+    "info": ($accent-500, $accent-500-invert),
+    "success": ($success-500, $success-500-invert),
+    "warning": ($warning-500, $warning-500-invert),
+    "danger": ($danger-500, $danger-500-invert),
+    "link": ($primary-500, $primary-500-invert, $primary-500),
+    "primary-050": ($primary-050, $primary-050-invert),
+    "primary-100": ($primary-100, $primary-100-invert),
+    "primary-200": ($primary-200, $primary-200-invert),
+    "primary-300": ($primary-300, $primary-300-invert),
+    "primary-400": ($primary-400, $primary-400-invert),
+    "primary-500": ($primary-500, $primary-500-invert),
+    "primary-600": ($primary-600, $primary-600-invert),
+    "primary-700": ($primary-700, $primary-700-invert),
+    "primary-800": ($primary-800, $primary-800-invert),
+    "primary-900": ($primary-900, $primary-900-invert),
+    "neutral-050": ($neutral-050, $neutral-050-invert),
+    "neutral-100": ($neutral-100, $neutral-100-invert),
+    "neutral-200": ($neutral-200, $neutral-200-invert),
+    "neutral-300": ($neutral-300, $neutral-300-invert),
+    "neutral-400": ($neutral-400, $neutral-400-invert),
+    "neutral-500": ($neutral-500, $neutral-500-invert),
+    "neutral-600": ($neutral-600, $neutral-600-invert),
+    "neutral-700": ($neutral-700, $neutral-700-invert),
+    "neutral-800": ($neutral-800, $neutral-800-invert),
+    "neutral-900": ($neutral-900, $neutral-900-invert),
+    "accent-050": ($accent-050, $accent-050-invert),
+    "accent-100": ($accent-100, $accent-100-invert),
+    "accent-200": ($accent-200, $accent-200-invert),
+    "accent-300": ($accent-300, $accent-300-invert),
+    "accent-400": ($accent-400, $accent-400-invert),
+    "accent-500": ($accent-500, $accent-500-invert),
+    "accent-600": ($accent-600, $accent-600-invert),
+    "accent-700": ($accent-700, $accent-700-invert),
+    "accent-800": ($accent-800, $accent-800-invert),
+    "accent-900": ($accent-900, $accent-900-invert),
+    "success-050": ($success-050, $success-050-invert),
+    "success-100": ($success-100, $success-100-invert),
+    "success-200": ($success-200, $success-200-invert),
+    "success-300": ($success-300, $success-300-invert),
+    "success-400": ($success-400, $success-400-invert),
+    "success-500": ($success-500, $success-500-invert),
+    "success-600": ($success-600, $success-600-invert),
+    "success-700": ($success-700, $success-700-invert),
+    "success-800": ($success-800, $success-800-invert),
+    "success-900": ($success-900, $success-900-invert),
+    "danger-050": ($danger-050, $danger-050-invert),
+    "danger-100": ($danger-100, $danger-100-invert),
+    "danger-200": ($danger-200, $danger-200-invert),
+    "danger-300": ($danger-300, $danger-300-invert),
+    "danger-400": ($danger-400, $danger-400-invert),
+    "danger-500": ($danger-500, $danger-500-invert),
+    "danger-600": ($danger-600, $danger-600-invert),
+    "danger-700": ($danger-700, $danger-700-invert),
+    "danger-800": ($danger-800, $danger-800-invert),
+    "danger-900": ($danger-900, $danger-900-invert),
+    "warning-050": ($warning-050, $warning-050-invert),
+    "warning-100": ($warning-100, $warning-100-invert),
+    "warning-200": ($warning-200, $warning-200-invert),
+    "warning-300": ($warning-300, $warning-300-invert),
+    "warning-400": ($warning-400, $warning-400-invert),
+    "warning-500": ($warning-500, $warning-500-invert),
+    "warning-600": ($warning-600, $warning-600-invert),
+    "warning-700": ($warning-700, $warning-700-invert),
+    "warning-800": ($warning-800, $warning-800-invert),
+    "warning-900": ($warning-900, $warning-900-invert),
 );
+

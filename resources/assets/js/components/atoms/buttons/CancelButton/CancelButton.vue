@@ -1,6 +1,6 @@
 <template>
     <button
-        class="button is-outlined"
+        class="button"
         @click="$emit('click')"
     >
         Cancel

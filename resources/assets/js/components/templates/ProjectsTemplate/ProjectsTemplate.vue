@@ -6,12 +6,14 @@
                 <search-field
                     :value="query"
                     @input="$emit('change:query', $event)"
+                    search-button-class="is-primary-050"
                     @click:search="$emit('click:search')"
                 ></search-field>
             </div>
             <div class="level-right">
                 <add-button
                     @click="$emit('click:add-button')"
+                    class="is-primary"
                 ></add-button>
             </div>
         </div>
@@ -24,36 +26,13 @@
             @change:pagination="$emit('change:pagination', $event)"
             @select="$emit('select', $event)"
         >
-            <!--<template slot-scope="{row}">-->
-                <!--<b-table-column-->
-                    <!--field="name"-->
-                    <!--label="Name"-->
-                    <!--sortable-->
-                <!--&gt;-->
-                    <!--{{ row.name }}-->
-                <!--</b-table-column>-->
-                <!--<b-table-column-->
-                    <!--field="domain"-->
-                    <!--label="Domain"-->
-                    <!--sortable-->
-                <!--&gt;-->
-                    <!--{{ row.domain }}-->
-                <!--</b-table-column>-->
-                <!--<b-table-column-->
-                    <!--field="created_at"-->
-                    <!--label="Created at"-->
-                    <!--sortable-->
-                <!--&gt;-->
-                    <!--{{ row.created_at }}-->
-                <!--</b-table-column>-->
-            <!--</template>-->
         </data-table>
     </div>
 </template>
 
 <script>
     import DataTable from "../../molecules/DataTable/DataTable";
-    import SearchField from "../../molecules/SearchField/SearchField";
+    import SearchField from "../../atoms/fields/SearchField/SearchField";
     import AddButton from "../../atoms/buttons/AddButton/AddButton";
     import Heading from "../../atoms/Heading/Heading";
 

@@ -2,53 +2,54 @@
 
 namespace App\Usecases\AddOAuth;
 
-use App\Repositories\Project\ProjectRepositoryContract;
-use App\Repositories\WhitelistedDomain\WhitelistedDomainRepositoryContract;
+use Exception;
+use App;
+use App\Repositories\OAuth\OAuthRepositoryContract;
+use App\Domains\Models\OAuthService;
 use Log;
 
-class AddOAuthUsecaseInteractor implements AddOAuthUsecase {
+class AddOAuthUsecaseInteractor implements AddOAuthUsecase
+{
+    /** @var OAuthRepositoryContract */
+    private $oauthRepository;
 
-    /**
-     * @var ProjectRepository
-     */
-    private $projectRepository;
-    private $whitelistedDomainRepository;
-
-    /**
-     * AddProjectUsecaseInteractor constructor.
-     * @param ProjectRepositoryContract $projectRepository
-     * @param WhitelistedDomainRepositoryContract $whitelistedDomainRepository
-     */
     public function __construct(
-        ProjectRepositoryContract $projectRepository,
-        WhitelistedDomainRepositoryContract $whitelistedDomainRepository
+        OAuthRepositoryContract $oauthRepository
     ){
-        $this->projectRepository = $projectRepository;
-        $this->whitelistedDomainRepository = $whitelistedDomainRepository;
+        $this->oauthRepository = $oauthRepository;
     }
 
     /**
-     * @param AddOAuthRequestModel $request
+     * @param DeleteOAuthRequestModel $request
      * @return AddOAuthResponseModel
+     * @throws Exception
      */
-    public function handle(AddOAuthRequestModel $request): AddOAuthResponseModel
+    public function handle(DeleteOAuthRequestModel $request): AddOAuthResponseModel
     {
-        $projectEntity = $this->projectRepository->create([
-            'name' => $request->name,
-            'domain' => $request->domain,
-            'protocol' => $request->protocol,
-            'user_id' => $request->userKey,
-        ]);
+        switch ($request->service) {
+            case OAuthService::GOOGLE_ANALYTICS:
+                /** @var \App\Domains\Models\OAuthProviderGoogle $provider */
+                $provider = App::make('App\Domains\Models\OAuthProviderGoogle');
 
-        foreach ($request->whitelistedDomainEntities as $whitelistedDomain) {
-            $this->whitelistedDomainRepository->create([
-                'domain' => $whitelistedDomain['domain'],
-                'protocol' => $whitelistedDomain['protocol'],
-                'project_id' => $projectEntity->id,
-            ]);
+                $token = $provider->getAccessToken('authorization_code', [
+                    'code' => $request->code,
+                ]);
+                $refreshToken = $token->getRefreshToken();
+                $access_token = $token->getToken();
+                $user = $provider->getResourceOwner($token);
+                $email = $user->getEmail();
+                $oauthEntity = $this->oauthRepository->create([
+                    'service' => $request->service,
+                    'email' => $email,
+                    'refresh_token' => $refreshToken,
+                    'access_token'  => $access_token,
+                    'project_id' => $request->project_id,
+                ]);
+                break;
+            default:
+                throw new Exception('OAuth service not found');
         }
-
-        return new AddOAuthResponseModel($projectEntity->toArray());
+        return new AddOAuthResponseModel($oauthEntity->toArray());
     }
 
 }

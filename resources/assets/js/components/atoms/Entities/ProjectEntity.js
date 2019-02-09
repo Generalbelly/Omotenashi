@@ -5,7 +5,6 @@ export default class ProjectEntity extends Entity {
     protocol = null
     domain = null
     user_id = null
-    user = null
     oauth_entities = []
     tutorial_entities = []
     whitelisted_domain_entities = []
