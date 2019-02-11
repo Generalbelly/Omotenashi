@@ -95,6 +95,7 @@ trait CommonRepositoryTrait
         if($search){
             $query->where(function($query) use ($search){
                 foreach($this->entity->searchColumns as $column){
+                    Log::error('column '.$column);
                     $query->orWhere($column, 'like', "%$search%");
                 }
             });

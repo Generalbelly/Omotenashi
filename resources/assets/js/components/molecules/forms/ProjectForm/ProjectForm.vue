@@ -4,7 +4,7 @@
             <div class="column is-two-fifths">
                 <sub-heading class="has-text-weight-bold has-margin-bottom-4">Basic</sub-heading>
                 <p>
-                    Domain is the one your users actually visit, while whitelisted domains are typically staging/design website ones where You can create/edit tutorials code-free with <a href="">{{ appName }} Chrome extension</a>.
+                    The domain is where users will actually visit, while the whitelisted domains are typically staging/design websites where you can create and edit tutorials code-free with <a href="">{{ appName }} Chrome extension</a>.
                 </p>
             </div>
             <div class="column">
@@ -29,7 +29,7 @@
                         class="whitelisted-domain"
                     >
                         <validatable-domain-field
-                            :label="whitelistedDomainEntityIndex===0 ? 'Whitelisted domain' : ''"
+                            :label="whitelistedDomainEntityIndex===0 ? 'Whitelisted domains' : ''"
                             name="Whitelisted domain"
                             rules="required"
                             :value="`${whitelistedDomainEntity.protocol}://${whitelistedDomainEntity.domain}`"
@@ -81,21 +81,19 @@
             <div class="column is-two-fifths">
                 <sub-heading class="has-text-weight-bold has-margin-bottom-4">Google Analytics</sub-heading>
                 <p>
-                    We send data to the connected Google Analytics such as: How many steps users complete; How often those users use your website/webapp.
+                    We send data such as how many steps users complete, how often those users use your website/webapp, etc., on your behalf to your connected Google Analytics account.
                 </p>
             </div>
             <div class="column">
                 <div
                     v-if="googleOAuthEntity"
+                    style="margin-top: 40px;"
+                    class="has-text-right"
                 >
-                    <p class="has-margin-bottom-4">Connected with an account whose email is {{ googleOAuthEntity.email }}</p>
-                    <div class="connect-google-analytics-button">
-                        <revoke-google-analytics-button
-                            @click="$emit('click:ga-revoke', googleOAuthEntity)"
-                            class="is-text"
-                        >
-                        ></revoke-google-analytics-button>
-                    </div>
+                    <span class="is-inline-flex has-padding-top-2 has-margin-right-4">
+                        Connected with the account {{ googleOAuthEntity.email }}
+                    </span>
+                    <delete-button @click="$emit('click:ga-delete', googleOAuthEntity)"></delete-button>
                 </div>
                 <div
                     v-else
@@ -124,12 +122,12 @@
     import SaveButton from "../../../atoms/buttons/SaveButton";
     import ConfirmButton from "../../../atoms/buttons/ConfirmButton";
     import ConnectGoogleAnalyticsButton from "../../../atoms/buttons/ConnectGoogleAnalyticsButton";
-    import RevokeGoogleAnalyticsButton from "../../../atoms/buttons/RevokeGoogleAnalyticsButton";
+    import DeleteButton from "../../../atoms/buttons/DeleteButton/DeleteButton";
 
     export default {
         name: "ProjectForm",
         components: {
-            RevokeGoogleAnalyticsButton,
+            DeleteButton,
             ConnectGoogleAnalyticsButton,
             ConfirmButton,
             SaveButton,

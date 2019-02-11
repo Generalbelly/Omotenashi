@@ -16,6 +16,8 @@
 <script>
     import { mapActions, mapState, mapGetters } from 'vuex'
     import ProjectsTemplate from "../../templates/ProjectsTemplate/ProjectsTemplate"
+    import { debounce } from 'debounce'
+
     export default {
         name: "ProjectsPage",
         components: {
@@ -64,14 +66,26 @@
                     pagination: this.pagination,
                 })
             },
+            search: debounce(function(params){
+                this.listProjects(params);
+            }, 250),
             onChangeQuery(query) {
-                this.query = query
-            },
-            onClickSearch() {
-                this.listProjects({
+                this.query = query;
+                this.search({
                     ...this.pagination,
                     q: this.query,
-                })
+                });
+            },
+            onClickSearch() {
+                console.log('called');
+                this.search({
+                    ...this.pagination,
+                    q: this.query,
+                });
+                // this.listProjects({
+                //     ...this.pagination,
+                //     q: this.query,
+                // })
             },
             onClickAddButton() {
                 this.$router.push({

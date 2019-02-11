@@ -9,7 +9,11 @@
         >
         </b-input>
         <p class="control">
-            <search-button :class="searchButtonClass"></search-button>
+            <search-button
+                :class="searchButtonClass"
+                @click="$emit('click:search')"
+            >
+            </search-button>
         </p>
     </b-field>
 </template>

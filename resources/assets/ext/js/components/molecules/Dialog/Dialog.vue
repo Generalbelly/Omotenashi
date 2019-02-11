@@ -1,13 +1,13 @@
 <template>
-    <Modal>
+    <modal>
         <div>
             <slot></slot>
         </div>
         <div>
-            <BaseButton @click="onConfirmClick">OK</BaseButton>
-            <BaseButton @click="onCancelClick">Cancel</BaseButton>
+            <base-button @click="onConfirmClick">Confirm</base-button>
+            <base-button @click="onCancelClick">Cancel</base-button>
         </div>
-    </Modal>
+    </modal>
 </template>
 
 <script>
@@ -20,24 +20,9 @@
             Modal,
         },
         data() {
-            return {
-                subscribers: [],
-                handlers: {
-                    confirm: [],
-                    cancel: [],
-                },
-            }
+            return {}
         },
         methods: {
-            subscribe(eventName, cb) {
-                this.handlers[eventName] = [
-                    ...this.handlers[eventName],
-                    cb,
-                ]
-            },
-            unsubscribe(eventName, cb) {
-                this.handlers[eventName] = this.handlers[eventName].filter(item => item !== cb)
-            },
             onConfirmClick() {
                 this.$emit('confirm')
                 this.handlers.confirm.forEach(cb => cb())

@@ -7,7 +7,7 @@
         @click:cancel="onCancel"
         @click:delete="onDelete"
         @click:ga-connect="onClickGAConnect"
-        @click:ga-revoke="onClickGARevoke"
+        @click:ga-delete="onClickGARevoke"
     >
     </project-template>
 </template>

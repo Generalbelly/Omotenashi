@@ -36,7 +36,7 @@
                             :class="navItemClass('/tags')"
                             :to="{ name : 'tags.show', params: { id: userKey }}"
                         >
-                            <b-icon icon="code" class="has-text-success" size="is-small"></b-icon>
+                            <code-icon size="is-small"></code-icon>
                             <span>Your tag</span>
                         </router-link>
                     </div>
@@ -68,10 +68,13 @@
     import { UNAUTHORIZED_401, UNAUTHORIZED_419, INTERNAL_SERVER_ERROR } from "./utils/constants";
     import { mapState, mapActions, mapGetters } from "vuex";
     import ProjectsPage from "./components/pages/ProjectsPage/ProjectsPage";
-    import ExtensionInstallBanner from "./components/organisms/ExtensionInstallBanner/ExtensionInstallBanner";
+    import ExtensionInstallBanner from "./components/organisms/ExtensionInstallBanner";
+    import CodeIcon from "./components/atoms/icons/CodeIcon";
+
     export default {
         name: "App",
         components: {
+            CodeIcon,
             ExtensionInstallBanner,
             ProjectsPage,
         },

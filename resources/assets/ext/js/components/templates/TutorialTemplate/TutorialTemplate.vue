@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Menu
+        <menu
             v-show="isHome"
             class="menu"
             :class="{
@@ -21,17 +21,17 @@
             @editTutorialClick="onEditTutorialClick"
             @deleteTutorialClick="onDeleteTutorialClick"
             @switchSideClick="menuIsOnTheRight = !menuIsOnTheRight"
-        ></Menu>
+        ></menu>
 
-        <DeleteConfirmationMessage
+        <delete-confirmation-message
             v-if="isDeletingTutorial"
             :tutorial="selectedTutorial"
             @closeClick="updateState('beingHome')"
             @deleteClick="onDeleteConfirmTutorialClick"
         >
-        </DeleteConfirmationMessage>
+        </delete-confirmation-message>
 
-        <DriverEditor
+        <driver-editor
             ref="editor"
             :steps="selectedTutorial ? selectedTutorial.steps : []"
             :has-selector-choices-available-message="!dontShowMeChecked('selectorChoicesAvailable')"
@@ -43,17 +43,17 @@
             @editDone="updateState('beingHome')"
             @dontShowMeChange="removeMessage"
         >
-        </DriverEditor>
+        </driver-editor>
 
-        <Setting
+        <setting
             v-show="isEditingTutorial || isAddingTutorial"
             :tutorial="isEditingTutorial ? selectedTutorial : null"
             @saveClick="onTutorialSaveClick"
             @cancelClick="updateState('beingHome')"
         >
-        </Setting>
+        </setting>
 
-        <Message
+        <message
             v-show="showUrlChangeAlert && isRequesting === 'REQUEST_LIST_TUTORIALS'"
             is-warning
             @closeClick="showUrlChangeAlert = false"
@@ -63,11 +63,11 @@
                Tutorials must be created per URL.<br>
                 Now fetching tutorials for this page.
             </template>
-        </Message>
+        </message>
 
-        <LoadingModal
+        <loading-modal
             v-show="isRequesting && isRequesting !== 'REQUEST_LIST_TUTORIALS'"
-        ></LoadingModal>
+        ></loading-modal>
     </div>
 </template>
 <script>
@@ -145,16 +145,16 @@
                 'retrieveLog',
                 'saveLog'
             ]),
-            showTutorialUrlChangeAlert() {
-                return new Promise(resolve => {
-                    this.$refs.tutorialUrlChangeAlert.subscribe('confirm', () => {
-                        resolve(true);
-                    })
-                    this.$refs.tutorialUrlChangeAlert.subscribe('cancel', () => {
-                        resolve(false);
-                    })
-                })
-            },
+            // showTutorialUrlChangeAlert() {
+            //     return new Promise(resolve => {
+            //         this.$refs.tutorialUrlChangeAlert.subscribe('confirm', () => {
+            //             resolve(true);
+            //         })
+            //         this.$refs.tutorialUrlChangeAlert.subscribe('cancel', () => {
+            //             resolve(false);
+            //         })
+            //     })
+            // },
             updateState(state = null) {
                 if (Object.values(states).includes(state)) {
                     this.state = state

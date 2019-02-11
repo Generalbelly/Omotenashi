@@ -12,16 +12,17 @@
                 :whitelisted_domain_entities.sync="innerProject.whitelisted_domain_entities"
                 :oauth_entities="innerProject.oauth_entities"
                 @click:ga-connect="$emit('click:ga-connect', $event)"
-                @click:ga-revoke="$emit('click:ga-revoke', $event)"
+                @click:ga-delete="$emit('click:ga-delete', $event)"
             ></project-form>
         </validation-observer>
         <div class="form-actions">
             <delete-button
-                @click="showDeleteButton = true"
-                class="is-text has-margin-right-auto"
+                @click="showDeleteDialog = true"
+                class="has-margin-right-auto  is-text"
             ></delete-button>
             <div class="buttons">
                 <cancel-button
+                    class="is-neutral-100"
                     @click="onCancel"
                 >
                 </cancel-button>
@@ -31,29 +32,29 @@
                 ></save-button>
             </div>
         </div>
-        <fade-transition>
-            <div v-show="showDeleteButton" class="delete-confirmation">
-                <b-message type="is-danger">
-                    <div class="level">
-                        <div class="level-left">
-                            <p class="level-item">You are about to delete this project.</p>
-                        </div>
-                        <div class="level-right">
-                            <confirm-button
-                                @click="onDelete"
-                                class="level-item is-danger"
-                            >
-                            </confirm-button>
-                            <cancel-button
-                                @click="showDeleteButton = false"
-                                class="level-item is-text"
-                            >
-                            </cancel-button>
-                        </div>
-                    </div>
-                </b-message>
-            </div>
-        </fade-transition>
+        <!--<fade-transition>-->
+            <!--<div v-show="showDeleteDialog" class="delete-confirmation">-->
+                <!--<dialog type="is-danger">-->
+                    <!--<div class="level">-->
+                        <!--<div class="level-left">-->
+                            <!--<p class="level-item">You are about to delete this project.</p>-->
+                        <!--</div>-->
+                        <!--<div class="level-right">-->
+                            <!--<confirm-button-->
+                                <!--@click="onDelete"-->
+                                <!--class="level-item is-danger-300"-->
+                            <!--&gt;-->
+                            <!--</confirm-button>-->
+                            <!--<cancel-button-->
+                                <!--@click="showDeleteDialog = false"-->
+                                <!--class="level-item is-text"-->
+                            <!--&gt;-->
+                            <!--</cancel-button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</dialog>-->
+            <!--</div>-->
+        <!--</fade-transition>-->
         <b-loading
             is-full-page
             :active="isLoading"
@@ -73,10 +74,12 @@
     import CancelButton from "../../atoms/buttons/CancelButton";
     import Breadcrumb from "../../molecules/Breadcrumb/Breadcrumb";
     import FadeTransition from "../../atoms/transitions/FadeTransition";
+    import Dialog from "../../../../ext/js/components/molecules/Dialog";
 
     export default {
         name: "ProjectTemplate",
         components: {
+            Dialog,
             Breadcrumb,
             CancelButton,
             ConfirmButton,
@@ -107,7 +110,7 @@
         data() {
             return {
                 innerProject: new ProjectEntity(),
-                showDeleteButton: false,
+                showDeleteDialog: false,
             }
         },
         watch: {
@@ -118,6 +121,17 @@
                         console.log(value);
                         this.innerProject = new ProjectEntity({...value});
                     }
+                }
+            },
+            showDeleteDialog(value) {
+                if (value) {
+                    this.$dialog.confirm({
+                        title: `Delete ${this.projectEntity.name}`,
+                        message: 'You are about to delete this project.',
+                        onConfirm: this.onDelete,
+                        onCancel: () => { this.showDeleteDialog = false },
+                        type: 'is-danger',
+                    })
                 }
             }
         },

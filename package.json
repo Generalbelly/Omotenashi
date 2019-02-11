@@ -34,6 +34,7 @@
     "clipboard": "^2.0.4",
     "cross-env": "^5.1",
     "css-loader": "^0.28.11",
+    "debounce": "^1.2.0",
     "dotenv-webpack": "^1.6.0",
     "expect": "^23.6.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",

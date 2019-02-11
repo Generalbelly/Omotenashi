@@ -1,7 +1,7 @@
 <template>
     <button
         class="button"
-        @click="$emit('click:search')"
+        @click="$emit('click', $event)"
     >
         Search
     </button>

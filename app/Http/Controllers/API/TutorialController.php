@@ -60,7 +60,12 @@ class TutorialController extends Controller
         $perPage = $request->query('perPage', 20);
 
         $orderBy = $request->query('orderBy', null);
-        $orders = [];
+        $orders = [
+            [
+                'column' => 'created_at',
+                'direction' => 'desc'
+            ],
+        ];
         if (isset($orderBy)) {
             foreach (explode(',', $orderBy) as $order) {
                 $orderArray = explode(' ', $order);

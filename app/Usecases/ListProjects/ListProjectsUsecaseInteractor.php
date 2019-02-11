@@ -2,7 +2,6 @@
 
 namespace App\Usecases\ListProjects;
 
-use App\Repositories\Tutorial\TutorialRepositoryContract;
 use App\Repositories\Project\ProjectRepositoryContract;
 use Log;
 
