@@ -1,6 +1,6 @@
 <template>
     <CardModal>
-        <div slot="header" class="has-margin-0">
+        <div slot="header" class="is-marginless">
             <base-header
                 :level="3"
                 class="has-text-left"
@@ -55,16 +55,18 @@
                                     @input="updateParameter(pIndex, { key: $event} )"
                                     :rules="showParameterFields ? 'required' : ''"
                                     name="parameter key"
+                                    class="is-marginless"
                                 ></validatable-text-field>
                                 <validatable-text-field
                                     :value="p.value"
                                     @input="updateParameter(pIndex, { value: $event })"
                                     :rules="showParameterFields ? 'required' : ''"
                                     name="parameter value"
+                                    class="is-marginless"
                                 ></validatable-text-field>
                                 <base-icon
                                     icon="trash"
-                                    class="parameter__trash has-cursor-pointer"
+                                    class="has-cursor-pointer"
                                     @click="deleteParameter(pIndex)"
                                 ></base-icon>
                             </div>
@@ -243,8 +245,7 @@
         display: grid;
         grid-template-columns: 1fr 1fr auto;
         grid-column-gap: .5em;
-    }
-    .parameter__trash {
-        margin-top: 0.5em;
+        align-items: center;
+        margin-bottom: 10px;
     }
 </style>

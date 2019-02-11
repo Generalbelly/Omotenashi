@@ -11,6 +11,7 @@
         <p
             class="control has-icons-right"
             :class="{
+                'is-expanded': isExpanded,
                 'has-icons-left': icon,
                 'is-loading': isLoading
             }"

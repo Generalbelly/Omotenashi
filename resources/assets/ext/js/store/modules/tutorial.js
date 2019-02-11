@@ -9,9 +9,6 @@ import {
     DELETE_TUTORIAL,
     SELECT_TUTORIAL,
 
-    ADD_STEP,
-    UPDATE_STEP,
-    DELETE_STEP,
     SELECT_STEP,
 
     REQUEST_LIST_TUTORIALS,
@@ -42,6 +39,7 @@ const state = {
     selectedTutorialId: null,
     selectedStepId: null,
     isRequesting: false,
+    requestState: null,
 }
 
 export const getters = {
@@ -83,7 +81,8 @@ export const mutations = {
             ...state.tutorialEntities.slice(tutorialIndex+1),
         ]
     },
-    [DELETE_TUTORIAL](state, { id }) {
+    [DELETE_TUTORIAL](state, payload) {
+        const { id } = payload
         const tutorialIndex = state.tutorialEntities.findIndex(t => t.id === id)
         state.tutorialEntities = [
             ...state.tutorialEntities.slice(0, tutorialIndex),
@@ -91,49 +90,52 @@ export const mutations = {
         ]
     },
     [REQUEST_LIST_TUTORIALS](state) {
-        state.isRequesting = REQUEST_LIST_TUTORIALS;
+        state.isRequesting = true
+        state.requestState = REQUEST_LIST_TUTORIALS
     },
     [REQUEST_LIST_TUTORIALS_SUCCESS](state) {
         state.isRequesting = false
+        state.requestState = REQUEST_LIST_TUTORIALS_SUCCESS
     },
-    [REQUEST_LIST_TUTORIALS_FAILURE](state, { errorCode, errorMsg }) {
+    [REQUEST_LIST_TUTORIALS_FAILURE](state, payload) {
         state.isRequesting = false
+        state.requestState = REQUEST_LIST_TUTORIALS_FAILURE
     },
     [REQUEST_ADD_TUTORIAL](state) {
-        state.isRequesting = REQUEST_ADD_TUTORIAL
+        state.isRequesting = true
+        state.requestState = REQUEST_ADD_TUTORIAL
     },
     [REQUEST_ADD_TUTORIAL_SUCCESS](state) {
         state.isRequesting = false
+        state.requestState = REQUEST_ADD_TUTORIAL_SUCCESS
     },
-    [REQUEST_ADD_TUTORIAL_FAILURE](state, { errorCode, errorMsg }) {
+    [REQUEST_ADD_TUTORIAL_FAILURE](state, payload) {
         state.isRequesting = false
+        state.requestState = REQUEST_ADD_TUTORIAL_FAILURE
     },
     [REQUEST_UPDATE_TUTORIAL](state) {
-        state.isRequesting = REQUEST_UPDATE_TUTORIAL
+        state.isRequesting = true
+        state.requestState = REQUEST_UPDATE_TUTORIAL
     },
     [REQUEST_UPDATE_TUTORIAL_SUCCESS](state) {
         state.isRequesting = false
+        state.requestState = REQUEST_UPDATE_TUTORIAL_SUCCESS
     },
-    [REQUEST_UPDATE_TUTORIAL_FAILURE](state, { errorCode, errorMsg }) {
+    [REQUEST_UPDATE_TUTORIAL_FAILURE](state, payload) {
         state.isRequesting = false
+        state.requestState = REQUEST_UPDATE_TUTORIAL_FAILURE
     },
     [REQUEST_DELETE_TUTORIAL](state) {
-        state.isRequesting = REQUEST_DELETE_TUTORIAL
+        state.isRequesting = true
+        state.requestState = REQUEST_DELETE_TUTORIAL
     },
     [REQUEST_DELETE_TUTORIAL_SUCCESS](state) {
         state.isRequesting = false
+        state.requestState = REQUEST_DELETE_TUTORIAL_SUCCESS
     },
-    [REQUEST_DELETE_TUTORIAL_FAILURE](state, { errorCode, errorMsg }) {
+    [REQUEST_DELETE_TUTORIAL_FAILURE](state, payload) {
         state.isRequesting = false
-    },
-    [ADD_STEP](state, { data }) {
-
-    },
-    [UPDATE_STEP](state, {id, data}) {
-
-    },
-    [DELETE_STEP](state, { id }) {
-
+        state.requestState = REQUEST_DELETE_TUTORIAL_FAILURE
     },
     [SELECT_TUTORIAL](state, { id = null }) {
         if (id) {

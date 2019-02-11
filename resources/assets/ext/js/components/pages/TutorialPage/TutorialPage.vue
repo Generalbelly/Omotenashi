@@ -3,9 +3,10 @@
         :tutorial-entities="tutorialEntities"
         :selected-tutorial="selectedTutorial"
         :selected-step="selectedStep"
+        :request-state="requestState"
         :is-requesting="isRequesting"
         :ext-log="extLog"
-        :url-did-change="urlDidChange"
+        :show-url-change-alert="urlDidChange"
         @tutorialSaveClick="onTutorialSaveClick"
         @tutorialChange="onTutorialChange"
         @closeClick="$emit('click:close')"
@@ -37,6 +38,7 @@
                 'tutorialEntities',
                 'selectedTutorialId',
                 'selectedStepId',
+                'requestState',
                 'isRequesting',
             ]),
             ...mapState([

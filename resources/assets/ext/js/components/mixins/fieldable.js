@@ -17,6 +17,10 @@ const props = {
         type: Boolean,
         default: false,
     },
+    isExpanded: {
+        type: Boolean,
+        default: false,
+    },
     icon: {
         type: String,
         default: null,
@@ -31,6 +35,10 @@ const props = {
             return [];
         }
     },
+    hasAddons: {
+        type: Boolean,
+        default: false,
+    }
 }
 
 export default {

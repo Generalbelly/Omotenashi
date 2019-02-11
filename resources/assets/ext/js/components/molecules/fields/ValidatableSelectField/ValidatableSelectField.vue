@@ -4,11 +4,12 @@
         :rules="rules"
     >
         <select-field
-            v-model="inputValue"
             v-bind="$attrs"
+            v-model="inputValue"
             slot-scope="{ errors, valid }"
-            :message="errors"
-            :type="getType(errors, valid)"
+            :messages="errors"
+            :is-success="errors.length === 0 && valid"
+            :is-danger="errors.length > 0 && !valid"
         ></select-field>
     </validation-provider>
 </template>
@@ -19,7 +20,7 @@
     import SelectField from "../SelectField";
 
     export default {
-        name: "ValidatableTextField",
+        name: "ValidatableSelectField",
         mixins: [ validatable ],
         props: {
             value: {

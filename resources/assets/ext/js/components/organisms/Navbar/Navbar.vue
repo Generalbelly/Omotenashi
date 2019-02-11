@@ -33,3 +33,8 @@
         },
     }
 </script>
+<style scoped>
+    .navbar {
+        z-index: 10000000;
+    }
+</style>

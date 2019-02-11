@@ -25,10 +25,6 @@ const props = {
         type: Boolean,
         default: false,
     },
-    isSecondary: {
-        type: Boolean,
-        default: false,
-    }
 }
 
 export default {

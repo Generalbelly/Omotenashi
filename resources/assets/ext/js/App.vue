@@ -97,9 +97,12 @@
 </script>
 
 <style>
+    #omotenashi {
+        z-index: 2147483648 !important;
+        position: relative;
+    }
     #omotenashi > .navbar {
         top: unset;
-        z-index: 10000000 !important;
     }
     #omotenashi > .navbar:after,
     #omotenashi > .navbar:before {

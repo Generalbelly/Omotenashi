@@ -1,13 +1,13 @@
 <template>
     <div>
-        <menu
+        <tutorial-list
             v-show="isHome"
             class="menu"
             :class="{
                 'is-fixed-bottom-right': menuIsOnTheRight,
                 'is-fixed-bottom-left': !menuIsOnTheRight,
             }"
-            :is-loading="isRequesting === 'REQUEST_LIST_TUTORIALS'"
+            :is-loading="requestState === 'REQUEST_LIST_TUTORIALS'"
             :tutorial-entities="tutorialEntities"
             :selected-tutorial="selectedTutorial"
             :selected-step="selectedStep"
@@ -21,7 +21,7 @@
             @editTutorialClick="onEditTutorialClick"
             @deleteTutorialClick="onDeleteTutorialClick"
             @switchSideClick="menuIsOnTheRight = !menuIsOnTheRight"
-        ></menu>
+        ></tutorial-list>
 
         <delete-confirmation-message
             v-if="isDeletingTutorial"
@@ -54,7 +54,7 @@
         </setting>
 
         <message
-            v-show="showUrlChangeAlert && isRequesting === 'REQUEST_LIST_TUTORIALS'"
+            v-show="showUrlChangeAlert && requestState === 'REQUEST_LIST_TUTORIALS'"
             is-warning
             @closeClick="showUrlChangeAlert = false"
         >
@@ -66,14 +66,14 @@
         </message>
 
         <loading-modal
-            v-show="isRequesting && isRequesting !== 'REQUEST_LIST_TUTORIALS'"
+            v-show="isRequesting && requestState !== 'REQUEST_LIST_TUTORIALS'"
         ></loading-modal>
     </div>
 </template>
 <script>
-    import { mapActions, mapGetters, mapState,} from 'vuex'
+    import { mapActions } from 'vuex'
     import LoadingModal from '../../molecules/LoadingModal'
-    import Menu from '../../organisms/Menu'
+    import TutorialList from '../../organisms/TutorialList'
     import Setting from '../../organisms/Setting'
     import DeleteConfirmationMessage from "../../organisms/DeleteConfirmationMessage"
     import DriverEditor from "../../organisms/DriverEditor"
@@ -90,6 +90,15 @@
     }
 
     export default {
+        name: 'TutorialTemplate',
+        components: {
+            Message,
+            LoadingModal,
+            DriverEditor,
+            DeleteConfirmationMessage,
+            TutorialList,
+            Setting,
+        },
         props: {
             tutorialEntities: {
                 type: Array,
@@ -106,7 +115,11 @@
                 default: null,
             },
             isRequesting: {
-                type: [Boolean, String],
+                type: Boolean,
+                default: false,
+            },
+            requestState: {
+                type: String,
                 default: false,
             },
             extLog: {
@@ -115,29 +128,16 @@
                     return {};
                 },
             },
-            domain: {
-                type: String,
-                default: null,
-            },
-            urlDidChange: {
+            showUrlChangeAlert: {
                 type: Boolean,
                 default: false,
             }
-        },
-        components: {
-            Message,
-            LoadingModal,
-            DriverEditor,
-            DeleteConfirmationMessage,
-            Menu,
-            Setting,
         },
         data() {
             return {
                 state: states.beingHome,
                 messageShown: null,
                 menuIsOnTheRight: true,
-                showUrlChangeAlert: false
             }
         },
         methods: {
@@ -145,16 +145,6 @@
                 'retrieveLog',
                 'saveLog'
             ]),
-            // showTutorialUrlChangeAlert() {
-            //     return new Promise(resolve => {
-            //         this.$refs.tutorialUrlChangeAlert.subscribe('confirm', () => {
-            //             resolve(true);
-            //         })
-            //         this.$refs.tutorialUrlChangeAlert.subscribe('cancel', () => {
-            //             resolve(false);
-            //         })
-            //     })
-            // },
             updateState(state = null) {
                 if (Object.values(states).includes(state)) {
                     this.state = state
@@ -216,13 +206,11 @@
         },
         watch: {
             tutorialEntities(newValue, oldValue) {
+                console.log(newValue);
                 if ((oldValue.length - newValue.length) === 1) {
                     this.updateState('beingHome')
                 }
             },
-            urlDidChange(value) {
-                this.showUrlChangeAlert = value;
-            }
         },
         computed: {
             isHome() {
@@ -247,7 +235,6 @@
     .menu {
         z-index: 10000000;
     }
-
     @media only screen and (max-width: 600px) {
         .menu {
             width: 100%;
