@@ -24,7 +24,7 @@ class RedirectOAuthUsecaseInteractor implements RedirectOAuthUsecase {
                         'https://www.googleapis.com/auth/analytics',
                         'email'
                     ],
-                    'approval_prompt' => 'force'
+                    'prompt' => 'consent',
                 ];
                 break;
             default:

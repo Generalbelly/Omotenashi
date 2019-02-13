@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Domains\Models\OAuthService;
 use App\Usecases\AddOAuth\AddOAuthUsecase;
+use App\Usecases\AddOAuth\AddOAuthRequestModel;
 use App\Usecases\DeleteOAuth\DeleteOAuthRequestModel;
 use App\Usecases\DeleteOAuth\DeleteOAuthUsecase;
 use App\Usecases\RedirectOAuth\RedirectOAuthRequestModel;
 use App\Usecases\RedirectOAuth\RedirectOAuthUsecase;
+use App\Usecases\StoreGoogleAnalyticsAccounts\StoreGoogleAnalyticsAccountsRequestModel;
+use App\Usecases\StoreGoogleAnalyticsAccounts\StoreGoogleAnalyticsAccountsUsecase;
 use Illuminate\Http\Request;
 use Session;
 use DB;
@@ -20,16 +23,19 @@ class OAuthController extends Controller
     private $addOAuthUsecase;
     private $redirectOAuthUsecase;
     private $deleteOAuthUsecase;
+    private $storeGoogleAnalyticsAccountsUsecase;
 
     public function __construct(
         AddOAuthUsecase $addOAuthUsecase,
         RedirectOAuthUsecase $redirectOAuthUsecase,
-        DeleteOAuthUsecase $deleteOAuthUsecase
+        DeleteOAuthUsecase $deleteOAuthUsecase,
+        StoreGoogleAnalyticsAccountsUsecase $storeGoogleAnalyticsAccountsUsecase
     )
     {
         $this->addOAuthUsecase = $addOAuthUsecase;
         $this->redirectOAuthUsecase = $redirectOAuthUsecase;
         $this->deleteOAuthUsecase = $deleteOAuthUsecase;
+        $this->storeGoogleAnalyticsAccountsUsecase = $storeGoogleAnalyticsAccountsUsecase;
     }
 
     /**
@@ -78,7 +84,7 @@ class OAuthController extends Controller
             ]);
         }
 
-        $addOAuthRequest = new DeleteOAuthRequestModel([
+        $addOAuthRequest = new AddOAuthRequestModel([
             'code'     => $request->get('code'),
             'service' => OAuthService::GOOGLE_ANALYTICS,
             'project_id' => $projectId,
@@ -87,6 +93,11 @@ class OAuthController extends Controller
         DB::beginTransaction();
         try {
             $addOAuthResponse = $this->addOAuthUsecase->handle($addOAuthRequest);
+
+            $storeGoogleAnalyticsAccountsRequest = new StoreGoogleAnalyticsAccountsRequestModel([
+                'project_id' => $addOAuthResponse->project_id,
+            ]);
+            $storeGoogleAnalyticsAccountsResponse = $this->storeGoogleAnalyticsAccountsUsecase->handle($storeGoogleAnalyticsAccountsRequest);
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -94,7 +105,7 @@ class OAuthController extends Controller
         }
 
         return redirect()->route('projects.show', [
-            'id' => $addOAuthResponse->project_id,
+            'id' => $storeGoogleAnalyticsAccountsResponse->project_id,
         ]);
     }
 

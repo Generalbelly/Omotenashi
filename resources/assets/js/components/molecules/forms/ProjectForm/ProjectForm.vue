@@ -90,10 +90,13 @@
                     style="margin-top: 40px;"
                     class="has-text-right"
                 >
-                    <span class="is-inline-flex has-padding-top-2 has-margin-right-4">
+                    <span class="is-inline-flex has-padding-top-2 has-margin-right-3">
                         Connected with the account {{ googleOAuthEntity.email }}
                     </span>
-                    <delete-button @click="$emit('click:ga-delete', googleOAuthEntity)"></delete-button>
+                    <trash-icon
+                        @click="$emit('click:ga-delete', googleOAuthEntity)"
+                        size="is-small"
+                    ></trash-icon>
                 </div>
                 <div
                     v-else

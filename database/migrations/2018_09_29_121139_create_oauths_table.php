@@ -17,8 +17,7 @@ class CreateOAuthsTable extends Migration
             $table->string('id')->unique();
             $table->string('service');
             $table->string('email');
-            $table->string('access_token');
-            $table->string('refresh_token')->nullable();
+            $table->string('refresh_token');
             $table->string('project_id');
 
             $table->timestamps();

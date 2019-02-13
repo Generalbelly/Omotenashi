@@ -39,6 +39,7 @@ return [
         'clientId'     => env('GOOGLE_ANALYTICS_CLIENT_ID'),
         'clientSecret' => env('GOOGLE_ANALYTICS_CLIENT_SECRET'),
         'redirectUri'  => env('GOOGLE_ANALYTICS_CLIENT_REDIRECT_URL'),
+        'credentials'  => env('GOOGLE_ANALYTICS_CREDENTIALS_FILE'),
     ]
 
 ];

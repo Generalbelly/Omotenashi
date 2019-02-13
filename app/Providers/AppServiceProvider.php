@@ -81,6 +81,16 @@ use League\OAuth2\Client\Provider\Google;
 use App\Domains\Models\OAuthAccessToken as IOAuthAccessToken;
 use League\OAuth2\Client\Token\AccessToken;
 
+use App\Domains\Models\GoogleApiClient as IGoogleAPIClient;
+use App\Externals\GoogleApiClient;
+use Google_Service_Analytics;
+
+use App\Domains\Models\OAuthRefreshToken as IRefreshToken;
+use League\OAuth2\Client\Grant\RefreshToken;
+
+use App\Usecases\StoreGoogleAnalyticsAccounts\StoreGoogleAnalyticsAccountsUsecase;
+use App\Usecases\StoreGoogleAnalyticsAccounts\StoreGoogleAnalyticsAccountsUsecaseInteractor;
+
 use Log;
 
 class AppServiceProvider extends ServiceProvider
@@ -235,6 +245,16 @@ class AppServiceProvider extends ServiceProvider
             AccessToken::class
         );
 
+        $this->app->bind(
+            IRefreshToken::class,
+            RefreshToken::class
+        );
+
+        $this->app->bind(
+            StoreGoogleAnalyticsAccountsUsecase::class,
+            StoreGoogleAnalyticsAccountsUsecaseInteractor::class
+        );
+
         $this->app->bind(IOAuthProviderGoogle::class, function($app){
             return new Google([
                 'clientId'     => config('services.google.clientId'),
@@ -242,6 +262,14 @@ class AppServiceProvider extends ServiceProvider
                 'redirectUri'  => config('services.google.redirectUri'),
                 'accessType'   => 'offline',
             ]);
+        });
+
+        $this->app->bind(IGoogleAPIClient::class, function($app){
+            $client = new GoogleApiClient();
+            $client->setApplicationName(config('app.name'));
+            $client->setAuthConfig(config('services.google.credentials'));
+            $client->addScope(Google_Service_Analytics::ANALYTICS);
+            return $client;
         });
 
 
