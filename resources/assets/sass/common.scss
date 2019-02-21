@@ -54,7 +54,7 @@ $directions: ('x', 'y');
         padding-left: sizeValue($sizeKey, $sizeValue) !important;
         padding-right: sizeValue($sizeKey, $sizeValue) !important;
       }
-      .#{$paddingKey}#{$separator}#{$direction}#{$separator}#{$sizeKey} {
+      .#{$marginKey}#{$separator}#{$direction}#{$separator}#{$sizeKey} {
         margin-left: sizeValue($sizeKey, $sizeValue) !important;
         margin-right: sizeValue($sizeKey, $sizeValue) !important;
       }

@@ -53,7 +53,7 @@
         <main class="container has-padding-5">
             <router-view></router-view>
         </main>
-        <extension-install-banner v-if="showExtensionLink"></extension-install-banner>
+        <extension-install-banner class="banner" v-if="showExtensionLink"></extension-install-banner>
         <footer class="footer">
             <div class="content has-text-centered">
                 <p>
@@ -160,5 +160,11 @@
     a.navbar-item > .icon {
         margin-left: -.25em;
         margin-right: .25em;
+    }
+    .banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
     }
 </style>

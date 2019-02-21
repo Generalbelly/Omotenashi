@@ -1,26 +1,24 @@
 <template>
     <section
-        class="hero"
+        class="is-flex has-padding-y-4 has-padding-x-6 has-background-white"
     >
-        <div class="hero-body has-text-centered is-size-4">
-            Have you installed our chrome extension yet?<br>
-            It is required to create tutorials.
-            <div class="has-margin-5">
-                <a
-                    class="button is-complementary"
-                    href=""
-                    target="_blank"
-                >
-                    Install the extension
-                </a>
-            </div>
+        <div class="is-size-5 has-margin-right-auto">
+            Seems like you haven't installed our chrome extension yet. It is required to create tutorials.
+        </div>
+        <div>
+            <a
+                class="button is-accent-300"
+                target="_blank"
+            >
+                Install the extension
+            </a>
         </div>
     </section>
 </template>
 
 <script>
     export default {
-        name: "ExtensionInstallBanner"
+        name: "ExtensionInstallBanner",
     }
 </script>
 
