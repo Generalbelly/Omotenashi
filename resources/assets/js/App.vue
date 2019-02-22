@@ -50,17 +50,20 @@
                 </div>
             </div>
         </nav>
+
         <main class="container has-padding-5">
             <router-view></router-view>
         </main>
-        <extension-install-banner class="banner" v-if="showExtensionLink"></extension-install-banner>
-        <footer class="footer">
-            <div class="content has-text-centered">
-                <p>
-                    &copy; 2018 Omotenashi
-                </p>
-            </div>
-        </footer>
+
+        <extension-install-banner class="banner has-background-white-ter" v-if="showExtensionLink"></extension-install-banner>
+
+        <!--<footer class="footer">-->
+            <!--<div class="content has-text-centered">-->
+                <!--<p>-->
+                    <!--&copy; 2018 Omotenashi-->
+                <!--</p>-->
+            <!--</div>-->
+        <!--</footer>-->
     </div>
 </template>
 
@@ -148,6 +151,7 @@
             },
             navItemClass(path) {
                 return {
+                    'has-text-primary': this.$route.path.includes(path),
                     'has-text-grey-light': !this.$route.path.includes(path),
                     'navbar-item': true,
                 }
