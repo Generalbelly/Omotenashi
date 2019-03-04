@@ -21,6 +21,7 @@ class CreateTutorialsTable extends Migration
             $table->string('path');
             $table->string('query')->nullable();
             $table->string('project_id');
+
             $table->timestamps();
             $table->softDeletes();
 

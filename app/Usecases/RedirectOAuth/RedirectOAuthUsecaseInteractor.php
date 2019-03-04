@@ -2,7 +2,7 @@
 
 namespace App\Usecases\RedirectOAuth;
 
-use App\Domains\Models\OAuthService;
+use App\Domains\Models\OAuth\OAuthService;
 use Exception;
 use App;
 
@@ -17,11 +17,12 @@ class RedirectOAuthUsecaseInteractor implements RedirectOAuthUsecase {
     {
         switch ($request->service) {
             case OAuthService::GOOGLE_ANALYTICS:
-                /** @var \App\Domains\Models\OAuthProviderGoogle $provider */
-                $provider = App::make('App\Domains\Models\OAuthProviderGoogle');
+                /** @var \App\Domains\Models\OAuth\OAuthProviderGoogle $provider */
+                $provider = App::make('App\Domains\Models\OAuth\OAuthProviderGoogle');
                 $params = [
                     'scope' => [
                         'https://www.googleapis.com/auth/analytics',
+                        'https://www.googleapis.com/auth/analytics.edit',
                         'email'
                     ],
                     'prompt' => 'consent',

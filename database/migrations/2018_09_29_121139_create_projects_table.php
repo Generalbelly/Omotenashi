@@ -18,13 +18,13 @@ class CreateProjectsTable extends Migration
             $table->string('name');
             $table->string('protocol');
             $table->string('domain');
-            $table->timestamps();
-            $table->softDeletes();
             $table->string('user_id');
 
-            $table->primary('id');
-            $table->unique(['domain', 'user_id']);
+            $table->timestamps();
+            $table->softDeletes();
 
+
+            $table->primary('id');
             $table->index('id', 'idx_id');
             $table->index(['user_id'], 'idx_user_id');
         });

@@ -7,7 +7,8 @@
         @click:cancel="onCancel"
         @click:delete="onDelete"
         @click:ga-connect="onClickGAConnect"
-        @click:ga-delete="onClickGARevoke"
+        @click:ga-delete="onClickGADelete"
+        @click:ga-property-edit="onClickGAPropetyEdit"
     >
     </project-template>
 </template>
@@ -18,8 +19,6 @@
 
     import {
         REQUEST_GET_PROJECT_SUCCESS,
-        REQUEST_ADD_PROJECT_SUCCESS,
-        REQUEST_UPDATE_PROJECT_SUCCESS,
         REQUEST_DELETE_PROJECT_SUCCESS,
     } from '../../../store/mutation-types';
     export default {
@@ -74,6 +73,7 @@
                 'getProject',
                 'deleteProject',
                 'deleteOAuth',
+                'listGoogleAnalyticsAccounts',
             ]),
             onSave(projectEntity) {
                 if (projectEntity.id) {
@@ -100,9 +100,14 @@
             onClickGAConnect() {
                 window.location.href = `/oauths/google-analytics/redirect?id=${this.projectEntity.id}`
             },
-            onClickGARevoke(oauthEntity) {
+            onClickGADelete(oauthEntity) {
                 this.deleteOAuth({
                     id: oauthEntity.id,
+                })
+            },
+            onClickGAPropetyEdit(projectId) {
+                this.listGoogleAnalyticsAccounts({
+                    id: projectId,
                 })
             }
         }

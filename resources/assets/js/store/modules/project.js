@@ -9,6 +9,7 @@ import {
     UPDATE_PROJECT,
     DELETE_PROJECT,
     DELETE_OAUTH,
+    LIST_GOOGLE_ANALYTICS,
 
     REQUEST_LIST_PROJECTS,
     REQUEST_LIST_PROJECTS_SUCCESS,
@@ -34,10 +35,15 @@ import {
     REQUEST_DELETE_OAUTH_SUCCESS,
     REQUEST_DELETE_OAUTH_FAILURE,
 
+    REQUEST_LIST_GOOGLE_ANALYTICS,
+    REQUEST_LIST_GOOGLE_ANALYTICS_SUCCESS,
+    REQUEST_LIST_GOOGLE_ANALYTICS_FAILURE,
+
     SET_ERROR_CODE,
 } from '../mutation-types'
 
 import ProjectEntity from "../../components/atoms/Entities/ProjectEntity";
+import GoogleAnalyticsAccount from "../../components/atoms/Entities/GoogleAnalyticsAccount";
 
 const state = {
     total: null,
@@ -104,6 +110,23 @@ export const mutations = {
             ]
         }
     },
+    [LIST_GOOGLE_ANALYTICS](state, payload) {
+        const { accounts, project_id } = payload
+        console.log(accounts);
+        const projectEntity = new ProjectEntity({
+            ...state.projectEntity,
+            googleAnalyticsAccounts: accounts.map(account => new GoogleAnalyticsAccount(account)),
+        })
+        state.projectEntity = projectEntity
+        const projectIndex = state.projectEntities.findIndex(p => p.id === project_id)
+        if (projectIndex !== -1) {
+            state.projectEntities = [
+                ...state.projectEntities.slice(0, projectIndex),
+                projectEntity,
+                ...state.projectEntities.slice(projectIndex+1),
+            ]
+        }
+    },
     [REQUEST_LIST_PROJECTS](state) {
         state.isRequesting = true
         state.requestState = REQUEST_LIST_PROJECTS
@@ -113,7 +136,6 @@ export const mutations = {
         state.requestState = REQUEST_LIST_PROJECTS_SUCCESS
     },
     [REQUEST_LIST_PROJECTS_FAILURE](state, payload) {
-        const { status, data } = payload
         state.isRequesting = false
         state.requestState = REQUEST_LIST_PROJECTS_FAILURE
     },
@@ -126,7 +148,6 @@ export const mutations = {
         state.requestState = REQUEST_ADD_PROJECT_SUCCESS
     },
     [REQUEST_ADD_PROJECT_FAILURE](state, payload) {
-        const { status, data } = payload
         state.isRequesting = false
         state.requestState = REQUEST_ADD_PROJECT_FAILURE
     },
@@ -143,7 +164,6 @@ export const mutations = {
         state.requestState = REQUEST_GET_PROJECT_SUCCESS
     },
     [REQUEST_GET_PROJECT_FAILURE](state, payload) {
-        const { status, data } = payload
         state.isRequesting = false
         state.requestState = REQUEST_GET_PROJECT_FAILURE
     },
@@ -156,7 +176,6 @@ export const mutations = {
         state.requestState = REQUEST_UPDATE_PROJECT_SUCCESS
     },
     [REQUEST_UPDATE_PROJECT_FAILURE](state, payload) {
-        const { status, data } = payload
         state.isRequesting = false
         state.requestState = REQUEST_UPDATE_PROJECT_FAILURE
     },
@@ -169,7 +188,6 @@ export const mutations = {
         state.requestState = REQUEST_DELETE_PROJECT_SUCCESS
     },
     [REQUEST_DELETE_PROJECT_FAILURE](state, payload) {
-        const { status, data } = payload
         state.isRequesting = false
         state.requestState = REQUEST_DELETE_PROJECT_FAILURE
     },
@@ -182,9 +200,20 @@ export const mutations = {
         state.requestState = REQUEST_DELETE_OAUTH_SUCCESS
     },
     [REQUEST_DELETE_OAUTH_FAILURE](state, payload) {
-        const { status, data } = payload
         state.isRequesting = false
         state.requestState = REQUEST_DELETE_OAUTH_FAILURE
+    },
+    [REQUEST_LIST_GOOGLE_ANALYTICS](state) {
+        state.isRequesting = true
+        state.requestState = REQUEST_LIST_GOOGLE_ANALYTICS
+    },
+    [REQUEST_LIST_GOOGLE_ANALYTICS_SUCCESS](state) {
+        state.isRequesting = false
+        state.requestState = REQUEST_LIST_GOOGLE_ANALYTICS_SUCCESS
+    },
+    [REQUEST_LIST_GOOGLE_ANALYTICS_FAILURE](state, payload) {
+        state.isRequesting = false
+        state.requestState = REQUEST_LIST_GOOGLE_ANALYTICS_FAILURE
     },
 }
 
@@ -308,7 +337,6 @@ export const actions = {
         })
             .then(({ data }) => {
                 commit(REQUEST_DELETE_OAUTH_SUCCESS)
-                console.log(data);
                 commit(DELETE_OAUTH, {
                     id: data.id,
                     project_id: data.project_id,
@@ -316,6 +344,24 @@ export const actions = {
             })
             .catch(() => {
                 commit(REQUEST_DELETE_OAUTH_FAILURE)
+            })
+    },
+    listGoogleAnalyticsAccounts({ commit, dispatch }, payload={}) {
+        const { id } = payload
+        commit(REQUEST_LIST_GOOGLE_ANALYTICS)
+        dispatch('request', {
+            id,
+            mutationType: LIST_GOOGLE_ANALYTICS,
+        })
+            .then(({ data }) => {
+                commit(REQUEST_LIST_GOOGLE_ANALYTICS_SUCCESS)
+                commit(LIST_GOOGLE_ANALYTICS, {
+                    accounts: data.accounts,
+                    project_id: data.project_id,
+                })
+            })
+            .catch(() => {
+                commit(REQUEST_LIST_GOOGLE_ANALYTICS_FAILURE)
             })
     },
 }

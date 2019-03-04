@@ -17,7 +17,9 @@ class CreateOAuthsTable extends Migration
             $table->string('id')->unique();
             $table->string('service');
             $table->string('email');
+            $table->string('access_token');
             $table->string('refresh_token');
+            $table->timestamp('expired_at');
             $table->string('project_id');
 
             $table->timestamps();
@@ -25,6 +27,8 @@ class CreateOAuthsTable extends Migration
 
             $table->primary('id');
             $table->index('id', 'idx_id');
+            $table->index('project_id', 'idx_project_id');
+
         });
     }
 

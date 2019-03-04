@@ -45,4 +45,13 @@ class ProjectEntity extends Entity
             'id'
         );
     }
+
+    public function googleAnalyticsPropertyEntities()
+    {
+        return $this->hasMany(
+            'App\Domains\Entities\GoogleAnalyticsPropertyEntity',
+            'project_id',
+            'id'
+        );
+    }
 }

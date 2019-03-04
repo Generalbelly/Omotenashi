@@ -4,6 +4,8 @@ namespace App\Providers;
 
 
 
+use App\Domains\Entities\GoogleAnalyticsPropertyEntity;
+use App\Domains\Entities\Observers\GoogleAnalyticsPropertyEntityObserver;
 use App\Usecases\AddOAuth\AddOAuthUsecase;
 use App\Usecases\AddOAuth\AddOAuthUsecaseInteractor;
 use App\Usecases\DeleteOAuth\DeleteOAuthUsecase;
@@ -75,21 +77,20 @@ use App\Usecases\UpdateProject\UpdateProjectUsecaseInteractor;
 use App\Usecases\DeleteProject\DeleteProjectUsecase;
 use App\Usecases\DeleteProject\DeleteProjectUsecaseInteractor;
 
-use App\Domains\Models\OAuthProviderGoogle as IOAuthProviderGoogle;
+use App\Domains\Models\OAuth\OAuthProviderGoogle as IOAuthProviderGoogle;
 use League\OAuth2\Client\Provider\Google;
 
-use App\Domains\Models\OAuthAccessToken as IOAuthAccessToken;
+use App\Domains\Models\OAuth\OAuthAccessToken as IOAuthAccessToken;
 use League\OAuth2\Client\Token\AccessToken;
 
-use App\Domains\Models\GoogleApiClient as IGoogleAPIClient;
-use App\Externals\GoogleApiClient;
-use Google_Service_Analytics;
-
-use App\Domains\Models\OAuthRefreshToken as IRefreshToken;
+use App\Domains\Models\OAuth\OAuthRefreshToken as IRefreshToken;
 use League\OAuth2\Client\Grant\RefreshToken;
 
-use App\Usecases\StoreGoogleAnalyticsAccounts\StoreGoogleAnalyticsAccountsUsecase;
-use App\Usecases\StoreGoogleAnalyticsAccounts\StoreGoogleAnalyticsAccountsUsecaseInteractor;
+use App\Domains\Models\GoogleAnalyticsClient as IGoogleAnalyticsClient;
+use App\Externals\Google\GoogleAnalyticsClient;
+
+use App\Usecases\ListGoogleAnalyticsAccounts\ListGoogleAnalyticsAccountsUsecase;
+use App\Usecases\ListGoogleAnalyticsAccounts\ListGoogleAnalyticsAccountsUsecaseInteractor;
 
 use Log;
 
@@ -115,6 +116,7 @@ class AppServiceProvider extends ServiceProvider
         ProjectEntity::observe(ProjectEntityObserver::class);
         OAuthEntity::observe(OAuthEntityObserver::class);
         WhitelistedDomainEntity::observe(WhitelistedDomainEntityObserver::class);
+        GoogleAnalyticsPropertyEntity::observe(GoogleAnalyticsPropertyEntityObserver::class);
 
         Validator::extend(
             'uuid',
@@ -251,8 +253,13 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            StoreGoogleAnalyticsAccountsUsecase::class,
-            StoreGoogleAnalyticsAccountsUsecaseInteractor::class
+            ListGoogleAnalyticsAccountsUsecase::class,
+            ListGoogleAnalyticsAccountsUsecaseInteractor::class
+        );
+
+        $this->app->bind(
+            IGoogleAnalyticsClient::class,
+            GoogleAnalyticsClient::class
         );
 
         $this->app->bind(IOAuthProviderGoogle::class, function($app){
@@ -264,11 +271,8 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
-        $this->app->bind(IGoogleAPIClient::class, function($app){
-            $client = new GoogleApiClient();
-            $client->setApplicationName(config('app.name'));
-            $client->setAuthConfig(config('services.google.credentials'));
-            $client->addScope(Google_Service_Analytics::ANALYTICS);
+        $this->app->bind(IGoogleAnalyticsClient::class, function($app){
+            $client = new GoogleAnalyticsClient();
             return $client;
         });
 

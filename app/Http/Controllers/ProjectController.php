@@ -163,9 +163,7 @@ class ProjectController extends Controller
             throw $e;
         }
 
-        $oauthError = Session::get('oauthError');
-        if ($oauthError) {
-            $request->session()->forget('oauthError');
+        if (Session::has('oauthError') && Session::get('oauthError')) {
             return response()->json($getProjectResponse, 500);
         }
 

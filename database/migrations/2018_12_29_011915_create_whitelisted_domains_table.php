@@ -18,6 +18,7 @@ class CreateWhitelistedDomainsTable extends Migration
             $table->string('protocol');
             $table->string('domain');
             $table->string('project_id');
+
             $table->timestamps();
             $table->softDeletes();
 

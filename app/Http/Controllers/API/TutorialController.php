@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 use App\Usecases\ListTutorials\ListTutorialsRequestModel;
-use App\Usecases\ListTutorials\ListTutorialsUsecase;
+use App\Usecases\ListTutorials\ListGoogleAnalyticsAccountsUsecase;
 use App\Usecases\GetTutorial\GetTutorialRequestModel;
 use App\Usecases\GetTutorial\GetTutorialUsecase;
 use App\Http\Requests\AddTutorialRequest;
@@ -29,7 +29,7 @@ class TutorialController extends Controller
     private $deleteTutorialUsecase;
 
     public function __construct(
-        ListTutorialsUsecase $listTutorialsUsecase,
+        ListGoogleAnalyticsAccountsUsecase $listTutorialsUsecase,
         GetTutorialUsecase $getTutorialUsecase,
         AddTutorialUsecase $addTutorialUsecase,
         UpdateTutorialUsecase $updateTutorialUsecase,

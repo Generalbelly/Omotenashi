@@ -8,6 +8,9 @@ export default class ProjectEntity extends Entity {
     oauth_entities = []
     tutorial_entities = []
     whitelisted_domain_entities = []
+    google_analytics_property_entities = []
+
+    googleAnalyticsAccounts = []
 
     constructor(data={}) {
         super()

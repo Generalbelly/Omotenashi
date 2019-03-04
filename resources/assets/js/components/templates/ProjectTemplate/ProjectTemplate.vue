@@ -11,8 +11,10 @@
                 :domain.sync="innerProject.domain"
                 :whitelisted_domain_entities.sync="innerProject.whitelisted_domain_entities"
                 :oauth_entities="innerProject.oauth_entities"
+                :google_analytics_property_entities="innerProject.google_analytics_property_entities"
                 @click:ga-connect="$emit('click:ga-connect', $event)"
                 @click:ga-delete="$emit('click:ga-delete', $event)"
+                @click:ga-property-edit="$emit('click:ga-property-edit', $event)"
             ></project-form>
         </validation-observer>
         <div class="form-actions">

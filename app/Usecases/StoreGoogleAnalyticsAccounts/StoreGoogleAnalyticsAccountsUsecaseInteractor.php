@@ -4,9 +4,7 @@ namespace App\Usecases\StoreGoogleAnalyticsAccounts;
 
 use App;
 use App\Repositories\OAuth\OAuthRepositoryContract;
-use App\Domains\Models\OAuthService;
-use App\Domains\Models\GoogleApiClient;
-use Google_Service_Analytics;
+use App\Domains\Models\OAuth\OAuthService;
 use Exception;
 use Log;
 
@@ -14,15 +12,11 @@ class StoreGoogleAnalyticsAccountsUsecaseInteractor implements StoreGoogleAnalyt
 {
     /** @var OAuthRepositoryContract */
     private $oauthRepository;
-    /** @var App\Domains\Models\GoogleApiClient */
-    private $client;
 
     public function __construct(
-        OAuthRepositoryContract $oauthRepository,
-        GoogleApiClient $client
+        OAuthRepositoryContract $oauthRepository
     ){
         $this->oauthRepository = $oauthRepository;
-        $this->client = $client;
     }
 
     /**
@@ -38,20 +32,27 @@ class StoreGoogleAnalyticsAccountsUsecaseInteractor implements StoreGoogleAnalyt
             'service' => OAuthService::GOOGLE_ANALYTICS,
         ])->firstOrFail();
 
-        /** @var \App\Domains\Models\OAuthProviderGoogle $provider */
-        $provider = App::make('App\Domains\Models\OAuthProviderGoogle');
-        $grant = App::make('App\Domains\Models\OAuthRefreshToken');
+        Log::error('expiration timestamp: '.$oauthEntity->getAttribute('expired_at')->getTimestamp());
+        Log::error('current timestamp: '.time());
 
-        $accessToken = $provider->getAccessToken($grant, [
-            'refresh_token' => $oauthEntity->getAttribute('refreshToken')
-        ]);
+        if ($oauthEntity->getAttribute('expired_at')->getTimestamp() < time()) {
+            /** @var \App\Domains\Models\OAuth\OAuthProviderGoogle $provider */
+            $provider = App::make('App\Domains\Models\OAuth\OAuthProviderGoogle');
+            $grant = App::make('App\Domains\Models\OAuth\OAuthRefreshToken');
+            $token = $provider->getAccessToken($grant, [
+                'refresh_token' => $oauthEntity->getAttribute('refresh_token')
+            ]);
+            $oauthEntity = $this->oauthRepository->update([
+                'access_token' => $token,
+                'expired_at' => $token->getExpires(),
+            ], $oauthEntity->getAttribute('id'));
+        }
 
-        $this->client->setAccessToken($accessToken);
-
-        $analytics = new Google_Service_Analytics($this->client);
+        /** @var \App\Domains\Models\GoogleAnalyticsClient $analytics */
+        $analytics = App::make('App\Domains\Models\GoogleAnalyticsClient');
 
         try {
-            $accounts = $analytics->management_accounts->listManagementAccounts();
+            $accounts = $analytics->listAccounts();
             Log::error(print_r($accounts, true));
         } catch (Exception $e) {
             Log::error($e->getMessage());

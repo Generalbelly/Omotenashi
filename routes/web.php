@@ -41,16 +41,26 @@ Route::prefix('projects')->middleware('auth')->group(function() use ($regexpUUID
 
 
 Route::prefix('oauths')->middleware('auth')->group(function() use ($regexpUUID){
+
     Route::get('/google-analytics/redirect', 'OAuthController@googleAnalyticsRedirect')
         ->name('oauths.google-analytics.redirect');
     Route::delete('/{id}', 'OAuthController@destroy')
         ->name('oauths.destroy');
+
 });
 
 Route::get('/oauths/google-analytics/callback', 'OAuthController@googleAnalyticsCallback')
     ->name('oauths.google-analytics.callback');
 
+
 Route::prefix('tags')->middleware('auth')->group(function() use ($regexpUUID){
     Route::get('{id}', 'TagController@show')
         ->name('tags.show');
+});
+
+Route::prefix('google-analytics')->middleware('auth')->group(function() use ($regexpUUID){
+
+    Route::get('/{project_id}', 'GoogleAnalyticsController@index')
+        ->name('google-analytics.index');
+
 });

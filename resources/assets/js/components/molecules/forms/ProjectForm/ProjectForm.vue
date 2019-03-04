@@ -69,7 +69,7 @@
                 </fade-transition-group>
                 <div class="has-text-right">
                     <button
-                        class="button is-text"
+                        class="button"
                         @click="addWhitelistedDomainEntity"
                     >
                         Add more
@@ -87,16 +87,41 @@
             <div class="column">
                 <div
                     v-if="googleOAuthEntity"
-                    style="margin-top: 40px;"
-                    class="has-text-right"
                 >
-                    <span class="is-inline-flex has-padding-top-2 has-margin-right-3">
-                        Connected with the account {{ googleOAuthEntity.email }}
+                    <span v-if="googleAnalyticsPropertyEntity" class="tag is-primary-200 is-inline-flex has-margin-bottom-4">
+                        Connected
                     </span>
-                    <trash-icon
-                        @click="$emit('click:ga-delete', googleOAuthEntity)"
-                        size="is-small"
-                    ></trash-icon>
+
+                    <div v-if="googleAnalyticsPropertyEntity">
+                        <div class="columns">
+                            <div class="column">
+                                Tracking ID (Web Property ID)
+                            </div>
+                            <div class="column">
+                                UA-XXXX-Y
+                            </div>
+                        </div>
+                        <connect-different-google-analytics-property-button
+                                @click="$emit('click:ga-property-edit', id)"
+                        >
+                        </connect-different-google-analytics-property-button>
+                        <disconnect-google-analytics-button
+                                @click="$emit('click:ga-delete', googleOAuthEntity)"
+                        >
+                        </disconnect-google-analytics-button>
+                    </div>
+                    <b-message v-else type="is-success">
+                        <p class="has-margin-bottom-4">
+                            Successfully connected to your Google account!<br>
+                            Next step is to select a Google Analytics account and a web property.
+                        </p>
+                        <div>
+                            <start-selecting-google-analytics-property-button
+                                    @click="$emit('click:ga-property-edit', id)"
+                            >
+                            </start-selecting-google-analytics-property-button>
+                        </div>
+                    </b-message>
                 </div>
                 <div
                     v-else
@@ -126,10 +151,20 @@
     import ConfirmButton from "../../../atoms/buttons/ConfirmButton";
     import ConnectGoogleAnalyticsButton from "../../../atoms/buttons/ConnectGoogleAnalyticsButton";
     import DeleteButton from "../../../atoms/buttons/DeleteButton/DeleteButton";
+    import DisconnectGoogleAnalyticsButton
+        from "../../../atoms/buttons/DisconnectGoogleAnalyticsButton/DisconnectGoogleAnalyticsButton";
+    import ConnectDifferentGoogleAnalyticsPropertyButton
+        from "../../../atoms/buttons/ConnectDifferentGoogleAnalyticsPropertyButton/ConnectDifferentGoogleAnalyticsPropertyButton";
+    import GoogleAnalyticsPropertyEntity from "../../../atoms/Entities/GoogleAnalyticsPropertyEntity";
+    import StartSelectingGoogleAnalyticsPropertyButton
+        from "../../../atoms/buttons/StartSelectingGoogleAnalyticsPropertyButton/StartSelectingGoogleAnalyticsPropertyButton";
 
     export default {
         name: "ProjectForm",
         components: {
+            StartSelectingGoogleAnalyticsPropertyButton,
+            ConnectDifferentGoogleAnalyticsPropertyButton,
+            DisconnectGoogleAnalyticsButton,
             DeleteButton,
             ConnectGoogleAnalyticsButton,
             ConfirmButton,
@@ -172,6 +207,12 @@
                 default() {
                     return []
                 }
+            },
+            google_analytics_property_entities: {
+                type: Array,
+                default() {
+                    return []
+                }
             }
         },
         data() {
@@ -200,6 +241,12 @@
             },
             googleOAuthEntity() {
                 return this.oauth_entities.find(entity => entity.service === 'google_analytics');
+            },
+            googleAnalyticsPropertyEntity() {
+                if (this.google_analytics_property_entities.length > 0) {
+                    return new GoogleAnalyticsPropertyEntity(this.google_analytics_property_entities[0]);
+                }
+                return null;
             }
         },
         watch: {

@@ -2,14 +2,12 @@
 
 namespace App\Usecases\GetProject;
 
+use App\Domains\Entities\ProjectEntity;
 use App\Repositories\Project\ProjectRepositoryContract;
 use Log;
 
 class GetProjectUsecaseInteractor implements GetProjectUsecase {
 
-    /**
-     * @var ProjectRepository
-     */
     private $projectRepository;
 
     /**
@@ -28,9 +26,11 @@ class GetProjectUsecaseInteractor implements GetProjectUsecase {
      */
     public function handle(GetProjectRequestModel $request): GetProjectResponseModel
     {
+        /** @var ProjectEntity $projectEntity */
         $projectEntity = $this->projectRepository->find($request->id);
-        $projectEntity->whitelistedDomainEntities;
-        $projectEntity->oauthEntities;
+        $projectEntity->getAttribute('whitelistedDomainEntities');
+        $projectEntity->getAttribute('oauthEntities');
+        $projectEntity->getAttribute('googleAnalyticsPropertyEntities');
         return new GetProjectResponseModel($projectEntity->toArray());
     }
 

@@ -10,7 +10,14 @@ class OAuthEntity extends Entity
         'email',
         'refresh_token',
         'access_token',
+        'expired_at',
         'project_id'
+    ];
+
+    protected $dates = [
+        'expired_at',
+        'created_at',
+        'updated_at',
     ];
 
     public function projectEntity()
