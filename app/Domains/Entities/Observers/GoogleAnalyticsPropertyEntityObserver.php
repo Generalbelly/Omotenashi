@@ -4,12 +4,11 @@ namespace App\Domains\Entities\Observers;
 
 use App\Domains\Entities\GoogleAnalyticsPropertyEntity;
 
-
 class GoogleAnalyticsPropertyEntityObserver extends EntityObserver
 {
-    public function creating(GoogleAnalyticsPropertyEntityObserver $googleAnalyticsPropertyEntity)
+    public function creating(GoogleAnalyticsPropertyEntity $googleAnalyticsPropertyEntity)
     {
-        $id = $this->generateKey(GoogleAnalyticsPropertyEntityObserver::class, 'id');
+        $id = $this->generateKey(GoogleAnalyticsPropertyEntity::class, 'id');
         $googleAnalyticsPropertyEntity->setAttribute('id', $id);
     }
 }

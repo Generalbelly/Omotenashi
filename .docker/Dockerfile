@@ -25,7 +25,8 @@ RUN yum install -y \
     libtool-ltdl \
     which \
     gcc gcc-c++ \
-    net-tools
+    net-tools \
+    lsof
 
 # install php7.2 nginx
 RUN amazon-linux-extras install php7.2 nginx1.12
@@ -37,7 +38,6 @@ RUN yum install -y --disablerepo=amzn-main,amzn-updates --enablerepo=remi,remi-p
 
 RUN rm -f /etc/nginx/default.d/php.conf
 ADD ./nginx/default.conf /etc/nginx/conf.d/default.conf
-
 
 RUN mkdir /var/lib/php/session_nginx && \
     chown root.nginx /var/lib/php/session_nginx && \
@@ -60,15 +60,17 @@ ADD ./certs/localhost+1.pem  /etc/ssl/certs/localhost+1.pem
 RUN chown -R root:nginx /var/log/nginx
 RUN chmod -R 770 /var/log/nginx/
 
-RUN useradd docker
+# node and npm
+RUN curl -sL https://rpm.nodesource.com/setup_10.x | bash -
+RUN yum -y install nodejs
+RUN yum -y install gcc-c++ make
+
+# yarn
+RUN wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
+RUN yum -y install yarnls
 
 RUN systemctl enable nginx.service
 RUN systemctl enable php-fpm.service
-
-# install node and npm
-RUN curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
-RUN sudo yum -y install nodejs
-RUN sudo yum -y install gcc-c++ make
 
 EXPOSE 80
 

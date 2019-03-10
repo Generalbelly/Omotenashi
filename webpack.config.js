@@ -1,13 +1,35 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-    mode: 'production',
+    mode: process.env.APP_ENV === 'prod' ? "production" : "development",
     entry: { app: './resources/assets/js/app.js' },
     output: {
-        path: path.resolve(__dirname, "public/js")
+        filename: "js/app.js",
+        path: path.join(__dirname, "./public"),
+        publicPath: "/",
+    },
+    devServer: {
+        compress: true,
+        contentBase: path.join(__dirname, "./public"),
+        publicPath: '/',
+        port: 80,
+        proxy: {
+            '*': {
+                target: 'https://docker.omotenashi.today',
+                secure: false
+            }
+        },
+        host: '0.0.0.0',
+        disableHostCheck: true,
+        hot: true,
+        inline: true,
+        quiet: false,
+        noInfo: false,
+        stats: {
+            colors: true
+        }
     },
     module: {
         rules: [
@@ -71,10 +93,10 @@ module.exports = {
         ]
     },
     plugins: [
-        new CleanWebpackPlugin('public/js', {}),
-        new CleanWebpackPlugin('public/css', {}),
         new MiniCssExtractPlugin({
-            filename: '../css/[name].css',
+            filename: 'css/[name].css',
+            path: path.join(__dirname, "./public"),
+            publicPath: "/",
         }),
         new Dotenv(),
     ],

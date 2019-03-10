@@ -6,7 +6,7 @@
         >
             <option
                 v-for="(option, optionIndex) in items"
-                :key="optionIndex"
+                :key="optionIndex+1"
                 :value="option.value"
             >
                 {{ option.text }}
@@ -32,7 +32,7 @@
                 default() {
                     return [];
                 },
-            }
+            },
         },
         computed: {
             inputValue: {
@@ -43,6 +43,9 @@
                     this.$emit('input', newValue)
                 }
             }
+        },
+        mounted() {
+            console.log(this.$attrs);
         }
     }
 </script>

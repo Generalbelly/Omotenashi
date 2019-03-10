@@ -35,6 +35,7 @@
                             :value="`${whitelistedDomainEntity.protocol}://${whitelistedDomainEntity.domain}`"
                             @input="updateWhitelistedDomainEntity($event, whitelistedDomainEntityIndex)"
                             expanded
+                            :exception-domains="['https://localhost', 'http://localhost']"
                         >
                         </validatable-domain-field>
                         <div
@@ -77,7 +78,10 @@
                 </div>
             </div>
         </div>
-        <div class="columns is-6">
+        <div
+            v-if="id"
+            class="columns is-6"
+        >
             <div class="column is-two-fifths">
                 <sub-heading class="has-text-weight-bold has-margin-bottom-4">Google Analytics</sub-heading>
                 <p>
@@ -88,27 +92,43 @@
                 <div
                     v-if="googleOAuthEntity"
                 >
-                    <span v-if="googleAnalyticsPropertyEntity" class="tag is-primary-200 is-inline-flex has-margin-bottom-4">
-                        Connected
-                    </span>
-
-                    <div v-if="googleAnalyticsPropertyEntity">
+                    <div v-if="googleAnalyticsPropertyEntity && googleAnalyticsPropertyEntity.id">
                         <div class="columns">
                             <div class="column">
-                                Tracking ID (Web Property ID)
-                            </div>
-                            <div class="column">
-                                UA-XXXX-Y
+                                <span
+                                    class="tag is-medium is-primary-100 has-margin-right-4"
+                                >
+                                    Connected
+                                </span>
+                                <pen-icon
+                                    class="has-margin-right-3 has-cursor-pointer"
+                                    size="is-small"
+                                    @click="$emit('click:ga-property-edit', id)"
+                                ></pen-icon>
+                                <trash-icon
+                                    class="has-cursor-pointer"
+                                    size="is-small"
+                                    @click="$emit('click:ga-delete', googleOAuthEntity)"
+                                >
+                                </trash-icon>
                             </div>
                         </div>
-                        <connect-different-google-analytics-property-button
-                                @click="$emit('click:ga-property-edit', id)"
-                        >
-                        </connect-different-google-analytics-property-button>
-                        <disconnect-google-analytics-button
-                                @click="$emit('click:ga-delete', googleOAuthEntity)"
-                        >
-                        </disconnect-google-analytics-button>
+                        <div class="columns">
+                            <div class="column is-half label">
+                                Property ID
+                            </div>
+                            <div class="column">
+                                {{ googleAnalyticsPropertyEntity.property_id }}
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column is-half label">
+                                Property Name
+                            </div>
+                            <div class="column">
+                                {{ googleAnalyticsPropertyEntity.property_name }}
+                            </div>
+                        </div>
                     </div>
                     <b-message v-else type="is-success">
                         <p class="has-margin-bottom-4">
@@ -117,9 +137,33 @@
                         </p>
                         <div>
                             <start-selecting-google-analytics-property-button
-                                    @click="$emit('click:ga-property-edit', id)"
+                                v-if="googleAnalyticsAccountOptions.length === 0"
+                                @click="$emit('click:ga-property-edit', id)"
+                                class="is-success-200"
                             >
                             </start-selecting-google-analytics-property-button>
+                            <div v-else>
+                                <validatable-select-field
+                                    :items="googleAnalyticsAccountOptions"
+                                    v-model="googleAnalyticsAccountId"
+                                    label="Account"
+                                    placeholder="Select account"
+                                    name="Account"
+                                    rules="required"
+                                    horizontal
+                                ></validatable-select-field>
+                                <validatable-select-field
+                                    v-if="googleAnalyticsAccount"
+                                    :items="googleAnalyticsWebPropertyOptions"
+                                    style="white-space: nowrap;"
+                                    label="Property"
+                                    placeholder="Select property"
+                                    v-model="googleAnalyticsWebPropertyId"
+                                    name="Property"
+                                    rules="required"
+                                    horizontal
+                                ></validatable-select-field>
+                            </div>
                         </div>
                     </b-message>
                 </div>
@@ -137,7 +181,7 @@
 </template>
 
 <script>
-    import ValidatableTextField from "../../fields/ValidatableTextField"
+    import ValidatableTextField from "../../fields/ValidatableTextField";
     import ValidatableDomainField from "../../fields/ValidatableDomainField";
     import AddButton from "../../../atoms/buttons/AddButton/AddButton";
     import QuestionCircleIcon from "../../../atoms/icons/QuestionCircleIcon";
@@ -149,19 +193,20 @@
     import CancelButton from "../../../atoms/buttons/CancelButton";
     import SaveButton from "../../../atoms/buttons/SaveButton";
     import ConfirmButton from "../../../atoms/buttons/ConfirmButton";
-    import ConnectGoogleAnalyticsButton from "../../../atoms/buttons/ConnectGoogleAnalyticsButton";
     import DeleteButton from "../../../atoms/buttons/DeleteButton/DeleteButton";
-    import DisconnectGoogleAnalyticsButton
-        from "../../../atoms/buttons/DisconnectGoogleAnalyticsButton/DisconnectGoogleAnalyticsButton";
-    import ConnectDifferentGoogleAnalyticsPropertyButton
-        from "../../../atoms/buttons/ConnectDifferentGoogleAnalyticsPropertyButton/ConnectDifferentGoogleAnalyticsPropertyButton";
+    import ConnectGoogleAnalyticsButton from "../../../atoms/buttons/ConnectGoogleAnalyticsButton";
+    import DisconnectGoogleAnalyticsButton from "../../../atoms/buttons/DisconnectGoogleAnalyticsButton";
+    import ConnectDifferentGoogleAnalyticsPropertyButton from "../../../atoms/buttons/ConnectDifferentGoogleAnalyticsPropertyButton";
     import GoogleAnalyticsPropertyEntity from "../../../atoms/Entities/GoogleAnalyticsPropertyEntity";
-    import StartSelectingGoogleAnalyticsPropertyButton
-        from "../../../atoms/buttons/StartSelectingGoogleAnalyticsPropertyButton/StartSelectingGoogleAnalyticsPropertyButton";
+    import StartSelectingGoogleAnalyticsPropertyButton from "../../../atoms/buttons/StartSelectingGoogleAnalyticsPropertyButton";
+    import ValidatableSelectField from "../../../../components/molecules/fields/ValidatableSelectField";
+    import PenIcon from "../../../atoms/icons/PenIcon/PenIcon";
 
     export default {
         name: "ProjectForm",
         components: {
+            PenIcon,
+            ValidatableSelectField,
             StartSelectingGoogleAnalyticsPropertyButton,
             ConnectDifferentGoogleAnalyticsPropertyButton,
             DisconnectGoogleAnalyticsButton,
@@ -213,11 +258,19 @@
                 default() {
                     return []
                 }
+            },
+            googleAnalyticsAccounts: {
+                type: Array,
+                default() {
+                    return []
+                }
             }
         },
         data() {
             return {
                 appName: process.env.APP_NAME,
+                googleAnalyticsAccountId: null,
+                googleAnalyticsWebPropertyId: null,
             }
         },
         computed: {
@@ -236,7 +289,7 @@
                     return this.whitelisted_domain_entities
                 },
                 set(newValue) {
-                    return this.$emit('update:whitelisted_domain_entities', newValue)
+                    this.$emit('update:whitelisted_domain_entities', newValue)
                 },
             },
             googleOAuthEntity() {
@@ -244,10 +297,35 @@
             },
             googleAnalyticsPropertyEntity() {
                 if (this.google_analytics_property_entities.length > 0) {
-                    return new GoogleAnalyticsPropertyEntity(this.google_analytics_property_entities[0]);
+                    return this.google_analytics_property_entities[0];
                 }
                 return null;
-            }
+            },
+            googleAnalyticsAccountOptions() {
+                return this.googleAnalyticsAccounts.map(account => ({
+                        text: account.name,
+                        value: account.id,
+                    }))
+            },
+            googleAnalyticsAccount() {
+                if (!this.googleAnalyticsAccountId) return null;
+                return this.googleAnalyticsAccounts.find(account => account.id === this.googleAnalyticsAccountId);
+            },
+            googleAnalyticsWebPropertyOptions() {
+                if (!this.googleAnalyticsAccount) {
+                    return [];
+                }
+                return this.googleAnalyticsAccount.webProperties.map(property => ({
+                        text: property.name,
+                        value: property.id,
+                    }))
+            },
+            googleAnalyticsWebProperty() {
+                if (!this.googleAnalyticsWebPropertyId) return null;
+                return this.googleAnalyticsAccount.webProperties.find(
+                    property => property.id === this.googleAnalyticsWebPropertyId
+                )
+            },
         },
         watch: {
             whitelisted_domain_entities: {
@@ -256,6 +334,18 @@
                     if (value && value.length === 0) {
                         this.addWhitelistedDomainEntity();
                     }
+                }
+            },
+            googleAnalyticsWebProperty(value) {
+                if (value) {
+                    const googleAnalyticsPropertyEntity = new GoogleAnalyticsPropertyEntity({
+                        account_id: this.googleAnalyticsAccount.id,
+                        account_name: this.googleAnalyticsAccount.name,
+                        property_id: value.id,
+                        property_name: value.name,
+                        website_url: value.websiteUrl,
+                    })
+                    this.$emit('update:google_analytics_property_entities', [ googleAnalyticsPropertyEntity ])
                 }
             }
         },

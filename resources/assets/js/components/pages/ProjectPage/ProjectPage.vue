@@ -14,17 +14,19 @@
 </template>
 
 <script>
-    import { mapActions, mapState } from 'vuex';
+    import { mapActions, mapState, mapGetters } from 'vuex';
     import ProjectTemplate from "../../templates/ProjectTemplate"
 
-    import {
-        REQUEST_GET_PROJECT_SUCCESS,
-        REQUEST_DELETE_PROJECT_SUCCESS,
-    } from '../../../store/mutation-types';
     export default {
         name: "ProjectPage",
         components: {
             ProjectTemplate
+        },
+        props: {
+            id: {
+                type: String,
+                default: null,
+            },
         },
         data() {
             return {
@@ -34,17 +36,17 @@
         computed: {
             ...mapState('project', [
                 'projectEntity',
-                'isRequesting',
                 'requestState',
             ]),
+            ...mapGetters('project', [
+                'isRequesting',
+            ])
         },
-        watch: {
-            requestState(value) {
-                if (value === REQUEST_DELETE_PROJECT_SUCCESS) {
-                    this.$router.push({
-                        name: 'projects.index',
-                    })
-                } else if (value === REQUEST_GET_PROJECT_SUCCESS) {
+        created() {
+            if (this.id) {
+                this.getProject({
+                    id: this.id,
+                }).then(() => {
                     this.breadcrumb = [
                         {
                             text: 'Projects',
@@ -53,18 +55,13 @@
                         },
                         {
                             text: this.projectEntity.name,
-                            to: this.$route.params.id,
+                            to: this.projectEntity.id,
                             exact: true,
                             isActive: true,
                         }
                     ]
-                }
+                })
             }
-        },
-        created() {
-            this.getProject({
-                id: this.$route.params.id,
-            })
         },
         methods: {
             ...mapActions('project',[
@@ -84,12 +81,23 @@
                 } else {
                     this.addProject({
                         data: projectEntity,
+                    }).then(() => {
+                        this.$router.push({
+                            name: 'projects.show',
+                            params: {
+                                id: this.projectEntity.id,
+                            }
+                        })
                     })
                 }
             },
             onDelete(projectEntity) {
                 this.deleteProject({
                     id: projectEntity.id,
+                }).then(() => {
+                    this.$router.push({
+                        name: 'projects.index',
+                    })
                 })
             },
             onCancel() {

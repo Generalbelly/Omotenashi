@@ -8,7 +8,7 @@ export default [
         component: ProjectsPage,
     },
     {
-        path: 'create',
+        path: '/projects/create',
         name: 'projects.create',
         component: ProjectPage,
     },
@@ -16,5 +16,6 @@ export default [
         path: '/projects/:id',
         name: 'projects.show',
         component: ProjectPage,
+        props: true,
     },
 ];

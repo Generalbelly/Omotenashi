@@ -40,6 +40,11 @@ class GetProjectResponseModel {
     public $oauth_entities;
 
     /**
+     * @var array
+     */
+    public $google_analytics_property_entities;
+
+    /**
      * @var string
      */
     public $created_at;
@@ -59,6 +64,7 @@ class GetProjectResponseModel {
         $this->user_id = $attributes['user_id'];
         $this->whitelisted_domain_entities = array_get($attributes, 'whitelisted_domain_entities', []);
         $this->oauth_entities = array_get($attributes, 'oauth_entities', []);
+        $this->google_analytics_property_entities = array_get($attributes, 'google_analytics_property_entities', []);
         $this->created_at = $attributes['created_at'];
         $this->updated_at = $attributes['updated_at'];
     }

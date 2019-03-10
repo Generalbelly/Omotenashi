@@ -19,7 +19,7 @@
     import SelectField from "../../../atoms/fields/SelectField/SelectField";
 
     export default {
-        name: "ValidatableTextField",
+        name: "ValidatableSelectField",
         mixins: [ validatable ],
         props: {
             value: {

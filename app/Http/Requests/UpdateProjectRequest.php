@@ -41,6 +41,7 @@ class UpdateProjectRequest extends FormRequest
                 'required',
             ],
             'whitelisted_domain_entities.*.id' => [
+                'nullable',
                 'uuid',
             ],
             'whitelisted_domain_entities.*.domain' => [
@@ -50,6 +51,49 @@ class UpdateProjectRequest extends FormRequest
                 'required',
                 Rule::in(['http', 'https']),
                 'max:20',
+            ],
+            'google_analytics_property_entities' => [
+                'array',
+            ],
+            'google_analytics_property_entities.*.account_id' => [
+                implode(',', [
+                    'required_with:google_analytics_property_entities.*.account_name',
+                    'google_analytics_property_entities.*.property_id',
+                    'google_analytics_property_entities.*.property_name',
+                    'google_analytics_property_entities.*.website_url',
+                ])
+            ],
+            'google_analytics_property_entities.*.account_name' => [
+                implode(',', [
+                    'required_with:google_analytics_property_entities.*.account_id',
+                    'google_analytics_property_entities.*.property_id',
+                    'google_analytics_property_entities.*.property_name',
+                    'google_analytics_property_entities.*.website_url',
+                ])
+            ],
+            'google_analytics_property_entities.*.property_id' => [
+                implode(',', [
+                    'required_with:google_analytics_property_entities.*.account_id',
+                    'google_analytics_property_entities.*.account_name',
+                    'google_analytics_property_entities.*.property_name',
+                    'google_analytics_property_entities.*.website_url',
+                ])
+            ],
+            'google_analytics_property_entities.*.property_name' => [
+                implode(',', [
+                    'required_with:google_analytics_property_entities.*.account_id',
+                    'google_analytics_property_entities.*.account_name',
+                    'google_analytics_property_entities.*.property_id',
+                    'google_analytics_property_entities.*.website_url',
+                ])
+            ],
+            'google_analytics_property_entities.*.website_url' => [
+                implode(',', [
+                    'required_with:google_analytics_property_entities.*.account_id',
+                    'google_analytics_property_entities.*.account_name',
+                    'google_analytics_property_entities.*.property_id',
+                    'google_analytics_property_entities.*.property_name',
+                ])
             ],
         ];
     }

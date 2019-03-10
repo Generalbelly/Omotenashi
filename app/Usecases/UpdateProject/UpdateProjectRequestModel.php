@@ -25,9 +25,14 @@ class UpdateProjectRequestModel {
     public $protocol;
 
     /**
-     * @var string
+     * @var array
      */
     public $whitelistedDomainEntities;
+
+    /**
+     * @var array
+     */
+    public $googleAnalyticsPropertyEntities;
 
     public function __construct(array $data)
     {
@@ -36,6 +41,7 @@ class UpdateProjectRequestModel {
         $this->domain = $data['domain'];
         $this->protocol = $data['protocol'];
         $this->whitelistedDomainEntities = $data['whitelisted_domain_entities'];
+        $this->googleAnalyticsPropertyEntities = $data['google_analytics_property_entities'];
     }
 
 }

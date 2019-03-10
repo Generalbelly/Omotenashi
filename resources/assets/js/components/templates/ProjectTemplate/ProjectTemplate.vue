@@ -5,13 +5,14 @@
         <validation-observer ref="observer">
             <project-form
                 slot-scope="{invalid}"
-                :id="innerProject.id"
-                :name.sync="innerProject.name"
-                :protocol.sync="innerProject.protocol"
-                :domain.sync="innerProject.domain"
-                :whitelisted_domain_entities.sync="innerProject.whitelisted_domain_entities"
-                :oauth_entities="innerProject.oauth_entities"
-                :google_analytics_property_entities="innerProject.google_analytics_property_entities"
+                :id="innerProjectEntity.id"
+                :name.sync="innerProjectEntity.name"
+                :protocol.sync="innerProjectEntity.protocol"
+                :domain.sync="innerProjectEntity.domain"
+                :whitelisted_domain_entities.sync="innerProjectEntity.whitelisted_domain_entities"
+                :oauth_entities="innerProjectEntity.oauth_entities"
+                :google_analytics_property_entities.sync="innerProjectEntity.google_analytics_property_entities"
+                :google-analytics-accounts="innerProjectEntity.googleAnalyticsAccounts"
                 @click:ga-connect="$emit('click:ga-connect', $event)"
                 @click:ga-delete="$emit('click:ga-delete', $event)"
                 @click:ga-property-edit="$emit('click:ga-property-edit', $event)"
@@ -19,6 +20,7 @@
         </validation-observer>
         <div class="form-actions">
             <delete-button
+                :disabled="!innerProjectEntity.id"
                 @click="showDeleteDialog = true"
                 class="has-margin-right-auto  is-text"
             ></delete-button>
@@ -106,12 +108,14 @@
             },
             projectEntity: {
                 type: Object,
-                default: null,
+                default() {
+                    return new ProjectEntity()
+                },
             },
         },
         data() {
             return {
-                innerProject: new ProjectEntity(),
+                innerProjectEntity: new ProjectEntity(),
                 showDeleteDialog: false,
             }
         },
@@ -120,8 +124,7 @@
                 immediate: true,
                 handler(value) {
                     if (value) {
-                        console.log(value);
-                        this.innerProject = new ProjectEntity({...value});
+                        this.innerProjectEntity = new ProjectEntity({...value});
                     }
                 }
             },
@@ -141,17 +144,17 @@
             onSave() {
                 this.$refs.observer.validate()
                     .then(result => {
-                        if (result) this.$emit('click:save', this.innerProject);
+                        if (result) this.$emit('click:save', this.innerProjectEntity);
                     })
                     .catch(error => {
                         console.log(error);
                     })
             },
             onCancel() {
-                this.$emit('click:cancel', this.innerProject);
+                this.$emit('click:cancel', this.innerProjectEntity);
             },
             onDelete() {
-                this.$emit('click:delete', this.innerProject);
+                this.$emit('click:delete', this.innerProjectEntity);
             }
         }
     }

@@ -6,7 +6,6 @@ class GoogleAnalyticsPropertyEntity extends Entity
 {
     protected $table = 'google_analytics_properties';
     protected $fillable = [
-        'name',
         'account_id',
         'account_name',
         'property_id',

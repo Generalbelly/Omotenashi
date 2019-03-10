@@ -49,19 +49,25 @@ const state = {
     total: null,
     projectEntity: new ProjectEntity(),
     projectEntities: [],
-    isRequesting: false,
     requestState: null,
 }
+
+const getters = {
+    isRequesting(state) {
+        return state.requestState != null && !/(FAILURE|SUCCESS)$/.exec(state.requestState);
+    },
+};
 
 export const mutations = {
     [LIST_PROJECTS](state, payload) {
         const { total, entities } = payload
         state.total = total
         state.projectEntities = entities.map(entity => new ProjectEntity(entity));
+        state.projectEntity = new ProjectEntity()
     },
     [ADD_PROJECT](state, payload) {
         const { data } = payload
-        const projectEntity = data
+        const projectEntity = new ProjectEntity(data)
         state.projectEntity = projectEntity
         state.projectEntities = [
             ...state.projectEntities,
@@ -93,6 +99,7 @@ export const mutations = {
                 ...state.projectEntities.slice(projectIndex + 1),
             ]
         }
+        this.projectEntity = null
     },
     [DELETE_OAUTH](state, payload) {
         const { id, project_id } = payload
@@ -112,7 +119,6 @@ export const mutations = {
     },
     [LIST_GOOGLE_ANALYTICS](state, payload) {
         const { accounts, project_id } = payload
-        console.log(accounts);
         const projectEntity = new ProjectEntity({
             ...state.projectEntity,
             googleAnalyticsAccounts: accounts.map(account => new GoogleAnalyticsAccount(account)),
@@ -128,91 +134,70 @@ export const mutations = {
         }
     },
     [REQUEST_LIST_PROJECTS](state) {
-        state.isRequesting = true
         state.requestState = REQUEST_LIST_PROJECTS
     },
     [REQUEST_LIST_PROJECTS_SUCCESS](state) {
-        state.isRequesting = false
         state.requestState = REQUEST_LIST_PROJECTS_SUCCESS
     },
     [REQUEST_LIST_PROJECTS_FAILURE](state, payload) {
-        state.isRequesting = false
         state.requestState = REQUEST_LIST_PROJECTS_FAILURE
     },
     [REQUEST_ADD_PROJECT](state) {
-        state.isRequesting = true
         state.requestState = REQUEST_ADD_PROJECT
     },
     [REQUEST_ADD_PROJECT_SUCCESS](state) {
-        state.isRequesting = false
         state.requestState = REQUEST_ADD_PROJECT_SUCCESS
     },
     [REQUEST_ADD_PROJECT_FAILURE](state, payload) {
-        state.isRequesting = false
         state.requestState = REQUEST_ADD_PROJECT_FAILURE
     },
     [GET_PROJECT](state, payload) {
-        const { data } = payload;
-        state.projectEntity = data
+        const { data } = payload
+        state.projectEntity = new ProjectEntity(data)
     },
     [REQUEST_GET_PROJECT](state) {
-        state.isRequesting = true
         state.requestState = REQUEST_GET_PROJECT
     },
     [REQUEST_GET_PROJECT_SUCCESS](state) {
-        state.isRequesting = false
         state.requestState = REQUEST_GET_PROJECT_SUCCESS
     },
     [REQUEST_GET_PROJECT_FAILURE](state, payload) {
-        state.isRequesting = false
         state.requestState = REQUEST_GET_PROJECT_FAILURE
     },
     [REQUEST_UPDATE_PROJECT](state) {
-        state.isRequesting = true
         state.requestState = REQUEST_UPDATE_PROJECT
     },
     [REQUEST_UPDATE_PROJECT_SUCCESS](state) {
-        state.isRequesting = false
         state.requestState = REQUEST_UPDATE_PROJECT_SUCCESS
     },
     [REQUEST_UPDATE_PROJECT_FAILURE](state, payload) {
-        state.isRequesting = false
         state.requestState = REQUEST_UPDATE_PROJECT_FAILURE
     },
     [REQUEST_DELETE_PROJECT](state) {
-        state.isRequesting = true
         state.requestState = REQUEST_DELETE_PROJECT
     },
     [REQUEST_DELETE_PROJECT_SUCCESS](state) {
-        state.isRequesting = false
         state.requestState = REQUEST_DELETE_PROJECT_SUCCESS
     },
     [REQUEST_DELETE_PROJECT_FAILURE](state, payload) {
-        state.isRequesting = false
         state.requestState = REQUEST_DELETE_PROJECT_FAILURE
     },
     [REQUEST_DELETE_OAUTH](state) {
-        state.isRequesting = true
         state.requestState = REQUEST_DELETE_PROJECT
     },
     [REQUEST_DELETE_OAUTH_SUCCESS](state) {
-        state.isRequesting = false
         state.requestState = REQUEST_DELETE_OAUTH_SUCCESS
     },
     [REQUEST_DELETE_OAUTH_FAILURE](state, payload) {
-        state.isRequesting = false
         state.requestState = REQUEST_DELETE_OAUTH_FAILURE
     },
     [REQUEST_LIST_GOOGLE_ANALYTICS](state) {
-        state.isRequesting = true
         state.requestState = REQUEST_LIST_GOOGLE_ANALYTICS
     },
     [REQUEST_LIST_GOOGLE_ANALYTICS_SUCCESS](state) {
-        state.isRequesting = false
         state.requestState = REQUEST_LIST_GOOGLE_ANALYTICS_SUCCESS
     },
     [REQUEST_LIST_GOOGLE_ANALYTICS_FAILURE](state, payload) {
-        state.isRequesting = false
         state.requestState = REQUEST_LIST_GOOGLE_ANALYTICS_FAILURE
     },
 }
@@ -254,37 +239,45 @@ export const actions = {
     addProject({ commit, dispatch }, payload={}) {
         const { data } = payload
         commit(REQUEST_ADD_PROJECT)
-        dispatch('request', {
-            data,
-            mutationType: ADD_PROJECT,
-        })
-            .then(({ data }) => {
-                commit(REQUEST_ADD_PROJECT_SUCCESS)
-                commit(ADD_PROJECT, {
-                    data
+        return new Promise(resolve => {
+            dispatch('request', {
+                data,
+                mutationType: ADD_PROJECT,
+            })
+                .then((response) => {
+                    const { data } = response
+                    commit(REQUEST_ADD_PROJECT_SUCCESS)
+                    commit(ADD_PROJECT, {
+                        data
+                    })
+                    resolve(response)
                 })
-            })
-            .catch((error) => {
-                commit(REQUEST_ADD_PROJECT_FAILURE, error)
-            })
+                .catch((error) => {
+                    commit(REQUEST_ADD_PROJECT_FAILURE, error)
+                })
+        })
     },
     getProject({ commit, dispatch }, payload={}) {
         const { id } = payload
         if (id) {
             commit(REQUEST_GET_PROJECT)
-            dispatch('request', {
-                id,
-                mutationType: GET_PROJECT,
-            })
-                .then(({ data }) => {
-                    commit(REQUEST_GET_PROJECT_SUCCESS)
-                    commit(GET_PROJECT, {
-                        data
+            return new Promise(resolve => {
+                dispatch('request', {
+                    id,
+                    mutationType: GET_PROJECT,
+                })
+                    .then((response) => {
+                        const { data } = response
+                        commit(REQUEST_GET_PROJECT_SUCCESS)
+                        commit(GET_PROJECT, {
+                            data
+                        })
+                        resolve(data);
                     })
-                })
-                .catch((error) => {
-                    commit(REQUEST_GET_PROJECT_FAILURE, error)
-                })
+                    .catch((error) => {
+                        commit(REQUEST_GET_PROJECT_FAILURE, error)
+                    })
+            })
         } else {
             commit(GET_PROJECT, {
                 data: null,
@@ -314,19 +307,23 @@ export const actions = {
     deleteProject({ commit, dispatch }, payload={}) {
         const { id } = payload
         commit(REQUEST_DELETE_PROJECT)
-        dispatch('request', {
-            id,
-            mutationType: DELETE_PROJECT,
-        })
-            .then(({ data }) => {
-                commit(REQUEST_DELETE_PROJECT_SUCCESS)
-                commit(DELETE_PROJECT, {
-                    id: data.id
+        return new Promise(resolve => {
+            dispatch('request', {
+                id,
+                mutationType: DELETE_PROJECT,
+            })
+                .then((response) => {
+                    const { data } = response
+                    commit(REQUEST_DELETE_PROJECT_SUCCESS)
+                    commit(DELETE_PROJECT, {
+                        id: data.id
+                    })
+                    resolve(response);
                 })
-            })
-            .catch(() => {
-                commit(REQUEST_DELETE_PROJECT_FAILURE)
-            })
+                .catch(() => {
+                    commit(REQUEST_DELETE_PROJECT_FAILURE)
+                })
+        });
     },
     deleteOAuth({ commit, dispatch }, payload={}) {
         const { id } = payload
@@ -369,6 +366,7 @@ export const actions = {
 export default {
     namespaced: true,
     state,
+    getters,
     mutations,
     actions,
 }

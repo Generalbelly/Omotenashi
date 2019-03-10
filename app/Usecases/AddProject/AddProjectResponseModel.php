@@ -2,7 +2,6 @@
 
 namespace App\Usecases\AddProject;
 
-use Log;
 
 class AddProjectResponseModel {
 
@@ -37,11 +36,6 @@ class AddProjectResponseModel {
     public $whitelisted_domain_entities;
 
     /**
-     * @var array
-     */
-    public $oauth_entities;
-
-    /**
      * @var string
      */
     public $created_at;
@@ -60,7 +54,6 @@ class AddProjectResponseModel {
         $this->protocol = $attributes['protocol'];
         $this->user_id = $attributes['user_id'];
         $this->whitelisted_domain_entities = array_get($attributes, 'whitelisted_domain_entities', []);
-        $this->oauth_entities = array_get($attributes, 'oauth_entities', []);
         $this->updated_at = $attributes['updated_at'];
         $this->created_at = $attributes['created_at'];
     }

@@ -47,8 +47,7 @@ class AddProjectUsecaseInteractor implements AddProjectUsecase {
             ]);
         }
 
-        $projectEntity->whitelistedDomainEntities()->get();
-        $projectEntity->oauthEntities()->get();
+        $projectEntity->getAttribute('whitelistedDomainEntities');
 
         return new AddProjectResponseModel($projectEntity->toArray());
     }

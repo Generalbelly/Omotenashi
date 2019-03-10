@@ -9,8 +9,11 @@ export default class GoogleAnalyticsAccount extends Entity {
 
     constructor(data={}) {
         super()
-        const { webProperties, ...otherProps } = data;
-        this.fill(otherProps)
+        const {
+            webProperties = [],
+            ...props
+        } = data
+        this.fill(props)
         this.webProperties = webProperties.map(webProperty => new GoogleAnalyticsWebProperty(webProperty))
     }
 

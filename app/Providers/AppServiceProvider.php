@@ -35,6 +35,9 @@ use App\Repositories\Project\ProjectRepository;
 use App\Repositories\Tutorial\TutorialRepositoryContract;
 use App\Repositories\Tutorial\TutorialRepository;
 
+use App\Repositories\GoogleAnalyticsProperty\GoogleAnalyticsPropertyRepositoryContract;
+use App\Repositories\GoogleAnalyticsProperty\GoogleAnalyticsPropertyRepository;
+
 use App\Domains\Entities\UserEntity;
 use App\Domains\Entities\ProjectEntity;
 use App\Domains\Entities\TutorialEntity;
@@ -175,6 +178,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             OAuthRepositoryContract::class,
             OAuthRepository::class
+        );
+
+        $this->app->bind(
+            GoogleAnalyticsPropertyRepositoryContract::class,
+            GoogleAnalyticsPropertyRepository::class
         );
 
         $this->app->bind(

@@ -19,11 +19,11 @@
     import DomainField from "../../../atoms/fields/DomainField";
 
     Validator.extend('domain', (value, args) => {
-        const localhostRe = /^https?:\/\/localhost$/
-        if (!!localhostRe.exec(value)) return true;
+        const exceptions = args;
+        if (exceptions.includes(value)) return true;
         const re = /^https?:\/\/(([A-Za-z0-9][A-Za-z0-9\-]{1,61}[A-Za-z0-9]|[A-Za-z0-9]{1,63})\.)+[A-Za-z]+$/
         return !!re.exec(value)
-    });
+    }, {});
 
     export default {
         name: "ValidatableDomainField",
@@ -33,6 +33,12 @@
                 type: String,
                 default: null
             },
+            exceptionDomains: {
+                type: Array,
+                default() {
+                    return [];
+                }
+            }
         },
         components: {
             DomainField,
@@ -48,7 +54,7 @@
                 },
             },
             innerRules() {
-                return `${this.rules}|domain`
+                return `${this.rules}|domain:${this.exceptionDomains.join(',')}`
             }
 
         },

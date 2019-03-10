@@ -37,9 +37,11 @@
         computed: {
             ...mapState('project', [
                 'projectEntities',
-                'isRequesting',
                 'total',
             ]),
+            ...mapGetters('project', [
+                'isRequesting',
+            ])
         },
         created() {
             this.listProjects()

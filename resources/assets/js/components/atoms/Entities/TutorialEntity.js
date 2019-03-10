@@ -2,7 +2,6 @@ import Entity from "./Entity";
 
 export default class TutorialEntity extends Entity {
 
-    id = null
     name = null
     description = null
     steps = []

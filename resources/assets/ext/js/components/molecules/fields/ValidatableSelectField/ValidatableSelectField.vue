@@ -4,8 +4,8 @@
         :rules="rules"
     >
         <select-field
-            v-bind="$attrs"
             v-model="inputValue"
+            v-bind="$attrs"
             slot-scope="{ errors, valid }"
             :messages="errors"
             :is-success="errors.length === 0 && valid"

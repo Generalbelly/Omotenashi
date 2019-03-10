@@ -128,4 +128,29 @@ trait CommonRepositoryTrait
         ];
     }
 
+    public function batchUpdate(array $dataArray, $parentEntity, string $relationAttribute, string $foreignKey)
+    {
+        $oldEntities = $parentEntity->getAttribute($relationAttribute)->toArray();
+        $newEntities = [];
+
+        foreach ($dataArray as $data) {
+            $newEntity = null;
+            if ($data['id']) {
+                $newEntity = $this->update($data, $data['id']);
+            } else {
+                $newEntity = $this->create(array_merge($data, [
+                    $foreignKey => $parentEntity->getAttribute('id'),
+                ]));
+            }
+            $newEntities[] = $newEntity;
+        }
+
+        $entityIdsToDelete = array_diff(
+            array_column($oldEntities, 'id'),
+            array_column($newEntities, 'id')
+        );
+
+        $this->destroy($entityIdsToDelete);
+    }
+
 }

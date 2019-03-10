@@ -55,7 +55,7 @@
             <router-view></router-view>
         </main>
 
-        <extension-install-banner class="banner has-background-white-ter" v-if="showExtensionLink"></extension-install-banner>
+        <!--<extension-install-banner class="banner has-background-white-ter" v-if="showExtensionLink"></extension-install-banner>-->
 
         <!--<footer class="footer">-->
             <!--<div class="content has-text-centered">-->
@@ -133,20 +133,21 @@
             ]),
             checkIfExtensionInstalled() {
                 const self = this;
-                chrome.runtime.sendMessage(this.extensionId, { message: "version" }, (response) => {
-                    if (response && response.state === 'success') {
-                        self.showExtensionLink = false
-                    } else {
-                        self.showExtensionLink = true
-                    }
-                })
+                if (chrome.runtime) {
+                    chrome.runtime.sendMessage(this.extensionId, { message: "version" }, (response) => {
+                        if (response && response.state === 'success') {
+                            self.showExtensionLink = false
+                        } else {
+                            self.showExtensionLink = true
+                        }
+                    })
+                }
             },
             showSnackbar() {
                 this.$snackbar.open({
                     position: 'is-top',
                     type: 'is-warning',
                     message: 'Oops! Something went wrong.',
-                    indefinite: true,
                 })
             },
             navItemClass(path) {

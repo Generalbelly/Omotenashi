@@ -3,29 +3,25 @@
 namespace App\Usecases\UpdateProject;
 
 use App\Domains\Entities\ProjectEntity;
+use App\Repositories\GoogleAnalyticsProperty\GoogleAnalyticsPropertyRepositoryContract;
 use App\Repositories\Project\ProjectRepositoryContract;
 use App\Repositories\WhitelistedDomain\WhitelistedDomainRepositoryContract;
 use Log;
 
 class UpdateProjectUsecaseInteractor implements UpdateProjectUsecase {
 
-    /**
-     * @var ProjectRepository
-     */
     private $projectRepository;
     private $whitelistedDomainRepository;
+    private $googleAnalyticsPropertyRepository;
 
-    /**
-     * UpdateProjectUsecaseInteractor constructor.
-     * @param ProjectRepositoryContract $projectRepository
-     * @param WhitelistedDomainRepositoryContract $whitelistedDomainRepository
-     */
     public function __construct(
         ProjectRepositoryContract $projectRepository,
-        WhitelistedDomainRepositoryContract $whitelistedDomainRepository
+        WhitelistedDomainRepositoryContract $whitelistedDomainRepository,
+        GoogleAnalyticsPropertyRepositoryContract $googleAnalyticsPropertyRepository
     ){
         $this->projectRepository = $projectRepository;
         $this->whitelistedDomainRepository = $whitelistedDomainRepository;
+        $this->googleAnalyticsPropertyRepository = $googleAnalyticsPropertyRepository;
     }
 
     /**
@@ -41,35 +37,51 @@ class UpdateProjectUsecaseInteractor implements UpdateProjectUsecase {
             'name' => $request->name,
         ], $request->id);
 
-        $oldEntities = $projectEntity->whitelistedDomainEntities->toArray();
-        $newEntities = [];
-
-        foreach ($request->whitelistedDomainEntities as $whitelistedDomain) {
-            $whitelistedDomainEntity = null;
-            if ($whitelistedDomain['id']) {
-                $whitelistedDomainEntity = $this->whitelistedDomainRepository->update([
-                    'domain' => $whitelistedDomain['domain'],
-                    'protocol' => $whitelistedDomain['protocol'],
-                ], $whitelistedDomain['id']);
-            } else {
-                $whitelistedDomainEntity = $this->whitelistedDomainRepository->create([
-                    'domain' => $whitelistedDomain['domain'],
-                    'protocol' => $whitelistedDomain['protocol'],
-                    'project_id' => $projectEntity->id,
-                ]);
-            }
-            $newEntities[] = $whitelistedDomainEntity;
-        }
-
-        $entityIdsToDelete = array_diff(
-            array_column($oldEntities, 'id'),
-            array_column($newEntities, 'id')
+        $this->whitelistedDomainRepository->batchUpdate(
+            $request->whitelistedDomainEntities,
+            $projectEntity,
+            'whitelistedDomainEntities',
+            'project_id'
         );
 
-        $this->whitelistedDomainRepository->destroy($entityIdsToDelete);
+        $this->googleAnalyticsPropertyRepository->batchUpdate(
+            $request->googleAnalyticsPropertyEntities,
+            $projectEntity,
+            'googleAnalyticsPropertyEntities',
+            'project_id'
+        );
+
+//        $oldEntities = $projectEntity->getAttribute('whitelistedDomainEntities')->toArray();
+//        $newEntities = [];
+//
+//        foreach ($request->whitelistedDomainEntities as $whitelistedDomain) {
+//            $whitelistedDomainEntity = null;
+//            if ($whitelistedDomain['id']) {
+//                $whitelistedDomainEntity = $this->whitelistedDomainRepository->update([
+//                    'domain' => $whitelistedDomain['domain'],
+//                    'protocol' => $whitelistedDomain['protocol'],
+//                ], $whitelistedDomain['id']);
+//            } else {
+//                $whitelistedDomainEntity = $this->whitelistedDomainRepository->create([
+//                    'domain' => $whitelistedDomain['domain'],
+//                    'protocol' => $whitelistedDomain['protocol'],
+//                    'project_id' => $projectEntity->getAttribute('id'),
+//                ]);
+//            }
+//            $newEntities[] = $whitelistedDomainEntity;
+//        }
+//
+//
+//        $entityIdsToDelete = array_diff(
+//            array_column($oldEntities, 'id'),
+//            array_column($newEntities, 'id')
+//        );
+//
+//        $this->whitelistedDomainRepository->destroy($entityIdsToDelete);
 
         $projectEntity->whitelistedDomainEntities()->get();
         $projectEntity->oauthEntities()->get();
+        $projectEntity->googleAnalyticsPropertyEntities()->get();
 
         return new UpdateProjectResponseModel($projectEntity->toArray());
     }

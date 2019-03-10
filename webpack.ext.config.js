@@ -1,24 +1,41 @@
 const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-    mode: 'development',
-    entry: {
-        omotenashi: './resources/assets/cdn/omotenashi.js',
-    },
+    mode: process.env.APP_ENV === 'prod' ? "production" : "development",
+    entry: { app: './resources/assets/ext/js/app.js' },
     output: {
-        path: path.resolve(__dirname, "public/cdn")
+        path: path.resolve(__dirname, "public/ext")
     },
     module: {
         rules: [
             {
+                test: /\.vue$/,
+                use: [
+                    {
+                        loader: 'vue-loader',
+                        options: {
+                            loaders: {
+                                js: 'babel-loader',
+                            }
+                        }
+                    },
+                ]
+            },
+            {
                 test: /\.scss$/,
                 use:  [
                     'style-loader',
+                    MiniCssExtractPlugin.loader,
                     'css-loader',
                     'sass-loader'
                 ]
+            },
+            {
+                test: /.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
+                loader: 'url-loader?limit=10000',
             },
             {
                 test: /\.js$/,
@@ -46,10 +63,14 @@ module.exports = {
         ]
     },
     plugins: [
-        new CleanWebpackPlugin('public/cdn', {}),
+        new CleanWebpackPlugin('public/ext', {}),
+        new MiniCssExtractPlugin(),
         new Dotenv(),
     ],
     resolve: {
-        extensions: ['.js'],
-    }
+        extensions: ['.js', '.vue'],
+        alias: {
+            vue: 'vue/dist/vue.esm.js'
+        }
+    },
 };

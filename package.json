@@ -1,17 +1,14 @@
 {
   "private": true,
   "scripts": {
-    "build": "webpack --config=./webpack.ext.prod.config.js --hide-modules --config ./webpack.config.js",
-    "watch": "webpack --config=./webpack.ext.prod.config.js --watch --config ./webpack.dev.config.js",
-    "build-ext": "webpack --config ./webpack.ext.prod.config.js --hide-modules",
-    "watch-ext": "webpack --watch --progress --config ./webpack.ext.dev.config.js",
-    "watch-cdn": "webpack --watch --progress --config ./webpack.cdn.dev.config.js",
-    "test": "mocha-webpack --webpack-config ./webpack.ext.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/js/components/**/*.spec.js",
-    "test-ext": "mocha-webpack --webpack-config ./webpack.ext.test.config.js --require ./resources/assets/test/setup.js ./resources/assets/js/ext/components/**/*.spec.js",
-    "test-one": "mocha-webpack --webpack-config ./webpack.test.config.js --watch --require ./resources/assets/test/setup.js ./resources/assets/js/components/**/ProjectsTemplate.spec.js",
-    "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test-ci",
-    "storybook-ext": "start-storybook -p 9001 -c ./resources/assets/.storybook -s ./public/ext",
-    "browser-sync": "webpack --watch --config ./webpack.dev.config.js & browser-sync start --config bs-config.js"
+    "hot": "webpack-dev-server",
+    "build": "webpack --hide-modules --config ./webpack.config.js",
+    "watch": "webpack --watch --config ./webpack.config.js",
+    "build-ext": "webpack --config ./webpack.ext.config.js --hide-modules",
+    "build-cdn": "webpack --watch --progress --config ./webpack.cdn.config.js",
+    "watch-ext": "webpack --watch --progress --config ./webpack.ext.config.js",
+    "watch-cdn": "webpack --watch --progress --config ./webpack.cdn.config.js",
+    "storybook-ext": "start-storybook -p 9001 -c ./resources/assets/.storybook -s ./public/ext"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -62,6 +59,7 @@
     "vue-template-compiler": "^2.5.17",
     "webpack": "^4.21.0",
     "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.2.1",
     "webpack-md5-hash": "0.0.6",
     "webpack-node-externals": "^1.7.2"
   },
