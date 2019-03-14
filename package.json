@@ -3,9 +3,9 @@
   "scripts": {
     "hot": "webpack-dev-server",
     "build": "webpack --hide-modules --config ./webpack.config.js",
-    "watch": "webpack --watch --config ./webpack.config.js",
-    "build-ext": "webpack --config ./webpack.ext.config.js --hide-modules",
-    "build-cdn": "webpack --watch --progress --config ./webpack.cdn.config.js",
+    "build-ext": "webpack --hide-modules --config ./webpack.ext.config.js",
+    "build-cdn": "webpack --hide-modules --config ./webpack.cdn.config.js",
+    "watch": "webpack --watch --progress --config ./webpack.config.js",
     "watch-ext": "webpack --watch --progress --config ./webpack.ext.config.js",
     "watch-cdn": "webpack --watch --progress --config ./webpack.cdn.config.js",
     "storybook-ext": "start-storybook -p 9001 -c ./resources/assets/.storybook -s ./public/ext"

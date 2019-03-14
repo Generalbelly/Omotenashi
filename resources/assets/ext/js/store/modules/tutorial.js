@@ -29,8 +29,9 @@ import {
 
     PROJECT_NOT_FOUND
 } from '../mutation-types'
-import TutorialEntity from "../../../../js/components/atoms/Entities/TutorialEntity";
-import ProjectEntity from "../../../../js/components/atoms/Entities/ProjectEntity";
+
+import TutorialEntity from "../../../../js/components/atoms/Entities/TutorialEntity"
+import ProjectEntity from "../../../../js/components/atoms/Entities/ProjectEntity"
 
 const state = {
     projectEntity: null,
@@ -187,7 +188,8 @@ export const actions = {
             })
             .catch((error) => {
                 commit(REQUEST_LIST_TUTORIALS_FAILURE, error)
-                const { data } = error;
+                console.log(error);
+                const { data } = error.response;
                 if (data.error && data.error.type === 'ProjectNotFound') {
                     commit(PROJECT_NOT_FOUND, true, {root: true});
                 }

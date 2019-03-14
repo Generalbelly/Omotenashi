@@ -103,11 +103,7 @@
                         switch (value) {
                             case UNAUTHORIZED_401:
                             case UNAUTHORIZED_419:
-                                if (window.location.href === `https://${process.env.APP_URL}` ||
-                                    window.location.href === 'https://localhost'
-                                ) {
-                                    window.location.href = `/login?from=${window.location.href}`
-                                }
+                                window.location.href = `/login?from=${window.location.href}`
                                 break
                             case INTERNAL_SERVER_ERROR:
                                 this.showSnackbar()

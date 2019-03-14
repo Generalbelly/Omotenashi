@@ -80,7 +80,7 @@
             },
             onClickLogo() {
                 window.open(
-                    'https://docker.omotenashi.today',
+                    process.env.APP_URL,
                     '_blank'
                 );
             },

@@ -1,15 +1,15 @@
 <template>
-    <BaseModal class="modal">
-        <BaseModalContent :class="contentClasses">
+    <base-modal class="modal">
+        <base-modal-content :class="contentClasses">
             <slot></slot>
-        </BaseModalContent>
+        </base-modal-content>
         <button
             v-if="showClose"
             class="modal-close is-large is-paddingless"
             aria-label="close"
             @click="$emit('closeClick')"
         ></button>
-    </BaseModal>
+    </base-modal>
 </template>
 
 <script>

@@ -106,4 +106,7 @@ module.exports = {
             vue: 'vue/dist/vue.esm.js'
         }
     },
+    watchOptions: {
+        poll: true,
+    }
 };

@@ -106,6 +106,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // 動作環境がlocalとtestingの場合はSQLを全てlogする
+        if (env('APP_ENV') === 'local') {
+            \DB::listen(function ($query) {
+                $sql = $query->sql;
+                for ($i = 0; $i < count($query->bindings); $i++) {
+                    $sql = preg_replace("/\?/", $query->bindings[$i], $sql, 1);
+                }
+                \Log::info($sql);
+            });
+        }
+
         // 動作環境がstagingとproductionの場合はSSLを強制する
         if (env('APP_ENV') === 'staging' || env('APP_ENV') === 'production') {
             \URL::forceScheme('https');

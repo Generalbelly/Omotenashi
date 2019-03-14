@@ -53,12 +53,8 @@ class ListTutorialsRequestModel {
         $this->page = $data['page'];
         $this->search = $data['search'];
         $this->perPage = $data['perPage'];
-
-        $parsedUrl = parse_url($this->url);
-        if ($parsedUrl) {
-            $this->domain = isset($parsedUrl['host']) ? $parsedUrl['host'] : null;
-            $this->path = isset($parsedUrl['path']) ? $parsedUrl['path'] : null;
-        }
+        $this->domain = $data['domain'];
+        $this->path = $data['path'];
     }
 
 }

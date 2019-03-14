@@ -62,7 +62,9 @@
         },
         created() {
             this.startWatchingUrlForSPA()
-            this.listTutorials({ url: window.location.href })
+            this.listTutorials({
+                url: window.parent.location.href
+            })
         },
         methods: {
             ...mapActions('tutorial', [
@@ -122,13 +124,13 @@
             },
             startWatchingUrlForSPA() {
                 const self = this;
-                const proxiedPushState = window.history.pushState
-                window.history.pushState = function(stateObj, title, URL) {
+                const proxiedPushState = window.parent.history.pushState
+                window.parent.history.pushState = function(stateObj, title, URL) {
                     const newPath = arguments[2]
                     if (newPath !== self.path) {
                         self.path = newPath
                         self.urlDidChange = true
-                        self.listTutorials({ url: window.location.origin + newPath })
+                        self.listTutorials({ url: window.parent.location.origin + newPath })
                     }
                     return proxiedPushState.apply(this, arguments)
                 }

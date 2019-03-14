@@ -76,7 +76,7 @@
 <script>
     import finder from '@medv/finder'
     import purify from 'dompurify'
-    import Driver from '../../../../../../../../driver.js/src/index'
+    import Driver from '../../../../../driver.js/driver.min'
     import BaseButton from '../../atoms/BaseButton'
     import Message from '../../molecules/Message'
 

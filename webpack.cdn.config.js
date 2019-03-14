@@ -51,5 +51,8 @@ module.exports = {
     ],
     resolve: {
         extensions: ['.js'],
+    },
+    watchOptions: {
+        poll: true,
     }
 };

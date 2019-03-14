@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 use App\Usecases\ListTutorials\ListTutorialsRequestModel;
-use App\Usecases\ListTutorials\ListGoogleAnalyticsAccountsUsecase;
+use App\Usecases\ListTutorials\ListTutorialsUsecase;
 use App\Usecases\GetTutorial\GetTutorialRequestModel;
 use App\Usecases\GetTutorial\GetTutorialUsecase;
 use App\Http\Requests\AddTutorialRequest;
@@ -19,6 +19,7 @@ use App\Usecases\DeleteTutorial\DeleteTutorialRequestModel;
 use App\Usecases\DeleteTutorial\DeleteTutorialUsecase;
 use Exception;
 use DB;
+use Validator;
 
 class TutorialController extends Controller
 {
@@ -29,7 +30,7 @@ class TutorialController extends Controller
     private $deleteTutorialUsecase;
 
     public function __construct(
-        ListGoogleAnalyticsAccountsUsecase $listTutorialsUsecase,
+        ListTutorialsUsecase $listTutorialsUsecase,
         GetTutorialUsecase $getTutorialUsecase,
         AddTutorialUsecase $addTutorialUsecase,
         UpdateTutorialUsecase $updateTutorialUsecase,
@@ -50,10 +51,24 @@ class TutorialController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'url' => 'url',
+            'url' => [
+                'url',
+                'required',
+            ],
         ]);
 
         $url = $request->query('url');
+
+        $parsedUrl = parse_url($url);
+
+        $validatedData = Validator::make([
+            'domain' => $parsedUrl['host'],
+            'path' => $parsedUrl['path'],
+        ], [
+            'domain' => 'required',
+            'path' => 'required',
+        ])->validate();
+
         $userKey = $request->user()->key;
         $search = $request->query('q');
         $page = $request->query('page', 0);
@@ -80,6 +95,8 @@ class TutorialController extends Controller
             'page' => $page,
             'search' => $search,
             'perPage' => $perPage,
+            'domain' => $validatedData['domain'],
+            'path' => $validatedData['path'],
         ]);
 
         DB::beginTransaction();

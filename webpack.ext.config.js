@@ -1,6 +1,5 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
@@ -63,7 +62,6 @@ module.exports = {
         ]
     },
     plugins: [
-        new CleanWebpackPlugin('public/ext', {}),
         new MiniCssExtractPlugin(),
         new Dotenv(),
     ],
@@ -73,4 +71,7 @@ module.exports = {
             vue: 'vue/dist/vue.esm.js'
         }
     },
+    watchOptions: {
+        poll: true,
+    }
 };

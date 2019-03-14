@@ -81,9 +81,14 @@ trait CommonRepositoryTrait
         return $this->entityClass::where($column, $operator, $value);
     }
 
+    public function whereHas($column, $operator=null, $value=null)
+    {
+        return $this->entityClass::whereHas($column, $operator, $value);
+    }
+
     public function with($relations)
     {
-        return $this->entity::with($relations);
+        return $this->entityClass::with($relations);
     }
 
     public function paging($predicates=[], $orders=[], $page=0, $search=null, $perPage=null)
