@@ -9,13 +9,10 @@
             v-show="extLog.userIsFirstTime"
             @click:start="onClickStart"
         ></greeting-modal>
-        <project-not-found-modal
-            v-show="projectNotFound"
-        >
-        </project-not-found-modal>
         <tutorial-page
             v-show="showTutorials"
             @click:close="onClickCloseTutorialPage"
+            ref="tutorialPage"
         >
         </tutorial-page>
     </div>
@@ -47,7 +44,6 @@
         computed: {
             ...mapState([
                 'extLog',
-                'projectNotFound',
             ]),
         },
         created() {
@@ -91,7 +87,7 @@
             onClickCloseTutorialPage() {
                 this.showTutorials = false
                 this.showNav = true
-            }
+            },
         },
     }
 </script>

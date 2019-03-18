@@ -23,6 +23,11 @@ class AddProjectRequestModel {
      * @var string
      */
     public $protocol;
+    
+    /**
+     * @var string
+     */
+    public $tutorial_settings;
 
     /**
      * @var string
@@ -31,10 +36,11 @@ class AddProjectRequestModel {
 
     public function __construct(array $data)
     {
-        $this->userKey = $data['userKey'];
+        $this->userKey = isset($data['userKey']) ?: null;
         $this->name = $data['name'];
         $this->domain = $data['domain'];
         $this->protocol = $data['protocol'];
+        $this->tutorial_settings = $data['tutorial_settings'];
         $this->whitelistedDomainEntities = $data['whitelisted_domain_entities'];
     }
 

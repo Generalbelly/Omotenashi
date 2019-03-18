@@ -20,6 +20,7 @@ class CreateTutorialsTable extends Migration
             $table->text('steps');
             $table->string('path');
             $table->string('query')->nullable();
+            $table->timestamp('last_time_used_at')->nullable()->default(null);
             $table->string('project_id');
 
             $table->timestamps();

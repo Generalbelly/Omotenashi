@@ -32,9 +32,6 @@ class StoreGoogleAnalyticsAccountsUsecaseInteractor implements StoreGoogleAnalyt
             'service' => OAuthService::GOOGLE_ANALYTICS,
         ])->firstOrFail();
 
-        Log::error('expiration timestamp: '.$oauthEntity->getAttribute('expired_at')->getTimestamp());
-        Log::error('current timestamp: '.time());
-
         if ($oauthEntity->getAttribute('expired_at')->getTimestamp() < time()) {
             /** @var \App\Domains\Models\OAuth\OAuthProviderGoogle $provider */
             $provider = App::make('App\Domains\Models\OAuth\OAuthProviderGoogle');

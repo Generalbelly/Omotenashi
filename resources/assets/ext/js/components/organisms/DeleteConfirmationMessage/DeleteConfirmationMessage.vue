@@ -1,5 +1,5 @@
 <template>
-    <Message
+    <message
         :is-fixed-top-right="false"
         is-fixed-bottom-right
         is-danger
@@ -16,11 +16,9 @@
                 You are about to delete "{{ tutorial.name }}".<br/>
                 Please type in the name of the tutorial to confirm.
             </p>
-            <text-field
-                v-model="tutorialName"
-            ></text-field>
+            <text-field v-model="tutorialName"></text-field>
             <div class="field">
-                <BaseButton
+                <base-button
                     is-danger
                     is-outlined
                     is-fullwidth
@@ -28,15 +26,15 @@
                     :disabled="isButtonDisabled"
                 >
                     DELETE
-                </BaseButton>
+                </base-button>
             </div>
         </template>
-    </Message>
+    </message>
 </template>
 <script>
     import Message from '../../molecules/Message'
     import BaseButton from '../../atoms/BaseButton'
-    import TextField from "../../../../../js/components/atoms/fields/TextField/TextField";
+    import TextField from "../../molecules/fields/TextField";
 
     export default {
         name: 'DeleteConfirmationMessage',

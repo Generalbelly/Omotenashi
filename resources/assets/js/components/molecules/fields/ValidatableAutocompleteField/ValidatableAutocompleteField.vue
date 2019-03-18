@@ -29,7 +29,7 @@
     import { ValidationProvider } from 'vee-validate'
     import validatable from "../../../mixins/validatable";
     import TextField from "../../../atoms/fields/TextField";
-    import AutocompleteField from "../../../atoms/fields/AutocompleteField/AutocompleteField";
+    import AutocompleteField from "../../../atoms/fields/AutocompleteField";
 
     export default {
         name: "ValidatableAutocompleteField",

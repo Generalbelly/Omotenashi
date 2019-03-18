@@ -19515,6 +19515,8 @@ div#driver-highlighted-element-stage {
   #omotenashi .footer {
     background-color: #F5F7FA;
     padding: 3rem 1.5rem 6rem; }
+  #omotenashi * {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; }
   #omotenashi .has-margin-0 {
     margin: 0rem !important; }
   #omotenashi .has-padding-0 {

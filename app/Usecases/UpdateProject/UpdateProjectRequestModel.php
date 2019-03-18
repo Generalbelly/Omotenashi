@@ -2,32 +2,14 @@
 
 namespace App\Usecases\UpdateProject;
 
-class UpdateProjectRequestModel {
+use App\Usecases\AddProject\AddProjectRequestModel;
+
+class UpdateProjectRequestModel extends AddProjectRequestModel {
 
     /**
      * @var string
      */
     public $id;
-
-    /**
-     * @var string
-     */
-    public $name;
-
-    /**
-     * @var string
-     */
-    public $domain;
-
-    /**
-     * @var string
-     */
-    public $protocol;
-
-    /**
-     * @var array
-     */
-    public $whitelistedDomainEntities;
 
     /**
      * @var array
@@ -36,11 +18,8 @@ class UpdateProjectRequestModel {
 
     public function __construct(array $data)
     {
+        parent::__construct($data);
         $this->id = $data['id'];
-        $this->name = $data['name'];
-        $this->domain = $data['domain'];
-        $this->protocol = $data['protocol'];
-        $this->whitelistedDomainEntities = $data['whitelisted_domain_entities'];
         $this->googleAnalyticsPropertyEntities = $data['google_analytics_property_entities'];
     }
 

@@ -9,6 +9,7 @@
                 :name.sync="innerProjectEntity.name"
                 :protocol.sync="innerProjectEntity.protocol"
                 :domain.sync="innerProjectEntity.domain"
+                :tutorial_settings.sync="innerProjectEntity.tutorial_settings"
                 :whitelisted_domain_entities.sync="innerProjectEntity.whitelisted_domain_entities"
                 :oauth_entities="innerProjectEntity.oauth_entities"
                 :google_analytics_property_entities.sync="innerProjectEntity.google_analytics_property_entities"
@@ -25,40 +26,16 @@
                 class="has-margin-right-auto  is-text"
             ></delete-button>
             <div class="buttons">
-                <cancel-button
+                <back-button
                     class="is-neutral-100"
                     @click="onCancel"
-                >
-                </cancel-button>
+                ></back-button>
                 <save-button
                     class="is-primary"
                     @click="onSave"
                 ></save-button>
             </div>
         </div>
-        <!--<fade-transition>-->
-            <!--<div v-show="showDeleteDialog" class="delete-confirmation">-->
-                <!--<dialog type="is-danger">-->
-                    <!--<div class="level">-->
-                        <!--<div class="level-left">-->
-                            <!--<p class="level-item">You are about to delete this project.</p>-->
-                        <!--</div>-->
-                        <!--<div class="level-right">-->
-                            <!--<confirm-button-->
-                                <!--@click="onDelete"-->
-                                <!--class="level-item is-danger-300"-->
-                            <!--&gt;-->
-                            <!--</confirm-button>-->
-                            <!--<cancel-button-->
-                                <!--@click="showDeleteDialog = false"-->
-                                <!--class="level-item is-text"-->
-                            <!--&gt;-->
-                            <!--</cancel-button>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</dialog>-->
-            <!--</div>-->
-        <!--</fade-transition>-->
         <b-loading
             is-full-page
             :active="isLoading"
@@ -69,13 +46,11 @@
 <script>
     import { ValidationObserver } from 'vee-validate'
     import ProjectEntity from "../../atoms/Entities/ProjectEntity"
-    import ProjectForm from "../../molecules/forms/ProjectForm"
+    import ProjectForm from "../../organisms/forms/ProjectForm"
     import Heading from "../../atoms/Heading"
     import SaveButton from "../../atoms/buttons/SaveButton";
     import BackButton from "../../atoms/buttons/BackButton";
     import DeleteButton from "../../atoms/buttons/DeleteButton";
-    import ConfirmButton from "../../atoms/buttons/ConfirmButton";
-    import CancelButton from "../../atoms/buttons/CancelButton";
     import Breadcrumb from "../../molecules/Breadcrumb/Breadcrumb";
     import FadeTransition from "../../atoms/transitions/FadeTransition";
     import Dialog from "../../../../ext/js/components/molecules/Dialog";
@@ -85,8 +60,6 @@
         components: {
             Dialog,
             Breadcrumb,
-            CancelButton,
-            ConfirmButton,
             DeleteButton,
             BackButton,
             SaveButton,
@@ -165,8 +138,5 @@
         margin-top: 3em;
         display: flex;
         flex-direction: row;
-    }
-    .delete-confirmation {
-        margin-top: 2em;
     }
 </style>

@@ -1,0 +1,2 @@
+import WhitelistedDomainFields from './WhitelistedDomainFields'
+export default WhitelistedDomainFields

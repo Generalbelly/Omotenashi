@@ -19,9 +19,9 @@ class UpdateProjectResponseModel extends AddProjectResponseModel {
 
     public function __construct(array $attributes)
     {
+        parent::__construct($attributes);
         $this->oauth_entities = array_get($attributes, 'oauth_entities', []);
         $this->google_analytics_property_entities = array_get($attributes, 'google_analytics_property_entities', []);
-        parent::__construct($attributes);
     }
 
 }

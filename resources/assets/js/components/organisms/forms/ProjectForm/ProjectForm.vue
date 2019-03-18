@@ -1,105 +1,74 @@
 <template>
     <div>
-        <div class="columns is-6">
-            <div class="column is-two-fifths">
+        <columns class="is-6">
+            <column class="is-two-fifths">
                 <sub-heading class="has-text-weight-bold has-margin-bottom-4">Basic</sub-heading>
                 <p>
                     The domain is where users will actually visit, while the whitelisted domains are typically staging/design websites where you can create and edit tutorials code-free with <a href="">{{ appName }} Chrome extension</a>.
                 </p>
-            </div>
-            <div class="column">
+            </column>
+            <column>
                 <validatable-text-field
                     label="Name"
-                    name="name"
+                    name="Name"
                     rules="required"
                     :value="name"
                     @input="$emit('update:name', $event)"
                 ></validatable-text-field>
                 <validatable-domain-field
                     label="Domain"
-                    name="domain"
+                    name="Domain"
                     rules="required"
                     v-model="domainUrl"
                 >
                 </validatable-domain-field>
-                <fade-transition-group>
-                    <div
-                        v-for="(whitelistedDomainEntity, whitelistedDomainEntityIndex) in whitelistedDomainEntities"
-                        :key="whitelistedDomainEntityIndex"
-                        class="whitelisted-domain"
-                    >
-                        <validatable-domain-field
-                            :label="whitelistedDomainEntityIndex===0 ? 'Whitelisted domains' : ''"
-                            name="Whitelisted domain"
-                            rules="required"
-                            :value="`${whitelistedDomainEntity.protocol}://${whitelistedDomainEntity.domain}`"
-                            @input="updateWhitelistedDomainEntity($event, whitelistedDomainEntityIndex)"
-                            expanded
-                            :exception-domains="['https://localhost', 'http://localhost']"
-                        >
-                        </validatable-domain-field>
-                        <div
-                            class="whitelisted-domain__actions"
-                            :class="{
-                                'whitelisted-domain__actions--single': whitelistedDomainEntity.id && whitelistedDomainEntities.length === 1,
-                                'whitelisted-domain__actions--with-label': whitelistedDomainEntityIndex === 0,
-                            }"
-                        >
-                            <external-link-icon
-                                v-if="whitelistedDomainEntity.id"
-                                size="is-small"
-                                @click="sendTo(whitelistedDomainEntity)"
-                                class="whitelisted-domain__icon"
-                            >
-                            </external-link-icon>
-                            <external-link-icon
-                                v-else
-                                size="is-small"
-                                class="whitelisted-domain__icon whitelisted-domain__icon--disabled"
-                            >
-                            </external-link-icon>
-                            <trash-icon
-                                v-if="whitelistedDomainEntities.length > 1"
-                                size="is-small"
-                                @click="deleteWhitelistedDomainEntity(whitelistedDomainEntityIndex)"
-                                class="whitelisted-domain__icon"
-                            >
-                            </trash-icon>
-                        </div>
-                    </div>
-                </fade-transition-group>
-                <div class="has-text-right">
-                    <button
-                        class="button"
-                        @click="addWhitelistedDomainEntity"
-                    >
-                        Add more
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div
+                <whitelisted-domain-fields
+                    :entities="whitelisted_domain_entities"
+                    @update:entities="$emit('update:whitelisted_domain_entities', $event)"
+                >
+                </whitelisted-domain-fields>
+            </column>
+        </columns>
+        <columns
             v-if="id"
-            class="columns is-6"
+            class="is-6"
         >
-            <div class="column is-two-fifths">
+            <column class="is-two-fifths">
+                <sub-heading class="has-text-weight-bold has-margin-bottom-4">Tutorials</sub-heading>
+                <p>
+                    Set rules for tutorials.
+                </p>
+            </column>
+            <column>
+                <tutorial-setting-fields
+                    :value="tutorial_settings"
+                    @input="$emit('update:tutorial_settings', $event)"
+                ></tutorial-setting-fields>
+            </column>
+        </columns>
+        <columns
+            v-if="id"
+            class="is-6"
+        >
+            <column class="is-two-fifths">
                 <sub-heading class="has-text-weight-bold has-margin-bottom-4">Google Analytics</sub-heading>
                 <p>
                     We send data such as how many steps users complete, how often those users use your website/webapp, etc., on your behalf to your connected Google Analytics account.
                 </p>
-            </div>
-            <div class="column">
+            </column>
+            <column>
                 <div
                     v-if="googleOAuthEntity"
                 >
                     <div v-if="googleAnalyticsPropertyEntity && googleAnalyticsPropertyEntity.id">
-                        <div class="columns">
-                            <div class="column">
-                                <span
-                                    class="tag is-medium is-primary-100 has-margin-right-4"
+                        <columns>
+                            <column>
+                                <tag
+                                    is-small
+                                    class="is-success-200 has-margin-right-4"
                                 >
                                     Connected
-                                </span>
+                                </tag>
                                 <pen-icon
                                     class="has-margin-right-3 has-cursor-pointer"
                                     size="is-small"
@@ -111,24 +80,24 @@
                                     @click="$emit('click:ga-delete', googleOAuthEntity)"
                                 >
                                 </trash-icon>
-                            </div>
-                        </div>
-                        <div class="columns">
-                            <div class="column is-half label">
+                            </column>
+                        </columns>
+                        <columns>
+                            <column class="is-half label">
                                 Property ID
-                            </div>
-                            <div class="column">
+                            </column>
+                            <column>
                                 {{ googleAnalyticsPropertyEntity.property_id }}
-                            </div>
-                        </div>
-                        <div class="columns">
-                            <div class="column is-half label">
+                            </column>
+                        </columns>
+                        <columns>
+                            <column class="is-half label">
                                 Property Name
-                            </div>
-                            <div class="column">
+                            </column>
+                            <column>
                                 {{ googleAnalyticsPropertyEntity.property_name }}
-                            </div>
-                        </div>
+                            </column>
+                        </columns>
                     </div>
                     <b-message v-else type="is-success">
                         <p class="has-margin-bottom-4">
@@ -175,52 +144,41 @@
                         @click="$emit('click:ga-connect', $event)"
                     ></connect-google-analytics-button>
                 </div>
-            </div>
-        </div>
+            </column>
+        </columns>
     </div>
 </template>
 
 <script>
-    import ValidatableTextField from "../../fields/ValidatableTextField";
-    import ValidatableDomainField from "../../fields/ValidatableDomainField";
-    import AddButton from "../../../atoms/buttons/AddButton/AddButton";
-    import QuestionCircleIcon from "../../../atoms/icons/QuestionCircleIcon";
+    import ValidatableTextField from "../../../molecules/fields/ValidatableTextField";
+    import ValidatableDomainField from "../../../molecules/fields/ValidatableDomainField";
     import TrashIcon from "../../../atoms/icons/TrashIcon";
-    import WhitelistedDomainEntity from "../../../atoms/Entities/WhitelistedDomainEntity";
-    import ExternalLinkIcon from "../../../atoms/icons/ExternalLinkIcon";
     import SubHeading from "../../../atoms/SubHeading/SubHeading";
-    import FadeTransitionGroup from "../../../atoms/transitions/FadeTransitionGroup";
-    import CancelButton from "../../../atoms/buttons/CancelButton";
-    import SaveButton from "../../../atoms/buttons/SaveButton";
-    import ConfirmButton from "../../../atoms/buttons/ConfirmButton";
-    import DeleteButton from "../../../atoms/buttons/DeleteButton/DeleteButton";
     import ConnectGoogleAnalyticsButton from "../../../atoms/buttons/ConnectGoogleAnalyticsButton";
-    import DisconnectGoogleAnalyticsButton from "../../../atoms/buttons/DisconnectGoogleAnalyticsButton";
-    import ConnectDifferentGoogleAnalyticsPropertyButton from "../../../atoms/buttons/ConnectDifferentGoogleAnalyticsPropertyButton";
     import GoogleAnalyticsPropertyEntity from "../../../atoms/Entities/GoogleAnalyticsPropertyEntity";
     import StartSelectingGoogleAnalyticsPropertyButton from "../../../atoms/buttons/StartSelectingGoogleAnalyticsPropertyButton";
-    import ValidatableSelectField from "../../../../components/molecules/fields/ValidatableSelectField";
+    import ValidatableSelectField from "../../../molecules/fields/ValidatableSelectField";
     import PenIcon from "../../../atoms/icons/PenIcon/PenIcon";
+    import Columns from "../../../atoms/Columns/Columns";
+    import Column from "../../../atoms/Column/Column";
+    import WhitelistedDomainFields from "../../../molecules/fields/WhitelistedDomainFields";
+    import TutorialSettingFields from "../../../molecules/fields/TutorialSettingFields";
+    import Tag from "../../../atoms/Tag/Tag";
 
     export default {
         name: "ProjectForm",
         components: {
+            TutorialSettingFields,
+            Tag,
+            WhitelistedDomainFields,
+            Column,
+            Columns,
             PenIcon,
             ValidatableSelectField,
             StartSelectingGoogleAnalyticsPropertyButton,
-            ConnectDifferentGoogleAnalyticsPropertyButton,
-            DisconnectGoogleAnalyticsButton,
-            DeleteButton,
             ConnectGoogleAnalyticsButton,
-            ConfirmButton,
-            SaveButton,
-            CancelButton,
-            FadeTransitionGroup,
             SubHeading,
-            ExternalLinkIcon,
             TrashIcon,
-            QuestionCircleIcon,
-            AddButton,
             ValidatableDomainField,
             ValidatableTextField,
         },
@@ -264,7 +222,13 @@
                 default() {
                     return []
                 }
-            }
+            },
+            tutorial_settings: {
+                type: Object,
+                default() {
+                    return {};
+                }
+            },
         },
         data() {
             return {
@@ -283,14 +247,6 @@
                     this.$emit('update:protocol', splitedDomainUrl[0])
                     this.$emit('update:domain', splitedDomainUrl[1])
                 }
-            },
-            whitelistedDomainEntities: {
-                get() {
-                    return this.whitelisted_domain_entities
-                },
-                set(newValue) {
-                    this.$emit('update:whitelisted_domain_entities', newValue)
-                },
             },
             googleOAuthEntity() {
                 return this.oauth_entities.find(entity => entity.service === 'google_analytics');
@@ -321,21 +277,15 @@
                     }))
             },
             googleAnalyticsWebProperty() {
-                if (!this.googleAnalyticsWebPropertyId) return null;
-                return this.googleAnalyticsAccount.webProperties.find(
-                    property => property.id === this.googleAnalyticsWebPropertyId
-                )
+                if (this.googleAnalyticsAccount && this.googleAnalyticsWebPropertyId) {
+                    return this.googleAnalyticsAccount.webProperties.find(
+                        property => property.id === this.googleAnalyticsWebPropertyId
+                    )
+                }
+                return null;
             },
         },
         watch: {
-            whitelisted_domain_entities: {
-                immediate: true,
-                handler(value) {
-                    if (value && value.length === 0) {
-                        this.addWhitelistedDomainEntity();
-                    }
-                }
-            },
             googleAnalyticsWebProperty(value) {
                 if (value) {
                     const googleAnalyticsPropertyEntity = new GoogleAnalyticsPropertyEntity({
@@ -347,68 +297,15 @@
                     })
                     this.$emit('update:google_analytics_property_entities', [ googleAnalyticsPropertyEntity ])
                 }
-            }
+            },
         },
         methods: {
-            addWhitelistedDomainEntity() {
-                this.whitelistedDomainEntities = [
-                    ...this.whitelistedDomainEntities,
-                    new WhitelistedDomainEntity({
-                        protocol: 'https://',
-                    })
-                ]
-            },
-            updateWhitelistedDomainEntity(data, index) {
-                const splitedDomainUrl = data.split('://')
-                this.whitelistedDomainEntities = [
-                    ...this.whitelistedDomainEntities.slice(0, index),
-                    new WhitelistedDomainEntity({
-                        ...this.whitelistedDomainEntities[index],
-                        protocol: splitedDomainUrl[0],
-                        domain: splitedDomainUrl[1],
-                    }),
-                    ...this.whitelistedDomainEntities.slice(index+1)
-                ]
-            },
-            deleteWhitelistedDomainEntity(index) {
-                this.whitelistedDomainEntities = [
-                    ...this.whitelistedDomainEntities.slice(0, index),
-                    ...this.whitelistedDomainEntities.slice(index+1),
-                ]
-            },
-            sendTo(whitelistedDomainEntity) {
-                const url = `${whitelistedDomainEntity.protocol}://${whitelistedDomainEntity.domain}`
-                window.open(url, '_blank')
-            }
+
         }
     }
 </script>
 
 <style scoped>
-    .whitelisted-domain {
-        display: grid;
-        grid-template-columns: 1fr minmax(40px, auto);
-        grid-column-gap: 20px;
-    }
-    .whitelisted-domain__actions {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-    .whitelisted-domain__actions--with-label {
-        margin-top: 2em;
-    }
-    .whitelisted-domain__actions--single {
-        justify-content: center;
-    }
-    .whitelisted-domain__icon {
-        margin-top: 0.5em;
-        cursor: pointer;
-    }
-    .whitelisted-domain__icon--disabled {
-        opacity: 0.3;
-        cursor: unset;
-    }
     .columns.is-6 {
         margin-bottom: 2em;
     }

@@ -44,9 +44,7 @@
                 }
             }
         },
-        mounted() {
-            console.log(this.$attrs);
-        }
+        mounted() {}
     }
 </script>
 

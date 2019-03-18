@@ -14,6 +14,8 @@
         @deleteStepClick="deleteStep"
         @stepSaveClick="onStepSaveClick"
         @deleteTutorialConfirmClick="deleteTutorial"
+        @click:retry="onClickRetry"
+        :show-project-not-found-modal="projectNotFound"
     >
     </tutorial-template>
 </template>
@@ -40,6 +42,7 @@
                 'selectedStepId',
                 'requestState',
                 'isRequesting',
+                'projectNotFound',
             ]),
             ...mapState([
                 'extLog'
@@ -54,17 +57,15 @@
                 deep: true,
                 handler(value) {
                     if (value) {
-                        this.path = value.path;
+                        this.path = value.path
                     }
-                    this.urlDidChange = false;
+                    this.urlDidChange = false
                 }
             },
         },
         created() {
             this.startWatchingUrlForSPA()
-            this.listTutorials({
-                url: window.parent.location.href
-            })
+            this.list()
         },
         methods: {
             ...mapActions('tutorial', [
@@ -80,8 +81,14 @@
             ]),
             ...mapActions([
                 'retrieveLog',
-                'saveLog'
+                'saveLog',
             ]),
+            list(params={}) {
+                this.listTutorials({
+                    url: window.parent.location.href,
+                    ...params,
+                })
+            },
             onTutorialSaveClick({ id=null, name='', description='', steps=[], url='' }) {
                 const data = {
                     name,
@@ -130,10 +137,13 @@
                     if (newPath !== self.path) {
                         self.path = newPath
                         self.urlDidChange = true
-                        self.listTutorials({ url: window.parent.location.origin + newPath })
+                        self.list({ url: window.parent.location.origin + newPath })
                     }
                     return proxiedPushState.apply(this, arguments)
                 }
+            },
+            onClickRetry() {
+                this.list()
             }
         },
     }

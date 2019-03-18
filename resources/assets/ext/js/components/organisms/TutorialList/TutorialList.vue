@@ -1,6 +1,6 @@
 <template>
-    <nav class="panel has-background-white list">
-        <p class="panel-heading level has-margin-bottom-0">
+    <base-panel class="has-background-white list">
+        <base-panel-header class="level has-margin-bottom-0">
             <base-header :level="2">Tutorials</base-header>
             <base-button
                 is-primary
@@ -12,10 +12,8 @@
             >
                 Add
             </base-button>
-        </p>
-        <div
-            class="panel-block level has-margin-bottom-0"
-        >
+        </base-panel-header>
+        <base-panel-block class="level has-margin-bottom-0">
             <template v-if="isLoading">
                 <div class="list__loading-screen">
                     <base-progress-circular is-small>
@@ -44,13 +42,14 @@
             <template v-else>
                 You haven't added any tutorials yet.
             </template>
-        </div>
+        </base-panel-block>
         <template v-if="selectedTutorial && !isLoading">
-            <a
-                class="panel-block has-padding-top-4 has-padding-bottom-4"
+            <base-panel-block
+                element="a"
+                class="has-padding-top-4 has-padding-bottom-4"
+                :class="{ 'is-active':isActiveStep(step) }"
                 :key="step.id"
                 v-for="(step, stepIndex) in selectedTutorial.steps"
-                :class="{ 'is-active':isActiveStep(step) }"
                 @click.stop="$emit('stepClick', step.id)"
             >
                 <span class="panel-icon">
@@ -63,8 +62,8 @@
                 >
                     <font-awesome-icon icon="trash"></font-awesome-icon>
                 </span>
-            </a>
-            <div class="panel-block" style="flex-direction: column;">
+            </base-panel-block>
+            <base-panel-block style="flex-direction: column;">
                 <base-button
                     is-primary
                     is-fullwidth
@@ -81,16 +80,16 @@
                 >
                     Preview
                 </base-button>
-            </div>
+            </base-panel-block>
         </template>
-        <div class="panel-block">
+        <base-panel-block>
             <base-icon
                 class="has-cursor-pointer has-margin-left-auto"
                 icon="exchange-alt"
                 @click="onSwitchSideClick"
             >
             </base-icon>
-        </div>
+        </base-panel-block>
         <base-icon
             class="list__close-button has-cursor-pointer"
             :class="{ 'list__close-button--is-on-left': !isOnRight }"
@@ -99,7 +98,7 @@
             has-background-gray
         >
         </base-icon>
-    </nav>
+    </base-panel>
 </template>
 <script>
     import BaseButton from '../../atoms/BaseButton'
@@ -107,11 +106,19 @@
     import BaseProgressCircular from '../../atoms/BaseProgressCircular'
     import BaseHeader from "../../atoms/BaseHeader";
     import SelectField from "../../molecules/fields/SelectField";
-    import BaseSelectInput from "../../atoms/BaseSelectInput/BaseSelectInput";
+    import BaseSelectInput from "../../atoms/BaseSelectInput";
+    import BasePanel from "../../atoms/BasePanel/BasePanel";
+    import BasePanelBlock from "../../atoms/BasePanelBlock";
+    import BasePanelHeader from "../../atoms/BasePanelHeader";
+    import BaseContent from "../../atoms/BaseContent/BaseContent";
 
     export default {
         name: 'TutorialList',
         components: {
+            BaseContent,
+            BasePanelHeader,
+            BasePanelBlock,
+            BasePanel,
             BaseSelectInput,
             SelectField,
             BaseHeader,

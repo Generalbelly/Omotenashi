@@ -11,17 +11,36 @@ module.exports = {
         publicPath: "/",
     },
     devServer: {
+        // compress: true,
+        // contentBase: path.join(__dirname, "./public"),
+        // publicPath: '/',
+        // port: 80,
+        // proxy: {
+        //     '*': {
+        //         target: 'https://docker.omotenashi.today',
+        //         secure: false
+        //     }
+        // },
+        // host: '0.0.0.0',
+        // disableHostCheck: true,
+        // hot: true,
+        // inline: true,
+        // quiet: false,
+        // noInfo: false,
+        // stats: {
+        //     colors: true
+        // }
         compress: true,
         contentBase: path.join(__dirname, "./public"),
         publicPath: '/',
-        port: 80,
+        port: 9000,
         proxy: {
             '*': {
                 target: 'https://docker.omotenashi.today',
                 secure: false
             }
         },
-        host: '0.0.0.0',
+        host: 'localhost',
         disableHostCheck: true,
         hot: true,
         inline: true,

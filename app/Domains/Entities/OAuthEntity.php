@@ -22,11 +22,11 @@ class OAuthEntity extends Entity
 
     public function projectEntity()
     {
-        return $this->belongsTo('App\Domains\Entities\ProjectEntity');
+        return $this->belongsTo(
+            'App\Domains\Entities\ProjectEntity',
+            'project_id',
+            'id'
+        );
     }
 
-    public function userEntity()
-    {
-        return $this->belongsTo('App\Domains\Entities\UserEntity');
-    }
 }

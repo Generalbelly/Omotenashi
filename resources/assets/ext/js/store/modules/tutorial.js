@@ -41,6 +41,7 @@ const state = {
     selectedStepId: null,
     isRequesting: false,
     requestState: null,
+    projectNotFound: false,
 }
 
 export const getters = {
@@ -148,6 +149,9 @@ export const mutations = {
     [SELECT_STEP](state, { id }) {
         state.selectedStepId = id
     },
+    [PROJECT_NOT_FOUND](state, shouldShow) {
+        state.projectNotFound = shouldShow
+    }
 }
 
 export const actions = {
@@ -179,19 +183,22 @@ export const actions = {
                         id: firstTutorial.id,
                     })
                     if (firstTutorial.steps.length > 0) {
-                        const firstTutorialSteps = firstTutorial.steps[0]
+                        const firstTutorialStep = firstTutorial.steps[0]
                         commit(SELECT_STEP, {
-                            id: firstTutorialSteps[0].id
+                            id: firstTutorialStep.id
                         })
                     }
                 }
+
+                commit(PROJECT_NOT_FOUND, false);
             })
             .catch((error) => {
                 commit(REQUEST_LIST_TUTORIALS_FAILURE, error)
-                console.log(error);
-                const { data } = error.response;
+                const {
+                    data={}
+                } = error.response;
                 if (data.error && data.error.type === 'ProjectNotFound') {
-                    commit(PROJECT_NOT_FOUND, true, {root: true});
+                    commit(PROJECT_NOT_FOUND, true);
                 }
             });
     },

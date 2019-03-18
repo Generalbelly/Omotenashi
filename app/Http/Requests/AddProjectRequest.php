@@ -24,17 +24,55 @@ class AddProjectRequest extends FormRequest
      */
     public function rules()
     {
+        $userKey = $this->user()->key;
         return [
             'name' => 'required|max:100',
             'domain' => [
                 'required',
                 'domain',
                 'max:100',
+                Rule::unique('projects')->where(function ($query) use ($userKey) {
+                    return $query->where('user_id', $userKey);
+                })
             ],
             'protocol' => [
                 'required',
                 Rule::in(['http', 'https']),
                 'max:20',
+            ],
+            'tutorial_settings' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $invalids = [];
+                    foreach ($value as $k => $v) {
+                        switch ($k) {
+                            case 'distribution_ratio':
+                                if (!in_array($v, ['random', 'even'])) {
+                                    $invalids[] = $k;
+                                }
+                                break;
+                            case 'only_once':
+                                if (!in_array($v, ['yes', 'no'])) {
+                                    $invalids[] = $k;
+                                }
+                                break;
+                            case 'only_once_duration':
+                                if (!($v === 'forever' || is_numeric($v))) {
+                                    $invalids[] = $k;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    if (count($invalids) > 0) {
+                        $fail(sprintf(
+                            "%s %s invalid.",
+                            implode(',', $invalids),
+                            count($invalids) > 1 ? 'are' : 'is'
+                        ));
+                    }
+                },
             ],
             'whitelisted_domain_entities' => [
                 'array',
@@ -47,6 +85,19 @@ class AddProjectRequest extends FormRequest
                 'required',
                 'max:20',
             ],
+        ];
+    }
+
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'domain.unique' => 'The domain has already been used by your another project',
         ];
     }
 }

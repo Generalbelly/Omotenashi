@@ -8,7 +8,8 @@
     "watch": "webpack --watch --progress --config ./webpack.config.js",
     "watch-ext": "webpack --watch --progress --config ./webpack.ext.config.js",
     "watch-cdn": "webpack --watch --progress --config ./webpack.cdn.config.js",
-    "storybook-ext": "start-storybook -p 9001 -c ./resources/assets/.storybook -s ./public/ext"
+    "storybook-ext": "start-storybook -p 9001 -c ./resources/assets/.storybook -s ./public/ext",
+    "browser-sync": "webpack --watch --config ./webpack.config.js & browser-sync start --config bs-config.js"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

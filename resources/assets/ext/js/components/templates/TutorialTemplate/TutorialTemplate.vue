@@ -68,6 +68,13 @@
         <loading-modal
             v-show="isRequesting && requestState !== 'REQUEST_LIST_TUTORIALS'"
         ></loading-modal>
+
+        <project-not-found-modal
+            v-show="showProjectNotFoundModal"
+            @click:retry="$emit('click:retry')"
+            :isRequesting="isRequesting"
+        >
+        </project-not-found-modal>
     </div>
 </template>
 <script>
@@ -78,6 +85,7 @@
     import DeleteConfirmationMessage from "../../organisms/DeleteConfirmationMessage"
     import DriverEditor from "../../organisms/DriverEditor"
     import Message from "../../molecules/Message";
+    import ProjectNotFoundModal from "../../organisms/ProjectNotFoundModal";
 
     export const states = {
         beingHome: 'beingHome',
@@ -92,6 +100,7 @@
     export default {
         name: 'TutorialTemplate',
         components: {
+            ProjectNotFoundModal,
             Message,
             LoadingModal,
             DriverEditor,
@@ -129,6 +138,10 @@
                 },
             },
             showUrlChangeAlert: {
+                type: Boolean,
+                default: false,
+            },
+            showProjectNotFoundModal: {
                 type: Boolean,
                 default: false,
             }

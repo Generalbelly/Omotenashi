@@ -137,7 +137,7 @@
         },
         data() {
             return {
-                updatedTutorial: null,
+                updatedTutorial: new TutorialEntity(),
                 showParameterFields: false,
             };
         },
@@ -146,9 +146,10 @@
                 immediate: true,
                 handler(value) {
                     if (value) {
-                        this.updatedTutorial = this.createTutorial(value);
-                    } else {
-                        this.clear();
+                        this.updatedTutorial = new TutorialEntity({
+                            ...this.updatedTutorial,
+                            ...value
+                        })
                     }
                 },
             },
@@ -160,7 +161,6 @@
                     } else if (newValue.length > 0) {
                         this.showParameterFields = true
                     }
-                    // this.updatedTutorial.url = this.updatedTutorial.urlPath + this.formatParameters(this.updatedTutorial.parameters)
                 }
             },
             showParameterFields(value){
@@ -170,40 +170,19 @@
             },
         },
         methods: {
-            formatParameters(params) {
-                return params.reduce((total, current, index) => {
-                    if (current.key && current.value) {
-                        if (index === 0) {
-                            return `?${total}${current.key}=${current.value}`
-                        } else {
-                            return `${total}&${current.key}=${current.value}`
-                        }
-                    } else {
-                        return total;
-                    }
-                }, '');
-            },
-            createTutorial(defaultValues={}) {
-                return new TutorialEntity(defaultValues);
-            },
             onCancelClick() {
                 this.$emit('cancelClick')
-                this.clear()
             },
             onSaveClick() {
                 this.$refs.observer.validate()
                     .then(result => {
                         if (result) {
                             this.$emit('saveClick', this.updatedTutorial)
-                            this.clear()
                         }
                     })
                     .catch(error => {
                         console.log(error);
                     })
-            },
-            clear() {
-                this.updatedTutorial = this.createTutorial();
             },
             addParameter() {
                 this.updatedTutorial.parameters = [

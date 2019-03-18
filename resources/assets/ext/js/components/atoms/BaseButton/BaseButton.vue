@@ -1,5 +1,13 @@
 <template>
+    <a
+        v-if="href"
+        class="button is-link"
+        v-bind="$attrs"
+    >
+        <slot></slot>
+    </a>
     <button
+        v-else
         class="button"
         :class="classes"
         @click.stop.prevent="$emit('click')"
@@ -64,6 +72,10 @@
                 type: String,
                 default: null,
             },
+            href: {
+                type: String,
+                default: null,
+            }
         },
         computed: {
             classes() {

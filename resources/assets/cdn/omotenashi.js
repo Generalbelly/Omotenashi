@@ -1,5 +1,5 @@
 import axios from 'axios'
-import Driver from '../../../../driver.js/src/index'
+import Driver from '../driver.js/driver.min'
 import '../sass/driver.scss'
 
 window.Omotenashi = window.Omotenashi || (() => {
@@ -9,6 +9,7 @@ window.Omotenashi = window.Omotenashi || (() => {
     const activateDriver = (steps) => {
         const driver = new Driver({
             animate: false,
+            allowClose: false,
         })
         driver.defineSteps(steps)
         driver.start()

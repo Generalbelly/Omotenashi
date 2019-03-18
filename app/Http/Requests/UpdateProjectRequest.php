@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateProjectRequest extends FormRequest
+class UpdateProjectRequest extends AddProjectRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,33 +24,15 @@ class UpdateProjectRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required|max:100',
+        $userKey = $this->user()->key;
+        return array_merge(parent::rules(), [
             'domain' => [
                 'required',
                 'domain',
                 'max:100',
-            ],
-            'protocol' => [
-                'required',
-                Rule::in(['http', 'https']),
-                'max:20',
-            ],
-            'whitelisted_domain_entities' => [
-                'array',
-                'required',
-            ],
-            'whitelisted_domain_entities.*.id' => [
-                'nullable',
-                'uuid',
-            ],
-            'whitelisted_domain_entities.*.domain' => [
-                'domain',
-            ],
-            'whitelisted_domain_entities.*.protocol' => [
-                'required',
-                Rule::in(['http', 'https']),
-                'max:20',
+                Rule::unique('projects')->where(function ($query) use ($userKey) {
+                    return $query->where('user_id', $userKey);
+                })->ignore($this->request->get('id'))
             ],
             'google_analytics_property_entities' => [
                 'array',
@@ -95,6 +77,19 @@ class UpdateProjectRequest extends FormRequest
                     'google_analytics_property_entities.*.property_name',
                 ])
             ],
+        ]);
+    }
+
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'domain.unique' => 'The domain has already been used by your another project',
         ];
     }
 }

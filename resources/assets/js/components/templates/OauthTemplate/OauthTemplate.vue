@@ -76,7 +76,7 @@
 <script>
     import { ValidationObserver } from 'vee-validate'
     import ProjectEntity from "../../atoms/Entities/ProjectEntity"
-    import ProjectForm from "../../molecules/forms/ProjectForm"
+    import ProjectForm from "../../organisms/forms/ProjectForm"
     import Heading from "../../atoms/Heading"
     import SaveButton from "../../atoms/buttons/SaveButton";
     import BackButton from "../../atoms/buttons/BackButton";

@@ -6,6 +6,7 @@
         <select-field
             v-model="inputValue"
             v-bind="$attrs"
+            :items="items"
             slot-scope="{ errors, valid }"
             :message="errors"
             :type="getType(errors, valid)"
@@ -25,6 +26,16 @@
             value: {
                 type: String,
                 default: null
+            },
+            placeholder: {
+                type: String,
+                default: null
+            },
+            items: {
+                type: Array,
+                default() {
+                    return [];
+                },
             },
         },
         components: {

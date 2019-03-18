@@ -32,6 +32,11 @@ class DatabaseSeeder extends Seeder
                     'domain' => 'localhost',
                     'project_id' => $projectEntity->id,
                 ]);
+                $whitelistedDomainEntities[] = factory(App\Domains\Entities\WhitelistedDomainEntity::class)->make([
+                    'protocol' => 'http',
+                    'domain' => 'omotenashi-test-site.com',
+                    'project_id' => $projectEntity->id,
+                ]);
                 $userEntity->sub = 'auth0|5bc9e49fc7d2f35b924027ce'; // auth0
                 $userEntity->email = 'nobuyoshi.shimmen@gmail.com';
                 $userEntity->name = 'Nobu';

@@ -25,10 +25,11 @@ export default class TutorialEntity extends Entity {
                 }
             });
         }
-        if (data.url) {
-            const url = new URL(data.url)
-            this.urlPath = url.origin + url.pathname
-        }
+
+        this.url =  data.url ?  data.url : window.location.href;
+
+        const url = new URL(this.url);
+        this.urlPath = url.origin + url.pathname
     }
 
     get parameters() {

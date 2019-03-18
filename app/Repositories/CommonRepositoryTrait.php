@@ -139,7 +139,6 @@ trait CommonRepositoryTrait
         $newEntities = [];
 
         foreach ($dataArray as $data) {
-            $newEntity = null;
             if ($data['id']) {
                 $newEntity = $this->update($data, $data['id']);
             } else {
@@ -155,7 +154,12 @@ trait CommonRepositoryTrait
             array_column($newEntities, 'id')
         );
 
-        $this->destroy($entityIdsToDelete);
+        if (count($entityIdsToDelete) > 0) {
+            $this->destroy($entityIdsToDelete);
+        }
+
+        return $newEntities;
+
     }
 
 }

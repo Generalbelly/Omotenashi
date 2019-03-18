@@ -27,6 +27,11 @@ class GetProjectResponseModel {
     /**
      * @var string
      */
+    public $tutorial_settings;
+
+    /**
+     * @var string
+     */
     public $user_id;
 
     /**
@@ -61,6 +66,7 @@ class GetProjectResponseModel {
         $this->name = $attributes['name'];
         $this->domain = $attributes['domain'];
         $this->protocol = $attributes['protocol'];
+        $this->tutorial_settings = $attributes['tutorial_settings'];
         $this->user_id = $attributes['user_id'];
         $this->whitelisted_domain_entities = array_get($attributes, 'whitelisted_domain_entities', []);
         $this->oauth_entities = array_get($attributes, 'oauth_entities', []);

@@ -25,8 +25,7 @@ RUN yum install -y \
     libtool-ltdl \
     which \
     gcc gcc-c++ \
-    net-tools \
-    lsof
+    net-tools
 
 # install php7.2 nginx
 RUN amazon-linux-extras install php7.2 nginx1.12

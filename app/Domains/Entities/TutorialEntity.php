@@ -12,6 +12,7 @@ class TutorialEntity extends Entity
         'path',
         'query',
         'project_id',
+        'last_time_used_at',
     ];
     public $searchColumns = [
         'name',
@@ -20,6 +21,10 @@ class TutorialEntity extends Entity
     ];
     protected $casts = [
         'steps' => 'array',
+    ];
+
+    protected $dates = [
+        'last_time_used_at',
     ];
 
     public function projectEntity()
