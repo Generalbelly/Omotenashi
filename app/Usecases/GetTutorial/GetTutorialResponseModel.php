@@ -4,13 +4,15 @@ namespace App\Usecases\GetTutorial;
 
 class GetTutorialResponseModel {
 
-    public $id;
-    public $steps;
+    public $tutorial;
+    public $property_id;
+    public $tutorial_settings;
 
     public function __construct(array $attributes)
     {
-        $this->id = $attributes['id'];
-        $this->steps = $attributes['steps'];
+        $this->tutorial = $attributes['tutorial'];
+        $this->property_id = $attributes['property_id'];
+        $this->tutorial_settings = $attributes['tutorial_settings'];
     }
 
 }

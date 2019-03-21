@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
             if ($key === 0) {
                 $projectEntity = factory(App\Domains\Entities\ProjectEntity::class)->make([
                     'name' => 'silo',
-                    'domain' => 'silos.com',
+                    'domain' => 'omotenashi-customer-site.com',
                 ]);
                 $tutorialEntity = factory(App\Domains\Entities\TutorialEntity::class)->make([
                     'path' => '/',
@@ -24,22 +24,18 @@ class DatabaseSeeder extends Seeder
                 $whitelistedDomainEntities = [];
                 $whitelistedDomainEntities[] = factory(App\Domains\Entities\WhitelistedDomainEntity::class)->make([
                     'protocol' => 'http',
-                    'domain' => 'docker.www.data-silos.com',
-                    'project_id' => $projectEntity->id,
-                ]);
-                $whitelistedDomainEntities[] = factory(App\Domains\Entities\WhitelistedDomainEntity::class)->make([
-                    'protocol' => 'http',
                     'domain' => 'localhost',
                     'project_id' => $projectEntity->id,
                 ]);
                 $whitelistedDomainEntities[] = factory(App\Domains\Entities\WhitelistedDomainEntity::class)->make([
                     'protocol' => 'http',
-                    'domain' => 'omotenashi-test-site.com',
+                    'domain' => 'staging.omotenashi-customer-site.com',
                     'project_id' => $projectEntity->id,
                 ]);
                 $userEntity->sub = 'auth0|5bc9e49fc7d2f35b924027ce'; // auth0
                 $userEntity->email = 'nobuyoshi.shimmen@gmail.com';
                 $userEntity->name = 'Nobu';
+                $userEntity->key = 'fa307526-3d9d-4c9b-ac2a-e5e1186f1359';
                 $userEntity->save();
 
                 $userEntity->projectEntities()->save($projectEntity);

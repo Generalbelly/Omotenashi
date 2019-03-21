@@ -60,7 +60,7 @@
                 <div
                     v-if="googleOAuthEntity"
                 >
-                    <div v-if="googleAnalyticsPropertyEntity && googleAnalyticsPropertyEntity.id">
+                    <div v-if="googleAnalyticsPropertyEntity && googleAnalyticsPropertyEntity.id && googleAnalyticsAccountOptions.length === 0">
                         <columns>
                             <column>
                                 <tag
@@ -101,7 +101,6 @@
                     </div>
                     <b-message v-else type="is-success">
                         <p class="has-margin-bottom-4">
-                            Successfully connected to your Google account!<br>
                             Next step is to select a Google Analytics account and a web property.
                         </p>
                         <div>
@@ -289,6 +288,7 @@
             googleAnalyticsWebProperty(value) {
                 if (value) {
                     const googleAnalyticsPropertyEntity = new GoogleAnalyticsPropertyEntity({
+                        ...this.googleAnalyticsPropertyEntity,
                         account_id: this.googleAnalyticsAccount.id,
                         account_name: this.googleAnalyticsAccount.name,
                         property_id: value.id,

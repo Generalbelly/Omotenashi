@@ -167,7 +167,6 @@
 
             this.driver = new Driver({
                 animate: false,
-                allowClose: false,
             })
         },
         destroyed() {

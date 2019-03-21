@@ -1,13 +1,13 @@
 <template>
     <div>
-        <div class="label">
+        <base-label>
             Tutorial distribution (if more than one created
             <question-circle-icon
                 class="has-cursor-pointer"
                 size="is-small"
                 @click="showDistributionDetail = !showDistributionDetail"
             ></question-circle-icon>
-        </div>
+        </base-label>
         <column class="has-margin-bottom-5">
             <template v-for="option in pickingMethodOptions">
                 <radio-field
@@ -22,11 +22,11 @@
                 This option determines the distribution pattern towards your users.
             </message>
         </column>
-        <div class="label">
+        <base-label>
             Hide after viewing once
-        </div>
+        </base-label>
         <column>
-            <template v-for="option in onlyOnceOptions">
+            <template v-for="option in yesOrNo">
                 <radio-field
                     v-model="onlyOnce"
                     :native-value="option.value"
@@ -37,9 +37,9 @@
             </template>
         </column>
         <fade-transition-group v-if="onlyOnce==='yes'">
-            <div class="label" key="label">
+            <base-label key="label">
                 For how long?
-            </div>
+            </base-label>
             <column key="column">
                 <grouped-field key="field">
                     <validatable-select-field
@@ -80,10 +80,12 @@
     import ValidatableTextField from "../../../molecules/fields/ValidatableTextField"
     import QuestionCircleIcon from "../../../atoms/icons/QuestionCircleIcon/QuestionCircleIcon";
     import Message from "../../../atoms/Message/Message";
+    import BaseLabel from "../../../../../ext/js/components/atoms/BaseLabel/BaseLabel";
 
     export default {
         name: 'tutorial-setting-fields',
         components: {
+            BaseLabel,
             Message,
             QuestionCircleIcon,
             Column,
@@ -105,6 +107,7 @@
             return {
                 onlyOnceDuration: null,
                 showDistributionDetail: false,
+                showOnlyFirstTimeDetail: false,
             }
         },
         computed: {
@@ -139,7 +142,7 @@
                     }
                 ]
             },
-            onlyOnceOptions() {
+            yesOrNo() {
                 return [
                     {
                         text: 'Yes',
