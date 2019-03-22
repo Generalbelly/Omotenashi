@@ -65,20 +65,18 @@ window.Omotenashi = window.Omotenashi || (() => {
             onReset() {
                 if (!gtag || !GA_TRACKING_ID) return;
 
+                const eventField = {
+                    'send_to': GA_TRACKING_ID,
+                    'event_label': EVENT_LABEL,
+                    'event_category': EVENT_CATEGORY,
+                    'value': step,
+                    'non_interaction': true
+                };
+
                 if (step === steps.length) {
-                    gtag(HIT_TYPE, EVENT_ACTION_COMPLETE, {
-                        'send_to': GA_TRACKING_ID,
-                        'event_label': EVENT_LABEL,
-                        'event_category': EVENT_CATEGORY,
-                        'non_interaction': true
-                    });
+                    gtag(HIT_TYPE, EVENT_ACTION_COMPLETE, eventField);
                 } else {
-                    gtag(HIT_TYPE, EVENT_ACTION_INCOMPLETE, {
-                        'send_to': GA_TRACKING_ID,
-                        'event_label': EVENT_LABEL,
-                        'event_category': EVENT_CATEGORY,
-                        'non_interaction': true
-                    });
+                    gtag(HIT_TYPE, EVENT_ACTION_INCOMPLETE, eventField);
                 }
 
                 if (tutorial_settings.only_once === 'yes') {

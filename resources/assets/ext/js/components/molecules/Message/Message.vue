@@ -1,29 +1,30 @@
 <template>
     <div @click.stop.self="$emit('closeClick')" class="message__container">
-        <BaseMessage
+        <base-message
             @closeClick="$emit('closeClick')"
             :class="messageClasses"
         >
-            <BaseMessageHeader @closeClick="$emit('closeClick')">
+            <base-message-header>
                 <slot name="header"></slot>
                 <button
+                    v-if="close"
                     class="delete is-paddingless"
                     aria-label="delete"
                     @click.stop="$emit('closeClick')"
                 ></button>
-            </BaseMessageHeader>
-            <BaseMessageBody>
+            </base-message-header>
+            <base-message-body>
                 <slot name="body"></slot>
                 <p v-if="hasDontShowMeOption" class="has-margin-top-3">
-                    <BaseCheckBox
+                    <base-check-box
                         :value="dontShowMe"
                         @change="onDontShowMeChenge"
                     >
                         Don't show me this message again.
-                    </BaseCheckBox>
+                    </base-check-box>
                 </p>
-            </BaseMessageBody>
-        </BaseMessage>
+            </base-message-body>
+        </base-message>
     </div>
 </template>
 
@@ -68,6 +69,10 @@
                 type: Boolean,
                 default: false,
             },
+            close: {
+                type: Boolean,
+                default: false,
+            }
         },
         computed: {
             messageClasses() {

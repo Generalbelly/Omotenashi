@@ -5,83 +5,56 @@
                 :level="3"
                 class="has-text-left"
             >
-                {{ !!tutorial ? 'Edit' : 'Create' }} Tutorial
+                {{ id ? 'Edit' : 'Create' }} Tutorial
             </base-header>
         </div>
         <div slot="body">
-            <validation-observer ref="observer">
-                <div slot-scope="{invalid}">
-                    <validatable-text-field
-                        label="Name"
-                        v-model="updatedTutorial.name"
-                        placeholder="First timers"
-                        name="name"
-                        rules="required"
-                    >
-                    </validatable-text-field>
-                    <validatable-textarea-field
-                        label="Description (Optional)"
-                        v-model="updatedTutorial.description"
-                        placeholder="Tutorial for first time customers."
-                        name="description"
-                        rules="required"
-                    >
-                    </validatable-textarea-field>
-                    <div>
-                        Show this tutorial for a user visiting the following url.
-                        <text-field
-                            :value="updatedTutorial.url"
-                            name="url"
-                            rules="required"
-                            disabled
-                        ></text-field>
-                        <base-check-box
-                            v-model="showParameterFields"
-                        >
-                            with parameters
-                        </base-check-box>
-                        <template v-if="showParameterFields">
-                            <div class="parameter__labels">
-                                <base-label>Key</base-label>
-                                <base-label>Value</base-label>
-                            </div>
-                            <div
-                                v-for="(p, pIndex) in updatedTutorial.parameters"
-                                :key="pIndex"
-                                class="parameter__input"
-                            >
-                                <validatable-text-field
-                                    :value="p.key"
-                                    @input="updateParameter(pIndex, { key: $event} )"
-                                    :rules="showParameterFields ? 'required' : ''"
-                                    name="parameter key"
-                                    class="is-marginless"
-                                ></validatable-text-field>
-                                <validatable-text-field
-                                    :value="p.value"
-                                    @input="updateParameter(pIndex, { value: $event })"
-                                    :rules="showParameterFields ? 'required' : ''"
-                                    name="parameter value"
-                                    class="is-marginless"
-                                ></validatable-text-field>
-                                <base-icon
-                                    icon="trash"
-                                    class="has-cursor-pointer"
-                                    @click="deleteParameter(pIndex)"
-                                ></base-icon>
-                            </div>
-                            <div class="has-margin-top-1">
-                                <base-button
-                                    @click="addParameter"
-                                    is-text
-                                >
-                                    Add another parameter
-                                </base-button>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-            </validation-observer>
+            <validatable-text-field
+                label="Name"
+                v-model="innerName"
+                placeholder="First timers"
+                name="name"
+                rules="required"
+            >
+            </validatable-text-field>
+            <validatable-textarea-field
+                label="Description"
+                v-model="innerDescription"
+                placeholder="Tutorial for first time customers."
+                name="description"
+                rules="required"
+            >
+            </validatable-textarea-field>
+            <div>
+                Show this tutorial for a user visiting the following url.
+                <text-field
+                    :value="url"
+                    name="url"
+                    rules="required"
+                    disabled
+                ></text-field>
+                <!--<base-check-box-->
+                    <!--v-model="hasDynamicUrlPath"-->
+                <!--&gt;-->
+                    <!--Does a part of the url dynamically change?-->
+                <!--</base-check-box>-->
+                <!--<div>-->
+                    <!--The url changes after the following url path.-->
+                    <!--<text-field-->
+                        <!--v-model="innerStaticPath"-->
+                    <!--&gt;</text-field>-->
+                <!--</div>-->
+                <base-check-box
+                    v-model="withParameters"
+                >
+                    with parameters
+                </base-check-box>
+                <parameter-fields
+                    v-show="withParameters"
+                    v-model="innerParameters"
+                >
+                </parameter-fields>
+            </div>
         </div>
         <div
             slot="footer"
@@ -91,7 +64,7 @@
                 @click="onSaveClick"
                 is-primary
             >
-                {{ !!tutorial ? 'Save' : 'Create' }}
+                Save
             </base-button>
             <base-button
                 @click="onCancelClick"
@@ -103,7 +76,6 @@
     </CardModal>
 </template>
 <script>
-    import { ValidationObserver } from 'vee-validate'
     import BaseIcon from '../../atoms/BaseIcon'
     import BaseButton from '../../atoms/BaseButton'
     import CardModal from '../../molecules/CardModal'
@@ -113,14 +85,14 @@
     import ValidatableTextareaField from "../../molecules/fields/ValidatableTextareaField";
     import BaseHeader from "../../atoms/BaseHeader";
     import BaseLabel from "../../atoms/BaseLabel";
-    import TutorialEntity from "../../../../../js/components/atoms/Entities/TutorialEntity";
+    import ParameterFields from "../../molecules/fields/ParameterFields/ParameterFields";
 
     export default {
         name: 'Setting',
         components: {
+            ParameterFields,
             BaseLabel,
             BaseHeader,
-            ValidationObserver,
             ValidatableTextareaField,
             ValidatableTextField,
             TextField,
@@ -130,101 +102,95 @@
             BaseIcon,
         },
         props: {
-            tutorial: {
-                type: Object,
+            id: {
+                type: String,
                 default: null,
+            },
+            url: {
+                type: String,
+                default: null,
+            },
+            name: {
+                type: String,
+                default: null,
+            },
+            description: {
+                type: String,
+                default: null,
+            },
+            static_path: {
+                type: String,
+                default: null,
+            },
+            parameters: {
+                type: Array,
+                default() {
+                    return [];
+                }
             },
         },
         data() {
             return {
-                updatedTutorial: new TutorialEntity(),
-                showParameterFields: false,
+                withParameters: false,
+                hasDynamicUrlPath: false,
             };
         },
-        watch: {
-            tutorial: {
-                immediate: true,
-                handler(value) {
-                    if (value) {
-                        this.updatedTutorial = new TutorialEntity({
-                            ...this.updatedTutorial,
-                            ...value
-                        })
-                    }
+        computed: {
+            innerName: {
+                get() {
+                    return this.name
                 },
-            },
-            'updatedTutorial.parameters': {
-                deep: true,
-                handler(newValue, oldValue) {
-                    if (newValue.length === 0 && oldValue.length > 0) {
-                        this.showParameterFields = false
-                    } else if (newValue.length > 0) {
-                        this.showParameterFields = true
-                    }
+                set(newValue) {
+                    this.$emit('update:name', newValue)
                 }
             },
-            showParameterFields(value){
-                if (value && this.updatedTutorial.parameters.length === 0) {
-                    this.addParameter()
+            innerDescription: {
+                get() {
+                    return this.description
+                },
+                set(newValue) {
+                    this.$emit('update:description', newValue)
                 }
             },
+            innerParameters: {
+                get() {
+                    return this.parameters
+                },
+                set(newValue) {
+                    this.$emit('update:parameters', newValue)
+                }
+            },
+            innerStaticPath: {
+                get() {
+                    return this.static_path
+                },
+                set(newValue) {
+                    this.$emit('update:static_path', newValue)
+                }
+            }
+        },
+        watch: {
+            withParameters(value) {
+                if (value) {
+                    this.innerParameters = [
+                        {
+                            key: '',
+                            value: '',
+                        }
+                    ]
+                } else {
+                    this.innerParameters = []
+                }
+            }
         },
         methods: {
             onCancelClick() {
-                this.$emit('cancelClick')
+                this.$emit('click:cancel')
             },
             onSaveClick() {
-                this.$refs.observer.validate()
-                    .then(result => {
-                        if (result) {
-                            this.$emit('saveClick', this.updatedTutorial)
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
-            },
-            addParameter() {
-                this.updatedTutorial.parameters = [
-                    ...this.updatedTutorial.parameters,
-                    {
-                        key: '',
-                        value: '',
-                    }
-                ]
-            },
-            updateParameter(index, value) {
-                this.updatedTutorial.parameters = [
-                    ...this.updatedTutorial.parameters.slice(0, index),
-                    {
-                        ...this.updatedTutorial.parameters[index],
-                        ...value,
-                    },
-                    ...this.updatedTutorial.parameters.slice(index+1),
-                ]
-            },
-            deleteParameter(index) {
-                this.updatedTutorial.parameters = [
-                    ...this.updatedTutorial.parameters.slice(0, index),
-                    ...this.updatedTutorial.parameters.slice(index+1),
-                ];
+                this.$emit('click:save')
             },
         }
     }
 
 </script>
-
-<style scoped>
-    .parameter__labels {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        margin-top: 10px;
-    }
-    .parameter__input {
-        display: grid;
-        grid-template-columns: 1fr 1fr auto;
-        grid-column-gap: .5em;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-</style>

@@ -6,8 +6,8 @@
         :request-state="requestState"
         :is-requesting="isRequesting"
         :ext-log="extLog"
-        :show-url-change-alert="urlDidChange"
-        @tutorialSaveClick="onTutorialSaveClick"
+        :show-url-change-alert.sync="urlDidChange"
+        @click:save="onClickSave"
         @tutorialChange="onTutorialChange"
         @closeClick="$emit('click:close')"
         @stepClick="selectStep"
@@ -89,7 +89,7 @@
                     ...params,
                 })
             },
-            onTutorialSaveClick({ id=null, name='', description='', steps=[], url='' }) {
+            onClickSave({ id=null, name='', description='', steps=[], url='' }) {
                 const data = {
                     name,
                     description,

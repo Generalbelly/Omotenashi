@@ -161,19 +161,12 @@
             },
         },
         created() {
-            document.querySelectorAll( 'body *' ).forEach(el => {
-                el.addEventListener('click', this.userScreenClickHandler)
-            })
-
             this.driver = new Driver({
                 animate: false,
             })
         },
         destroyed() {
             this.driver = null
-            document.querySelectorAll( 'body *' ).forEach(el => {
-                el.removeEventListener('click', this.userScreenClickHandler)
-            })
         },
         methods: {
             updateState(state = null) {
@@ -247,11 +240,13 @@
                 ]
             },
             userScreenClickHandler(e) {
+                console.log('called');
                 if (!this.isHighlightSelectionActive) return;
                 // omotenashiの要素のクリックは無視
                 if (e.composedPath().find(el => el.id === 'omotenashi')) return
                 e.preventDefault() // for driver.js
                 e.stopPropagation() // for driver.js
+
                 if (this.isEdit) {
                     if (e.target.id === 'om-adding-step-cancel' || e.target.id === 'om-adding-step-save') return
                     if (this.selectorChoices.length > 0) {

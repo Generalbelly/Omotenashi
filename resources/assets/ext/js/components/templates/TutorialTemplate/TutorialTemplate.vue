@@ -37,26 +37,38 @@
             :has-selector-choices-available-message="!dontShowMeChecked('selectorChoicesAvailable')"
             :has-click-to-add-step-message="!dontShowMeChecked('clickToAddStep')"
             :is-highlight-selection-active="isAddingStep"
-            @saveClick="e => $emit('stepSaveClick', e)"
-            @cancelClick="updateState('beingHome')"
+            @saveClick="onEditorSaveClick"
+            @cancelClick="onEditorCancelClick"
             @previewDone="updateState('beingHome')"
             @editDone="updateState('beingHome')"
             @dontShowMeChange="removeMessage"
         >
         </driver-editor>
 
-        <setting
-            v-show="isEditingTutorial || isAddingTutorial"
-            :tutorial="isEditingTutorial ? selectedTutorial : null"
-            @saveClick="onTutorialSaveClick"
-            @cancelClick="updateState('beingHome')"
-        >
-        </setting>
+        <validation-observer ref="observer">
+            <setting
+                slot-scope="{invalid}"
+                v-show="isEditingTutorial || isAddingTutorial"
+                :id="innerTutorialEntity.id"
+                :url="currentUrlPath"
+                :name="innerTutorialEntity.name"
+                :description="innerTutorialEntity.description"
+                :steps="innerTutorialEntity.steps"
+                :parameters="innerTutorialEntity.parameters"
+                @update:name="onTutorialUpdate('name', $event)"
+                @update:description="onTutorialUpdate('description', $event)"
+                @update:steps="onTutorialUpdate('steps', $event)"
+                @update:parameters="onTutorialUpdate('parameters', $event)"
+                @click:save="onClickSave"
+                @click:cancel="onClickCancel"
+            >
+            </setting>
+        </validation-observer>
 
         <message
             v-show="showUrlChangeAlert && requestState === 'REQUEST_LIST_TUTORIALS'"
             is-warning
-            @closeClick="showUrlChangeAlert = false"
+            @closeClick="$emit('update:show-url-change-alert', false)"
         >
             <template slot="header">Alert</template>
             <template slot="body">
@@ -78,6 +90,7 @@
     </div>
 </template>
 <script>
+    import { ValidationObserver } from 'vee-validate'
     import { mapActions } from 'vuex'
     import LoadingModal from '../../molecules/LoadingModal'
     import TutorialList from '../../organisms/TutorialList'
@@ -86,6 +99,7 @@
     import DriverEditor from "../../organisms/DriverEditor"
     import Message from "../../molecules/Message";
     import ProjectNotFoundModal from "../../organisms/ProjectNotFoundModal";
+    import TutorialEntity from "../../../../../js/components/atoms/Entities/TutorialEntity";
 
     export const states = {
         beingHome: 'beingHome',
@@ -100,6 +114,7 @@
     export default {
         name: 'TutorialTemplate',
         components: {
+            ValidationObserver,
             ProjectNotFoundModal,
             Message,
             LoadingModal,
@@ -151,6 +166,7 @@
                 state: states.beingHome,
                 messageShown: null,
                 menuIsOnTheRight: true,
+                innerTutorialEntity: new TutorialEntity()
             }
         },
         methods: {
@@ -185,9 +201,31 @@
                 }
             },
             onAddStepClick() {
+                this.addUserScreenClickHandler()
                 this.updateState(states.addingStep)
             },
+            onEditorSaveClick(step) {
+                this.removeUserScreenClickHandler()
+                this.$emit('stepSaveClick', step)
+                this.updateState(states.beingHome)
+            },
+            onEditorCancelClick() {
+                this.removeUserScreenClickHandler()
+                this.updateState(states.beingHome)
+            },
+            addUserScreenClickHandler() {
+                document.querySelectorAll( 'body *' ).forEach(el => {
+                    el.addEventListener('click', this.$refs.editor.userScreenClickHandler)
+                })
+            },
+            removeUserScreenClickHandler() {
+                document.querySelectorAll( 'body *' ).forEach(el => {
+                    el.removeEventListener('click', this.$refs.editor.userScreenClickHandler)
+                })
+            },
             onAddTutorialClick() {
+                this.innerTutorialEntity = new TutorialEntity()
+                this.$refs.observer.reset()
                 this.updateState(states.addingTutorial)
             },
             onDeleteTutorialClick() {
@@ -197,11 +235,31 @@
                 this.$emit('deleteTutorialConfirmClick', { id })
                 this.updateState(states.deletingTutorial)
             },
-            onTutorialSaveClick(tutorial) {
-                this.$emit('tutorialSaveClick', tutorial)
+            onTutorialUpdate(key, value) {
+                this.innerTutorialEntity = new TutorialEntity({
+                    ...this.innerTutorialEntity,
+                    [key]: value,
+                })
+            },
+            onClickSave() {
+                this.$refs.observer.validate()
+                    .then(result => {
+                        if (result) {
+                            this.$emit('click:save', this.innerTutorialEntity)
+                            this.updateState(states.beingHome)
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            },
+            onClickCancel() {
                 this.updateState(states.beingHome)
             },
             onEditTutorialClick() {
+                this.innerTutorialEntity = new TutorialEntity({
+                    ...this.selectedTutorial,
+                })
                 this.updateState(states.editingTutorial)
             },
             onStepClick(id) {
@@ -219,9 +277,8 @@
         },
         watch: {
             tutorialEntities(newValue, oldValue) {
-                console.log(newValue);
                 if ((oldValue.length - newValue.length) === 1) {
-                    this.updateState('beingHome')
+                    this.updateState(states.beingHome)
                 }
             },
         },
@@ -241,6 +298,9 @@
             isDeletingTutorial() {
                 return (this.state === states.deletingTutorial)
             },
+            currentUrlPath() {
+                return this.innerTutorialEntity.getUrlCurrentUrlPath();
+            }
         },
     }
 </script>

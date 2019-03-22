@@ -11,7 +11,7 @@ export default class TutorialEntity extends Entity {
     project_id = null
 
     urlPath = null
-    _parameters = []
+    parameters = []
 
     constructor(data={}) {
         super()
@@ -26,19 +26,18 @@ export default class TutorialEntity extends Entity {
             });
         }
 
-        this.url =  data.url ?  data.url : window.location.href;
+        this.url =  data.url ? data.url : this.getCurrentUrl();
 
         const url = new URL(this.url);
         this.urlPath = url.origin + url.pathname
     }
 
-    get parameters() {
-        return this._parameters;
+    getCurrentUrl() {
+        return window.location.href;
     }
 
-    set parameters(value) {
-        this._parameters = value
-        this.url = this.urlPath + this.formatParameters(value)
+    getUrlCurrentUrlPath() {
+        return this.urlPath + this.formatParameters(this.parameters)
     }
 
     formatParameters(params) {

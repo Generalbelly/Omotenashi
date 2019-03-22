@@ -6,8 +6,8 @@
             :checked="value"
             :true-value="trueValue"
             :false-value="falseValue"
-            @change="$emit('change', $event.target.checked)"
-            @input="$emit('input', $event.target.checked)"
+            @change="onChange($event.target.checked)"
+            @input="onInput($event.target.checked)"
             style="display: inline-block;"
         >
         <slot></slot>
@@ -31,5 +31,13 @@
                 default: false,
             },
         },
+        methods: {
+            onChange(event) {
+                this.$emit('change', event);
+            },
+            onInput(event) {
+                this.$emit('input', event);
+            },
+        }
     }
 </script>
