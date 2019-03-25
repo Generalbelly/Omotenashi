@@ -103,7 +103,7 @@
     </CardModal>
 </template>
 <script>
-    import { Validator } from 'vee-validate'
+    // import { Validator } from 'vee-validate'
     import BaseIcon from '../../atoms/BaseIcon'
     import BaseButton from '../../atoms/BaseButton'
     import BaseHeader from "../../atoms/BaseHeader";
@@ -118,9 +118,9 @@
     import Columns from "../../../../../js/components/atoms/Columns/Columns";
     import Column from "../../../../../js/components/atoms/Column/Column";
 
-    Validator.extend('path-regex', (value, args) => {
-        return (value.match(/\//g) || []).length === args[0];
-    }, {});
+    // Validator.extend('path-regex', (value, args) => {
+    //     return (value.match(/\//g) || []).length === args[0];
+    // }, {});
 
     export default {
         name: 'Setting',
