@@ -43,7 +43,7 @@ class TutorialEntity extends Entity
     {
         $query = '';
         foreach(json_decode($this->attributes['parameters'], true) as $index => $parameter) {
-            $query .= $index === 0 ? '?' : '&';
+            $query .= $index === 0 ? '' : '&';
             $query .= sprintf("%s=%s", $parameter['key'], $parameter['value']);
         };
         return $query;

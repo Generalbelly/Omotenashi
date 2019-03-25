@@ -88,6 +88,10 @@ class GetTutorialUsecaseInteractor implements GetTutorialUsecase {
             }
         }
 
+        if (count($tutorialEntities) === 0) {
+            throw new TutorialNotFound('Tutorial not found', 404);
+        }
+
         $tutorialSettings = $projectEntity->getAttribute('tutorialSettings');
         if ($tutorialSettings['distribution_ratio'] === 'random') {
             $tutorialIndex = rand(0, count($tutorialEntities) - 1);

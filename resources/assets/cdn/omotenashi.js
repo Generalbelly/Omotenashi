@@ -112,15 +112,18 @@ window.Omotenashi = window.Omotenashi || (() => {
 
                 const {
                     steps = [],
-                    query,
                 } = tutorial;
 
-                const key = `${window.location.pathname}${query ? query : ''}`;
-                console.log(key);
-                if (steps.length > 0 && !only_once.includes(key)) {
-                    window.setTimeout(() => {
-                        activateDriver(key, tutorial, property_id, tutorial_settings)
-                    }, 1000);
+                const key = window.location.pathname + window.location.search;
+                if (steps.length > 0) {
+                    if (
+                        tutorial_settings.only_once === 'no' ||
+                        tutorial_settings.only_once === 'yes' && !only_once.includes(key)
+                    ) {
+                        window.setTimeout(() => {
+                            activateDriver(key, tutorial, property_id, tutorial_settings)
+                        }, 1000);
+                    }
                 }
             })
             .catch(error => {

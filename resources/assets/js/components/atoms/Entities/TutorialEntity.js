@@ -12,7 +12,6 @@ export default class TutorialEntity extends Entity {
     }
     parameters = []
     project_id = null
-    origin = null
 
     constructor(data={}) {
         super()
