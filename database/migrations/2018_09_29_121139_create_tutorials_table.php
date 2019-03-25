@@ -17,17 +17,16 @@ class CreateTutorialsTable extends Migration
             $table->string('id')->unique();
             $table->string('name');
             $table->string('description');
-            $table->text('steps');
-            $table->string('path');
-            $table->string('query')->nullable();
-            $table->timestamp('last_time_used_at')->nullable()->default(null);
+            $table->longText('steps');
+            $table->json('path');
+            $table->json('parameters');
+            $table->json('last_time_used_at');
             $table->string('project_id');
 
             $table->timestamps();
             $table->softDeletes();
 
             $table->primary('id');
-            $table->index(['project_id', 'path'], 'idx_project_id_path');
         });
     }
 

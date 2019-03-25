@@ -4,6 +4,7 @@ namespace App\Usecases\ListTutorials;
 
 use App\Domains\Entities\Exceptions\ProjectNotFound;
 use App\Domains\Entities\ProjectEntity;
+use App\Domains\Entities\TutorialEntity;
 use App\Repositories\Tutorial\TutorialRepositoryContract;
 use App\Repositories\Project\ProjectRepositoryContract;
 use App\Repositories\WhitelistedDomain\WhitelistedDomainRepositoryContract;
@@ -65,9 +66,9 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
                     'value' => $projectEntity->getAttribute('id'),
                 ],
                 [
-                    'column' => 'path',
+                    'column' => 'path->deepness',
                     'operator' => '=',
-                    'value' => $request->path,
+                    'value' => $request->deepness,
                 ],
             ];
 
@@ -78,11 +79,32 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
                 $request->search,
                 $request->perPage
             );
-            $result['projectEntity'] = $projectEntity->toArray();
+
+            $tutorialEntities = [];
+
+            /** @var TutorialEntity $tutorialEntity */
+            foreach ($result['entities'] as $tutorialEntity) {
+                $path = $tutorialEntity->getAttribute('path');
+                if ((
+                    $path['regex'] == false &&
+                    $path['value'] === $request->path
+                ) || (
+                    $path['regex'] == true &&
+                    preg_match(TutorialEntity::generateRegex($path['value']), $request->path)
+                )) {
+                    $tutorialEntities[] = $tutorialEntity->toArray();
+                }
+            }
         } else {
             throw new ProjectNotFound($request->domain);
         }
 
-        return new ListTutorialsResponseModel($result);
+        return new ListTutorialsResponseModel(array_merge(
+            $result,
+            [
+                'entities' => $tutorialEntities,
+                'projectEntity' => $projectEntity->toArray(),
+            ]
+        ));
     }
 }

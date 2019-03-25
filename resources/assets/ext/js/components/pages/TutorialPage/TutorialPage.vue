@@ -1,5 +1,6 @@
 <template>
     <tutorial-template
+        :project-entity="projectEntity"
         :tutorial-entities="tutorialEntities"
         :selected-tutorial="selectedTutorial"
         :selected-step="selectedStep"
@@ -89,22 +90,37 @@
                     ...params,
                 })
             },
-            onClickSave({ id=null, name='', description='', steps=[], url='' }) {
-                const data = {
+            onClickSave(data) {
+                const {
+                    id = null,
+                    steps = [],
+                    parameters = [],
+                    path = {},
                     name,
                     description,
-                    steps,
-                    url,
-                    project_id: this.projectEntity.id,
-                }
+                } = data
                 if (id) {
                     this.updateTutorial({
-                        id,
-                        data,
+                        data: {
+                            id,
+                            name,
+                            description,
+                            steps,
+                            path,
+                            parameters
+                        },
+                        id
                     })
                 } else {
                     this.addTutorial({
-                        data,
+                        data: {
+                            name,
+                            description,
+                            steps,
+                            path,
+                            parameters,
+                            project_id: this.projectEntity.id,
+                        }
                     })
                 }
             },

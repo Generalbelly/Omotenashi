@@ -45,16 +45,13 @@ class AddTutorialUsecaseInteractor implements AddTutorialUsecase {
             'description' => $request->description,
             'steps' => $request->steps,
             'path' => $request->path,
-            'query' => $request->query,
+            'parameters' => $request->parameters,
+            'last_time_used_at' => [
+                $request->path['value'] => null,
+            ],
             'project_id' => $projectEntity->getAttribute('id'),
         ]);
-        return new AddTutorialResponseModel(array_merge(
-            $tutorial->toArray(),
-            [
-                'protocol' => $projectEntity->getAttribute('protocol'),
-                'domain' => $projectEntity->getAttribute('domain'),
-            ]
-        ));
+        return new AddTutorialResponseModel($tutorial->toArray());
     }
 
 }

@@ -63,14 +63,29 @@ class GetTutorialUsecaseInteractor implements GetTutorialUsecase {
         if (!$projectEntity) {
             throw new ProjectNotFound($request->domain);
         }
-        $tutorialEntities = $this->tutorialRepository->where([
-            'path' => $request->path,
-            'query' => $request->query,
+        $entities = $this->tutorialRepository->where([
+            'path->deepness' => $request->deepness,
             'project_id' => $projectEntity->getAttribute('id'),
         ])->get();
 
-        if (count($tutorialEntities) === 0) {
+        if (count($entities) === 0) {
             throw new TutorialNotFound('Tutorial not found', 404);
+        }
+
+        $tutorialEntities = [];
+        /** @var TutorialEntity $tutorialEntity */
+        foreach ($entities as $tutorialEntity) {
+            if ($tutorialEntity->getAttribute('query') != $request->query) continue;
+            $path = $tutorialEntity->getAttribute('path');
+            if ((
+                    $path['regex'] == false &&
+                    $path['value'] === $request->path
+                ) || (
+                    $path['regex'] == true &&
+                    preg_match(TutorialEntity::generateRegex($path['value']), $request->path)
+                )) {
+                $tutorialEntities[] = $tutorialEntity;
+            }
         }
 
         $tutorialSettings = $projectEntity->getAttribute('tutorialSettings');
@@ -83,19 +98,29 @@ class GetTutorialUsecaseInteractor implements GetTutorialUsecase {
             /** @var TutorialEntity $tutorialEntity */
             foreach ($tutorialEntities as $index => $tutorialEntity) {
                 $lastTimeUsedAt = $tutorialEntity->getAttribute('last_time_used_at');
-                if ($lastTimeUsedAt) {
-                    $timestamp = $lastTimeUsedAt->getTimestamp();
-                    if (is_null($oldestTimestamp) || $timestamp < $oldestTimestamp ) {
-                        $oldestTimestamp = $timestamp;
-                        $tutorialIndex = $index;
-                    }
-                } else {
+                // 正規表現のときここにくる
+                if (!array_key_exists($request->path, $lastTimeUsedAt)) {
+                    $tutorialIndex = $index;
+                    break;
+                }
+                if (is_null($lastTimeUsedAt[$request->path])) {
+                    $tutorialIndex = $index;
+                    break;
+                }
+                $timestamp = (new Carbon($lastTimeUsedAt[$request->path]))->getTimestamp();
+                if (is_null($oldestTimestamp) || $timestamp < $oldestTimestamp ) {
+                    $oldestTimestamp = $timestamp;
                     $tutorialIndex = $index;
                 }
             }
             $tutorialEntity = $tutorialEntities[$tutorialIndex];
             $this->tutorialRepository->update([
-                'last_time_used_at' => now(),
+                'last_time_used_at' => array_merge(
+                    $tutorialEntity->getAttribute('last_time_used_at'),
+                    [
+                        $request->path => now()->getTimestamp(),
+                    ]
+                ),
             ], $tutorialEntity->getAttribute('id'));
         }
 

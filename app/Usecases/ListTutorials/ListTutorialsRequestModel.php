@@ -13,11 +13,6 @@ class ListTutorialsRequestModel {
     /**
      * @var string
      */
-    public $url;
-
-    /**
-     * @var string
-     */
     public $domain;
 
     /**
@@ -44,10 +39,13 @@ class ListTutorialsRequestModel {
      * @var string
      */
     public $path;
+    /**
+     * @var int
+     */
+    public $deepness;
 
     public function __construct(array $data)
     {
-        $this->url = $data['url'];
         $this->userKey = $data['userKey'];
         $this->orders = $data['orders'];
         $this->page = $data['page'];
@@ -55,6 +53,7 @@ class ListTutorialsRequestModel {
         $this->perPage = $data['perPage'];
         $this->domain = $data['domain'];
         $this->path = $data['path'];
+        $this->deepness = $data['path'] === '/' ? 0 : count(explode('/', $data['path'])) - 1;
     }
 
 }

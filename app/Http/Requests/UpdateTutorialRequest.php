@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class UpdateTutorialRequest extends FormRequest
+class UpdateTutorialRequest extends AddTutorialRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,14 +21,11 @@ class UpdateTutorialRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required|max:100',
-            'description' => 'required|max:255',
-            'url' => 'required|url',
-            'steps' => 'array',
+        return array_merge(parent::rules(), [
             'steps.*.element' => 'required_with:steps.*.popover',
             'steps.*.popover' => 'required_with_all:steps.*.element',
             'steps.*.popover.content' => 'required_with:steps.*.popover',
-        ];
+            'project_id' => 'nullable',
+        ]);
     }
 }

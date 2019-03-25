@@ -31,6 +31,11 @@ class GetTutorialRequestModel {
      */
     public $query;
 
+    /**
+     * @var int
+     */
+    public $deepness;
+
     public function __construct(array $data)
     {
         $this->userKey = $data['userKey'];
@@ -38,6 +43,7 @@ class GetTutorialRequestModel {
         $this->domain = $parsedUrl['host'];
         $this->path = $parsedUrl['path'];
         $this->query = isset($parsedUrl['query']) ? $parsedUrl['query'] : null;
+        $this->deepness = $parsedUrl['path'] === '/' ? 0 : count(explode('/', $parsedUrl['path'])) - 1;
     }
 
 }

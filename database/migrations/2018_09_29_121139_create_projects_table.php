@@ -19,7 +19,7 @@ class CreateProjectsTable extends Migration
             $table->string('protocol');
             $table->string('domain');
             $table->string('user_id');
-            $table->longText('tutorial_settings');
+            $table->json('tutorial_settings');
 
             $table->timestamps();
             $table->softDeletes();

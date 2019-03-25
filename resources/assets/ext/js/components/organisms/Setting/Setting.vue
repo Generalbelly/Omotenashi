@@ -26,29 +26,56 @@
             >
             </validatable-textarea-field>
             <div>
-                Show this tutorial for a user visiting the following url.
-                <text-field
-                    :value="url"
-                    name="url"
-                    rules="required"
-                    disabled
-                ></text-field>
-                <!--<base-check-box-->
-                    <!--v-model="hasDynamicUrlPath"-->
-                <!--&gt;-->
-                    <!--Does a part of the url dynamically change?-->
-                <!--</base-check-box>-->
-                <!--<div>-->
-                    <!--The url changes after the following url path.-->
-                    <!--<text-field-->
-                        <!--v-model="innerStaticPath"-->
-                    <!--&gt;</text-field>-->
-                <!--</div>-->
-                <base-check-box
-                    v-model="withParameters"
+                <div class="has-padding-bottom-4">
+                    Show this tutorial for a user visiting the following url.
+                </div>
+                <columns
+                    v-if="innerPath.regex"
+                    class="path-regex-value"
                 >
-                    with parameters
-                </base-check-box>
+                    <div>
+                        {{ origin }}
+                    </div>
+                    <div>
+                        <text-field
+                            :value="innerPath.value"
+                            @input="updateInnerPath('value', $event)"
+                            name="regex"
+                            :rules="innerPath.regex ? 'required|' : ''"
+                        ></text-field>
+                    </div>
+                    <div>
+                        {{ formatParameters(innerParameters) }}
+                    </div>
+                </columns>
+                <columns v-else>
+                    <column>
+                        <textarea-field
+                            row="3"
+                            :value="origin+path.value+formatParameters(innerParameters)"
+                            disabled
+                        ></textarea-field>
+                    </column>
+                </columns>
+                <columns v-if="innerPath.value !== '/'">
+                    <column>
+                        <base-check-box
+                            :value="innerPath.regex"
+                            @input="updateInnerPath('regex', $event)"
+                        >
+                            Use regular expression
+                        </base-check-box>
+                    </column>
+                </columns>
+                <columns>
+                    <column>
+                        <base-check-box
+                            v-model="withParameters"
+                        >
+                            with parameters
+                        </base-check-box>
+                    </column>
+                </columns>
                 <parameter-fields
                     v-show="withParameters"
                     v-model="innerParameters"
@@ -76,20 +103,31 @@
     </CardModal>
 </template>
 <script>
+    import { Validator } from 'vee-validate'
     import BaseIcon from '../../atoms/BaseIcon'
     import BaseButton from '../../atoms/BaseButton'
-    import CardModal from '../../molecules/CardModal'
-    import BaseCheckBox from "../../atoms/BaseCheckBox"
-    import ValidatableTextField from "../../molecules/fields/ValidatableTextField";
-    import TextField from "../../molecules/fields/TextField";
-    import ValidatableTextareaField from "../../molecules/fields/ValidatableTextareaField";
     import BaseHeader from "../../atoms/BaseHeader";
     import BaseLabel from "../../atoms/BaseLabel";
+    import BaseCheckBox from "../../atoms/BaseCheckBox"
+    import CardModal from '../../molecules/CardModal'
+    import ValidatableTextField from "../../molecules/fields/ValidatableTextField";
+    import TextField from "../../molecules/fields/TextField";
+    import TextareaField from "../../molecules/fields/TextareaField";
+    import ValidatableTextareaField from "../../molecules/fields/ValidatableTextareaField";
     import ParameterFields from "../../molecules/fields/ParameterFields/ParameterFields";
+    import Columns from "../../../../../js/components/atoms/Columns/Columns";
+    import Column from "../../../../../js/components/atoms/Column/Column";
+
+    Validator.extend('path-regex', (value, args) => {
+        return (value.match(/\//g) || []).length === args[0];
+    }, {});
 
     export default {
         name: 'Setting',
         components: {
+            TextareaField,
+            Column,
+            Columns,
             ParameterFields,
             BaseLabel,
             BaseHeader,
@@ -106,10 +144,6 @@
                 type: String,
                 default: null,
             },
-            url: {
-                type: String,
-                default: null,
-            },
             name: {
                 type: String,
                 default: null,
@@ -118,21 +152,26 @@
                 type: String,
                 default: null,
             },
-            static_path: {
+            origin: {
                 type: String,
                 default: null,
+            },
+            path: {
+                type: Object,
+                default() {
+                    return {}
+                },
             },
             parameters: {
                 type: Array,
                 default() {
-                    return [];
+                    return []
                 }
             },
         },
         data() {
             return {
                 withParameters: false,
-                hasDynamicUrlPath: false,
             };
         },
         computed: {
@@ -154,34 +193,34 @@
             },
             innerParameters: {
                 get() {
+                    this.withParameters = this.parameters.length > 0
                     return this.parameters
                 },
                 set(newValue) {
                     this.$emit('update:parameters', newValue)
                 }
             },
-            innerStaticPath: {
+            innerPath: {
                 get() {
-                    return this.static_path
+                    return this.path
                 },
                 set(newValue) {
-                    this.$emit('update:static_path', newValue)
+                    this.$emit('update:path', newValue)
                 }
-            }
+            },
+
         },
         watch: {
             withParameters(value) {
-                if (value) {
+                if (value && this.innerParameters.length === 0) {
                     this.innerParameters = [
                         {
                             key: '',
                             value: '',
                         }
                     ]
-                } else {
-                    this.innerParameters = []
                 }
-            }
+            },
         },
         methods: {
             onCancelClick() {
@@ -190,7 +229,37 @@
             onSaveClick() {
                 this.$emit('click:save')
             },
+            updateInnerPath(key, value) {
+                this.innerPath = {
+                    ...this.innerPath,
+                    [key]: value,
+                }
+            },
+            formatParameters(params) {
+                return params.reduce((total, current, index) => {
+                    if (current.key && current.value) {
+                        if (index === 0) {
+                            return `?${total}${current.key}=${current.value}`
+                        } else {
+                            return `${total}&${current.key}=${current.value}`
+                        }
+                    } else {
+                        return total;
+                    }
+                }, '');
+            }
         }
     }
 
 </script>
+
+<style scoped>
+    .path-regex-value {
+        flex-wrap: wrap;
+        padding: 10px;
+    }
+    .path-regex-value > div {
+        display: flex;
+        align-items: center;
+    }
+</style>

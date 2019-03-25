@@ -15,10 +15,10 @@ class DatabaseSeeder extends Seeder
             if ($key === 0) {
                 $projectEntity = factory(App\Domains\Entities\ProjectEntity::class)->make([
                     'name' => 'silo',
+                    'protocol' => 'http',
                     'domain' => 'omotenashi-customer-site.com',
                 ]);
                 $tutorialEntity = factory(App\Domains\Entities\TutorialEntity::class)->make([
-                    'path' => '/',
                     'steps' => [],
                 ]);
                 $whitelistedDomainEntities = [];
@@ -43,7 +43,6 @@ class DatabaseSeeder extends Seeder
                 foreach ($whitelistedDomainEntities as $whitelistedDomainEntity) {
                     $projectEntity->whitelistedDomainEntities()->save($whitelistedDomainEntity);
                 }
-
             } else {
                 $projectEntity = factory(App\Domains\Entities\ProjectEntity::class)->make();
                 $tutorialEntity = factory(App\Domains\Entities\TutorialEntity::class)->make();

@@ -6,7 +6,7 @@ import '../sass/driver.scss';
 window.Omotenashi = window.Omotenashi || (() => {
     const URL = process.env.APP_URL;
     const LOG_KEY = 'omotenashi_log';
-    let log = null;
+    let log = {};
 
     let KEY = null;
 
@@ -21,7 +21,7 @@ window.Omotenashi = window.Omotenashi || (() => {
     };
 
 
-    const saveLog = (log, data) => {
+    const saveLog = (data) => {
         try {
             log = {
                 ...log,
@@ -63,6 +63,19 @@ window.Omotenashi = window.Omotenashi || (() => {
                 step -=1;
             },
             onReset() {
+
+                if (tutorial_settings.only_once === 'yes') {
+                    if (!only_once.includes(key)) {
+                        only_once = [
+                            ...only_once,
+                            key,
+                        ];
+                    }
+                    log = saveLog({
+                        only_once,
+                    });
+                }
+
                 if (!gtag || !GA_TRACKING_ID) return;
 
                 const eventField = {
@@ -77,18 +90,6 @@ window.Omotenashi = window.Omotenashi || (() => {
                     gtag(HIT_TYPE, EVENT_ACTION_COMPLETE, eventField);
                 } else {
                     gtag(HIT_TYPE, EVENT_ACTION_INCOMPLETE, eventField);
-                }
-
-                if (tutorial_settings.only_once === 'yes') {
-                    if (!only_once.includes(key)) {
-                        only_once = [
-                            ...only_once,
-                            key,
-                        ];
-                    }
-                    log = saveLog(log, {
-                        only_once,
-                    });
                 }
             }
         });
@@ -111,14 +112,15 @@ window.Omotenashi = window.Omotenashi || (() => {
 
                 const {
                     steps = [],
-                    id,
-                    path,
                     query,
                 } = tutorial;
 
-                const key = `${path}${query ? query : ''}`;
+                const key = `${window.location.pathname}${query ? query : ''}`;
+                console.log(key);
                 if (steps.length > 0 && !only_once.includes(key)) {
-                    activateDriver(key, tutorial, property_id, tutorial_settings)
+                    window.setTimeout(() => {
+                        activateDriver(key, tutorial, property_id, tutorial_settings)
+                    }, 1000);
                 }
             })
             .catch(error => {
@@ -149,7 +151,7 @@ window.Omotenashi = window.Omotenashi || (() => {
 
             if (!log.EU_ID) {
                 const identifier = uuidv4();
-                log = saveLog(log, {
+                log = saveLog({
                     EU_ID: identifier,
                 });
             }

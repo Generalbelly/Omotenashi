@@ -14,12 +14,20 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\Domains\Entities\TutorialEntity::class, function (Faker $faker) {
+    $path = [
+        "deepness" => 0,
+        "value" => "/",
+        "regex" => false
+    ];
     return [
         'id' => $faker->uuid,
         'name' => $faker->name,
         'description' => $faker->realText(),
         'steps' => [],
-        'path' => '/',
-        'query' => null,
+        'path' => $path,
+        'parameters' => [],
+        'last_time_used_at' => [
+            $path['value'] => null
+        ],
     ];
 });

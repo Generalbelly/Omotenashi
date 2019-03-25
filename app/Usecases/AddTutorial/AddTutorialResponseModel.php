@@ -27,17 +27,12 @@ class AddTutorialResponseModel {
     /**
      * @var string
      */
-    public $url;
-
-    /**
-     * @var string
-     */
     public $path;
 
     /**
-     * @var string
+     * @var array
      */
-    public $query;
+    public $parameters;
 
     /**
      * @var string
@@ -50,10 +45,8 @@ class AddTutorialResponseModel {
         $this->name = $attributes['name'];
         $this->description = $attributes['description'];
         $this->steps = $attributes['steps'];
-        $this->url = $attributes['protocol'].'://'.$attributes['domain'].$attributes['path'];
-        $this->url .= $attributes['query'] ? '?'.$attributes['query'] : '';
-        $this->query = $attributes['query'];
         $this->path = $attributes['path'];
+        $this->parameters = $attributes['parameters'];
         $this->project_id = $attributes['project_id'];
     }
 

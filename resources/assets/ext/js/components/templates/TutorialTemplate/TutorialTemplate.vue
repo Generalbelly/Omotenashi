@@ -50,15 +50,17 @@
                 slot-scope="{invalid}"
                 v-show="isEditingTutorial || isAddingTutorial"
                 :id="innerTutorialEntity.id"
-                :url="currentUrlPath"
+                :path="innerTutorialEntity.path"
                 :name="innerTutorialEntity.name"
                 :description="innerTutorialEntity.description"
                 :steps="innerTutorialEntity.steps"
                 :parameters="innerTutorialEntity.parameters"
+                :origin="origin"
                 @update:name="onTutorialUpdate('name', $event)"
                 @update:description="onTutorialUpdate('description', $event)"
                 @update:steps="onTutorialUpdate('steps', $event)"
                 @update:parameters="onTutorialUpdate('parameters', $event)"
+                @update:path="onTutorialUpdate('path', $event)"
                 @click:save="onClickSave"
                 @click:cancel="onClickCancel"
             >
@@ -100,6 +102,7 @@
     import Message from "../../molecules/Message";
     import ProjectNotFoundModal from "../../organisms/ProjectNotFoundModal";
     import TutorialEntity from "../../../../../js/components/atoms/Entities/TutorialEntity";
+    import ProjectEntity from "../../../../../js/components/atoms/Entities/ProjectEntity";
 
     export const states = {
         beingHome: 'beingHome',
@@ -124,6 +127,12 @@
             Setting,
         },
         props: {
+            projectEntity: {
+                type: Object,
+                default() {
+                    return new ProjectEntity()
+                }
+            },
             tutorialEntities: {
                 type: Array,
                 default() {
@@ -254,6 +263,9 @@
                     })
             },
             onClickCancel() {
+                if (this.state === states.addingTutorial) {
+                    this.innerTutorialEntity = new TutorialEntity()
+                }
                 this.updateState(states.beingHome)
             },
             onEditTutorialClick() {
@@ -298,9 +310,12 @@
             isDeletingTutorial() {
                 return (this.state === states.deletingTutorial)
             },
-            currentUrlPath() {
-                return this.innerTutorialEntity.getUrlCurrentUrlPath();
-            }
+            origin() {
+                if (this.projectEntity) {
+                    return `${this.projectEntity.protocol}://${this.projectEntity.domain}`
+                }
+                return null;
+            },
         },
     }
 </script>

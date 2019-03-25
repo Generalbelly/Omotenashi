@@ -35,18 +35,11 @@ class UpdateTutorialUsecaseInteractor implements UpdateTutorialUsecase {
                 'name' => $request->name,
                 'description' => $request->description,
                 'steps' => $request->steps,
-                'query' => $request->query,
+                'path' => $request->path,
+                'parameters' => $request->parameters,
             ],
             $request->id
         );
-        $projectEntity = $tutorialEntity->getAttribute('projectEntity');
-
-        return new UpdateTutorialResponseModel(array_merge(
-            $tutorialEntity->toArray(),
-            [
-                'domain' => $projectEntity->getAttribute('domain'),
-                'protocol' => $projectEntity->getAttribute('protocol'),
-            ]
-        ));
+        return new UpdateTutorialResponseModel($tutorialEntity->toArray());
     }
 }

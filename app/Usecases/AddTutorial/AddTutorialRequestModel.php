@@ -35,9 +35,9 @@ class AddTutorialRequestModel {
     public $path;
 
     /**
-     * @var string
+     * @var array
      */
-    public $query;
+    public $parameters;
 
     /**
      * @var string
@@ -50,12 +50,14 @@ class AddTutorialRequestModel {
         $this->name = $data['name'];
         $this->description = $data['description'];
         $this->steps = $data['steps'];
-        $this->project_id = $data['project_id'];
-
-        $parsedUrl = parse_url($data['url']);
-        $this->domain = $parsedUrl['host'];
-        $this->path = $parsedUrl['path'];
-        $this->query = isset($parsedUrl['query']) ? $parsedUrl['query'] : null;
+        $this->path = array_merge(
+            $data['path'],
+            [
+                'deepness' => $data['path']['value'] === '/' ? 0 : count(explode('/', $data['path']['value'])) - 1,
+            ]
+        );
+        $this->parameters = $data['parameters'];
+        $this->project_id = isset($data['project_id']) ? $data['project_id'] : null;
     }
 
 }
