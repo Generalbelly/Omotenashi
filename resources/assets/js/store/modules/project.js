@@ -214,7 +214,7 @@ export const actions = {
                         response = null
                     } = error;
                     if (response) {
-                        commit(SET_ERROR_CODE, error.response.status, { root: true })
+                        commit(SET_ERROR_CODE, response.status, { root: true })
                     }
                     reject(error);
                 })

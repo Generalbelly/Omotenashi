@@ -44,7 +44,7 @@
         },
         data() {
             return {
-                url: `https://${process.env.APP_URL}`,
+                url: process.env.APP_URL,
             }
         }
     }

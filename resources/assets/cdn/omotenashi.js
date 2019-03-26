@@ -98,7 +98,7 @@ window.Omotenashi = window.Omotenashi || (() => {
     }
 
     const fetchTutorial = (url) => {
-        axios.get(`https://${URL}/api/tutorials/${KEY}?url=${url}`)
+        axios.get(`${URL}/api/tutorials/${KEY}?url=${url}`)
             .then(response => {
                 const {
                     tutorial = {},
