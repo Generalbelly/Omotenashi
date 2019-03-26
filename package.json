@@ -4,6 +4,7 @@
     "hot": "webpack-dev-server",
     "build": "webpack --hide-modules --config ./webpack.config.js",
     "build-ext": "webpack --hide-modules --config ./webpack.ext.config.js",
+    "build-ext-package": "./ext-package.sh",
     "build-cdn": "webpack --hide-modules --config ./webpack.cdn.config.js",
     "watch": "webpack --watch --progress --config ./webpack.config.js",
     "watch-ext": "webpack --watch --progress --config ./webpack.ext.config.js",

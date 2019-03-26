@@ -44,7 +44,8 @@
   "externally_connectable": {
     "matches": [
       "*://localhost/*",
-      "*://omotenashi.today/*"
+      "*://omotenashi.today/*",
+      "*://qtorial.herokuapp.co/*"
     ]
   }
 }
