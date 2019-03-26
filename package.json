@@ -9,7 +9,8 @@
     "watch-ext": "webpack --watch --progress --config ./webpack.ext.config.js",
     "watch-cdn": "webpack --watch --progress --config ./webpack.cdn.config.js",
     "storybook-ext": "start-storybook -p 9001 -c ./resources/assets/.storybook -s ./public/ext",
-    "browser-sync": "webpack --watch --config ./webpack.config.js & browser-sync start --config bs-config.js"
+    "browser-sync": "webpack --watch --config ./webpack.config.js & browser-sync start --config bs-config.js",
+    "heroku-postbuild": "build && build-ext && build-cdn"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -29,7 +30,6 @@
     "browser-sync": "^2.26.3",
     "chai": "^4.1.2",
     "clean-webpack-plugin": "^0.1.19",
-    "clipboard": "^2.0.4",
     "cross-env": "^5.1",
     "css-loader": "^0.28.11",
     "debounce": "^1.2.0",
@@ -73,6 +73,7 @@
     "auth0-js": "^9.8.0",
     "buefy": "^0.7.2",
     "bulma": "^0.7.2",
+    "clipboard": "^2.0.4",
     "dompurify": "^1.0.8",
     "dotenv": "^6.0.0",
     "driver.js": "^0.7.1",
@@ -118,6 +119,9 @@
   },
   "name": "omotenashi",
   "version": "1.0.0",
+  "engines": {
+    "yarn": "1.15.2"
+  },
   "repository": "git@Generalbelly-GitLab:Generalbelly/omotenashi.git",
   "author": "Nobuyoshi Shimmen <nobuyoshi.shimmen@gmail.com>"
 }
