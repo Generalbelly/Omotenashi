@@ -30,7 +30,6 @@
             </column>
         </columns>
         <columns
-            v-if="id"
             class="is-6"
         >
             <column class="is-two-fifths">
