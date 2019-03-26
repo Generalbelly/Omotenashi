@@ -224,11 +224,19 @@
             },
             addUserScreenClickHandler() {
                 document.querySelectorAll( 'body *' ).forEach(el => {
+                    if (el.tagName === 'A') {
+                        el.style.pointerEvents = 'none';
+                        el.style.cursor = 'default';
+                    }
                     el.addEventListener('click', this.$refs.editor.userScreenClickHandler)
                 })
             },
             removeUserScreenClickHandler() {
                 document.querySelectorAll( 'body *' ).forEach(el => {
+                    if (el.tagName === 'A') {
+                        el.style.pointerEvents = null;
+                        el.style.cursor = null;
+                    }
                     el.removeEventListener('click', this.$refs.editor.userScreenClickHandler)
                 })
             },
