@@ -27,6 +27,7 @@ class CreateTutorialsTable extends Migration
             $table->softDeletes();
 
             $table->primary('id');
+            $table->index('id', 'idx_tutorial_id');
         });
     }
 

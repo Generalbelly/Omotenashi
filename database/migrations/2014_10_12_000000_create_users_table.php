@@ -23,7 +23,8 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index(['email'], 'idx_email');
+            $table->index('email', 'idx_email');
+            $table->index('sub', 'idx_sub');
         });
     }
 
