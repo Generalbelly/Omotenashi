@@ -10,7 +10,7 @@
     "watch-cdn": "webpack --watch --progress --config ./webpack.cdn.config.js",
     "storybook-ext": "start-storybook -p 9001 -c ./resources/assets/.storybook -s ./public/ext",
     "browser-sync": "webpack --watch --config ./webpack.config.js & browser-sync start --config bs-config.js",
-    "heroku-postbuild": "build && build-ext && build-cdn"
+    "heroku-postbuild": "yarn build && yarn build-ext && yarn build-cdn"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
