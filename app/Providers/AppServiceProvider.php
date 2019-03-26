@@ -290,10 +290,10 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
-        $this->app->bind(IGoogleAnalyticsClient::class, function($app){
-            $client = new GoogleAnalyticsClient();
-            return $client;
-        });
+//        $this->app->bind(IGoogleAnalyticsClient::class, function($app){
+//            $client = new GoogleAnalyticsClient();
+//            return $client;
+//        });
 
 
         if ($this->app->environment() !== 'production') {
