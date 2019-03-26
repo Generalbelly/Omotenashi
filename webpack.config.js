@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-    mode: process.env.APP_ENV === 'prod' ? "production" : "development",
+    mode: process.env.APP_ENV !== 'local' ? "production" : "development",
     entry: { app: './resources/assets/js/app.js' },
     output: {
         filename: "js/app.js",

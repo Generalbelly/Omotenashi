@@ -3,7 +3,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-    mode: process.env.APP_ENV === 'prod' ? "production" : "development",
+    mode: process.env.APP_ENV !== 'local' ? "production" : "development",
     entry: {
         omotenashi: './resources/assets/cdn/omotenashi.js',
     },

@@ -210,7 +210,12 @@ export const actions = {
                     resolve(response);
                 })
                 .catch((error) => {
-                    commit(SET_ERROR_CODE, error.response.status, { root: true })
+                    const {
+                        response = null
+                    } = error;
+                    if (response) {
+                        commit(SET_ERROR_CODE, error.response.status, { root: true })
+                    }
                     reject(error);
                 })
         })
