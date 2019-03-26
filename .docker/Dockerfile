@@ -66,7 +66,7 @@ RUN yum -y install gcc-c++ make
 
 # yarn
 RUN wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
-RUN yum -y install yarnls
+RUN yum -y install yarn
 
 RUN systemctl enable nginx.service
 RUN systemctl enable php-fpm.service
