@@ -24,7 +24,6 @@ export default class ProjectEntity extends Entity {
         super()
         const {
             google_analytics_property_entities = [],
-            whitelisted_domain_entities = [],
             tutorial_entities = [],
             oauth_entities = [],
             ...props

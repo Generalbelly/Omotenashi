@@ -4,7 +4,7 @@
             <column class="is-two-fifths">
                 <sub-heading class="has-text-weight-bold has-margin-bottom-4">Basic</sub-heading>
                 <p>
-                    The domain is where users will actually visit, while the whitelisted domains are typically staging/design websites where you can create and edit tutorials code-free with <a href="">{{ appName }} Chrome extension</a>.
+                    The domain is where users will actually visit.
                 </p>
             </column>
             <column>
@@ -30,7 +30,7 @@
             <column class="is-two-fifths">
                 <sub-heading class="has-text-weight-bold has-margin-bottom-4">Tutorials</sub-heading>
                 <p>
-                    Set rules for tutorials.
+                    Set rules for tutorials. You can override them at tutorial-level.
                 </p>
             </column>
             <column>
