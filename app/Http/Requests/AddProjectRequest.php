@@ -40,7 +40,7 @@ class AddProjectRequest extends FormRequest
                 Rule::in(['http', 'https']),
                 'max:20',
             ],
-            'settings' => [
+            'tutorial_settings' => [
                 'required',
                 function ($attribute, $value, $fail) {
                     $invalids = [];
@@ -52,7 +52,7 @@ class AddProjectRequest extends FormRequest
                                 }
                                 break;
                             case 'only_once':
-                                if (!in_array($v, ['true', 'false'])) {
+                                if (!in_array($v, ['yes', 'no'])) {
                                     $invalids[] = $k;
                                 }
                                 break;

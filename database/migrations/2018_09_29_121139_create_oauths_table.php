@@ -26,6 +26,7 @@ class CreateOAuthsTable extends Migration
             $table->softDeletes();
 
             $table->primary('id');
+            $table->index('id', 'idx_oauth_id');
             $table->index('project_id', 'idx_oauth_project_id');
 
         });
