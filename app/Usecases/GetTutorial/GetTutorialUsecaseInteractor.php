@@ -137,7 +137,7 @@ class GetTutorialUsecaseInteractor implements GetTutorialUsecase {
             [
                 'tutorial' => $tutorialEntity->toArray(),
                 'property_id' => $googleAnalyticsPropertyEntity ? $googleAnalyticsPropertyEntity->getAttribute('property_id') : null,
-                'tutorial_settings' => $tutorialSettings,
+                'settings' => $tutorialSettings,
             ]
         );
         return new GetTutorialResponseModel($response);

@@ -17,9 +17,9 @@ class CreateTutorialsTable extends Migration
             $table->string('id')->unique();
             $table->string('name');
             $table->string('description');
-            $table->longText('steps');
             $table->json('path');
             $table->json('parameters');
+            $table->json('settings');
             $table->json('last_time_used_at');
             $table->string('project_id');
 
@@ -27,7 +27,6 @@ class CreateTutorialsTable extends Migration
             $table->softDeletes();
 
             $table->primary('id');
-            $table->index('id', 'idx_tutorial_id');
         });
     }
 

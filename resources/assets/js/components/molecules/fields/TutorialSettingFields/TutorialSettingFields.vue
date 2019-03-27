@@ -36,7 +36,7 @@
                 </radio-field>
             </template>
         </column>
-        <fade-transition-group v-if="onlyOnce==='yes'">
+        <fade-transition-group v-if="onlyOnce==='true'">
             <base-label key="label">
                 For how long?
             </base-label>
@@ -146,11 +146,11 @@
                 return [
                     {
                         text: 'Yes',
-                        value: 'yes',
+                        value: 'true',
                     },
                     {
                         text: 'No',
-                        value: 'no',
+                        value: 'false',
                     }
                 ]
             },

@@ -40,7 +40,7 @@ class AddProjectRequestModel {
         $this->name = $data['name'];
         $this->domain = $data['domain'];
         $this->protocol = $data['protocol'];
-        $this->tutorial_settings = $data['tutorial_settings'];
+        $this->settings = $data['settings'];
         $this->whitelistedDomainEntities = $data['whitelisted_domain_entities'];
     }
 

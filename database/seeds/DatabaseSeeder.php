@@ -18,9 +18,7 @@ class DatabaseSeeder extends Seeder
                     'protocol' => 'http',
                     'domain' => 'omotenashi-customer-site.com',
                 ]);
-                $tutorialEntity = factory(App\Domains\Entities\TutorialEntity::class)->make([
-                    'steps' => [],
-                ]);
+                $tutorialEntity = factory(App\Domains\Entities\TutorialEntity::class)->make();
                 $whitelistedDomainEntities = [];
                 $whitelistedDomainEntities[] = factory(App\Domains\Entities\WhitelistedDomainEntity::class)->make([
                     'protocol' => 'http',
