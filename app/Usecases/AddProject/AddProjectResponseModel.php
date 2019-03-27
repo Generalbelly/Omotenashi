@@ -57,7 +57,7 @@ class AddProjectResponseModel {
         $this->name = $attributes['name'];
         $this->domain = $attributes['domain'];
         $this->protocol = $attributes['protocol'];
-        $this->tutorial_settings = $attributes['tutorial_settings'];
+        $this->settings = $attributes['settings'];
         $this->user_id = $attributes['user_id'];
         $this->whitelisted_domain_entities = array_get($attributes, 'whitelisted_domain_entities', []);
         $this->updated_at = $attributes['updated_at'];

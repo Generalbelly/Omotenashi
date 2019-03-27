@@ -8,9 +8,9 @@ class TutorialEntity extends Entity
     protected $fillable = [
         'name',
         'description',
-        'steps',
         'path',
         'parameters',
+        'settings',
         'project_id',
         'last_time_used_at',
     ];
@@ -19,15 +19,12 @@ class TutorialEntity extends Entity
         'description',
     ];
     protected $casts = [
-        'steps' => 'array',
         'path' => 'array',
+        'settings' => 'array',
         'parameters' => 'array',
         'last_time_used_at' => 'array',
     ];
 
-//    protected $dates = [
-//        'last_time_used_at',
-//    ];
     protected $appends = ['query'];
 
     public function projectEntity()
@@ -35,6 +32,15 @@ class TutorialEntity extends Entity
         return $this->belongsTo(
             'App\Domains\Entities\ProjectEntity',
             'project_id',
+            'id'
+        );
+    }
+
+    public function tutorialStepperEntities()
+    {
+        return $this->hasMany(
+            'App\Domains\Entities\TutorialStepperEntity',
+            'tutorial_id',
             'id'
         );
     }

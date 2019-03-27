@@ -10,20 +10,23 @@ class ProjectEntity extends Entity
         'domain',
         'protocol',
         'user_id',
-        'tutorial_settings',
+        'settings',
     ];
 
     public $searchColumns = ['name', 'domain'];
 
+    public $casts = [
+        'settings' => 'array',
+    ];
 
     public function getTutorialSettingsAttribute()
     {
-        return json_decode($this->attributes['tutorial_settings'], true);
+        return json_decode($this->attributes['settings'], true);
     }
 
     public function setTutorialSettingsAttribute($value)
     {
-        $this->attributes['tutorial_settings'] = json_encode($value);
+        $this->attributes['settings'] = json_encode($value);
     }
 
     public function userEntity()

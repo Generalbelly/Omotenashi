@@ -35,7 +35,7 @@ class UpdateProjectUsecaseInteractor implements UpdateProjectUsecase {
             'domain' => $request->domain,
             'protocol' => $request->protocol,
             'name' => $request->name,
-            'tutorial_settings' => $request->tutorial_settings,
+            'settings' => $request->settings,
         ], $request->id);
 
         $whitelistedDomainEntities = $this->whitelistedDomainRepository->batchUpdate(

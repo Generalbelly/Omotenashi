@@ -3,8 +3,6 @@
 namespace App\Domains\Entities\Observers;
 
 use App\Domains\Entities\TutorialEntity;
-use Ramsey\Uuid\Uuid;
-use Log;
 
 class TutorialEntityObserver extends EntityObserver
 {
@@ -14,26 +12,4 @@ class TutorialEntityObserver extends EntityObserver
         $tutorialEntity->setAttribute('id', $id);
     }
 
-    public function saving(TutorialEntity $tutorialEntity)
-    {
-        $steps = [];
-        foreach ($tutorialEntity->getAttribute('steps') as $step) {
-            if (!isset($step['id'])) {
-                do {
-                    $uuidObject = Uuid::uuid4();
-                    $uuid = $uuidObject->toString();
-
-                    $duplicate = false;
-                    foreach ($tutorialEntity->getAttribute('steps') as $s) {
-                        if (isset($s['id'])) {
-                            $duplicate = $s['id'] === $uuid;
-                        }
-                    }
-                } while ($duplicate);
-                $step['id'] = $uuid;
-            }
-            $steps[] = $step;
-        }
-        $tutorialEntity->setAttribute('steps', $steps);
-    }
 }

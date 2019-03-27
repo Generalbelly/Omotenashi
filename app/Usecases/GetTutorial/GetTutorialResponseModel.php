@@ -12,7 +12,7 @@ class GetTutorialResponseModel {
     {
         $this->tutorial = $attributes['tutorial'];
         $this->property_id = $attributes['property_id'];
-        $this->tutorial_settings = $attributes['tutorial_settings'];
+        $this->settings = $attributes['settings'];
     }
 
 }

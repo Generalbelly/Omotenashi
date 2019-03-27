@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectsTable extends Migration
+class CreateTutorialSteppersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,16 @@ class CreateProjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('tutorial_steppers', function (Blueprint $table) {
             $table->string('id')->unique();
-            $table->string('name');
-            $table->string('protocol');
-            $table->string('domain');
-            $table->string('user_id');
-            $table->json('settings');
+            $table->longText('steps');
+            $table->longText('path');
+            $table->string('tutorial_id');
 
             $table->timestamps();
             $table->softDeletes();
 
             $table->primary('id');
-            $table->index('user_id', 'idx_project_user_id');
         });
     }
 
@@ -36,6 +33,6 @@ class CreateProjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('tutorial_steppers');
     }
 }

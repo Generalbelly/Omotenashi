@@ -36,7 +36,7 @@ class AddProjectUsecaseInteractor implements AddProjectUsecase {
             'name' => $request->name,
             'domain' => $request->domain,
             'protocol' => $request->protocol,
-            'tutorial_settings' => $request->tutorial_settings,
+            'settings' => $request->settings,
             'user_id' => $request->userKey,
         ]);
 
