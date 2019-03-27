@@ -9,7 +9,7 @@
                 :name.sync="innerProjectEntity.name"
                 :protocol.sync="innerProjectEntity.protocol"
                 :domain.sync="innerProjectEntity.domain"
-                :settings.sync="innerProjectEntity.settings"
+                :tutorial_settings.sync="innerProjectEntity.tutorial_settings"
                 :whitelisted_domain_entities.sync="innerProjectEntity.whitelisted_domain_entities"
                 :oauth_entities="innerProjectEntity.oauth_entities"
                 :google_analytics_property_entities.sync="innerProjectEntity.google_analytics_property_entities"

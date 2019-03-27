@@ -40,8 +40,8 @@
             </column>
             <column>
                 <tutorial-setting-fields
-                    :value="settings"
-                    @input="$emit('update:settings', $event)"
+                    :value="tutorial_settings"
+                    @input="$emit('update:tutorial_settings', $event)"
                 ></tutorial-setting-fields>
             </column>
         </columns>
@@ -221,7 +221,7 @@
                     return []
                 }
             },
-            settings: {
+            tutorial_settings: {
                 type: Object,
                 default() {
                     return {};

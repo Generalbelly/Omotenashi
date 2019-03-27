@@ -23,7 +23,7 @@ $factory->define(App\Domains\Entities\TutorialEntity::class, function (Faker $fa
         'id' => $faker->uuid,
         'name' => $faker->name,
         'description' => $faker->realText(),
-        'settings' => [],
+        'steps' => [],
         'path' => $path,
         'parameters' => [],
         'last_time_used_at' => [

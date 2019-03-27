@@ -16,14 +16,14 @@ use Faker\Generator as Faker;
 $factory->define(App\Domains\Entities\ProjectEntity::class, function (Faker $faker) {
     $tutorialSettings = [
         "distribution_ratio" => "random",
-        "only_once" => "true",
+        "only_once" => "yes",
         "only_once_duration" => "forever",
     ];
     return [
         'id' => $faker->uuid,
         'name' => $faker->name,
         'domain' => $faker->domainName,
-        'settings' => $tutorialSettings,
+        'tutorial_settings' => $tutorialSettings,
         'protocol' => 'https',
     ];
 });

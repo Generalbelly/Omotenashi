@@ -26,6 +26,7 @@ class CreateGoogleAnalyticsPropertiesTable extends Migration
             $table->softDeletes();
 
             $table->primary('id');
+            $table->index('id', 'idx_gap_id');
             $table->index('project_id', 'idx_gap_project_id');
         });
     }

@@ -10,9 +10,9 @@ export default class ProjectEntity extends Entity {
     protocol = null
     domain = null
     user_id = null
-    settings = {
+    tutorial_settings = {
         distribution_ratio: 'random',
-        only_once: 'true',
+        only_once: 'yes',
         only_once_duration: 'forever',
     };
     oauth_entities = []
