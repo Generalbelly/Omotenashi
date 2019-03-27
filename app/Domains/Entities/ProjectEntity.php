@@ -42,15 +42,6 @@ class ProjectEntity extends Entity
         );
     }
 
-    public function whitelistedDomainEntities()
-    {
-        return $this->hasMany(
-            'App\Domains\Entities\WhitelistedDomainEntity',
-            'project_id',
-            'id'
-        );
-    }
-
     public function googleAnalyticsPropertyEntities()
     {
         return $this->hasMany(

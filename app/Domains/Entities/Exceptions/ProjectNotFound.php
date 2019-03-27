@@ -10,7 +10,7 @@ class ProjectNotFound extends Exception implements OmotenashiException {
 
     public function __construct(string $domain)
     {
-        parent::__construct("We couldn't find a project with the whitelisted domain '".$domain."'.", 404);
+        parent::__construct("We couldn't find a project with the domain '".$domain."'.", 404);
     }
 
     public function getType(): string

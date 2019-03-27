@@ -38,13 +38,6 @@ class UpdateProjectUsecaseInteractor implements UpdateProjectUsecase {
             'tutorial_settings' => $request->tutorial_settings,
         ], $request->id);
 
-        $whitelistedDomainEntities = $this->whitelistedDomainRepository->batchUpdate(
-            $request->whitelistedDomainEntities,
-            $projectEntity,
-            'whitelistedDomainEntities',
-            'project_id'
-        );
-
         $googleAnalyticsPropertyEntities = $this->googleAnalyticsPropertyRepository->batchUpdate(
             $request->googleAnalyticsPropertyEntities,
             $projectEntity,
@@ -56,7 +49,6 @@ class UpdateProjectUsecaseInteractor implements UpdateProjectUsecase {
 
         return new UpdateProjectResponseModel(array_merge($projectEntity->toArray(),[
             'google_analytics_property_entities' => $googleAnalyticsPropertyEntities,
-            'whitelisted_domain_entities' => $whitelistedDomainEntities,
         ]));
     }
 

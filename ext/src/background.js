@@ -7,7 +7,7 @@ chrome.runtime.onMessage.addListener(function (request) {
             message: error.message,
             iconUrl: 'icons/icon128.png'
         });
-    };
+    }
 
     function sendActivateMessage(token) {
         chrome.tabs.query({

@@ -74,17 +74,6 @@ class AddProjectRequest extends FormRequest
                     }
                 },
             ],
-            'whitelisted_domain_entities' => [
-                'array',
-                'required',
-            ],
-            'whitelisted_domain_entities.*.domain' => [
-                'domain',
-            ],
-            'whitelisted_domain_entities.*.protocol' => [
-                'required',
-                'max:20',
-            ],
         ];
     }
 

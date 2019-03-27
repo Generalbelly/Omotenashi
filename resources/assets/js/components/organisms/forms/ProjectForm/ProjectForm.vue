@@ -22,11 +22,6 @@
                     v-model="domainUrl"
                 >
                 </validatable-domain-field>
-                <whitelisted-domain-fields
-                    :entities="whitelisted_domain_entities"
-                    @update:entities="$emit('update:whitelisted_domain_entities', $event)"
-                >
-                </whitelisted-domain-fields>
             </column>
         </columns>
         <columns
@@ -159,7 +154,6 @@
     import PenIcon from "../../../atoms/icons/PenIcon/PenIcon";
     import Columns from "../../../atoms/Columns/Columns";
     import Column from "../../../atoms/Column/Column";
-    import WhitelistedDomainFields from "../../../molecules/fields/WhitelistedDomainFields";
     import TutorialSettingFields from "../../../molecules/fields/TutorialSettingFields";
     import Tag from "../../../atoms/Tag/Tag";
 
@@ -168,7 +162,6 @@
         components: {
             TutorialSettingFields,
             Tag,
-            WhitelistedDomainFields,
             Column,
             Columns,
             PenIcon,
@@ -196,12 +189,6 @@
             domain: {
                 type: String,
                 default: null,
-            },
-            whitelisted_domain_entities: {
-                type: Array,
-                default() {
-                    return []
-                }
             },
             oauth_entities: {
                 type: Array,

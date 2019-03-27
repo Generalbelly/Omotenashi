@@ -19,9 +19,6 @@ use Illuminate\Support\Facades\Validator;
 use App\Repositories\BaseRepositoryContract;
 use App\Repositories\BaseRepository;
 
-use App\Repositories\WhitelistedDomain\WhitelistedDomainRepositoryContract;
-use App\Repositories\WhitelistedDomain\WhitelistedDomainRepository;
-
 use App\Repositories\OAuth\OAuthRepositoryContract;
 use App\Repositories\OAuth\OAuthRepository;
 
@@ -42,13 +39,11 @@ use App\Domains\Entities\UserEntity;
 use App\Domains\Entities\ProjectEntity;
 use App\Domains\Entities\TutorialEntity;
 use App\Domains\Entities\OAuthEntity;
-use App\Domains\Entities\WhitelistedDomainEntity;
 
 use App\Domains\Entities\Observers\UserEntityObserver;
 use App\Domains\Entities\Observers\TutorialEntityObserver;
 use App\Domains\Entities\Observers\ProjectEntityObserver;
 use App\Domains\Entities\Observers\OAuthEntityObserver;
-use App\Domains\Entities\Observers\WhitelistedDomainEntityObserver;
 
 use App\Usecases\ListTutorials\ListTutorialsUsecase;
 use App\Usecases\ListTutorials\ListTutorialsUsecaseInteractor;
@@ -129,7 +124,6 @@ class AppServiceProvider extends ServiceProvider
         TutorialEntity::observe(TutorialEntityObserver::class);
         ProjectEntity::observe(ProjectEntityObserver::class);
         OAuthEntity::observe(OAuthEntityObserver::class);
-        WhitelistedDomainEntity::observe(WhitelistedDomainEntityObserver::class);
         GoogleAnalyticsPropertyEntity::observe(GoogleAnalyticsPropertyEntityObserver::class);
 
         Validator::extend(
@@ -179,11 +173,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             ProjectRepositoryContract::class,
             ProjectRepository::class
-        );
-
-        $this->app->bind(
-            WhitelistedDomainRepositoryContract::class,
-            WhitelistedDomainRepository::class
         );
 
         $this->app->bind(
