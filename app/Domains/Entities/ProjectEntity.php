@@ -17,7 +17,7 @@ class ProjectEntity extends Entity
 
     protected $casts = [
         'tutorial_settings' => 'array',
-    ]
+    ];
 
     public function userEntity()
     {
