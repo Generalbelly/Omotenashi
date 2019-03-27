@@ -64,7 +64,7 @@ window.Omotenashi = window.Omotenashi || (() => {
             },
             onReset() {
 
-                if (tutorial_settings.only_once === 'yes') {
+                if (tutorial_settings.only_once) {
                     if (!only_once.includes(key)) {
                         only_once = [
                             ...only_once,
@@ -117,8 +117,8 @@ window.Omotenashi = window.Omotenashi || (() => {
                 const key = window.location.pathname + window.location.search;
                 if (steps.length > 0) {
                     if (
-                        tutorial_settings.only_once === 'no' ||
-                        tutorial_settings.only_once === 'yes' && !only_once.includes(key)
+                        !tutorial_settings.only_once ||
+                        tutorial_settings.only_once && !only_once.includes(key)
                     ) {
                         window.setTimeout(() => {
                             activateDriver(key, tutorial, property_id, tutorial_settings)

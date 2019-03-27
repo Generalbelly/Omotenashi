@@ -52,7 +52,7 @@ class AddProjectRequest extends FormRequest
                                 }
                                 break;
                             case 'only_once':
-                                if (!in_array($v, ['yes', 'no'])) {
+                                if (!in_array($v, ['true', 'false'])) {
                                     $invalids[] = $k;
                                 }
                                 break;

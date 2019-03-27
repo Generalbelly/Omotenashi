@@ -16,7 +16,7 @@ use Faker\Generator as Faker;
 $factory->define(App\Domains\Entities\ProjectEntity::class, function (Faker $faker) {
     $tutorialSettings = [
         "distribution_ratio" => "random",
-        "only_once" => "yes",
+        "only_once" => true,
         "only_once_duration" => "forever",
     ];
     return [

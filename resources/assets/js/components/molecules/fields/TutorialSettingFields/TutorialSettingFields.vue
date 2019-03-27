@@ -26,7 +26,7 @@
             Hide after viewing once
         </base-label>
         <column>
-            <template v-for="option in yesOrNo">
+            <template v-for="option in booleanOptions">
                 <radio-field
                     v-model="onlyOnce"
                     :native-value="option.value"
@@ -36,7 +36,7 @@
                 </radio-field>
             </template>
         </column>
-        <fade-transition-group v-if="onlyOnce==='yes'">
+        <fade-transition-group v-if="onlyOnce">
             <base-label key="label">
                 For how long?
             </base-label>
@@ -142,15 +142,15 @@
                     }
                 ]
             },
-            yesOrNo() {
+            booleanOptions() {
                 return [
                     {
                         text: 'Yes',
-                        value: 'yes',
+                        value: true,
                     },
                     {
                         text: 'No',
-                        value: 'no',
+                        value: false,
                     }
                 ]
             },
