@@ -4,7 +4,6 @@ namespace App\Usecases\AddProject;
 
 use App\Domains\Entities\ProjectEntity;
 use App\Repositories\Project\ProjectRepositoryContract;
-use App\Repositories\WhitelistedDomain\WhitelistedDomainRepositoryContract;
 use Log;
 
 class AddProjectUsecaseInteractor implements AddProjectUsecase {
@@ -15,11 +14,9 @@ class AddProjectUsecaseInteractor implements AddProjectUsecase {
     /**
      * AddProjectUsecaseInteractor constructor.
      * @param ProjectRepositoryContract $projectRepository
-     * @param WhitelistedDomainRepositoryContract $whitelistedDomainRepository
      */
     public function __construct(
-        ProjectRepositoryContract $projectRepository,
-        WhitelistedDomainRepositoryContract $whitelistedDomainRepository
+        ProjectRepositoryContract $projectRepository
     ){
         $this->projectRepository = $projectRepository;
         $this->whitelistedDomainRepository = $whitelistedDomainRepository;

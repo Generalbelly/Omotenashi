@@ -2,14 +2,49 @@ import Vue from 'vue'
 import Buefy from 'buefy'
 import VeeValidate from 'vee-validate'
 import store from './store'
-import '../sass/app.scss'
-// import 'buefy/dist/buefy.css'
-import './bootstrap'
 import router from './router'
 import App from './App.vue'
+import './bootstrap'
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+    faCode,
+    faExternalLinkAlt,
+    faPen,
+    faQuestionCircle,
+    faTrash,
+    faSearch,
+    faPlus,
+    faArrowUp,
+    faAngleLeft,
+    faAngleRight
+} from '@fortawesome/free-solid-svg-icons'
+
+import {
+    faFrown
+} from '@fortawesome/free-regular-svg-icons'
+
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(
+    faCode,
+    faExternalLinkAlt,
+    faFrown,
+    faPen,
+    faQuestionCircle,
+    faTrash,
+    faSearch,
+    faPlus,
+    faArrowUp,
+    faAngleLeft,
+    faAngleRight
+)
+
+import '../sass/app.scss'
 
 Vue.use(Buefy, {
     defaultIconPack: "fas",
+    defaultIconComponent: FontAwesomeIcon
 })
 Vue.use(VeeValidate, {
     aria: true,

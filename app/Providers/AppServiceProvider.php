@@ -6,6 +6,8 @@ namespace App\Providers;
 
 use App\Domains\Entities\GoogleAnalyticsPropertyEntity;
 use App\Domains\Entities\Observers\GoogleAnalyticsPropertyEntityObserver;
+use App\Domains\Entities\Observers\TutorialStepEntityObserver;
+use App\Domains\Entities\TutorialStepEntity;
 use App\Usecases\AddOAuth\AddOAuthUsecase;
 use App\Usecases\AddOAuth\AddOAuthUsecaseInteractor;
 use App\Usecases\DeleteOAuth\DeleteOAuthUsecase;
@@ -29,8 +31,8 @@ use Auth0\Login\Contract\Auth0UserRepository;
 use App\Repositories\Project\ProjectRepositoryContract;
 use App\Repositories\Project\ProjectRepository;
 
-use App\Repositories\Tutorial\TutorialRepositoryContract;
-use App\Repositories\Tutorial\TutorialRepository;
+use App\Repositories\Tutorial\TutorialStepRepositoryContract;
+use App\Repositories\Tutorial\TutorialStepRepository;
 
 use App\Repositories\GoogleAnalyticsProperty\GoogleAnalyticsPropertyRepositoryContract;
 use App\Repositories\GoogleAnalyticsProperty\GoogleAnalyticsPropertyRepository;
@@ -125,6 +127,7 @@ class AppServiceProvider extends ServiceProvider
         ProjectEntity::observe(ProjectEntityObserver::class);
         OAuthEntity::observe(OAuthEntityObserver::class);
         GoogleAnalyticsPropertyEntity::observe(GoogleAnalyticsPropertyEntityObserver::class);
+        TutorialStepEntity::observe(TutorialStepEntityObserver::class);
 
         Validator::extend(
             'uuid',
@@ -166,8 +169,8 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            TutorialRepositoryContract::class,
-            TutorialRepository::class
+            TutorialStepRepositoryContract::class,
+            TutorialStepRepository::class
         );
 
         $this->app->bind(

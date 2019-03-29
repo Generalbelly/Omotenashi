@@ -5,22 +5,18 @@ namespace App\Usecases\UpdateProject;
 use App\Domains\Entities\ProjectEntity;
 use App\Repositories\GoogleAnalyticsProperty\GoogleAnalyticsPropertyRepositoryContract;
 use App\Repositories\Project\ProjectRepositoryContract;
-use App\Repositories\WhitelistedDomain\WhitelistedDomainRepositoryContract;
 use Log;
 
 class UpdateProjectUsecaseInteractor implements UpdateProjectUsecase {
 
     private $projectRepository;
-    private $whitelistedDomainRepository;
     private $googleAnalyticsPropertyRepository;
 
     public function __construct(
         ProjectRepositoryContract $projectRepository,
-        WhitelistedDomainRepositoryContract $whitelistedDomainRepository,
         GoogleAnalyticsPropertyRepositoryContract $googleAnalyticsPropertyRepository
     ){
         $this->projectRepository = $projectRepository;
-        $this->whitelistedDomainRepository = $whitelistedDomainRepository;
         $this->googleAnalyticsPropertyRepository = $googleAnalyticsPropertyRepository;
     }
 

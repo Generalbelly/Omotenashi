@@ -27,7 +27,7 @@
             </validatable-textarea-field>
             <div>
                 <div class="has-padding-bottom-4">
-                    Show this tutorial for a user visiting the following url.
+                    Start this tutorial for a user visiting the following url.
                 </div>
                 <columns
                     v-if="innerPath.regex"
@@ -103,20 +103,19 @@
     </CardModal>
 </template>
 <script>
-    // import { Validator } from 'vee-validate'
     import BaseIcon from '../../atoms/BaseIcon'
     import BaseButton from '../../atoms/BaseButton'
     import BaseHeader from "../../atoms/BaseHeader";
     import BaseLabel from "../../atoms/BaseLabel";
     import BaseCheckBox from "../../atoms/BaseCheckBox"
     import CardModal from '../../molecules/CardModal'
-    import ValidatableTextField from "../../molecules/fields/ValidatableTextField";
-    import TextField from "../../molecules/fields/TextField";
-    import TextareaField from "../../molecules/fields/TextareaField";
-    import ValidatableTextareaField from "../../molecules/fields/ValidatableTextareaField";
     import ParameterFields from "../../molecules/fields/ParameterFields/ParameterFields";
     import Columns from "../../../../../js/components/atoms/Columns/Columns";
     import Column from "../../../../../js/components/atoms/Column/Column";
+    import ValidatableTextField from "../../../../../js/components/molecules/fields/ValidatableTextField";
+    import TextField from "../../../../../js/components/atoms/fields/TextField";
+    import TextareaField from "../../../../../js/components/atoms/fields/TextareaField";
+    import ValidatableTextareaField from "../../../../../js/components/molecules/fields/ValidatableTextareaField";
 
     // Validator.extend('path-regex', (value, args) => {
     //     return (value.match(/\//g) || []).length === args[0];
@@ -125,15 +124,15 @@
     export default {
         name: 'Setting',
         components: {
+            ValidatableTextareaField,
             TextareaField,
+            TextField,
+            ValidatableTextField,
             Column,
             Columns,
             ParameterFields,
             BaseLabel,
             BaseHeader,
-            ValidatableTextareaField,
-            ValidatableTextField,
-            TextField,
             BaseCheckBox,
             BaseButton,
             CardModal,

@@ -3,7 +3,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-    mode: process.env.APP_ENV !== 'local' ? "production" : "development",
     entry: { app: './resources/assets/ext/js/app.js' },
     output: {
         path: path.resolve(__dirname, "public/ext")
@@ -47,13 +46,6 @@ module.exports = {
                             plugins: [
                                 '@babel/plugin-proposal-class-properties',
                                 '@babel/plugin-proposal-object-rest-spread',
-                                ["transform-imports", {
-                                    "@fortawesome": {
-                                        "transform": "@fortawesome/free-solid-svg-icons/${member}",
-                                        "preventFullImport": true,
-                                        "skipDefaultConversion": true,
-                                    }
-                                }],
                             ]
                         }
                     }
@@ -71,7 +63,4 @@ module.exports = {
             vue: 'vue/dist/vue.esm.js'
         }
     },
-    watchOptions: {
-        poll: true,
-    }
 };

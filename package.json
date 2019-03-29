@@ -2,13 +2,12 @@
   "private": true,
   "scripts": {
     "hot": "webpack-dev-server",
-    "build": "webpack --hide-modules --config ./webpack.config.js",
-    "build-ext": "webpack --hide-modules --config ./webpack.ext.config.js",
-    "build-ext-package": "./ext-package.sh",
-    "build-cdn": "webpack --hide-modules --config ./webpack.cdn.config.js",
-    "watch": "webpack --watch --progress --config ./webpack.config.js",
-    "watch-ext": "webpack --watch --progress --config ./webpack.ext.config.js",
-    "watch-cdn": "webpack --watch --progress --config ./webpack.cdn.config.js",
+    "build": "webpack --hide-modules --mode=production --config ./webpack.config.js",
+    "build-ext": "webpack --hide-modules --mode=production --config ./webpack.ext.config.js",
+    "build-cdn": "webpack --hide-modules --mode=production --config ./webpack.cdn.config.js",
+    "watch": "webpack --watch --progress --mode=development --config ./webpack.config.js",
+    "watch-ext": "webpack --watch --progress --mode=development --config ./webpack.ext.config.js",
+    "watch-cdn": "webpack --watch --progress  --mode=development --config ./webpack.cdn.config.js",
     "storybook-ext": "start-storybook -p 9001 -c ./resources/assets/.storybook -s ./public/ext",
     "browser-sync": "webpack --watch --config ./webpack.config.js & browser-sync start --config bs-config.js",
     "build-all": "yarn build && yarn build-ext && yarn build-cdn",
@@ -27,7 +26,6 @@
     "axios": "^0.18",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.2",
-    "babel-plugin-transform-imports": "^1.5.1",
     "babel-preset-vue": "^2.0.2",
     "browser-sync": "^2.26.3",
     "chai": "^4.1.2",
@@ -67,9 +65,10 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
-    "@fortawesome/fontawesome-svg-core": "^1.2.2",
-    "@fortawesome/free-solid-svg-icons": "^5.2.0",
-    "@fortawesome/vue-fontawesome": "^0.1.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.17",
+    "@fortawesome/free-regular-svg-icons": "^5.8.1",
+    "@fortawesome/free-solid-svg-icons": "^5.8.1",
+    "@fortawesome/vue-fontawesome": "^0.1.6",
     "@medv/finder": "^1.1.0",
     "auth0-js": "^9.8.0",
     "buefy": "^0.7.2",
@@ -98,16 +97,7 @@
           "loose": true
         }
       ],
-      "@babel/plugin-proposal-object-rest-spread",
-      [
-        "transform-imports",
-        {
-          "@fortawesome": {
-            "transform": "@fortawesome/free-solid-svg-icons/${member}",
-            "preventFullImport": true
-          }
-        }
-      ]
+      "@babel/plugin-proposal-object-rest-spread"
     ]
   },
   "nyc": {

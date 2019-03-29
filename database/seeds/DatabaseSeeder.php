@@ -18,9 +18,7 @@ class DatabaseSeeder extends Seeder
                     'protocol' => 'http',
                     'domain' => 'omotenashi-customer-site.com',
                 ]);
-                $tutorialEntity = factory(App\Domains\Entities\TutorialEntity::class)->make([
-                    'steps' => [],
-                ]);
+                $tutorialEntity = factory(App\Domains\Entities\TutorialEntity::class)->make();
                 $userEntity->sub = 'auth0|5bc9e49fc7d2f35b924027ce'; // auth0
                 $userEntity->email = 'nobuyoshi.shimmen@gmail.com';
                 $userEntity->name = 'Nobu';

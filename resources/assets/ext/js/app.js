@@ -1,26 +1,49 @@
 import Vue from 'vue'
-import VeeValidate from 'vee-validate';
-
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import {
-    faHome,
-    faPlay,
-    faCircle,
-    faPlus,
-    faPlusCircle,
-    faTrash,
-    faPen,
-    faEdit,
-    faExchangeAlt,
-    faTimes,
-    faExclamationCircle,
-    faCheck,
-} from '@fortawesome'
-
+import Buefy from 'buefy'
+import VeeValidate from 'vee-validate'
 import store from './store'
 import App from './App.vue'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+    faCode,
+    faExternalLinkAlt,
+    faPen,
+    faQuestionCircle,
+    faTrash,
+    faSearch,
+    faPlus,
+    faArrowUp,
+    faAngleLeft,
+    faAngleRight
+} from '@fortawesome/free-solid-svg-icons'
+
+import {
+    faFrown
+} from '@fortawesome/free-regular-svg-icons'
+
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(
+    faCode,
+    faExternalLinkAlt,
+    faFrown,
+    faPen,
+    faQuestionCircle,
+    faTrash,
+    faSearch,
+    faPlus,
+    faArrowUp,
+    faAngleLeft,
+    faAngleRight
+)
+
+import "../sass/app.scss"
+
+Vue.use(Buefy, {
+    defaultIconPack: 'fas',
+    defaultIconComponent: FontAwesomeIcon
+})
 Vue.use(VeeValidate, {
     aria: true,
     classNames: {},
@@ -36,29 +59,6 @@ Vue.use(VeeValidate, {
     locale: 'en',
     validity: false
 })
-
-library.add(
-    faHome,
-    faPlay,
-    faCircle,
-    faPlus,
-    faPlusCircle,
-    faTrash,
-    faPen,
-    faEdit,
-    faExchangeAlt,
-    faTimes,
-    faExclamationCircle,
-    faCheck,
-)
-
-Vue.component('font-awesome-icon', FontAwesomeIcon)
-
-// import LogRocket from 'logrocket';
-// LogRocket.init('agnj7d/omotenashi');
-
-
-import "../sass/app.scss"
 
 const rootDiv = document.createElement('div')
 rootDiv.id = "omotenashi"

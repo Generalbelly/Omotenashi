@@ -41,7 +41,7 @@
 </template>
 
 <script>
-    import FrownIcon from "../../atoms/icons/FrownIcon/FrownIcon";
+    import FrownIcon from "../../atoms/icons/FrownIcon";
     export default {
         name: 'DataTable',
         components: {FrownIcon},

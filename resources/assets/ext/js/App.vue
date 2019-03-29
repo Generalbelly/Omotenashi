@@ -18,7 +18,7 @@
     </div>
 </template>
 <script>
-    import TutorialPage from './components/pages/TutorialPage'
+    import TutorialPage from './components/pages/TutorialsPage'
     import GreetingModal from './components/organisms/GreetingModal'
     import Navbar from "./components/organisms/Navbar"
     import ProjectNotFoundModal from "./components/organisms/ProjectNotFoundModal"
@@ -28,6 +28,7 @@
     } from 'vuex'
 
     export default {
+        name: 'App',
         components: {
             ProjectNotFoundModal,
             Navbar,

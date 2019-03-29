@@ -52,8 +52,6 @@ class ListTutorialsRequestModel {
         $this->search = $data['search'];
         $this->perPage = $data['perPage'];
         $this->domain = $data['domain'];
-        $this->path = $data['path'];
-        $this->deepness = $data['path'] === '/' ? 0 : count(explode('/', $data['path'])) - 1;
     }
 
 }

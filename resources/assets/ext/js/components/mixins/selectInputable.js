@@ -16,9 +16,13 @@ const props = {
         default: 'text',
     },
     itemValue: {
-        type: String,
+        type: [String, Boolean, Number],
         default: 'value',
     },
+    noItemSelectedText: {
+        type: String,
+        default: 'Select an item',
+    }
 }
 
 export default {

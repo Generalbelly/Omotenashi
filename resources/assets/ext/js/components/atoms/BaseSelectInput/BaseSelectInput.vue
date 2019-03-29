@@ -5,6 +5,13 @@
     >
         <select v-model="inputValue">
             <option
+                disabled="disabled"
+                hidden="hidden"
+                :value="null"
+            >
+                {{ noItemSelectedText }}
+            </option>
+            <option
                 v-for="(item, itemIndex) in items"
                 :key="itemIndex"
                 :value="item[itemValue]"
@@ -39,6 +46,10 @@
                 type: [String, Boolean, Number],
                 default: null,
             },
+            noItemSelectedText: {
+                type: String,
+                default: 'Select an item',
+            }
         },
         computed: {
             inputValue: {

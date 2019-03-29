@@ -4,6 +4,7 @@ export const PROJECT_NOT_FOUND = 'PROJECT_NOT_FOUND'
 
 // constants
 export const EXT_LOG_KEY = '_ot_ext_log'
+export const SET_ERROR_CODE = 'SET_ERROR_CODE'
 
 
 export const LIST_TUTORIALS = 'LIST_TUTORIALS'

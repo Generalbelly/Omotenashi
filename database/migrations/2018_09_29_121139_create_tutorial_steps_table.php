@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOAuthsTable extends Migration
+class CreateTutorialStepsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,21 @@ class CreateOAuthsTable extends Migration
      */
     public function up()
     {
-        Schema::create('oauths', function (Blueprint $table) {
+        Schema::create('tutorial_steps', function (Blueprint $table) {
             $table->string('id')->unique();
-            $table->string('service');
-            $table->string('email');
-            $table->string('access_token');
-            $table->string('refresh_token');
-            $table->timestamp('expired_at');
-            $table->string('project_id');
+            $table->json('path');
+            $table->json('parameters');
+            $table->string('type');
+            $table->longText('content');
+            $table->json('trigger');
+            $table->string('selector')->nullable()->default(null);
+
+            $table->string('tutorial_id');
 
             $table->timestamps();
             $table->softDeletes();
 
             $table->primary('id');
-            $table->index('project_id', 'idx_oauth_project_id');
-
         });
     }
 
@@ -38,6 +38,6 @@ class CreateOAuthsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('oauths');
+        Schema::dropIfExists('tutorial_steps');
     }
 }

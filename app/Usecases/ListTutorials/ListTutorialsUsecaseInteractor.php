@@ -5,16 +5,15 @@ namespace App\Usecases\ListTutorials;
 use App\Domains\Entities\Exceptions\ProjectNotFound;
 use App\Domains\Entities\ProjectEntity;
 use App\Domains\Entities\TutorialEntity;
-use App\Repositories\Tutorial\TutorialRepositoryContract;
+use App\Repositories\Tutorial\TutorialStepRepositoryContract;
 use App\Repositories\Project\ProjectRepositoryContract;
-use App\Repositories\WhitelistedDomain\WhitelistedDomainRepositoryContract;
 use Log;
 use DB;
 
 class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
 
     /**
-     * @var TutorialRepositoryContract
+     * @var TutorialStepRepositoryContract
      */
     private $tutorialRepository;
 
@@ -24,24 +23,16 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
     private $projectRepository;
 
     /**
-     * @var WhitelistedDomainRepositoryContract
-     */
-    private $whitelistedDomainRepository;
-
-    /**
      * ListTutorialsUsecaseInteractor constructor.
-     * @param TutorialRepositoryContract $tutorialRepository
+     * @param TutorialStepRepositoryContract $tutorialRepository
      * @param ProjectRepositoryContract $projectRepository
-     * @param WhitelistedDomainRepositoryContract $whitelistedDomainRepository
      */
     public function __construct(
-        TutorialRepositoryContract $tutorialRepository,
-        ProjectRepositoryContract $projectRepository,
-        WhitelistedDomainRepositoryContract $whitelistedDomainRepository
+        TutorialStepRepositoryContract $tutorialRepository,
+        ProjectRepositoryContract $projectRepository
     ){
         $this->tutorialRepository = $tutorialRepository;
         $this->projectRepository = $projectRepository;
-        $this->whitelistedDomainRepository = $whitelistedDomainRepository;
     }
 
 
@@ -53,56 +44,42 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
     public function handle(ListTutorialsRequestModel $request): ListTutorialsResponseModel
     {
         /** @var ProjectEntity $projectEntity */
-        $projectEntity = $this->projectRepository->where('user_id', $request->userKey)->whereHas(
-            'whitelistedDomainEntities', function($query) use ($request) {
-                $query->where('domain', '=', $request->domain);
-        })->first();
+        $projectEntity = $this->projectRepository->where([
+            [
+                'column' => 'user_id',
+                'operator' => '=',
+                'value' => $request->userKey,
+            ],
+            [
+                'column' => 'domain',
+                'operator' => '=',
+                'value' => $request->domain,
+            ]
+        ])->first();
 
-        if ($projectEntity) {
-            $predicates = [
-                [
-                    'column' => 'project_id',
-                    'operator' => '=',
-                    'value' => $projectEntity->getAttribute('id'),
-                ],
-                [
-                    'column' => 'path->deepness',
-                    'operator' => '=',
-                    'value' => $request->deepness,
-                ],
-            ];
-
-            $result = $this->tutorialRepository->paging(
-                $predicates,
-                $request->orders,
-                $request->page,
-                $request->search,
-                $request->perPage
-            );
-
-            $tutorialEntities = [];
-
-            /** @var TutorialEntity $tutorialEntity */
-            foreach ($result['entities'] as $tutorialEntity) {
-                $path = $tutorialEntity->getAttribute('path');
-                if ((
-                    $path['regex'] == false &&
-                    $path['value'] === $request->path
-                ) || (
-                    $path['regex'] == true &&
-                    preg_match(TutorialEntity::generateRegex($path['value']), $request->path)
-                )) {
-                    $tutorialEntities[] = $tutorialEntity->toArray();
-                }
-            }
-        } else {
+        if (!$projectEntity) {
             throw new ProjectNotFound($request->domain);
         }
+
+        $predicates = [
+            [
+                'column' => 'project_id',
+                'operator' => '=',
+                'value' => $projectEntity->getAttribute('id'),
+            ],
+        ];
+
+        $result = $this->tutorialRepository->paging(
+            $predicates,
+            $request->orders,
+            $request->page,
+            $request->search,
+            $request->perPage
+        );
 
         return new ListTutorialsResponseModel(array_merge(
             $result,
             [
-                'entities' => $tutorialEntities,
                 'projectEntity' => $projectEntity->toArray(),
             ]
         ));

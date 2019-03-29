@@ -1,108 +1,122 @@
 <template>
-    <div>
-        <tutorial-list
-            v-show="isHome"
-            class="menu"
-            :class="{
-                'is-fixed-bottom-right': menuIsOnTheRight,
-                'is-fixed-bottom-left': !menuIsOnTheRight,
-            }"
-            :is-loading="requestState === 'REQUEST_LIST_TUTORIALS'"
-            :tutorial-entities="tutorialEntities"
-            :selected-tutorial="selectedTutorial"
-            :selected-step="selectedStep"
-            @tutorialChange="e => $emit('tutorialChange', e)"
-            @closeClick="$emit('closeClick')"
-            @previewClick="onPreviewClick"
-            @addStepClick="onAddStepClick"
-            @stepClick="onStepClick"
-            @deleteStepClick="onDeleteStepClick"
-            @addTutorialClick="onAddTutorialClick"
-            @editTutorialClick="onEditTutorialClick"
-            @deleteTutorialClick="onDeleteTutorialClick"
-            @switchSideClick="menuIsOnTheRight = !menuIsOnTheRight"
-        ></tutorial-list>
+    <div class="tutorials">
+        <!--<tutorial-list-->
+            <!--v-show="isHome"-->
+            <!--class="menu"-->
+            <!--:class="{-->
+                <!--'is-fixed-bottom-right': menuIsOnTheRight,-->
+                <!--'is-fixed-bottom-left': !menuIsOnTheRight,-->
+            <!--}"-->
+            <!--:is-loading="requestState === 'REQUEST_LIST_TUTORIALS'"-->
+            <!--:tutorial-entities="tutorialEntities"-->
+            <!--:selected-tutorial="selectedTutorial"-->
+            <!--:selected-step="selectedStep"-->
+            <!--@tutorialChange="e => $emit('tutorialChange', e)"-->
+            <!--@closeClick="$emit('closeClick')"-->
+            <!--@previewClick="onPreviewClick"-->
+            <!--@addStepClick="onAddStepClick"-->
+            <!--@stepClick="onStepClick"-->
+            <!--@deleteStepClick="onDeleteStepClick"-->
+            <!--@addTutorialClick="onAddTutorialClick"-->
+            <!--@editTutorialClick="onEditTutorialClick"-->
+            <!--@deleteTutorialClick="onDeleteTutorialClick"-->
+            <!--@switchSideClick="menuIsOnTheRight = !menuIsOnTheRight"-->
+        <!--&gt;</tutorial-list>-->
+        <b-modal :active="isHome">
+            <tutorial-table
+                class="has-background-white has-padding-5"
+                :query="query"
+                :pagination="pagination"
+                :tutorial-entities="tutorialEntities"
+                :is-loading="isRequesting"
+                @select="$emit('select', $event)"
+                @click:search="$emit('click:search', $event)"
+                @change:query="$emit('change:query', $event)"
+                @change:pagination="$emit('change:pagination', $event)"
+                @click:add-button="$emit('click:add-button', $event)"
+            ></tutorial-table>
+        </b-modal>
 
-        <delete-confirmation-message
-            v-if="isDeletingTutorial"
-            :tutorial="selectedTutorial"
-            @closeClick="updateState('beingHome')"
-            @deleteClick="onDeleteConfirmTutorialClick"
-        >
-        </delete-confirmation-message>
+        <!--<delete-confirmation-message-->
+            <!--v-if="isDeletingTutorial"-->
+            <!--:tutorial="selectedTutorial"-->
+            <!--@closeClick="updateState('beingHome')"-->
+            <!--@deleteClick="onDeleteConfirmTutorialClick"-->
+        <!--&gt;-->
+        <!--</delete-confirmation-message>-->
 
-        <driver-editor
-            ref="editor"
-            :steps="selectedTutorial ? selectedTutorial.steps : []"
-            :has-selector-choices-available-message="!dontShowMeChecked('selectorChoicesAvailable')"
-            :has-click-to-add-step-message="!dontShowMeChecked('clickToAddStep')"
-            :is-highlight-selection-active="isAddingStep"
-            @saveClick="onEditorSaveClick"
-            @cancelClick="onEditorCancelClick"
-            @previewDone="updateState('beingHome')"
-            @editDone="updateState('beingHome')"
-            @dontShowMeChange="removeMessage"
-        >
-        </driver-editor>
+        <!--<driver-editor-->
+            <!--ref="editor"-->
+            <!--:steps="selectedTutorial ? selectedTutorial.steps : []"-->
+            <!--:has-selector-choices-available-message="!dontShowMeChecked('selectorChoicesAvailable')"-->
+            <!--:has-click-to-add-step-message="!dontShowMeChecked('clickToAddStep')"-->
+            <!--:is-highlight-selection-active="isAddingStep"-->
+            <!--@saveClick="onEditorSaveClick"-->
+            <!--@cancelClick="onEditorCancelClick"-->
+            <!--@previewDone="updateState('beingHome')"-->
+            <!--@editDone="updateState('beingHome')"-->
+            <!--@dontShowMeChange="removeMessage"-->
+        <!--&gt;-->
+        <!--</driver-editor>-->
 
-        <validation-observer ref="observer">
-            <setting
-                slot-scope="{invalid}"
-                v-show="isEditingTutorial || isAddingTutorial"
-                :id="innerTutorialEntity.id"
-                :path="innerTutorialEntity.path"
-                :name="innerTutorialEntity.name"
-                :description="innerTutorialEntity.description"
-                :steps="innerTutorialEntity.steps"
-                :parameters="innerTutorialEntity.parameters"
-                :origin="origin"
-                @update:name="onTutorialUpdate('name', $event)"
-                @update:description="onTutorialUpdate('description', $event)"
-                @update:steps="onTutorialUpdate('steps', $event)"
-                @update:parameters="onTutorialUpdate('parameters', $event)"
-                @update:path="onTutorialUpdate('path', $event)"
-                @click:save="onClickSave"
-                @click:cancel="onClickCancel"
-            >
-            </setting>
-        </validation-observer>
+        <!--<validation-observer ref="observer">-->
+            <!--<setting-->
+                <!--slot-scope="{invalid}"-->
+                <!--v-show="isEditingTutorial || isAddingTutorial"-->
+                <!--:id="innerTutorialEntity.id"-->
+                <!--:path="innerTutorialEntity.path"-->
+                <!--:name="innerTutorialEntity.name"-->
+                <!--:description="innerTutorialEntity.description"-->
+                <!--:steps="innerTutorialEntity.steps"-->
+                <!--:parameters="innerTutorialEntity.parameters"-->
+                <!--:origin="origin"-->
+                <!--@update:name="onTutorialUpdate('name', $event)"-->
+                <!--@update:description="onTutorialUpdate('description', $event)"-->
+                <!--@update:steps="onTutorialUpdate('steps', $event)"-->
+                <!--@update:parameters="onTutorialUpdate('parameters', $event)"-->
+                <!--@update:path="onTutorialUpdate('path', $event)"-->
+                <!--@click:save="onClickSave"-->
+                <!--@click:cancel="onClickCancel"-->
+            <!--&gt;-->
+            <!--</setting>-->
+        <!--</validation-observer>-->
 
-        <message
-            v-show="showUrlChangeAlert && requestState === 'REQUEST_LIST_TUTORIALS'"
-            is-warning
-            @closeClick="$emit('update:show-url-change-alert', false)"
-        >
-            <template slot="header">Alert</template>
-            <template slot="body">
-               Tutorials must be created per URL.<br>
-                Now fetching tutorials for this page.
-            </template>
-        </message>
+        <!--&lt;!&ndash;<message&ndash;&gt;-->
+            <!--&lt;!&ndash;v-show="showUrlChangeAlert && requestState === 'REQUEST_LIST_TUTORIALS'"&ndash;&gt;-->
+            <!--&lt;!&ndash;is-warning&ndash;&gt;-->
+            <!--&lt;!&ndash;@closeClick="$emit('update:show-url-change-alert', false)"&ndash;&gt;-->
+        <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;<template slot="header">Alert</template>&ndash;&gt;-->
+            <!--&lt;!&ndash;<template slot="body">&ndash;&gt;-->
+               <!--&lt;!&ndash;Tutorials must be created per URL.<br>&ndash;&gt;-->
+                <!--&lt;!&ndash;Now fetching tutorials for this page.&ndash;&gt;-->
+            <!--&lt;!&ndash;</template>&ndash;&gt;-->
+        <!--&lt;!&ndash;</message>&ndash;&gt;-->
 
-        <loading-modal
-            v-show="isRequesting && requestState !== 'REQUEST_LIST_TUTORIALS'"
-        ></loading-modal>
+        <!--&lt;!&ndash;<loading-modal&ndash;&gt;-->
+            <!--&lt;!&ndash;v-show="isRequesting && requestState !== 'REQUEST_LIST_TUTORIALS'"&ndash;&gt;-->
+        <!--&lt;!&ndash;&gt;</loading-modal>&ndash;&gt;-->
 
-        <project-not-found-modal
-            v-show="showProjectNotFoundModal"
-            @click:retry="$emit('click:retry')"
-            :isRequesting="isRequesting"
-        >
-        </project-not-found-modal>
+        <!--<project-not-found-modal-->
+            <!--v-show="showProjectNotFoundModal"-->
+            <!--@click:retry="$emit('click:retry')"-->
+            <!--:isRequesting="isRequesting"-->
+        <!--&gt;-->
+        <!--</project-not-found-modal>-->
     </div>
 </template>
 <script>
     import { ValidationObserver } from 'vee-validate'
     import { mapActions } from 'vuex'
     import LoadingModal from '../../molecules/LoadingModal'
-    import TutorialList from '../../organisms/TutorialList'
     import Setting from '../../organisms/Setting'
-    import DeleteConfirmationMessage from "../../organisms/DeleteConfirmationMessage"
     import DriverEditor from "../../organisms/DriverEditor"
     import Message from "../../molecules/Message";
     import ProjectNotFoundModal from "../../organisms/ProjectNotFoundModal";
     import TutorialEntity from "../../../../../js/components/atoms/Entities/TutorialEntity";
     import ProjectEntity from "../../../../../js/components/atoms/Entities/ProjectEntity";
+    import TutorialTable from "../../../../../js/components/organisms/TutorialTable";
+    import BModal from "buefy/src/components/modal/Modal";
 
     export const states = {
         beingHome: 'beingHome',
@@ -115,15 +129,15 @@
     }
 
     export default {
-        name: 'TutorialTemplate',
+        name: 'TutorialsTemplate',
         components: {
+            BModal,
+            TutorialTable,
             ValidationObserver,
             ProjectNotFoundModal,
             Message,
             LoadingModal,
             DriverEditor,
-            DeleteConfirmationMessage,
-            TutorialList,
             Setting,
         },
         props: {
@@ -139,20 +153,22 @@
                     return []
                 }
             },
-            selectedTutorial: {
-                type: Object,
+            query: {
+                type: String,
                 default: null,
             },
-            selectedStep: {
+            pagination: {
                 type: Object,
-                default: null,
+                default() {
+                    return {}
+                }
+            },
+            total: {
+                type: Number,
+                default: 0,
             },
             isRequesting: {
                 type: Boolean,
-                default: false,
-            },
-            requestState: {
-                type: String,
                 default: false,
             },
             extLog: {
@@ -161,14 +177,10 @@
                     return {};
                 },
             },
-            showUrlChangeAlert: {
-                type: Boolean,
-                default: false,
-            },
             showProjectNotFoundModal: {
                 type: Boolean,
                 default: false,
-            }
+            },
         },
         data() {
             return {
@@ -333,7 +345,7 @@
     }
     @media only screen and (max-width: 600px) {
         .menu {
-            width: 100%;
+            width: 90% !important;
         }
     }
 </style>

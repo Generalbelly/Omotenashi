@@ -31,13 +31,6 @@ module.exports = {
                             plugins: [
                                 '@babel/plugin-proposal-class-properties',
                                 '@babel/plugin-proposal-object-rest-spread',
-                                ["transform-imports", {
-                                    "@fortawesome": {
-                                        "transform": "@fortawesome/free-solid-svg-icons/${member}",
-                                        "preventFullImport": true,
-                                        "skipDefaultConversion": true,
-                                    }
-                                }],
                             ]
                         }
                     }

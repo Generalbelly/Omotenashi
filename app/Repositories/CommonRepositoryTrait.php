@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 use App\Domains\Entities\Entity;
-use Log;
 
 trait CommonRepositoryTrait
 {
@@ -56,24 +55,6 @@ trait CommonRepositoryTrait
     public function findOrFail($id)
     {
         return $this->entityClass::findOrFail($id);
-    }
-
-    public function selectOne($predicates)
-    {
-        return $this->entityClass::where(function($query) use ($predicates){
-            foreach($predicates as $column => $value){
-                $query->where($column, '=', $value);
-            }
-        })->first();
-    }
-
-    public function select($predicates)
-    {
-        return $this->entityClass::where(function($query) use ($predicates){
-            foreach($predicates as $column => $value){
-                $query->where($column, '=', $value);
-            }
-        })->get();
     }
 
     public function where($column, $operator=null, $value=null)

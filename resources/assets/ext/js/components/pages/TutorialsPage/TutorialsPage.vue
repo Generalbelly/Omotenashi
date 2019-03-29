@@ -1,15 +1,17 @@
 <template>
-    <tutorial-template
+    <tutorials-template
         :project-entity="projectEntity"
         :tutorial-entities="tutorialEntities"
-        :selected-tutorial="selectedTutorial"
-        :selected-step="selectedStep"
-        :request-state="requestState"
+        :query="query"
+        :pagination="pagination"
         :is-requesting="isRequesting"
-        :ext-log="extLog"
-        :show-url-change-alert.sync="urlDidChange"
-        @click:save="onClickSave"
-        @tutorialChange="onTutorialChange"
+        @select="onTutorialSelect"
+        @click:search="onClickSearch"
+        @change:query="onChangeQuery"
+        @change:pagination="onChangePagination"
+        @click:add-button="onClickAddButton"
+
+
         @closeClick="$emit('click:close')"
         @stepClick="selectStep"
         @deleteStepClick="deleteStep"
@@ -18,21 +20,28 @@
         @click:retry="onClickRetry"
         :show-project-not-found-modal="projectNotFound"
     >
-    </tutorial-template>
+    </tutorials-template>
 </template>
 <script>
+    import { debounce } from 'debounce'
     import { mapActions, mapGetters, mapState,} from 'vuex'
-    import TutorialTemplate from '../../templates/TutorialTemplate'
-    import tutorial from "../../../store/modules/tutorial";
+    import TutorialsTemplate from '../../templates/TutorialsTemplate'
 
     export default {
         components: {
-            TutorialTemplate
+            TutorialsTemplate
         },
         data() {
             return {
                 urlDidChange: false,
                 path: null,
+                query: null,
+                pagination: {
+                    page: 0,
+                    perPage: 20,
+                    orderBy: ['created_at', 'desc'],
+                    total: 0,
+                },
             };
         },
         computed: {
@@ -42,7 +51,6 @@
                 'selectedTutorialId',
                 'selectedStepId',
                 'requestState',
-                'isRequesting',
                 'projectNotFound',
             ]),
             ...mapState([
@@ -51,22 +59,11 @@
             ...mapGetters('tutorial', [
                 'selectedTutorial',
                 'selectedStep',
+                'isRequesting'
             ]),
         },
-        watch: {
-            selectedTutorial: {
-                deep: true,
-                handler(value) {
-                    if (value) {
-                        this.path = value.path
-                    }
-                    this.urlDidChange = false
-                }
-            },
-        },
         created() {
-            this.startWatchingUrlForSPA()
-            this.list()
+            this.listTutorials()
         },
         methods: {
             ...mapActions('tutorial', [
@@ -84,12 +81,6 @@
                 'retrieveLog',
                 'saveLog',
             ]),
-            list(params={}) {
-                this.listTutorials({
-                    url: window.parent.location.href,
-                    ...params,
-                })
-            },
             onClickSave(data) {
                 const {
                     id = null,
@@ -124,7 +115,44 @@
                     })
                 }
             },
-            onTutorialChange(id) {
+            onTutorialSelect(tutorialEntity) {
+                console.log(tutorialEntity);
+            },
+            onChangePagination(pagination) {
+                this.pagination = {
+                    ...pagination,
+                    orderBy: `${pagination.orderBy[0]} ${pagination.orderBy[1]}`,
+                };
+                this.listTutorials({
+                    pagination: this.pagination,
+                })
+            },
+            search: debounce(function(params){
+                this.listTutorials(params);
+            }, 250),
+            onChangeQuery(query) {
+                this.query = query;
+                this.search({
+                    ...this.pagination,
+                    q: this.query,
+                });
+            },
+            onClickSearch() {
+                this.search({
+                    ...this.pagination,
+                    q: this.query,
+                });
+                // this.listProjects({
+                //     ...this.pagination,
+                //     q: this.query,
+                // })
+            },
+            onClickAddButton() {
+                // this.$router.push({
+                //     name: 'projects.create',
+                // })
+            },
+            onSelectTutorial(id) {
                 this.selectTutorial({ id });
             },
             onStepSaveClick({ id, element, popover }) {
@@ -143,19 +171,6 @@
                             popover,
                         },
                     })
-                }
-            },
-            startWatchingUrlForSPA() {
-                const self = this;
-                const proxiedPushState = window.parent.history.pushState
-                window.parent.history.pushState = function(stateObj, title, URL) {
-                    const newPath = arguments[2]
-                    if (newPath !== self.path) {
-                        self.path = newPath
-                        self.urlDidChange = true
-                        self.list({ url: window.parent.location.origin + newPath })
-                    }
-                    return proxiedPushState.apply(this, arguments)
                 }
             },
             onClickRetry() {

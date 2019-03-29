@@ -27,7 +27,8 @@ import {
     REQUEST_DELETE_TUTORIAL_SUCCESS,
     REQUEST_DELETE_TUTORIAL_FAILURE,
 
-    PROJECT_NOT_FOUND
+    PROJECT_NOT_FOUND,
+    SET_ERROR_CODE
 } from '../mutation-types'
 
 import TutorialEntity from "../../../../js/components/atoms/Entities/TutorialEntity"
@@ -39,7 +40,6 @@ const state = {
     tutorialEntities: [],
     selectedTutorialId: null,
     selectedStepId: null,
-    isRequesting: false,
     requestState: null,
     projectNotFound: false,
 }
@@ -56,6 +56,9 @@ export const getters = {
             return getters.selectedTutorial.steps.find(s => s.id === state.selectedStepId)
         }
         return null
+    },
+    isRequesting(state) {
+        return state.requestState != null && !/(FAILURE|SUCCESS)$/.exec(state.requestState);
     },
 }
 
@@ -92,51 +95,39 @@ export const mutations = {
         ]
     },
     [REQUEST_LIST_TUTORIALS](state) {
-        state.isRequesting = true
         state.requestState = REQUEST_LIST_TUTORIALS
     },
     [REQUEST_LIST_TUTORIALS_SUCCESS](state) {
-        state.isRequesting = false
         state.requestState = REQUEST_LIST_TUTORIALS_SUCCESS
     },
     [REQUEST_LIST_TUTORIALS_FAILURE](state, payload) {
-        state.isRequesting = false
         state.requestState = REQUEST_LIST_TUTORIALS_FAILURE
     },
     [REQUEST_ADD_TUTORIAL](state) {
-        state.isRequesting = true
         state.requestState = REQUEST_ADD_TUTORIAL
     },
     [REQUEST_ADD_TUTORIAL_SUCCESS](state) {
-        state.isRequesting = false
         state.requestState = REQUEST_ADD_TUTORIAL_SUCCESS
     },
     [REQUEST_ADD_TUTORIAL_FAILURE](state, payload) {
-        state.isRequesting = false
         state.requestState = REQUEST_ADD_TUTORIAL_FAILURE
     },
     [REQUEST_UPDATE_TUTORIAL](state) {
-        state.isRequesting = true
         state.requestState = REQUEST_UPDATE_TUTORIAL
     },
     [REQUEST_UPDATE_TUTORIAL_SUCCESS](state) {
-        state.isRequesting = false
         state.requestState = REQUEST_UPDATE_TUTORIAL_SUCCESS
     },
     [REQUEST_UPDATE_TUTORIAL_FAILURE](state, payload) {
-        state.isRequesting = false
         state.requestState = REQUEST_UPDATE_TUTORIAL_FAILURE
     },
     [REQUEST_DELETE_TUTORIAL](state) {
-        state.isRequesting = true
         state.requestState = REQUEST_DELETE_TUTORIAL
     },
     [REQUEST_DELETE_TUTORIAL_SUCCESS](state) {
-        state.isRequesting = false
         state.requestState = REQUEST_DELETE_TUTORIAL_SUCCESS
     },
     [REQUEST_DELETE_TUTORIAL_FAILURE](state, payload) {
-        state.isRequesting = false
         state.requestState = REQUEST_DELETE_TUTORIAL_FAILURE
     },
     [SELECT_TUTORIAL](state, { id = null }) {
@@ -155,52 +146,48 @@ export const mutations = {
 }
 
 export const actions = {
-    listTutorials({ commit }, payload) {
+    request({ commit }, payload) {
+        return new Promise((resolve, reject) => {
+            makeRequest(payload)
+                .then(response => {
+                    resolve(response);
+                })
+                .catch((error) => {
+                    const {
+                        response = null
+                    } = error;
+                    if (response) {
+                        commit(SET_ERROR_CODE, response.status, { root: true })
+                    }
+                    reject(error);
+                })
+        })
+    },
+    listTutorials({ commit, dispatch }, payload={}) {
         commit(REQUEST_LIST_TUTORIALS)
-        const { url } = payload;
-        makeRequest({
+        const { pagination={}, q=null, origin=window.location.origin } = payload;
+        dispatch('request', {
             mutationType: LIST_TUTORIALS,
             params: {
-                url,
+                orderBy: pagination.orderBy,
+                origin,
+                q,
             }
         })
             .then(({ data }) => {
                 commit(REQUEST_LIST_TUTORIALS_SUCCESS)
-                const {
-                    total,
-                    tutorialEntities,
-                    projectEntity,
-                } = data
-                commit(LIST_TUTORIALS, {
-                    total,
-                    tutorialEntities,
-                    projectEntity,
-                })
-
-                if (tutorialEntities.length > 0) {
-                    const firstTutorial = tutorialEntities[0]
-                    commit(SELECT_TUTORIAL, {
-                        id: firstTutorial.id,
-                    })
-                    if (firstTutorial.steps.length > 0) {
-                        const firstTutorialStep = firstTutorial.steps[0]
-                        commit(SELECT_STEP, {
-                            id: firstTutorialStep.id
-                        })
-                    }
-                }
-
-                commit(PROJECT_NOT_FOUND, false);
+                commit(LIST_TUTORIALS, data)
+                commit(PROJECT_NOT_FOUND, false)
             })
             .catch((error) => {
-                commit(REQUEST_LIST_TUTORIALS_FAILURE, error)
-                const {
-                    data={}
-                } = error.response;
-                if (data.error && data.error.type === 'ProjectNotFound') {
-                    commit(PROJECT_NOT_FOUND, true);
-                }
-            });
+            commit(REQUEST_LIST_TUTORIALS_FAILURE, error)
+            const {
+                data={}
+            } = error.response;
+            if (data.error && data.error.type === 'ProjectNotFound') {
+                commit(PROJECT_NOT_FOUND, true);
+            }
+        })
     },
     addTutorial({ commit }, { data }) {
         commit(REQUEST_ADD_TUTORIAL)
@@ -233,10 +220,10 @@ export const actions = {
                     id: data.id,
                     data,
                 })
-                commit(SELECT_TUTORIAL, {
-                    id: data.id
-                })
-                commit(SELECT_STEP, { id: null })
+                // commit(SELECT_TUTORIAL, {
+                //     id: data.id
+                // })
+                // commit(SELECT_STEP, { id: null })
             })
             .catch(() => {
                 commit(REQUEST_UPDATE_TUTORIAL_FAILURE)

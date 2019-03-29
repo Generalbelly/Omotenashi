@@ -51,23 +51,14 @@ class TutorialController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'url' => [
+            'origin' => [
                 'url',
                 'required',
             ],
         ]);
 
-        $url = $request->query('url');
-
-        $parsedUrl = parse_url($url);
-
-        $validatedData = Validator::make([
-            'domain' => $parsedUrl['host'],
-            'path' => $parsedUrl['path'],
-        ], [
-            'domain' => 'required',
-            'path' => 'required',
-        ])->validate();
+        $domain = parse_url($request->query('origin'), PHP_URL_HOST);
+        \Log::error($domain);
 
         $userKey = $request->user()->key;
         $search = $request->query('q');
@@ -89,14 +80,12 @@ class TutorialController extends Controller
         }
 
         $listTutorialsRequest = new ListTutorialsRequestModel([
-            'url' => $url,
             'userKey' => $userKey,
             'orders' => $orders,
             'page' => $page,
             'search' => $search,
             'perPage' => $perPage,
-            'domain' => $validatedData['domain'],
-            'path' => $validatedData['path'],
+            'domain' => $domain,
         ]);
 
         DB::beginTransaction();

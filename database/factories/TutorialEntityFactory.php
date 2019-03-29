@@ -23,9 +23,9 @@ $factory->define(App\Domains\Entities\TutorialEntity::class, function (Faker $fa
         'id' => $faker->uuid,
         'name' => $faker->name,
         'description' => $faker->realText(),
-        'steps' => [],
         'path' => $path,
         'parameters' => [],
+        'orders' => [],
         'last_time_used_at' => [
             $path['value'] => null
         ],

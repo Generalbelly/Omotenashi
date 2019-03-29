@@ -23,11 +23,10 @@
                 name="parameter value"
                 class="is-marginless"
             ></validatable-text-field>
-            <base-icon
-                icon="trash"
+            <trash-icon
                 class="has-cursor-pointer"
                 @click="deleteParameter(pIndex)"
-            ></base-icon>
+            ></trash-icon>
         </div>
         <div class="has-margin-top-1">
             <base-button
@@ -42,16 +41,18 @@
 
 <script>
     import BaseButton from "../../../atoms/BaseButton";
-    import ValidatableTextField from "../../../molecules/fields/ValidatableTextField";
     import BaseLabel from "../../../atoms/BaseLabel";
     import BaseIcon from "../../../atoms/BaseIcon";
+    import ValidatableTextField from "../../../../../../js/components/molecules/fields/ValidatableTextField";
+    import TrashIcon from "../../../../../../js/components/atoms/icons/TrashIcon";
 
     export default {
         name: "ParameterFields",
         components: {
+            TrashIcon,
+            ValidatableTextField,
             BaseIcon,
             BaseLabel,
-            ValidatableTextField,
             BaseButton,
         },
         props: {

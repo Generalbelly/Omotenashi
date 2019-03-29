@@ -79,7 +79,6 @@
                 });
             },
             onClickSearch() {
-                console.log('called');
                 this.search({
                     ...this.pagination,
                     q: this.query,

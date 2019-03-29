@@ -1,7 +1,9 @@
 <template>
     <base-panel class="has-background-white list">
-        <base-panel-header class="level has-margin-bottom-0">
-            <base-header :level="2">Tutorials</base-header>
+        <base-panel-header class="has-margin-bottom-0">
+            <base-header
+                :level="2"
+            >Tutorials</base-header>
             <base-button
                 is-primary
                 is-outlined
@@ -30,12 +32,19 @@
                         :items="tutorialEntities"
                         item-value="id"
                         item-text="name"
+                        no-item-selected-text="Select a tutorial"
                     ></select-field>
                     <span>
-                        <base-icon icon="pen" @click="$emit('editTutorialClick')"></base-icon>
+                        <base-icon
+                            icon="pen"
+                            @click="$emit('editTutorialClick')"
+                        ></base-icon>
                     </span>
                     <span>
-                        <base-icon @click="$emit('deleteTutorialClick')" icon="trash"></base-icon>
+                        <base-icon
+                            @click="$emit('deleteTutorialClick')"
+                            icon="trash"
+                        ></base-icon>
                     </span>
                 </div>
             </template>
@@ -106,20 +115,20 @@
     import BaseProgressCircular from '../../atoms/BaseProgressCircular'
     import BaseHeader from "../../atoms/BaseHeader";
     import SelectField from "../../molecules/fields/SelectField";
-    import BaseSelectInput from "../../atoms/BaseSelectInput";
     import BasePanel from "../../atoms/BasePanel/BasePanel";
     import BasePanelBlock from "../../atoms/BasePanelBlock";
     import BasePanelHeader from "../../atoms/BasePanelHeader";
     import BaseContent from "../../atoms/BaseContent/BaseContent";
+    import BaseTile from "../../atoms/BaseTile/BaseTile";
 
     export default {
         name: 'TutorialList',
         components: {
+            BaseTile,
             BaseContent,
             BasePanelHeader,
             BasePanelBlock,
             BasePanel,
-            BaseSelectInput,
             SelectField,
             BaseHeader,
             BaseIcon,

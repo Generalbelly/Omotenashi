@@ -16,10 +16,10 @@ class CreateTutorialsTable extends Migration
         Schema::create('tutorials', function (Blueprint $table) {
             $table->string('id')->unique();
             $table->string('name');
-            $table->string('description');
-            $table->longText('steps');
+            $table->string('description')->nullable()->default(null);
             $table->json('path');
             $table->json('parameters');
+            $table->json('orders');
             $table->json('last_time_used_at');
             $table->string('project_id');
 
@@ -27,7 +27,6 @@ class CreateTutorialsTable extends Migration
             $table->softDeletes();
 
             $table->primary('id');
-            $table->index('id', 'idx_tutorial_id');
         });
     }
 
