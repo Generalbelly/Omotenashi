@@ -4,7 +4,7 @@ namespace App\Usecases\AddTutorial;
 
 use App\Domains\Entities\ProjectEntity;
 use App\Repositories\Project\ProjectRepositoryContract;
-use App\Repositories\Tutorial\TutorialStepRepositoryContract;
+use App\Repositories\Tutorial\TutorialRepositoryContract;
 use Log;
 
 class AddTutorialUsecaseInteractor implements AddTutorialUsecase {
@@ -21,11 +21,11 @@ class AddTutorialUsecaseInteractor implements AddTutorialUsecase {
 
     /**
      * AddTutorialUsecaseInteractor constructor.
-     * @param TutorialStepRepositoryContract $tutorialRepository
+     * @param TutorialRepositoryContract $tutorialRepository
      * @param ProjectRepositoryContract $projectRepository
      */
     public function __construct(
-        TutorialStepRepositoryContract $tutorialRepository,
+        TutorialRepositoryContract $tutorialRepository,
         ProjectRepositoryContract $projectRepository
     ){
         $this->tutorialRepository = $tutorialRepository;

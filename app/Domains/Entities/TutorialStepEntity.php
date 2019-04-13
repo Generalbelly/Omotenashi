@@ -6,20 +6,15 @@ class TutorialStepEntity extends Entity
 {
     protected $table = 'tutorial_steps';
     protected $fillable = [
-        'path',
-        'parameters',
-        'type',
-        'trigger',
-        'selector',
-        'content',
+        'target',
+        'value',
+        'config',
         'tutorial_id',
     ];
     protected $casts = [
-        'path' => 'array',
-        'parameters' => 'array',
-        'trigger' => 'array',
+        'value' => 'array',
+        'config' => 'array',
     ];
-    protected $appends = ['query'];
 
     public function tutorialEntity()
     {
@@ -30,14 +25,4 @@ class TutorialStepEntity extends Entity
         );
     }
 
-
-    public function getQueryAttribute()
-    {
-        $query = '';
-        foreach(json_decode($this->attributes['parameters'], true) as $index => $parameter) {
-            $query .= $index === 0 ? '' : '&';
-            $query .= sprintf("%s=%s", $parameter['key'], $parameter['value']);
-        };
-        return $query;
-    }
 }

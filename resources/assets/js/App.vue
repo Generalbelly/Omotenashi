@@ -84,7 +84,6 @@
         data() {
             return {
                 showExtensionLink: false,
-                extensionId: process.env.CHROME_EXTENSION_ID,
                 burgerMenuActive: false,
             }
         },
@@ -130,7 +129,7 @@
             checkIfExtensionInstalled() {
                 const self = this;
                 if (chrome.runtime) {
-                    chrome.runtime.sendMessage(this.extensionId, { message: "version" }, (response) => {
+                    chrome.runtime.sendMessage(process.env.CHROME_EXTENSION_ID, { message: "version" }, (response) => {
                         if (response && response.state === 'success') {
                             self.showExtensionLink = false
                         } else {

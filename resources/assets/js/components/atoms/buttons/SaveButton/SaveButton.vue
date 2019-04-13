@@ -1,6 +1,6 @@
 <template>
     <button
-        class="button"
+        class="button is-primary"
         @click="$emit('click')"
     >
         <b-icon

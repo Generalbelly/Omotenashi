@@ -1,6 +1,6 @@
 <template>
     <button
-        class="button"
+        class="button is-neutral-100"
         @click="$emit('click')"
     >
         Back

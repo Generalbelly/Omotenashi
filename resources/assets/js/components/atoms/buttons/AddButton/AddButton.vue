@@ -1,20 +1,20 @@
 <template>
     <button
-        class="button"
+        class="button is-primary"
         @click="$emit('click')"
     >
-        <b-icon
-            pack="fas"
-            icon="plus"
-        >
-        </b-icon>
-        <span>Add</span>
+        <plus-icon></plus-icon>
+        <span>
+            <slot>Add</slot>
+        </span>
     </button>
 </template>
 
 <script>
+    import PlusIcon from "../../icons/PlusIcon";
     export default {
         name: "AddButton",
+        components: {PlusIcon},
     }
 </script>
 

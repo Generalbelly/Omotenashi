@@ -31,8 +31,12 @@ use Auth0\Login\Contract\Auth0UserRepository;
 use App\Repositories\Project\ProjectRepositoryContract;
 use App\Repositories\Project\ProjectRepository;
 
-use App\Repositories\Tutorial\TutorialStepRepositoryContract;
-use App\Repositories\Tutorial\TutorialStepRepository;
+use App\Repositories\Tutorial\TutorialRepositoryContract;
+use App\Repositories\Tutorial\TutorialRepository;
+use App\Repositories\TutorialStep\TutorialStepRepositoryContract;
+use App\Repositories\TutorialStep\TutorialStepRepository;
+use App\Repositories\TutorialPath\TutorialPathRepositoryContract;
+use App\Repositories\TutorialPath\TutorialPathRepository;
 
 use App\Repositories\GoogleAnalyticsProperty\GoogleAnalyticsPropertyRepositoryContract;
 use App\Repositories\GoogleAnalyticsProperty\GoogleAnalyticsPropertyRepository;
@@ -61,6 +65,9 @@ use App\Usecases\UpdateTutorial\UpdateTutorialUsecaseInteractor;
 
 use App\Usecases\DeleteTutorial\DeleteTutorialUsecase;
 use App\Usecases\DeleteTutorial\DeleteTutorialUsecaseInteractor;
+
+use App\Usecases\RedirectTutorial\RedirectTutorialUsecase;
+use App\Usecases\RedirectTutorial\RedirectTutorialUsecaseInteractor;
 
 use App\Usecases\ListProjects\ListProjectsUsecase;
 use App\Usecases\ListProjects\ListProjectsUsecaseInteractor;
@@ -92,7 +99,6 @@ use App\Externals\Google\GoogleAnalyticsClient;
 use App\Usecases\ListGoogleAnalyticsAccounts\ListGoogleAnalyticsAccountsUsecase;
 use App\Usecases\ListGoogleAnalyticsAccounts\ListGoogleAnalyticsAccountsUsecaseInteractor;
 
-use Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -169,8 +175,18 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
+            TutorialRepositoryContract::class,
+            TutorialRepository::class
+        );
+
+        $this->app->bind(
             TutorialStepRepositoryContract::class,
             TutorialStepRepository::class
+        );
+
+        $this->app->bind(
+            TutorialPathRepositoryContract::class,
+            TutorialPathRepository::class
         );
 
         $this->app->bind(
@@ -211,6 +227,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             DeleteTutorialUsecase::class,
             DeleteTutorialUsecaseInteractor::class
+        );
+
+        $this->app->bind(
+            RedirectTutorialUsecase::class,
+            RedirectTutorialUsecaseInteractor::class
         );
 
         $this->app->bind(

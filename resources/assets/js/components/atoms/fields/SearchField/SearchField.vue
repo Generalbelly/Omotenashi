@@ -1,7 +1,6 @@
 <template>
     <b-field v-bind="$attrs">
         <b-input
-            placeholder="Search..."
             type="search"
             icon-pack="fas"
             icon="search"
@@ -11,6 +10,7 @@
         <p class="control">
             <search-button
                 :class="searchButtonClass"
+                class="is-primary-050"
                 @click="$emit('click:search')"
             >
             </search-button>

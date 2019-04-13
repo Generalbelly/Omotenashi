@@ -18,6 +18,11 @@ class ListTutorialsRequestModel {
     /**
      * @var string
      */
+    public $project_id;
+
+    /**
+     * @var string
+     */
     public $orders;
 
     /**
@@ -51,7 +56,8 @@ class ListTutorialsRequestModel {
         $this->page = $data['page'];
         $this->search = $data['search'];
         $this->perPage = $data['perPage'];
-        $this->domain = $data['domain'];
+        $this->domain = isset($data['domain']) ? $data['domain'] : null;
+        $this->project_id = isset($data['project_id']) ? $data['project_id'] : null;
     }
 
 }

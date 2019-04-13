@@ -52,7 +52,7 @@
     import sizable from '../../mixins/sizable'
     import fieldable from '../../mixins/fieldable'
     import BaseIcon from "../BaseIcon"
-    import BaseLabel from "../BaseLabel";
+    import BaseLabel from "../../../../../js/components/atoms/BaseLabel";
 
     export default {
         name: "BaseField",

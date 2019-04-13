@@ -9,7 +9,7 @@
     "watch-ext": "webpack --watch --progress --mode=development --config ./webpack.ext.config.js",
     "watch-cdn": "webpack --watch --progress  --mode=development --config ./webpack.cdn.config.js",
     "storybook-ext": "start-storybook -p 9001 -c ./resources/assets/.storybook -s ./public/ext",
-    "browser-sync": "webpack --watch --config ./webpack.config.js & browser-sync start --config bs-config.js",
+    "browser-sync": "yarn watch & browser-sync start --config bs-config.js",
     "build-all": "yarn build && yarn build-ext && yarn build-cdn",
     "heroku-postbuild": "build-all"
   },

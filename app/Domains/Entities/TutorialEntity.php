@@ -6,26 +6,32 @@ class TutorialEntity extends Entity
 {
     protected $table = 'tutorials';
     protected $fillable = [
+        'operator',
+        'depth',
         'name',
         'path',
+        'parameters',
         'description',
-        'orders',
-        'project_id',
+        'settings',
+        'is_active',
         'last_time_used_at',
+        'project_id',
     ];
+
     public $searchColumns = [
         'name',
         'path',
         'description',
     ];
     protected $casts = [
-        'path' => 'array',
         'parameters' => 'array',
-        'orders' => 'array',
         'last_time_used_at' => 'array',
+        'settings' => 'array',
     ];
 
-    protected $appends = ['query'];
+    protected $appends = [
+        'query',
+    ];
 
     public function projectEntity()
     {

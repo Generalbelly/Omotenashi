@@ -8,14 +8,14 @@ use App\Domains\Entities\GoogleAnalyticsPropertyEntity;
 use App\Domains\Entities\ProjectEntity;
 use App\Domains\Entities\TutorialEntity;
 use App\Repositories\GoogleAnalyticsProperty\GoogleAnalyticsPropertyRepository;
-use App\Repositories\Tutorial\TutorialStepRepositoryContract;
+use App\Repositories\Tutorial\TutorialRepositoryContract;
 use App\Repositories\Project\ProjectRepositoryContract;
 use Carbon\Carbon;
 
 class GetTutorialUsecaseInteractor implements GetTutorialUsecase {
 
     /**
-     * @var TutorialStepRepositoryContract
+     * @var TutorialRepositoryContract
      */
     private $tutorialRepository;
 
@@ -31,12 +31,12 @@ class GetTutorialUsecaseInteractor implements GetTutorialUsecase {
 
     /**
      * GetTutorialUsecaseInteractor constructor.
-     * @param TutorialStepRepositoryContract $tutorialRepository
+     * @param TutorialRepositoryContract $tutorialRepository
      * @param ProjectRepositoryContract $projectRepository
      * @param GoogleAnalyticsPropertyRepository $googleAnalyticsPropertyRepository
      */
     public function __construct(
-        TutorialStepRepositoryContract $tutorialRepository,
+        TutorialRepositoryContract $tutorialRepository,
         ProjectRepositoryContract $projectRepository,
         GoogleAnalyticsPropertyRepository $googleAnalyticsPropertyRepository
     ){

@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
                     'protocol' => 'http',
                     'domain' => 'omotenashi-customer-site.com',
                 ]);
-                $tutorialEntity = factory(App\Domains\Entities\TutorialEntity::class)->make();
+//                $tutorialEntity = factory(App\Domains\Entities\TutorialEntity::class)->make();
                 $userEntity->sub = 'auth0|5bc9e49fc7d2f35b924027ce'; // auth0
                 $userEntity->email = 'nobuyoshi.shimmen@gmail.com';
                 $userEntity->name = 'Nobu';
@@ -26,13 +26,13 @@ class DatabaseSeeder extends Seeder
                 $userEntity->save();
 
                 $userEntity->projectEntities()->save($projectEntity);
-                $projectEntity->tutorialEntities()->save($tutorialEntity);
+//                $projectEntity->tutorialEntities()->save($tutorialEntity);
             } else {
                 $projectEntity = factory(App\Domains\Entities\ProjectEntity::class)->make();
-                $tutorialEntity = factory(App\Domains\Entities\TutorialEntity::class)->make();
+//                $tutorialEntity = factory(App\Domains\Entities\TutorialEntity::class)->make();
 
                 $userEntity->projectEntities()->save($projectEntity);
-                $projectEntity->tutorialEntities()->save($tutorialEntity);
+//                $projectEntity->tutorialEntities()->save($tutorialEntity);
             }
         });
     }

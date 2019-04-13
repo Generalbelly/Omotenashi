@@ -1,5 +1,8 @@
 <template>
-    <div class="tutorials">
+    <div>
+        <heading>
+            {{ innerTutorialEntity.id ?  innerTutorialEntity.name : 'New Tutorial' }}
+        </heading>
         <!--<tutorial-list-->
             <!--v-show="isHome"-->
             <!--class="menu"-->
@@ -22,9 +25,9 @@
             <!--@deleteTutorialClick="onDeleteTutorialClick"-->
             <!--@switchSideClick="menuIsOnTheRight = !menuIsOnTheRight"-->
         <!--&gt;</tutorial-list>-->
-        <b-modal :active="isHome">
-            <tutorial-table
-                class="has-background-white has-padding-5"
+        <b-modal active>
+            <tutorial-table v-show="isHome"
+                class="has-background-white"
                 :query="query"
                 :pagination="pagination"
                 :tutorial-entities="tutorialEntities"
@@ -33,8 +36,35 @@
                 @click:search="$emit('click:search', $event)"
                 @change:query="$emit('change:query', $event)"
                 @change:pagination="$emit('change:pagination', $event)"
-                @click:add-button="$emit('click:add-button', $event)"
+                @click:add-button="onAddTutorialClick"
             ></tutorial-table>
+            <div v-show="isEditingTutorial || isAddingTutorial">
+                <validation-observer ref="observer">
+                    <tutorial-form
+                        slot-scope="{invalid}"
+                        :id="innerTutorialEntity.id"
+                        :name="innerTutorialEntity.name"
+                        :path="innerTutorialEntity.path"
+                        :description="innerTutorialEntity.description"
+                        :parameters="innerTutorialEntity.parameters"
+                        :origin="origin"
+                        @update:name="onTutorialUpdate('name', $event)"
+                        @update:description="onTutorialUpdate('description', $event)"
+                        @update:steps="onTutorialUpdate('steps', $event)"
+                        @update:parameters="onTutorialUpdate('parameters', $event)"
+                        @update:path="onTutorialUpdate('path', $event)"
+                    >
+                    </tutorial-form>
+                </validation-observer>
+                <grouped-buttons-layout>
+                    <back-button
+                        @click="onClickBack"
+                    ></back-button>
+                    <save-button
+                        @click="onClickSave"
+                    ></save-button>
+                </grouped-buttons-layout>
+            </div>
         </b-modal>
 
         <!--<delete-confirmation-message-->
@@ -58,28 +88,6 @@
             <!--@dontShowMeChange="removeMessage"-->
         <!--&gt;-->
         <!--</driver-editor>-->
-
-        <!--<validation-observer ref="observer">-->
-            <!--<setting-->
-                <!--slot-scope="{invalid}"-->
-                <!--v-show="isEditingTutorial || isAddingTutorial"-->
-                <!--:id="innerTutorialEntity.id"-->
-                <!--:path="innerTutorialEntity.path"-->
-                <!--:name="innerTutorialEntity.name"-->
-                <!--:description="innerTutorialEntity.description"-->
-                <!--:steps="innerTutorialEntity.steps"-->
-                <!--:parameters="innerTutorialEntity.parameters"-->
-                <!--:origin="origin"-->
-                <!--@update:name="onTutorialUpdate('name', $event)"-->
-                <!--@update:description="onTutorialUpdate('description', $event)"-->
-                <!--@update:steps="onTutorialUpdate('steps', $event)"-->
-                <!--@update:parameters="onTutorialUpdate('parameters', $event)"-->
-                <!--@update:path="onTutorialUpdate('path', $event)"-->
-                <!--@click:save="onClickSave"-->
-                <!--@click:cancel="onClickCancel"-->
-            <!--&gt;-->
-            <!--</setting>-->
-        <!--</validation-observer>-->
 
         <!--&lt;!&ndash;<message&ndash;&gt;-->
             <!--&lt;!&ndash;v-show="showUrlChangeAlert && requestState === 'REQUEST_LIST_TUTORIALS'"&ndash;&gt;-->
@@ -116,7 +124,11 @@
     import TutorialEntity from "../../../../../js/components/atoms/Entities/TutorialEntity";
     import ProjectEntity from "../../../../../js/components/atoms/Entities/ProjectEntity";
     import TutorialTable from "../../../../../js/components/organisms/TutorialTable";
-    import BModal from "buefy/src/components/modal/Modal";
+    import TutorialForm from "../../../../../js/components/organisms/forms/TutorialForm/TutorialForm";
+    import GroupedButtonsLayout from "../../../../../js/components/layouts/GroupedButtonsLayout";
+    import SaveButton from "../../../../../js/components/atoms/buttons/SaveButton";
+    import BackButton from "../../../../../js/components/atoms/buttons/BackButton";
+    import Heading from "../../../../../js/components/atoms/Heading/Heading";
 
     export const states = {
         beingHome: 'beingHome',
@@ -131,7 +143,11 @@
     export default {
         name: 'TutorialsTemplate',
         components: {
-            BModal,
+            Heading,
+            BackButton,
+            SaveButton,
+            GroupedButtonsLayout,
+            TutorialForm,
             TutorialTable,
             ValidationObserver,
             ProjectNotFoundModal,
@@ -282,7 +298,7 @@
                         console.log(error);
                     })
             },
-            onClickCancel() {
+            onClickBack() {
                 if (this.state === states.addingTutorial) {
                     this.innerTutorialEntity = new TutorialEntity()
                 }
@@ -342,6 +358,9 @@
 <style scoped>
     .menu {
         z-index: 10000000;
+    }
+    >>> .modal-content {
+        padding: 30px;
     }
     @media only screen and (max-width: 600px) {
         .menu {

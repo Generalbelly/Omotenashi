@@ -14,21 +14,20 @@
     "scripts": [
       "env.js",
       "node_modules/auth0-chrome/dist/auth0chrome.min.js",
+      "node_modules/jwt-decode/build/jwt-decode.js",
       "src/background.js"
     ],
     "persistent": false
   },
   "browser_action": {
     "default_icon": "icons/icon19.png",
-    "default_title": "Omotenashi",
-    "default_popup": "src/browser_action/browser_action.html"
+    "default_title": "Omotenashi"
   },
   "permissions": [
     "*://*/*",
     "tabs",
     "background",
-    "identity",
-    "notifications"
+    "identity"
   ],
   "content_scripts": [
     {

@@ -24,16 +24,14 @@
                 @click="showDeleteDialog = true"
                 class="has-margin-right-auto  is-text"
             ></delete-button>
-            <div class="buttons">
+            <grouped-buttons-layout is-right>
                 <back-button
-                    class="is-neutral-100"
                     @click="onCancel"
                 ></back-button>
                 <save-button
-                    class="is-primary"
                     @click="onSave"
                 ></save-button>
-            </div>
+            </grouped-buttons-layout>
         </div>
         <b-loading
             is-full-page
@@ -53,10 +51,12 @@
     import Breadcrumb from "../../molecules/Breadcrumb/Breadcrumb";
     import FadeTransition from "../../atoms/transitions/FadeTransition";
     import Dialog from "../../../../ext/js/components/molecules/Dialog";
+    import GroupedButtonsLayout from "../../layouts/GroupedButtonsLayout";
 
     export default {
         name: "ProjectTemplate",
         components: {
+            GroupedButtonsLayout,
             Dialog,
             Breadcrumb,
             DeleteButton,

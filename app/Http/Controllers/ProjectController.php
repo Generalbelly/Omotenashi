@@ -23,46 +23,13 @@ use App\Usecases\DeleteProject\DeleteProjectUsecase;
 
 use Exception;
 use DB;
-use Log;
 use Session;
 
 
 class ProjectController extends Controller
 {
-    private $listProjectsUsecase;
-    private $addProjectUsecase;
-    private $getProjectUsecase;
-    private $updateProjectUsecase;
-    private $deleteProjectUsecase;
 
-    /**
-     * ProjectController constructor.
-     * @param ListProjectsUsecase $listProjectsUsecase
-     * @param AddProjectUsecase $addProjectUsecase
-     * @param GetProjectUsecase $getProjectUsecase
-     * @param UpdateProjectUsecase $updateProjectUsecase
-     * @param DeleteProjectUsecase $deleteProjectUsecase
-     */
-    public function __construct(
-        ListProjectsUsecase $listProjectsUsecase,
-        AddProjectUsecase $addProjectUsecase,
-        GeTProjectUsecase $getProjectUsecase,
-        UpdateProjectUsecase $updateProjectUsecase,
-        DeleteProjectUsecase $deleteProjectUsecase
-    ){
-        $this->listProjectsUsecase = $listProjectsUsecase;
-        $this->addProjectUsecase = $addProjectUsecase;
-        $this->getProjectUsecase = $getProjectUsecase;
-        $this->updateProjectUsecase = $updateProjectUsecase;
-        $this->deleteProjectUsecase = $deleteProjectUsecase;
-    }
-
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
-     * @throws Exception
-     */
-    public function index(Request $request)
+    public function index(ListProjectsUsecase $listProjectsUsecase, Request $request)
     {
         if ($request->isXmlHttpRequest() === false) {
             return view('dashboard');
@@ -96,7 +63,7 @@ class ProjectController extends Controller
 
         DB::beginTransaction();
         try {
-            $listProjectsResponse = $this->listProjectsUsecase->handle($listProjectsRequest);
+            $listProjectsResponse = $listProjectsUsecase->handle($listProjectsRequest);
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -105,20 +72,12 @@ class ProjectController extends Controller
         return response()->json($listProjectsResponse);
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
     public function create()
     {
         return view('dashboard');
     }
 
-    /**
-     * @param AddProjectRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws Exception
-     */
-    public function store(AddProjectRequest $request)
+    public function store(AddProjectUsecase $addProjectUsecase, AddProjectRequest $request)
     {
         $addProjectRequest = new AddProjectRequestModel(array_merge(
             $request->all(),
@@ -129,7 +88,7 @@ class ProjectController extends Controller
 
         DB::beginTransaction();
         try {
-            $addProjectResponse = $this->addProjectUsecase->handle($addProjectRequest);
+            $addProjectResponse = $addProjectUsecase->handle($addProjectRequest);
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -138,13 +97,7 @@ class ProjectController extends Controller
         return response()->json($addProjectResponse);
     }
 
-    /**
-     * @param Request $request
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
-     * @throws Exception
-     */
-    public function show(Request $request, $id)
+    public function show(GetProjectUsecase $getProjectUsecase, Request $request, string $id)
     {
         if ($request->isXmlHttpRequest() === false) {
             return view('dashboard');
@@ -156,7 +109,7 @@ class ProjectController extends Controller
 
         DB::beginTransaction();
         try {
-            $getProjectResponse = $this->getProjectUsecase->handle($getProjectRequest);
+            $getProjectResponse = $getProjectUsecase->handle($getProjectRequest);
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -170,22 +123,12 @@ class ProjectController extends Controller
         return response()->json($getProjectResponse);
     }
 
-    /**
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function edit($id)
+    public function edit(string $id)
     {
         return view('dashboard');
     }
 
-    /**
-     * @param UpdateProjectRequest $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
-     * @throws Exception
-     */
-    public function update(UpdateProjectRequest $request, $id)
+    public function update(UpdateProjectUsecase $updateProjectUsecase, UpdateProjectRequest $request, string $id)
     {
         $updateProjectRequest = new UpdateProjectRequestModel(array_merge(
             $request->all(),
@@ -196,7 +139,7 @@ class ProjectController extends Controller
 
         DB::beginTransaction();
         try {
-            $updateProjectResponse = $this->updateProjectUsecase->handle($updateProjectRequest);
+            $updateProjectResponse = $updateProjectUsecase->handle($updateProjectRequest);
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -205,12 +148,7 @@ class ProjectController extends Controller
         return response()->json($updateProjectResponse);
     }
 
-    /**
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
-     * @throws Exception
-     */
-    public function destroy($id)
+    public function destroy(DeleteProjectUsecase $deleteProjectUsecase, string $id)
     {
         $deleteProjectRequest = new DeleteProjectRequestModel(array_merge(
             [
@@ -220,7 +158,7 @@ class ProjectController extends Controller
 
         DB::beginTransaction();
         try {
-            $deleteProjectResponse = $this->deleteProjectUsecase->handle($deleteProjectRequest);
+            $deleteProjectResponse = $deleteProjectUsecase->handle($deleteProjectRequest);
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();

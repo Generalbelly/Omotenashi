@@ -6,39 +6,8 @@ import router from './router'
 import App from './App.vue'
 import './bootstrap'
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import {
-    faCode,
-    faExternalLinkAlt,
-    faPen,
-    faQuestionCircle,
-    faTrash,
-    faSearch,
-    faPlus,
-    faArrowUp,
-    faAngleLeft,
-    faAngleRight
-} from '@fortawesome/free-solid-svg-icons'
-
-import {
-    faFrown
-} from '@fortawesome/free-regular-svg-icons'
-
+import library from './fontawesome'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-library.add(
-    faCode,
-    faExternalLinkAlt,
-    faFrown,
-    faPen,
-    faQuestionCircle,
-    faTrash,
-    faSearch,
-    faPlus,
-    faArrowUp,
-    faAngleLeft,
-    faAngleRight
-)
 
 import '../sass/app.scss'
 

@@ -26,7 +26,7 @@ class CreateProjectsTable extends Migration
 
 
             $table->primary('id');
-            $table->index('user_id', 'idx_project_user_id');
+            $table->index('user_id', 'idx_user_id');
         });
     }
 

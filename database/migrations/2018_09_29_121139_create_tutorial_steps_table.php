@@ -15,19 +15,17 @@ class CreateTutorialStepsTable extends Migration
     {
         Schema::create('tutorial_steps', function (Blueprint $table) {
             $table->string('id')->unique();
-            $table->json('path');
-            $table->json('parameters');
-            $table->string('type');
-            $table->longText('content');
-            $table->json('trigger');
-            $table->string('selector')->nullable()->default(null);
-
+            $table->longText('trigger_target')->nullable()->default(null);
+            $table->string('trigger_event');
+            $table->unsignedInteger('waiting_time')->default(0);
+            $table->longText('config');
             $table->string('tutorial_id');
 
             $table->timestamps();
             $table->softDeletes();
 
             $table->primary('id');
+            $table->index('tutorial_id', 'idx_tutorial_id');
         });
     }
 

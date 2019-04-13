@@ -1,6 +1,7 @@
 <template>
     <tutorials-template
         :project-entity="projectEntity"
+
         :tutorial-entities="tutorialEntities"
         :query="query"
         :pagination="pagination"
@@ -9,7 +10,6 @@
         @click:search="onClickSearch"
         @change:query="onChangeQuery"
         @change:pagination="onChangePagination"
-        @click:add-button="onClickAddButton"
 
 
         @closeClick="$emit('click:close')"
@@ -148,6 +148,7 @@
                 // })
             },
             onClickAddButton() {
+
                 // this.$router.push({
                 //     name: 'projects.create',
                 // })

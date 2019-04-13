@@ -5,7 +5,7 @@ namespace App\Usecases\ListTutorials;
 use App\Domains\Entities\Exceptions\ProjectNotFound;
 use App\Domains\Entities\ProjectEntity;
 use App\Domains\Entities\TutorialEntity;
-use App\Repositories\Tutorial\TutorialStepRepositoryContract;
+use App\Repositories\Tutorial\TutorialRepositoryContract;
 use App\Repositories\Project\ProjectRepositoryContract;
 use Log;
 use DB;
@@ -13,7 +13,7 @@ use DB;
 class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
 
     /**
-     * @var TutorialStepRepositoryContract
+     * @var TutorialRepositoryContract
      */
     private $tutorialRepository;
 
@@ -24,11 +24,11 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
 
     /**
      * ListTutorialsUsecaseInteractor constructor.
-     * @param TutorialStepRepositoryContract $tutorialRepository
+     * @param TutorialRepositoryContract $tutorialRepository
      * @param ProjectRepositoryContract $projectRepository
      */
     public function __construct(
-        TutorialStepRepositoryContract $tutorialRepository,
+        TutorialRepositoryContract $tutorialRepository,
         ProjectRepositoryContract $projectRepository
     ){
         $this->tutorialRepository = $tutorialRepository;
@@ -43,34 +43,37 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
      */
     public function handle(ListTutorialsRequestModel $request): ListTutorialsResponseModel
     {
-        /** @var ProjectEntity $projectEntity */
-        $projectEntity = $this->projectRepository->where([
-            [
-                'column' => 'user_id',
-                'operator' => '=',
-                'value' => $request->userKey,
-            ],
-            [
-                'column' => 'domain',
-                'operator' => '=',
-                'value' => $request->domain,
-            ]
-        ])->first();
+        $projectID = $request->project_id;
+        $projectEntity = null;
 
-        if (!$projectEntity) {
-            throw new ProjectNotFound($request->domain);
+        if ($request->domain) {
+            $projectEntity = $this->projectRepository->where([
+                [
+                    'column' => 'user_id',
+                    'operator' => '=',
+                    'value' => $request->userKey,
+                ],
+                [
+                    'column' => 'domain',
+                    'operator' => '=',
+                    'value' => $request->domain,
+                ]
+            ])->first();
+
+            if (!$projectEntity) {
+                throw new ProjectNotFound($request->domain);
+            }
+            $projectID = $projectEntity->getAttribute('id');
         }
 
-        $predicates = [
-            [
-                'column' => 'project_id',
-                'operator' => '=',
-                'value' => $projectEntity->getAttribute('id'),
-            ],
-        ];
-
         $result = $this->tutorialRepository->paging(
-            $predicates,
+            [
+                [
+                    'column' => 'project_id',
+                    'operator' => '=',
+                    'value' => $projectID,
+                ],
+            ],
             $request->orders,
             $request->page,
             $request->search,
@@ -80,7 +83,7 @@ class ListTutorialsUsecaseInteractor implements ListTutorialsUsecase {
         return new ListTutorialsResponseModel(array_merge(
             $result,
             [
-                'projectEntity' => $projectEntity->toArray(),
+                'projectEntity' => $projectEntity ? $projectEntity->toArray() : null,
             ]
         ));
     }

@@ -1,33 +1,17 @@
 <template>
-    <div>
-        <heading>Tutorials</heading>
-        <div class="level has-margin-bottom-5">
-            <div class="level-left">
-                <search-field
-                    :value="query"
-                    @input="$emit('change:query', $event)"
-                    search-button-class="is-primary-050"
-                    @click:search="$emit('click:search')"
-                ></search-field>
-            </div>
-            <div class="level-right">
-                <add-button
-                    @click="$emit('click:add-button')"
-                    class="is-primary"
-                ></add-button>
-            </div>
-        </div>
-        <data-table
-            :pagination="pagination"
-            :data="tutorialEntities"
-            :columns="columns"
-            :loading="isLoading"
-            :total="total"
-            @change:pagination="$emit('change:pagination', $event)"
-            @select="$emit('select', $event)"
-        >
-        </data-table>
-    </div>
+    <data-table
+        :pagination="pagination"
+        :data="tutorialEntities"
+        :columns="columns"
+        :loading="isLoading"
+        :total="total"
+        item-type="tutorial"
+        v-bind="$attrs"
+        @change:pagination="$emit('change:pagination', $event)"
+        @select="$emit('select', $event)"
+        @click:create-first="$emit('click:create-first-tutorial')"
+    >
+    </data-table>
 </template>
 <script>
     import Heading from "../../atoms/Heading";
@@ -41,10 +25,20 @@
             label: 'Name',
             sortable: true,
         },
+        // {
+        //     field: 'description',
+        //     label: 'Description',
+        //     sortable: true,
+        // },
         {
-            field: 'path',
+            field: 'path_in_text',
             label: 'Path',
-            sortable: true,
+            sortable: false,
+        },
+        {
+            field: 'query',
+            label: 'Parameters',
+            sortable: false,
         },
         {
             field: 'created_at',

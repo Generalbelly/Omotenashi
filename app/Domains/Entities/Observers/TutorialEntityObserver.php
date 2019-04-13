@@ -3,8 +3,6 @@
 namespace App\Domains\Entities\Observers;
 
 use App\Domains\Entities\TutorialEntity;
-use Ramsey\Uuid\Uuid;
-use Log;
 
 class TutorialEntityObserver extends EntityObserver
 {

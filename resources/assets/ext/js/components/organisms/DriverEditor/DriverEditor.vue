@@ -161,9 +161,12 @@
             },
         },
         created() {
-            this.driver = new Driver({
-                animate: false,
-            })
+            window.parent.postMessage({
+               activate: true,
+            }, window.top.location.origin);
+            // this.driver = new Driver({
+            //     animate: false,
+            // })
         },
         destroyed() {
             this.driver = null

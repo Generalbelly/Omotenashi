@@ -9,7 +9,6 @@ use Log;
 class AddProjectUsecaseInteractor implements AddProjectUsecase {
 
     private $projectRepository;
-    private $whitelistedDomainRepository;
 
     /**
      * AddProjectUsecaseInteractor constructor.
@@ -19,7 +18,6 @@ class AddProjectUsecaseInteractor implements AddProjectUsecase {
         ProjectRepositoryContract $projectRepository
     ){
         $this->projectRepository = $projectRepository;
-        $this->whitelistedDomainRepository = $whitelistedDomainRepository;
     }
 
     /**
@@ -36,16 +34,6 @@ class AddProjectUsecaseInteractor implements AddProjectUsecase {
             'tutorial_settings' => $request->tutorial_settings,
             'user_id' => $request->userKey,
         ]);
-
-        foreach ($request->whitelistedDomainEntities as $whitelistedDomain) {
-            $this->whitelistedDomainRepository->create([
-                'domain' => $whitelistedDomain['domain'],
-                'protocol' => $whitelistedDomain['protocol'],
-                'project_id' => $projectEntity->getAttribute('id'),
-            ]);
-        }
-
-        $projectEntity->getAttribute('whitelistedDomainEntities');
 
         return new AddProjectResponseModel($projectEntity->toArray());
     }

@@ -1,13 +1,13 @@
 <template>
     <div>
-        <columns class="is-6">
-            <column class="is-two-fifths">
-                <sub-heading class="has-text-weight-bold has-margin-bottom-4">Basic</sub-heading>
-                <p>
-                    The domain is where users will actually visit.
-                </p>
-            </column>
-            <column>
+        <form-section-layout>
+            <template slot="title">
+                Basic
+            </template>
+            <template slot="description">
+                The domain is where users will actually visit.
+            </template>
+            <template slot="form">
                 <validatable-text-field
                     label="Name"
                     name="Name"
@@ -22,38 +22,31 @@
                     v-model="domainUrl"
                 >
                 </validatable-domain-field>
-            </column>
-        </columns>
-        <columns
-            class="is-6"
-        >
-            <column class="is-two-fifths">
-                <sub-heading class="has-text-weight-bold has-margin-bottom-4">Tutorials</sub-heading>
-                <p>
-                    Set rules for tutorials. You can override them at tutorial-level.
-                </p>
-            </column>
-            <column>
+            </template>
+        </form-section-layout>
+        <form-section-layout>
+            <template slot="title">
+                Tutorials
+            </template>
+            <template slot="description">
+                Set rules for tutorials. You can override them at tutorial-level.
+            </template>
+            <template slot="form">
                 <tutorial-setting-fields
                     :value="tutorial_settings"
                     @input="$emit('update:tutorial_settings', $event)"
                 ></tutorial-setting-fields>
-            </column>
-        </columns>
-        <columns
-            v-if="id"
-            class="is-6"
-        >
-            <column class="is-two-fifths">
-                <sub-heading class="has-text-weight-bold has-margin-bottom-4">Google Analytics</sub-heading>
-                <p>
-                    We send data such as how many steps users complete, how often those users use your website/webapp, etc., on your behalf to your connected Google Analytics account.
-                </p>
-            </column>
-            <column>
-                <div
-                    v-if="googleOAuthEntity"
-                >
+            </template>
+        </form-section-layout>
+        <form-section-layout v-if="id">
+            <template slot="title">
+                Google Analytics
+            </template>
+            <template slot="description">
+                We send data such as how many steps users complete, how often those users use your website/webapp, etc., on your behalf to your connected Google Analytics account.
+            </template>
+            <template slot="form">
+                <div v-if="googleOAuthEntity">
                     <div v-if="googleAnalyticsPropertyEntity && googleAnalyticsPropertyEntity.id && googleAnalyticsAccountOptions.length === 0">
                         <columns>
                             <column>
@@ -137,8 +130,8 @@
                         @click="$emit('click:ga-connect', $event)"
                     ></connect-google-analytics-button>
                 </div>
-            </column>
-        </columns>
+            </template>
+        </form-section-layout>
     </div>
 </template>
 
@@ -156,10 +149,12 @@
     import Column from "../../../atoms/Column/Column";
     import TutorialSettingFields from "../../../molecules/fields/TutorialSettingFields";
     import Tag from "../../../atoms/Tag/Tag";
+    import FormSectionLayout from "../../../layouts/FormSectionLayout/FormSectionLayout";
 
     export default {
         name: "ProjectForm",
         components: {
+            FormSectionLayout,
             TutorialSettingFields,
             Tag,
             Column,
@@ -244,9 +239,9 @@
             },
             googleAnalyticsAccountOptions() {
                 return this.googleAnalyticsAccounts.map(account => ({
-                        text: account.name,
-                        value: account.id,
-                    }))
+                    text: account.name,
+                    value: account.id,
+                }))
             },
             googleAnalyticsAccount() {
                 if (!this.googleAnalyticsAccountId) return null;
@@ -257,9 +252,9 @@
                     return [];
                 }
                 return this.googleAnalyticsAccount.webProperties.map(property => ({
-                        text: property.name,
-                        value: property.id,
-                    }))
+                    text: property.name,
+                    value: property.id,
+                }))
             },
             googleAnalyticsWebProperty() {
                 if (this.googleAnalyticsAccount && this.googleAnalyticsWebPropertyId) {
@@ -292,12 +287,6 @@
 </script>
 
 <style scoped>
-    .columns.is-6 {
-        margin-bottom: 2em;
-    }
-    .column > .field {
-        margin-bottom: 3em;
-    }
     .connect-google-analytics-button {
         height: 100%;
         display: flex;

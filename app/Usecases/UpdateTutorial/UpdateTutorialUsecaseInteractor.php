@@ -3,21 +3,21 @@
 namespace App\Usecases\UpdateTutorial;
 
 use App\Domains\Entities\TutorialEntity;
-use App\Repositories\Tutorial\TutorialStepRepositoryContract;
+use App\Repositories\Tutorial\TutorialRepositoryContract;
 
 class UpdateTutorialUsecaseInteractor implements UpdateTutorialUsecase {
 
     /**
-     * @var TutorialStepRepositoryContract
+     * @var TutorialRepositoryContract
      */
     private $tutorialRepository;
 
     /**
      * UpdateTutorialUsecaseInteractor constructor.
-     * @param TutorialStepRepositoryContract $tutorialRepository
+     * @param TutorialRepositoryContract $tutorialRepository
      */
     public function __construct(
-        TutorialStepRepositoryContract $tutorialRepository
+        TutorialRepositoryContract $tutorialRepository
     ){
         $this->tutorialRepository = $tutorialRepository;
     }

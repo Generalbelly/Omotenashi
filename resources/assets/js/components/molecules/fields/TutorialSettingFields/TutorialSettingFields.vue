@@ -1,7 +1,7 @@
 <template>
     <div>
         <base-label>
-            Tutorial distribution (if more than one created
+            Tutorial distribution (if more than one created)
             <question-circle-icon
                 class="has-cursor-pointer"
                 size="is-small"
@@ -18,7 +18,7 @@
                 </radio-field>
             </template>
             <message :active="showDistributionDetail" class="has-margin-y-3">
-                For one URL you can create as many tutorials as you like to compare the effectiveness of different styles between users. <br>
+                You can create as many tutorials starting at the same URL as you like to compare the effectiveness of different styles between users. <br>
                 This option determines the distribution pattern towards your users.
             </message>
         </column>
@@ -36,51 +36,51 @@
                 </radio-field>
             </template>
         </column>
-        <fade-transition-group v-if="onlyOnce">
-            <base-label key="label">
-                For how long?
-            </base-label>
-            <column key="column">
-                <grouped-field key="field">
-                    <validatable-select-field
-                        key="onlyOnceDurationOptions"
-                        :items="onlyOnceDurationOptions"
-                        v-model="onlyOnceDuration"
-                        name="Duration"
-                        rules="required"
-                    ></validatable-select-field>
-                    <validatable-text-field
-                        key="onlyOnceCustomDuration"
-                        v-if="onlyOnceDuration !== 'forever'"
-                        name="Custom duration"
-                        :rules="{'required': onlyOnceDuration !== 'forever', 'numeric': true}"
-                        :value="value.only_once_duration === 'forever' ? '' : value.only_once_duration"
-                        @input="updateOnlyOnceDuration"
-                    >
-                    </validatable-text-field>
-                    <div
-                        v-show="onlyOnceDuration !== 'forever'"
-                        class="label"
-                        style="margin-top: 5px; margin-left: 5px;"
-                    >
-                        Days
-                    </div>
-                </grouped-field>
-            </column>
-        </fade-transition-group>
+<!--        <fade-transition-group v-if="onlyOnce">-->
+<!--            <base-label key="label">-->
+<!--                For how long?-->
+<!--            </base-label>-->
+<!--            <column key="column">-->
+<!--                <grouped-field-layout key="field">-->
+<!--                    <validatable-select-field-->
+<!--                        key="onlyOnceDurationOptions"-->
+<!--                        :items="onlyOnceDurationOptions"-->
+<!--                        v-model="onlyOnceDuration"-->
+<!--                        name="Duration"-->
+<!--                        rules="required"-->
+<!--                    ></validatable-select-field>-->
+<!--                    <validatable-text-field-->
+<!--                        key="onlyOnceCustomDuration"-->
+<!--                        v-if="onlyOnceDuration !== 'forever'"-->
+<!--                        name="Custom duration"-->
+<!--                        :rules="{'required': onlyOnceDuration !== 'forever', 'numeric': true}"-->
+<!--                        :value="value.only_once_duration === 'forever' ? '' : value.only_once_duration"-->
+<!--                        @input="updateOnlyOnceDuration"-->
+<!--                    >-->
+<!--                    </validatable-text-field>-->
+<!--                    <div-->
+<!--                        v-show="onlyOnceDuration !== 'forever'"-->
+<!--                        class="label"-->
+<!--                        style="margin-top: 5px; margin-left: 5px;"-->
+<!--                    >-->
+<!--                        Days-->
+<!--                    </div>-->
+<!--                </grouped-field-layout>-->
+<!--            </column>-->
+<!--        </fade-transition-group>-->
     </div>
 </template>
 
 <script>
     import Column from "../../../atoms/Column/Column"
-    import FadeTransitionGroup from "../../../atoms/transitions/FadeTransitionGroup/FadeTransitionGroup"
-    import GroupedField from "../../../layouts/GroupedField/GroupedField"
+    import FadeTransitionGroup from "../../../atoms/transitions/FadeTransitionGroup"
+    import GroupedFieldLayout from "../../../layouts/GroupedFieldLayout"
     import RadioField from "../../../atoms/fields/RadioField"
     import ValidatableSelectField from "../../../molecules/fields/ValidatableSelectField"
     import ValidatableTextField from "../../../molecules/fields/ValidatableTextField"
-    import QuestionCircleIcon from "../../../atoms/icons/QuestionCircleIcon/QuestionCircleIcon";
+    import QuestionCircleIcon from "../../../atoms/icons/QuestionCircleIcon";
     import Message from "../../../atoms/Message/Message";
-    import BaseLabel from "../../../../../ext/js/components/atoms/BaseLabel/BaseLabel";
+    import BaseLabel from "../../../atoms/BaseLabel";
 
     export default {
         name: 'tutorial-setting-fields',
@@ -90,7 +90,7 @@
             QuestionCircleIcon,
             Column,
             FadeTransitionGroup,
-            GroupedField,
+            GroupedFieldLayout,
             RadioField,
             ValidatableSelectField,
             ValidatableTextField

@@ -4,41 +4,8 @@ import VeeValidate from 'vee-validate'
 import store from './store'
 import App from './App.vue'
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import {
-    faCode,
-    faExternalLinkAlt,
-    faPen,
-    faQuestionCircle,
-    faTrash,
-    faSearch,
-    faPlus,
-    faArrowUp,
-    faAngleLeft,
-    faAngleRight
-} from '@fortawesome/free-solid-svg-icons'
-
-import {
-    faFrown
-} from '@fortawesome/free-regular-svg-icons'
-
+import library from '../../js/fontawesome'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-library.add(
-    faCode,
-    faExternalLinkAlt,
-    faFrown,
-    faPen,
-    faQuestionCircle,
-    faTrash,
-    faSearch,
-    faPlus,
-    faArrowUp,
-    faAngleLeft,
-    faAngleRight
-)
-
-import "../sass/app.scss"
 
 Vue.use(Buefy, {
     defaultIconPack: 'fas',

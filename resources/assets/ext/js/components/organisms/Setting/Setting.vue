@@ -22,7 +22,6 @@
                 v-model="innerDescription"
                 placeholder="Tutorial for first time customers."
                 name="description"
-                rules="required"
             >
             </validatable-textarea-field>
             <div>
@@ -103,13 +102,12 @@
     </CardModal>
 </template>
 <script>
-    import BaseIcon from '../../atoms/BaseIcon'
     import BaseButton from '../../atoms/BaseButton'
     import BaseHeader from "../../atoms/BaseHeader";
-    import BaseLabel from "../../atoms/BaseLabel";
+    import BaseLabel from "../../../../../js/components/atoms/BaseLabel";
     import BaseCheckBox from "../../atoms/BaseCheckBox"
     import CardModal from '../../molecules/CardModal'
-    import ParameterFields from "../../molecules/fields/ParameterFields/ParameterFields";
+    import ParameterFields from "../../../../../js/components/molecules/fields/ParameterFields/ParameterFields";
     import Columns from "../../../../../js/components/atoms/Columns/Columns";
     import Column from "../../../../../js/components/atoms/Column/Column";
     import ValidatableTextField from "../../../../../js/components/molecules/fields/ValidatableTextField";
@@ -136,7 +134,6 @@
             BaseCheckBox,
             BaseButton,
             CardModal,
-            BaseIcon,
         },
         props: {
             id: {

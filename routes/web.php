@@ -37,8 +37,22 @@ Route::prefix('projects')->middleware('auth')->group(function() use ($regexpUUID
     Route::delete('/{id}', 'ProjectController@destroy')
         ->name('projects.destroy');
 
-});
 
+    // Tutorials
+    Route::get('/{projectId}/tutorials', 'TutorialController@index')
+        ->name('tutorials.index');
+    Route::get('/{projectId}/tutorials/create', 'TutorialController@create')
+        ->name('tutorials.create');
+    Route::get('/{projectId}/tutorials/redirect', 'TutorialController@redirect')
+        ->name('tutorials.redirect');
+    Route::get('/{projectId}/tutorials/{id}', 'TutorialController@show')
+        ->name('tutorials.show');
+    Route::put('/{projectId}/tutorials/{id}', 'TutorialController@update')
+        ->name('tutorials.update');
+    Route::delete('/{projectId}/tutorials/{id}', 'TutorialController@destroy')
+        ->name('tutorials.destroy');
+
+});
 
 Route::prefix('oauths')->middleware('auth')->group(function() use ($regexpUUID){
 

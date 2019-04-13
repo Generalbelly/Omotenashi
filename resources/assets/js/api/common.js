@@ -12,8 +12,12 @@ export class BaseAPI {
         this.basePath = basePath
     }
 
+    request(params) {
+        return axios(params)
+    }
+
     list(params) {
-        return axios({
+        return this.request({
             url: `/${this.basePath}/`,
             method: GET_METHOD,
             params,
@@ -21,7 +25,7 @@ export class BaseAPI {
     }
 
     add(data) {
-        return axios({
+        return this.request({
             url: `/${this.basePath}/`,
             method: POST_METHOD,
             data,
@@ -29,14 +33,14 @@ export class BaseAPI {
     }
 
     get(id) {
-        return axios({
+        return this.request({
             url:`/${this.basePath}/${id}`,
             method: GET_METHOD,
         })
     }
 
     update(id, data) {
-        return axios({
+        return this.request({
             url:`/${this.basePath}/${id}`,
             method: PUT_METHOD,
             data,
@@ -44,7 +48,7 @@ export class BaseAPI {
     }
 
     delete(id) {
-        return axios({
+        return this.request({
             url: `/${this.basePath}/${id}`,
             method: DELETE_METHOD,
         })

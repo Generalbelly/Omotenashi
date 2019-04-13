@@ -4,11 +4,14 @@
         :pagination="pagination"
         :project-entities="projectEntities"
         :is-loading="isRequesting"
-        @select="onProjectSelect"
+        @click:edit="onClickEdit"
         @click:search="onClickSearch"
         @change:query="onChangeQuery"
         @change:pagination="onChangePagination"
-        @click:add-button="onClickAddButton"
+        @details-open="onDetailsOpen"
+        @click:add="onClickAdd"
+        @click:create-first-project="onClickAdd"
+        @click:create-first-tutorial="onClickCreateFirstTutorial"
     >
     </projects-template>
 </template>
@@ -51,7 +54,10 @@
                 'listProjects',
                 'deleteProject',
             ]),
-            onProjectSelect(projectEntity) {
+            ...mapActions('tutorial', [
+                'listTutorials',
+            ]),
+            onClickEdit(projectEntity) {
                 this.$router.push({
                     name: 'projects.show',
                     params: {
@@ -88,9 +94,25 @@
                 //     q: this.query,
                 // })
             },
-            onClickAddButton() {
+            onClickAdd() {
                 this.$router.push({
                     name: 'projects.create',
+                })
+            },
+            onDetailsOpen(projectEntity) {
+                this.listTutorials({
+                    projectId: projectEntity.id
+                })
+            },
+            onClickCreateFirstTutorial(projectEntity) {
+                // window.open(
+                //     `/projects/${projectEntity.id}/tutorials/create`,
+                // )
+                this.$router.push({
+                    name: 'tutorials.create',
+                    params: {
+                        projectId: projectEntity.id,
+                    }
                 })
             }
         }

@@ -12,7 +12,7 @@
         name: "RadioField",
         props: {
             value: {
-                type: String,
+                type: [String, Boolean],
                 default: null,
             }
         },

@@ -58,7 +58,6 @@ class TutorialController extends Controller
         ]);
 
         $domain = parse_url($request->query('origin'), PHP_URL_HOST);
-        \Log::error($domain);
 
         $userKey = $request->user()->key;
         $search = $request->query('q');

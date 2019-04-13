@@ -5,24 +5,29 @@
         :columns="columns"
         :per-page="pagination.perPage"
         :default-sort="pagination.orderBy"
-        hoverable
-        striped
-        mobile-cards
-        paginated
-        backend-pagination
-        backend-sorting
+        :hoverable="hoverable"
+        :striped="striped"
+        :mobile-cards="mobileCards"
+        :paginated="paginated"
+        :backend-pagination="backendPagination"
+        :backend-sorting="backendSorting"
         @page-change="onPageChange"
         @sort="onSort"
         @select="onSelect"
+        @details-open="onDetailsOpen"
+        @details-close="onDetailsClose"
     >
         <template slot="empty">
             <section class="section">
                 <div class="content has-text-grey has-text-centered">
-                    <p>
-                        <frown-icon size="is-large">
-                        </frown-icon>
-                    </p>
-                    <p>No items found</p>
+<!--                    <p>-->
+<!--                        <frown-icon size="is-large">-->
+<!--                        </frown-icon>-->
+<!--                    </p>-->
+                    <p>No {{ itemType }} found</p>
+                    <create-first-button
+                        @click="$emit('click:create-first')"
+                    >Create your first {{ itemType }}</create-first-button>
                 </div>
             </section>
         </template>
@@ -42,10 +47,16 @@
 
 <script>
     import FrownIcon from "../../atoms/icons/FrownIcon";
+    import AddButton from "../../atoms/buttons/AddButton/AddButton";
+    import CreateFirstButton from "../../atoms/buttons/CreateFirstButton/CreateFirstButton";
     export default {
         name: 'DataTable',
-        components: {FrownIcon},
+        components: {CreateFirstButton, AddButton, FrownIcon},
         props: {
+            itemType: {
+                type: String,
+                default: 'project',
+            },
             data: {
                 type: Array,
                 default() {
@@ -68,11 +79,35 @@
                         total: 0,
                     }
                 }
-            }
+            },
+            hoverable: {
+                type: Boolean,
+                default: true,
+            },
+            striped: {
+                type: Boolean,
+                default: true,
+            },
+            mobileCards: {
+                type: Boolean,
+                default: true,
+            },
+            paginated: {
+                type: Boolean,
+                default: true,
+            },
+            backendPagination: {
+                type: Boolean,
+                default: true,
+            },
+            backendSorting: {
+                type: Boolean,
+                default: true,
+            },
         },
         methods: {
-            onSelect(e) {
-                this.$emit('select', e);
+            onSelect(row, oldRow) {
+                this.$emit('select', row)
             },
             onPageChange(page) {
                 this.emitPagination({
@@ -83,6 +118,12 @@
                 this.emitPagination({
                     orderBy: [column, direction],
                 })
+            },
+            onDetailsOpen(row) {
+                this.$emit('details-open', row)
+            },
+            onDetailsClose(row) {
+                this.$emit('details-close', row)
             },
             emitPagination(data) {
                 this.$emit('change:pagination', {

@@ -25,7 +25,7 @@ $factory->define(App\Domains\Entities\TutorialEntity::class, function (Faker $fa
         'description' => $faker->realText(),
         'path' => $path,
         'parameters' => [],
-        'orders' => [],
+        'settings' => [],
         'last_time_used_at' => [
             $path['value'] => null
         ],
