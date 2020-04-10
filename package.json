@@ -70,7 +70,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "@medv/finder": "^1.1.0",
-    "auth0-js": "^9.8.0",
+    "auth0-js": "^9.13.2",
     "buefy": "^0.7.2",
     "bulma": "^0.7.2",
     "clipboard": "^2.0.4",
